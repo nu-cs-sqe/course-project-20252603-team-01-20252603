@@ -13,7 +13,7 @@
 **Methods**
 - `boolean startGame(List<String> playerNames, List<PlayerColor> colors)`
 - `boolean claimTerritory(Player player, String territoryName)`
-- `boolean placeInitialArmies(Player player, String territoryName, int count)`
+- `boolean placeInitialArmes(Player player, String territoryName, int count)`
 - `boolean isSetupComplete()`
 - `Player getCurrentPlayer()`
 - `Player getFirstPlayer()`
