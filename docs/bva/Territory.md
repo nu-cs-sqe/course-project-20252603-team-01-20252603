@@ -6,7 +6,7 @@
     - **State of the system**: Create a new `Territory`; `owner == null`.
     - **Expected output**: `isUnclaimed()` returns `true`.
 
-- **TC2: Territory with owner is not unclaimed** ( :x: )
+- **TC2: Territory with owner is not unclaimed** ( :white_check_mark: )
     - **State of the system**: Create a `Territory`; call `setOwner(player)`.
     - **Expected output**: `isUnclaimed()` returns `false`.
 
@@ -14,11 +14,11 @@
 
 ### Method under test: `setOwner(Player player)`
 
-- **TC3: Set owner from null to valid player** ( :x: )
+- **TC3: Set owner from null to valid player** ( :white_check_mark: )
     - **State of the system**: Territory starts unclaimed; call `setOwner(player1)`.
     - **Expected output**: `getOwner()` returns `player1`.
 
-- **TC4: Replace existing owner with another player** ( :x: )
+- **TC4: Replace existing owner with another player** ( :white_check_mark: )
     - **State of the system**: Territory owner is `player1`; call `setOwner(player2)`.
     - **Expected output**: `getOwner()` returns `player2`.
 
