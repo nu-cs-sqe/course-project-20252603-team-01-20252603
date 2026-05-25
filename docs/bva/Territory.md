@@ -2,7 +2,7 @@
 
 ### Method under test: `isUnclaimed()`
 
-- **TC1: New territory has no owner** ( :x: )
+- **TC1: New territory has no owner** ( :white_check_mark: )
     - **State of the system**: Create a new `Territory`; `owner == null`.
     - **Expected output**: `isUnclaimed()` returns `true`.
 
