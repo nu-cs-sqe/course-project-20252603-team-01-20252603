@@ -19,10 +19,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.easymock/easymock
     testImplementation("org.easymock:easymock:3.1")
 
-    // cucumber
-    testImplementation(platform("io.cucumber:cucumber-bom:7.20.1"))
-    testImplementation("io.cucumber:cucumber-java")
-    testImplementation("io.cucumber:cucumber-junit-platform-engine")
 }
 
 java {
