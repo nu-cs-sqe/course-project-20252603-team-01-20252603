@@ -98,11 +98,11 @@
 
 ### Method under test: `getOwner()`
 
-- **TC19: Owner before claiming** ( implemented in TC1 )
+- **TC19: Owner before claiming** ( :white_check_mark: )
     - **State of the system**: New territory.
     - **Expected output**: `getOwner()` returns `null`.
 
-- **TC20: Owner after claiming** ( implemented in TC3 )
+- **TC20: Owner after claiming** ( :white_check_mark: )
     - **State of the system**: Call `setOwner(player1)`.
     - **Expected output**: `getOwner()` returns `player1`.
 

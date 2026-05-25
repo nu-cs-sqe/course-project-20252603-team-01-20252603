@@ -180,4 +180,31 @@ public class TerritoryTests {
             new Territory("", continent);
         });
     }
+
+    @Test
+    void getOwner_NewTerritory_ReturnsNull() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+
+        assertNull(territory.getOwner());
+    }
+
+    @Test
+    void getOwner_AfterSettingOwner_ReturnsOwner() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+        Player player = new Player("Player 1", PlayerColor.RED);
+
+        territory.setOwner(player);
+
+        assertSame(player, territory.getOwner());
+    }
+
+    @Test
+    void getContinent_TerritoryHasAssignedContinent_ReturnsContinent() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+
+        assertSame(continent, territory.getContinent());
+    }
 }

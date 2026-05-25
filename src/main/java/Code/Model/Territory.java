@@ -47,4 +47,8 @@ public class Territory {
     public String getName() {
         return this.name;
     }
+
+    public Continent getContinent() {
+        return this.continent;
+    }
 }
