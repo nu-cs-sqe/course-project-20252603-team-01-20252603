@@ -50,7 +50,7 @@
 
 ### Method under test: `addArmies(int count)`
 
-- **TC10: Add negative armies** ( :x: )
+- **TC10: Add negative armies** ( :white_check_mark: )
     - **State of the system**: Territory has `armyCount = 0`; call `addArmies(-1)`.
     - **Expected output**: Returns `false`; `armyCount` remains `0`.
 

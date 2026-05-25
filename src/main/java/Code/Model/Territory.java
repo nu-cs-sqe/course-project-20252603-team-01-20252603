@@ -28,4 +28,16 @@ public class Territory {
     public boolean isOwnedBy(Player player) {
         return this.owner != null && this.owner.equals(player);
     }
+
+    public boolean addArmies(int i) {
+        if (i < 0) {
+            return false;
+        }
+        this.armyCount += i;
+        return true;
+    }
+
+    public int getArmyCount() {
+        return this.armyCount;
+    }
 }

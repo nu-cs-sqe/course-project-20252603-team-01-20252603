@@ -90,4 +90,14 @@ public class TerritoryTests {
         assertFalse(territory.isOwnedBy(null));
     }
 
+    @Test
+    void addArmies_CountIsNegative_ReturnsFalseAndArmyCountUnchanged() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+
+        boolean result = territory.addArmies(-1);
+
+        assertFalse(result);
+        assertEquals(0, territory.getArmyCount());
+    }
 }
