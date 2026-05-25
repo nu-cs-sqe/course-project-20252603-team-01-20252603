@@ -22,7 +22,7 @@
     - **State of the system**: Territory owner is `player1`; call `setOwner(player2)`.
     - **Expected output**: `getOwner()` returns `player2`.
 
-- **TC5: Set owner to null** ( :x: )
+- **TC5: Set owner to null** ( :white_check_mark: )
     - **State of the system**: Territory owner is `player1`; call `setOwner(null)`.
     - **Expected output**: Either reject with error or make territory unclaimed. You should decide this behavior explicitly.
 
@@ -30,7 +30,7 @@
 
 ### Method under test: `isOwnedBy(Player player)`
 
-- **TC6: Same player object owns territory** ( :x: )
+- **TC6: Same player object owns territory** ( :white_check_mark: )
     - **State of the system**: Territory owner is `player1`; call `isOwnedBy(player1)`.
     - **Expected output**: Returns `true`.
 

@@ -24,4 +24,8 @@ public class Territory {
     public Player getOwner() {
         return this.owner;
     }
+
+    public boolean isOwnedBy(Player player) {
+        return this.owner != null && this.owner.equals(player);
+    }
 }
