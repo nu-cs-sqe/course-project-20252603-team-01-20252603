@@ -7,6 +7,9 @@ public class Territory {
     private Continent continent;
 
     public Territory(String name, Continent continent) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Territory name cannot be null or empty.");
+        }
         this.name = name;
         this.continent = continent;
         this.armyCount = 0;

@@ -171,4 +171,13 @@ public class TerritoryTests {
 
         assertEquals("Alaska", territory.getName());
     }
+
+    @Test
+    void getName_EmptyTerritoryName_ThrowsIllegalArgumentException() {
+        Continent continent = new Continent("North America");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Territory("", continent);
+        });
+    }
 }

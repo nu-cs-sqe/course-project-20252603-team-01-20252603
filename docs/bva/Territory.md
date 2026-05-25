@@ -90,7 +90,7 @@
     - **State of the system**: Create `Territory("Alaska", continent)`.
     - **Expected output**: `getName()` returns `"Alaska"`.
 
-- **TC18: Empty territory name** ( :x: )
+- **TC18: Empty territory name** ( :white_check_mark: )
     - **State of the system**: Create `Territory("", continent)`.
     - **Expected output**: Should be rejected if empty names are invalid.
 
