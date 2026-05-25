@@ -1,5 +1,6 @@
 package Code.Model;
 
 public enum PlayerColor {
-    RED
+    RED,
+    BLUE,
 }

@@ -58,4 +58,17 @@ public class TerritoryTests {
 
         assertTrue(territory.isOwnedBy(player));
     }
+
+    @Test
+    void isOwnedBy_DifferentPlayerObjectDoesNotOwnTerritory_ReturnsFalse() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player2 = new Player("Player 2", PlayerColor.BLUE);
+
+        territory.setOwner(player1);
+
+        assertFalse(territory.isOwnedBy(player2));
+    }
+
 }
