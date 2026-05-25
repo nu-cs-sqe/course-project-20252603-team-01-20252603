@@ -16,4 +16,8 @@ public class Territory {
     public boolean isUnclaimed() {
         return owner == null;
     }
+
+    public void setOwner(Player player) {
+        this.owner = player;
+    }
 }

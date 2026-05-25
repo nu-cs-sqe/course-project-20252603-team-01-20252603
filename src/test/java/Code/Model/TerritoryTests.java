@@ -12,4 +12,15 @@ public class TerritoryTests {
 
         assertTrue(territory.isUnclaimed());
     }
+
+    @Test
+    void isUnclaimed_TerritoryHasOwner_ReturnsFalse() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+        Player player = new Player("Player 1", PlayerColor.RED);
+
+        territory.setOwner(player);
+
+        assertFalse(territory.isUnclaimed());
+    }
 }
