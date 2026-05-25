@@ -20,4 +20,8 @@ public class Territory {
     public void setOwner(Player player) {
         this.owner = player;
     }
+
+    public Player getOwner() {
+        return this.owner;
+    }
 }

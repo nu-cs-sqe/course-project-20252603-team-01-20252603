@@ -23,4 +23,15 @@ public class TerritoryTests {
 
         assertFalse(territory.isUnclaimed());
     }
+
+    @Test
+    void setOwner_TerritoryHasNoOwner_SetsOwnerToPlayer() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+        Player player = new Player("Player 1", PlayerColor.RED);
+
+        territory.setOwner(player);
+
+        assertSame(player, territory.getOwner());
+    }
 }
