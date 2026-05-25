@@ -30,7 +30,7 @@ public class Territory {
     }
 
     public boolean addArmies(int i) {
-        if (i < 0) {
+        if (i <= 0) {
             return false;
         }
         this.armyCount += i;

@@ -54,7 +54,7 @@
     - **State of the system**: Territory has `armyCount = 0`; call `addArmies(-1)`.
     - **Expected output**: Returns `false`; `armyCount` remains `0`.
 
-- **TC11: Add zero armies** ( :x: )
+- **TC11: Add zero armies** ( :white_check_mark: )
     - **State of the system**: Territory has `armyCount = 0`; call `addArmies(0)`.
     - **Expected output**: Returns `false`; `armyCount` remains `0`.
 

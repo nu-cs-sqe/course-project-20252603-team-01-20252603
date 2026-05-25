@@ -100,4 +100,15 @@ public class TerritoryTests {
         assertFalse(result);
         assertEquals(0, territory.getArmyCount());
     }
+
+    @Test
+    void addArmies_CountIsZero_ReturnsFalseAndArmyCountUnchanged() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+
+        boolean result = territory.addArmies(0);
+
+        assertFalse(result);
+        assertEquals(0, territory.getArmyCount());
+    }
 }
