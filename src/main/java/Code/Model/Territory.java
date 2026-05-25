@@ -10,6 +10,9 @@ public class Territory {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Territory name cannot be null or empty.");
         }
+        if (continent == null) {
+            throw new IllegalArgumentException("Continent cannot be null.");
+        }
         this.name = name;
         this.continent = continent;
         this.armyCount = 0;

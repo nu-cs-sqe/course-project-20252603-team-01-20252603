@@ -207,4 +207,11 @@ public class TerritoryTests {
 
         assertSame(continent, territory.getContinent());
     }
+
+    @Test
+    void getContinent_NullContinent_ThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Territory("Alaska", null);
+        });
+    }
 }
