@@ -34,15 +34,15 @@
     - **State of the system**: Territory owner is `player1`; call `isOwnedBy(player1)`.
     - **Expected output**: Returns `true`.
 
-- **TC7: Different player object does not own territory** ( :x: )
+- **TC7: Different player object does not own territory** ( :white_check_mark: )
     - **State of the system**: Territory owner is `player1`; call `isOwnedBy(player2)`.
     - **Expected output**: Returns `false`.
 
-- **TC8: Null player checked against owned territory** ( :x: )
+- **TC8: Null player checked against owned territory** ( :white_check_mark: )
     - **State of the system**: Territory owner is `player1`; call `isOwnedBy(null)`.
     - **Expected output**: Returns `false`.
 
-- **TC9: Null player checked against unclaimed territory** ( :x: )
+- **TC9: Null player checked against unclaimed territory** ( :white_check_mark: )
     - **State of the system**: Territory owner is `null`; call `isOwnedBy(null)`.
     - **Expected output**: Should return `false`, not `true`. This is important if your code uses `owner == player`.
 

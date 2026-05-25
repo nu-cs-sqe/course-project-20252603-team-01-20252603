@@ -71,4 +71,23 @@ public class TerritoryTests {
         assertFalse(territory.isOwnedBy(player2));
     }
 
+    @Test
+    void isOwnedBy_NullPlayerCheckedAgainstOwnedTerritory_ReturnsFalse() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+        Player player = new Player("Player 1", PlayerColor.RED);
+
+        territory.setOwner(player);
+
+        assertFalse(territory.isOwnedBy(null));
+    }
+
+    @Test
+    void isOwnedBy_NullPlayerCheckedAgainstUnclaimedTerritory_ReturnsFalse() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+
+        assertFalse(territory.isOwnedBy(null));
+    }
+
 }
