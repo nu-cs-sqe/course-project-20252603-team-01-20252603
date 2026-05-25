@@ -58,15 +58,15 @@
     - **State of the system**: Territory has `armyCount = 0`; call `addArmies(0)`.
     - **Expected output**: Returns `false`; `armyCount` remains `0`.
 
-- **TC12: Add one army** ( :x: )
+- **TC12: Add one army** ( :white_check_mark: )
     - **State of the system**: Territory has `armyCount = 0`; call `addArmies(1)`.
     - **Expected output**: Returns `true`; `armyCount` becomes `1`.
 
-- **TC13: Add more than one army** ( :x: )
+- **TC13: Add more than one army** ( :white_check_mark: )
     - **State of the system**: Territory has `armyCount = 0`; call `addArmies(3)`.
     - **Expected output**: Returns `true`; `armyCount` becomes `3`.
 
-- **TC14: Add armies to nonzero existing army count** ( :x: )
+- **TC14: Add armies to nonzero existing army count** ( :white_check_mark: )
     - **State of the system**: Territory has `armyCount = 2`; call `addArmies(3)`.
     - **Expected output**: Returns `true`; `armyCount` becomes `5`.
 
@@ -74,11 +74,11 @@
 
 ### Method under test: `getArmyCount()`
 
-- **TC15: Initial army count is zero** ( implemented in TC1 )
+- **TC15: Initial army count is zero** ( :white_check_mark: )
     - **State of the system**: Create a new `Territory`.
     - **Expected output**: `getArmyCount()` returns `0`.
 
-- **TC16: Army count after valid addition** ( implemented in TC12 )
+- **TC16: Army count after valid addition** ( :white_check_mark: )
     - **State of the system**: Call `addArmies(1)`.
     - **Expected output**: `getArmyCount()` returns `1`.
 
@@ -86,7 +86,7 @@
 
 ### Method under test: `getName()`
 
-- **TC17: Normal territory name** ( :x: )
+- **TC17: Normal territory name** ( :white_check_mark: )
     - **State of the system**: Create `Territory("Alaska", continent)`.
     - **Expected output**: `getName()` returns `"Alaska"`.
 

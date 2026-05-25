@@ -111,4 +111,64 @@ public class TerritoryTests {
         assertFalse(result);
         assertEquals(0, territory.getArmyCount());
     }
+
+    @Test
+    void addArmies_CountIsOne_ReturnsTrueAndArmyCountBecomesOne() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+
+        boolean result = territory.addArmies(1);
+
+        assertTrue(result);
+        assertEquals(1, territory.getArmyCount());
+    }
+
+    @Test
+    void addArmies_CountIsMoreThanOne_ReturnsTrueAndArmyCountIncreasesByCount() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+
+        boolean result = territory.addArmies(3);
+
+        assertTrue(result);
+        assertEquals(3, territory.getArmyCount());
+    }
+
+    @Test
+    void addArmies_ArmyCountAlreadyNonzero_ReturnsTrueAndAddsToExistingCount() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+
+        territory.addArmies(2);
+        boolean result = territory.addArmies(3);
+
+        assertTrue(result);
+        assertEquals(5, territory.getArmyCount());
+    }
+
+    @Test
+    void getArmyCount_NewTerritory_ReturnsZero() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+
+        assertEquals(0, territory.getArmyCount());
+    }
+
+    @Test
+    void getArmyCount_AfterAddingOneArmy_ReturnsOne() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+
+        territory.addArmies(1);
+
+        assertEquals(1, territory.getArmyCount());
+    }
+
+    @Test
+    void getName_NormalTerritoryName_ReturnsTerritoryName() {
+        Continent continent = new Continent("North America");
+        Territory territory = new Territory("Alaska", continent);
+
+        assertEquals("Alaska", territory.getName());
+    }
 }

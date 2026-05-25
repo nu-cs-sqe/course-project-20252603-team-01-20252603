@@ -40,4 +40,8 @@ public class Territory {
     public int getArmyCount() {
         return this.armyCount;
     }
+
+    public String getName() {
+        return this.name;
+    }
 }
