@@ -1,0 +1,255 @@
+@startuml
+
+' ─────────────────────────────────────────
+'  MODEL
+' ─────────────────────────────────────────
+package model {
+
+  +class GameModel {
+    -players: List<Player>
+    -board: GameBoard
+    -deck: Deck
+    -currentPlayerIndex: int
+    -gameState: GameState
+    -setupManager: SetupManager
+
+    +startGame(playerNames: List<String>, colors: List<PlayerColor>): boolean
+    +claimTerritory(player: Player, territoryName: String): boolean
+    +placeInitialArmies(player: Player, territoryName: String, count: int): boolean
+    +finishSetup(): boolean
+    +getCurrentPlayer(): Player
+    +nextSetupPlayer(): Player
+    +isSetupComplete(): boolean
+    +getGameState(): GameState
+  }
+
+  +class SetupManager {
+    +isValidPlayerCount(count: int): boolean
+    +calculateStartingArmies(playerCount: int): int
+    +areColorsUnique(colors: List<PlayerColor>): boolean
+    +allTerritoriesClaimed(board: GameBoard): boolean
+    +allPlayersPlacedArmies(players: List<Player>): boolean
+  }
+
+  +class Player {
+    -name: String
+    -color: PlayerColor
+    -territories: List<Territory>
+    -cards: List<RiskCard>
+    -availableArmies: int
+    -eliminated: boolean
+
+    +addTerritory(territory: Territory): void
+    +removeTerritory(territory: Territory): void
+    +ownsTerritory(territory: Territory): boolean
+    +placeArmies(territory: Territory, count: int): boolean
+    +hasAvailableArmies(): boolean
+    +getAvailableArmies(): int
+    +getTerritoryCount(): int
+  }
+
+  +class GameBoard {
+    -continents: List<Continent>
+    -territories: List<Territory>
+
+    +initializeBoard(): void
+    +getTerritoryByName(name: String): Territory
+    +isTerritoryUnclaimed(name: String): boolean
+    +claimTerritory(name: String, player: Player): boolean
+    +allTerritoriesClaimed(): boolean
+    +getUnclaimedTerritories(): List<Territory>
+  }
+
+  +class Territory {
+    -name: String
+    -owner: Player
+    -armyCount: int
+    -continent: Continent
+    -adjacentTerritories: List<Territory>
+
+    +setOwner(player: Player): void
+    +isOwnedBy(player: Player): boolean
+    +isUnclaimed(): boolean
+    +addArmies(count: int): boolean
+    +removeArmies(count: int): boolean
+    +getArmyCount(): int
+    +getName(): String
+  }
+
+  +class Continent {
+    -name: String
+    -territories: List<Territory>
+    -bonusArmies: int
+
+    +containsTerritory(territory: Territory): boolean
+    +isControlledBy(player: Player): boolean
+    +getBonusArmies(): int
+  }
+
+  +class Deck {
+    -cards: List<RiskCard>
+    -discardPile: List<RiskCard>
+    -tradeInCount: int
+
+    +initializeClassicDeck(territories: List<Territory>): void
+    +shuffle(): void
+    +drawCard(): RiskCard
+    +size(): int
+    +isEmpty(): boolean
+  }
+
+  +class RiskCard {
+    -territory: Territory
+    -type: CardType
+    -wild: boolean
+
+    +getType(): CardType
+    +isWild(): boolean
+    +matchesTerritory(territory: Territory): boolean
+  }
+
+  +enum GameState {
+    SETUP
+    REINFORCEMENT
+    ATTACK
+    FORTIFY
+    GAME_OVER
+  }
+
+  +enum CardType {
+    INFANTRY
+    CAVALRY
+    ARTILLERY
+    WILD
+  }
+
+  +enum PlayerColor {
+    RED
+    BLUE
+    GREEN
+    YELLOW
+    BLACK
+    PURPLE
+  }
+}
+
+' ─────────────────────────────────────────
+'  VIEW
+' ─────────────────────────────────────────
+package view {
+
+  +class ConsoleView {
+    +displayWelcomeMessage(): void
+    +displaySetupInstructions(): void
+    +promptNumberOfPlayers(): int
+    +promptPlayerName(playerNumber: int): String
+    +promptPlayerColor(playerName: String): PlayerColor
+    +promptTerritoryChoice(player: Player, territories: List<Territory>): String
+    +promptArmyPlacement(player: Player): int
+    +displayBoard(board: GameBoard): void
+    +displayPlayers(players: List<Player>): void
+    +displayCurrentPlayer(player: Player): void
+    +displayError(message: String): void
+    +displaySetupComplete(): void
+  }
+}
+
+' ─────────────────────────────────────────
+'  CONTROLLER
+' ─────────────────────────────────────────
+package controller {
+
+  +class GameController {
+    -model: GameModel
+    -view: ConsoleView
+    -setupController: SetupController
+
+    +run(): void
+    +startGame(): void
+    +routeInput(command: String): void
+  }
+
+  +class SetupController {
+    -model: GameModel
+    -view: ConsoleView
+
+    +runSetup(): void
+    +collectPlayerInfo(): void
+    +handleTerritoryClaiming(): void
+    +handleInitialArmyPlacement(): void
+    +completeSetup(): void
+  }
+}
+
+' ─────────────────────────────────────────
+'  HAS-A / HAS-MANY RELATIONSHIPS
+'  HW3 uses --> for has-a/has-many.
+' ─────────────────────────────────────────
+
+GameModel --> "*" Player
+GameModel --> GameBoard
+GameModel --> Deck
+GameModel --> SetupManager
+GameModel --> GameState
+
+Player --> "*" Territory
+Player --> "*" RiskCard
+Player --> PlayerColor
+
+GameBoard --> "*" Continent
+GameBoard --> "*" Territory
+
+Continent --> "*" Territory
+
+Territory --> Player
+Territory --> Continent
+Territory --> "*" Territory
+
+Deck --> "*" RiskCard
+
+RiskCard --> Territory
+RiskCard --> CardType
+
+GameController --> GameModel
+GameController --> ConsoleView
+GameController --> SetupController
+
+SetupController --> GameModel
+SetupController --> ConsoleView
+
+' ─────────────────────────────────────────
+'  DEPENDENCY RELATIONSHIPS
+'  Used when a class has method params/returns/local usage.
+' ─────────────────────────────────────────
+
+ConsoleView ..> GameBoard
+ConsoleView ..> Player
+ConsoleView ..> Territory
+ConsoleView ..> PlayerColor
+
+SetupManager ..> GameBoard
+SetupManager ..> Player
+SetupManager ..> PlayerColor
+
+note top of GameModel
+  Model: stores game state and
+  performs classic Risk domain logic.
+end note
+
+note top of ConsoleView
+  View: command-line interface.
+  Displays text and collects input.
+end note
+
+note top of GameController
+  Controller: starts the app and
+  routes user input to model methods.
+end note
+
+note bottom of Deck
+  Classic World Domination deck:
+  42 territory cards + 2 wild cards.
+  No Secret Mission cards.
+end note
+
+@enduml
