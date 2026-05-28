@@ -9,6 +9,15 @@ The following chapters of the textbook are considered: Chapter 1, 2, 3, 4, 5, 6,
 Please note that this feedback does not include evaluation of your progress, the proper use of linters, the quality of your test cases, or your compliance of TDD/BDD workflow.  
 You can find the weekly feedback from your dedicated PM/TA for that.
 
+## Week 7-8 Code Review
+This review is for the code your team developed in Week 7 and 8.
+I apologize for this delayed code review (should have been given last Friday but I got really sick...).
+As compensation, I will add one extra code review in Week 10 (around Thursday).
+
+There is still no code in the main branch yet so there is nothing for me to review :(. 
+
+I know your team has started the project work. Hopefully, my Week 10 code review will give you some feedback on whether all the Clean Code standards are satisfied.
+
 ## Week 6 Code Review
 There is no code in the main branch yet so there is nothing for me to review.
 
