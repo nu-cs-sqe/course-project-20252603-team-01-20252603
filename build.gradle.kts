@@ -1,7 +1,14 @@
+import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
+
+
 plugins {
+    application
     id("java")
     jacoco
     id("info.solidsoft.pitest") version "1.15.0"
+    checkstyle
+    id("com.github.spotbugs") version "6.0.25"
 }
 
 group = "nu.csse.sqe"
@@ -11,6 +18,10 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = "code.main"
+}
+
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -18,7 +29,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.easymock/easymock
     testImplementation("org.easymock:easymock:3.1")
-
 }
 
 java {
@@ -33,6 +43,43 @@ tasks.compileJava {
 
 tasks.test {
     useJUnitPlatform()
+}
+tasks.withType<Checkstyle>().configureEach {
+    reports {
+        xml.required = true
+        html.required = true
+//        html.stylesheet = resources.text.fromFile("config/xsl/checkstyle-noframes-severity-sorted.xsl")
+    }
+}
+
+checkstyle{
+    toolVersion = "10.21.1"
+    configFile = file("config/checkstyle/sun_checks.xml")
+    isIgnoreFailures = false
+}
+
+spotbugs {
+    ignoreFailures = false
+    showStackTraces = true
+    showProgress = true
+    effort = Effort.DEFAULT
+    reportLevel = Confidence.DEFAULT
+    //omitVisitors = listOf("FindNonShortCircuit")
+    reportsDir = file("spotbugs")
+    //onlyAnalyze = listOf("com.foobar.MyClass", "com.foobar.mypkg.*")
+    maxHeapSize = "1g"
+    extraArgs = listOf("-nested:false")
+    //jvmArgs = listOf("-Duser.language=ja") // set user language to japanese
+}
+
+tasks.spotbugsMain {
+    reports.create("html") {
+        required = true
+        outputLocation = layout.buildDirectory.file("reports/spotbugs/spotbugs.html")
+        setStylesheet("fancy-hist.xsl")
+    }
+//    reports.maybeCreate("html").required.set(true)
+//    reports.maybeCreate("html").outputLocation.set(layout.buildDirectory.file("reports/spotbugs/spotbugs.html"))
 }
 
 tasks.jacocoTestReport {
@@ -56,8 +103,8 @@ tasks.jacocoTestReport {
 }
 
 pitest {
-    targetClasses = setOf("Code.*") //by default "${project.group}.*"
-    targetTests = setOf("Code.*")
+    targetClasses = setOf("code.*") //by default "${project.group}.*"
+    targetTests = setOf("code.*")
     junit5PluginVersion = "1.2.1"
     pitestVersion = "1.15.0" //not needed when a default PIT version should be used
 
