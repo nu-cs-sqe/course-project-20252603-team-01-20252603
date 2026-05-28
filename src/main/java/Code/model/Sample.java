@@ -1,4 +1,4 @@
-package Code.Model;
+package code.model;
 
 public class Sample {
     public boolean sample() {
