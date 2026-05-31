@@ -1,210 +1,186 @@
-# Game Setup Design — Classes, Fields, and Methods
+# Risk Setup Phase — Design
 
-## 1. `GameModel`
+## `RiskGame`
+**Methods**
+- `main(args: String[]): void`
 
+---
+
+## `GameController`
 **Fields**
-- `List<Player> players`
-- `GameBoard board`
-- `Deck deck`
-- `int currentPlayerIndex`
-- `GameState gameState`
-- `Player firstPlayer`
+- `model: GameModel`
+- `view: ConsoleView`
+- `setupController: SetupController`
 
 **Methods**
-- `boolean startGame(List<String> playerNames, List<PlayerColor> colors)`
-- `boolean claimTerritory(Player player, String territoryName)`
-- `boolean placeInitialArmes(Player player, String territoryName, int count)`
-- `boolean isSetupComplete()`
-- `Player getCurrentPlayer()`
-- `Player getFirstPlayer()`
-- `GameState getGameState()`
-- `GameBoard getBoard()`
-- `Deck getDeck()`
-- `List<Player> getPlayers()`
+- `run(): void`
+- `startGame(): void`
 
 ---
 
-## 2. `Player`
-
+## `SetupController`
 **Fields**
-- `String name`
-- `PlayerColor color`
-- `List<Territory> territories`
-- `int availableArmies`
+- `model: GameModel`
+- `view: ConsoleView`
 
 **Methods**
-- `void addTerritory(Territory territory)`
-- `boolean ownsTerritory(Territory territory)`
-- `boolean placeArmies(Territory territory, int count)`
-- `boolean hasAvailableArmies()`
-- `int getAvailableArmies()`
-- `int getTerritoryCount()`
-- `String getName()`
-- `PlayerColor getColor()`
+- `runSetup(): void`
+- `collectPlayerInfo(): void`
+- `handleTerritoryClaiming(): void`
+- `handleInitialArmyPlacement(): void`
+- `completeSetup(): void`
 
 ---
 
-## 3. `GameBoard`
+## `SetupManager`
+**Methods**
+- `isValidPlayerCount(count: int): boolean`
+- `calculateStartingArmies(playerCount: int): int`
+- `areColorsUnique(colors: List<PlayerColor>): boolean`
+- `allTerritoriesClaimed(board: GameBoard): boolean`
+- `allPlayersPlacedArmies(players: List<Player>): boolean`
 
+---
+
+## `GameModel`
 **Fields**
-- `List<Continent> continents`
-- `List<Territory> territories`
+- `players: List<Player>`
+- `board: GameBoard`
+- `deck: Deck`
+- `currentPlayerIndex: int`
+- `gameState: GameState`
+- `setupManager: SetupManager`
 
 **Methods**
-- `void initializeBoard()`
-- `Territory getTerritoryByName(String name)`
-- `boolean claimTerritory(String territoryName, Player player)`
-- `boolean isTerritoryUnclaimed(String territoryName)`
-- `boolean allTerritoriesClaimed()`
-- `List<Territory> getUnclaimedTerritories()`
-- `List<Territory> getTerritories()`
-- `List<Continent> getContinents()`
+- `startGame(playerNames: List<String>, colors: List<PlayerColor>): boolean`
+- `claimTerritory(player: Player, territoryName: String): boolean`
+- `placeInitialArmies(player: Player, territoryName: String, pieces: List<ArmyPiece>): boolean`
+- `finishSetup(): boolean`
+- `getCurrentPlayer(): Player`
+- `nextSetupPlayer(): Player`
+- `isSetupComplete(): boolean`
+- `getGameState(): GameState`
+- `advanceGameState(): void`
 
 ---
 
-## 4. `Territory`
-
+## `GameBoard`
 **Fields**
-- `String name`
-- `Player owner`
-- `int armyCount`
-- `Continent continent`
+- `continents: List<Continent>`
+- `territories: List<Territory>`
 
 **Methods**
-- `void setOwner(Player player)`
-- `boolean isUnclaimed()`
-- `boolean isOwnedBy(Player player)`
-- `boolean addArmies(int count)`
-- `int getArmyCount()`
-- `String getName()`
-- `Player getOwner()`
-- `Continent getContinent()`
+- `initializeBoard(): void`
+- `getTerritoryByName(name: String): Territory`
+- `isTerritoryUnclaimed(name: String): boolean`
+- `claimTerritory(name: String, player: Player): boolean`
+- `allTerritoriesClaimed(): boolean`
+- `getUnclaimedTerritories(): List<Territory>`
 
 ---
 
-## 5. `Continent`
-
+## `Player`
 **Fields**
-- `String name`
-- `List<Territory> territories`
+- `name: String`
+- `color: PlayerColor`
+- `territories: List<Territory>`
+- `hand: List<RiskCard>`
+- `availableArmies: int`
+- `eliminated: boolean`
 
 **Methods**
-- `String getName()`
-- `List<Territory> getTerritories()`
-- `boolean containsTerritory(Territory territory)`
+- `addTerritory(territory: Territory): void`
+- `ownsTerritory(territory: Territory): boolean`
+- `reinforceTerritory(territory: Territory, pieces: List<ArmyPiece>): boolean`
+- `hasAvailableArmies(): boolean`
+- `getAvailableArmies(): int`
+- `getTerritoryCount(): int`
 
 ---
 
-## 6. `Deck`
-
+## `Territory`
 **Fields**
-- `List<RiskCard> cards`
+- `name: String`
+- `owner: Player`
+- `pieces: List<ArmyPiece>`
+- `continent: Continent`
+- `adjacentTerritories: List<Territory>`
 
 **Methods**
-- `void initializeClassicDeck(List<Territory> territories)`
-- `void shuffle()`
-- `int size()`
-- `boolean isEmpty()`
+- `setOwner(player: Player): void`
+- `isOwnedBy(player: Player): boolean`
+- `isUnclaimed(): boolean`
+- `placeArmies(pieces: List<ArmyPiece>): boolean`
+- `getArmyCount(): int`
+- `getPieces(): List<ArmyPiece>`
+- `getName(): String`
 
 ---
 
-## 7. `RiskCard`
-
+## `Continent`
 **Fields**
-- `Territory territory`
-- `CardType type`
-- `boolean wild`
+- `name: String`
+- `territories: List<Territory>`
+- `bonusArmies: int`
 
 **Methods**
-- `Territory getTerritory()`
-- `CardType getType()`
-- `boolean isWild()`
+- `containsTerritory(territory: Territory): boolean`
 
 ---
 
-## 8. `SetupManager`
-
+## `Deck`
 **Fields**
-- None required
+- `cards: List<RiskCard>`
+- `discardPile: List<RiskCard>`
+- `globalTradeInCount: int`
 
 **Methods**
-- `boolean isValidPlayerCount(int count)`
-- `int calculateStartingArmies(int playerCount)`
-- `boolean areColorsUnique(List<PlayerColor> colors)`
-- `boolean allPlayersPlacedArmies(List<Player> players)`
+- `initializeClassicDeck(territories: List<Territory>): void`
+- `shuffle(): void`
 
 ---
 
-## 9. `ConsoleView`
-
+## `RiskCard`
 **Fields**
-- `Scanner scanner`
+- `territory: Territory`
+- `type: CardType`
+- `wild: boolean`
 
 **Methods**
-- `void displayWelcomeMessage()`
-- `int promptNumberOfPlayers()`
-- `String promptPlayerName(int playerNumber)`
-- `PlayerColor promptPlayerColor(String playerName)`
-- `String promptTerritoryChoice(Player player, List<Territory> territories)`
-- `int promptArmyPlacement(Player player)`
-- `void displayBoard(GameBoard board)`
-- `void displayError(String message)`
-- `void displaySetupComplete()`
+- `getType(): CardType`
+- `isWild(): boolean`
 
 ---
 
-## 10. `GameController`
-
+## `ArmyPiece`
 **Fields**
-- `GameModel model`
-- `ConsoleView view`
-- `SetupController setupController`
+- `type: ArmyType`
 
 **Methods**
-- `void run()`
-- `void startGame()`
+- `getValue(): int`
+- `getType(): ArmyType`
 
 ---
 
-## 11. `SetupController`
-
-**Fields**
-- `GameModel model`
-- `ConsoleView view`
-
+## `ConsoleView`
 **Methods**
-- `void runSetup()`
-- `void collectPlayerInfo()`
-- `void handleTerritoryClaiming()`
-- `void handleInitialArmyPlacement()`
-- `void completeSetup()`
+- `displayWelcomeMessage(): void`
+- `displaySetupInstructions(): void`
+- `promptNumberOfPlayers(): int`
+- `promptPlayerName(playerNumber: int): String`
+- `promptPlayerColor(playerName: String): PlayerColor`
+- `promptTerritoryChoice(player: Player, territories: List<Territory>): String`
+- `promptArmyCount(player: Player, max: int): int`
+- `displayBoard(board: GameBoard): void`
+- `displayPlayers(players: List<Player>): void`
+- `displayCurrentPlayer(player: Player): void`
+- `displayError(message: String): void`
+- `displaySetupComplete(): void`
 
 ---
 
-## 12. `GameState`
-
-**Values**
-- `SETUP`
-- `REINFORCEMENT`
-
----
-
-## 13. `CardType`
-
-**Values**
-- `INFANTRY`
-- `CAVALRY`
-- `ARTILLERY`
-- `WILD`
-
----
-
-## 14. `PlayerColor`
-
-**Values**
-- `RED`
-- `BLUE`
-- `GREEN`
-- `YELLOW`
-- `BLACK`
-- `PURPLE`
+## Enums
+- `GameState`: `SETUP_CLAIM`, `SETUP_PLACE`
+- `PlayerColor`: `RED`, `BLUE`, `GREEN`, `YELLOW`, `BLACK`, `PURPLE`
+- `ArmyType`: `INFANTRY`, `CAVALRY`, `ARTILLERY`
+- `CardType`: `INFANTRY`, `CAVALRY`, `ARTILLERY`, `WILD`
