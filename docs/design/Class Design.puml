@@ -1,6 +1,16 @@
 @startuml
 
 ' ─────────────────────────────────────────
+'  ENTRY POINT
+' ─────────────────────────────────────────
+package main {
+
+  +class RiskGame {
+    +main(args: String[]): void
+  }
+}
+
+' ─────────────────────────────────────────
 '  MODEL
 ' ─────────────────────────────────────────
 package model {
@@ -12,18 +22,30 @@ package model {
     -currentPlayerIndex: int
     -gameState: GameState
     -setupManager: SetupManager
+    -winner: Player
+    -capturedTerritoryThisTurn: boolean
 
+    +recordTerritoryCaptured(): void
+    +awardEndOfTurnCard(player: Player): void
     +startGame(playerNames: List<String>, colors: List<PlayerColor>): boolean
     +claimTerritory(player: Player, territoryName: String): boolean
     +placeInitialArmies(player: Player, territoryName: String, count: int): boolean
     +finishSetup(): boolean
+    +reinforceTerritory(player: Player, territoryName: String, count: int): boolean
+    +fortifyTerritory(player: Player, fromName: String, toName: String, count: int): boolean
+    +eliminatePlayer(loser: Player): void
+    +checkWinCondition(): boolean
+    +isGameOver(): boolean
+    +getWinner(): Player
     +getCurrentPlayer(): Player
     +nextSetupPlayer(): Player
     +isSetupComplete(): boolean
     +getGameState(): GameState
+    +advanceGameState(): void
   }
 
   +class SetupManager {
+    ' Classic game: 3-6 players only
     +isValidPlayerCount(count: int): boolean
     +calculateStartingArmies(playerCount: int): int
     +areColorsUnique(colors: List<PlayerColor>): boolean
@@ -35,17 +57,26 @@ package model {
     -name: String
     -color: PlayerColor
     -territories: List<Territory>
-    -cards: List<RiskCard>
+    -hand: List<RiskCard>
     -availableArmies: int
     -eliminated: boolean
 
     +addTerritory(territory: Territory): void
     +removeTerritory(territory: Territory): void
     +ownsTerritory(territory: Territory): boolean
-    +placeArmies(territory: Territory, count: int): boolean
+    ' Place armies during reinforcement phase (start of turn)
+    +reinforceTerritory(territory: Territory, count: int): boolean
+    ' Move armies at end of turn (fortify phase)
+    +fortify(from: Territory, to: Territory, count: int): boolean
     +hasAvailableArmies(): boolean
     +getAvailableArmies(): int
     +getTerritoryCount(): int
+    +calculateReinforcements(board: GameBoard): int
+    +addCard(card: RiskCard): void
+    +tradeInCards(cards: List<RiskCard>): int
+    +receiveCards(cards: List<RiskCard>): void
+    +isEliminated(): boolean
+    +mustTradeIn(): boolean
   }
 
   +class GameBoard {
@@ -58,22 +89,33 @@ package model {
     +claimTerritory(name: String, player: Player): boolean
     +allTerritoriesClaimed(): boolean
     +getUnclaimedTerritories(): List<Territory>
+    +areAdjacent(t1: Territory, t2: Territory): boolean
+    +getAdjacentEnemyTerritories(territory: Territory, player: Player): List<Territory>
   }
 
   +class Territory {
     -name: String
     -owner: Player
-    -armyCount: int
+    -pieces: List<ArmyPiece>
     -continent: Continent
     -adjacentTerritories: List<Territory>
 
     +setOwner(player: Player): void
     +isOwnedBy(player: Player): boolean
     +isUnclaimed(): boolean
-    +addArmies(count: int): boolean
-    +removeArmies(count: int): boolean
+    ' Called during reinforcement or initial placement
+    +placeArmies(pieces: List<ArmyPiece>): boolean
+    ' Called during fortify phase (end of turn, single free move)
+    +moveArmies(pieces: List<ArmyPiece>): List<ArmyPiece>
+    ' Called to remove one army-worth of pieces after a battle casualty
+    +loseArmy(): boolean
+    ' Swap any piece(s) for equivalent total value; enforces no net change
+    +swapPieces(remove: List<ArmyPiece>, add: List<ArmyPiece>): boolean
+    ' Derived from summing piece values - not stored
     +getArmyCount(): int
+    +getPieces(): List<ArmyPiece>
     +getName(): String
+    +canAttackFrom(): boolean
   }
 
   +class Continent {
@@ -89,13 +131,17 @@ package model {
   +class Deck {
     -cards: List<RiskCard>
     -discardPile: List<RiskCard>
-    -tradeInCount: int
+    ' Global counter shared across all players; drives trade-in army escalation
+    -globalTradeInCount: int
 
     +initializeClassicDeck(territories: List<Territory>): void
     +shuffle(): void
     +drawCard(): RiskCard
+    +getNextTradeInValue(): int
+    +incrementTradeInCount(): void
     +size(): int
     +isEmpty(): boolean
+    +reshuffleDiscard(): void
   }
 
   +class RiskCard {
@@ -108,8 +154,50 @@ package model {
     +matchesTerritory(territory: Territory): boolean
   }
 
+  ' Encapsulates one dice-roll exchange between attacker and defender
+  +class Battle {
+    -attacker: Player
+    -defender: Player
+    -attackingTerritory: Territory
+    -defendingTerritory: Territory
+    -attackerDice: int
+    -defenderDice: int
+    -attackerRolls: List<Integer>
+    -defenderRolls: List<Integer>
+
+    +isValidAttack(): boolean
+    +rollAttackerDice(): List<Integer>
+    +rollDefenderDice(): List<Integer>
+    +resolveRolls(): BattleResult
+    +captureTerritory(): void
+  }
+
+  +class BattleResult {
+    -attackerLosses: int
+    -defenderLosses: int
+    -territoryCapture: boolean
+
+    +getAttackerLosses(): int
+    +getDefenderLosses(): int
+    +isCaptured(): boolean
+  }
+
+  +class ArmyPiece {
+    -type: ArmyType
+    ' Value in Infantry: INFANTRY=1, CAVALRY=5, ARTILLERY=10
+    +getValue(): int
+    +getType(): ArmyType
+  }
+
+  +enum ArmyType {
+    INFANTRY
+    CAVALRY
+    ARTILLERY
+  }
+
   +enum GameState {
-    SETUP
+    SETUP_CLAIM
+    SETUP_PLACE
     REINFORCEMENT
     ATTACK
     FORTIFY
@@ -145,10 +233,16 @@ package view {
     +promptPlayerName(playerNumber: int): String
     +promptPlayerColor(playerName: String): PlayerColor
     +promptTerritoryChoice(player: Player, territories: List<Territory>): String
-    +promptArmyPlacement(player: Player): int
+    +promptArmyCount(player: Player, max: int): int
+    +promptAttackDecision(player: Player): boolean
+    +promptAttackTargets(player: Player): String[]
+    +promptFortifyDecision(player: Player): boolean
+    +promptCardTradeIn(player: Player): List<RiskCard>
     +displayBoard(board: GameBoard): void
     +displayPlayers(players: List<Player>): void
     +displayCurrentPlayer(player: Player): void
+    +displayBattleResult(result: BattleResult): void
+    +displayWinner(player: Player): void
     +displayError(message: String): void
     +displaySetupComplete(): void
   }
@@ -163,10 +257,12 @@ package controller {
     -model: GameModel
     -view: ConsoleView
     -setupController: SetupController
+    -turnController: TurnController
 
     +run(): void
     +startGame(): void
     +routeInput(command: String): void
+    +checkAndHandleWin(): boolean
   }
 
   +class SetupController {
@@ -179,12 +275,25 @@ package controller {
     +handleInitialArmyPlacement(): void
     +completeSetup(): void
   }
+
+  +class TurnController {
+    -model: GameModel
+    -view: ConsoleView
+
+    +runTurn(player: Player): void
+    +handleReinforcement(player: Player): void
+    +handleCardTradeIn(player: Player): void
+    +handleAttackPhase(player: Player): void
+    +handleFortifyPhase(player: Player): void
+    +executeBattle(attacker: Player, from: Territory, to: Territory, attackerDice: int, defenderDice: int): BattleResult
+  }
 }
 
 ' ─────────────────────────────────────────
 '  HAS-A / HAS-MANY RELATIONSHIPS
-'  HW3 uses --> for has-a/has-many.
 ' ─────────────────────────────────────────
+
+RiskGame --> GameController
 
 GameModel --> "*" Player
 GameModel --> GameBoard
@@ -204,36 +313,52 @@ Continent --> "*" Territory
 Territory --> Player
 Territory --> Continent
 Territory --> "*" Territory
+Territory --> "*" ArmyPiece
 
 Deck --> "*" RiskCard
 
 RiskCard --> Territory
 RiskCard --> CardType
 
+ArmyPiece --> ArmyType
+
+Battle --> Player
+Battle --> Territory
+Battle --> BattleResult
+
 GameController --> GameModel
 GameController --> ConsoleView
 GameController --> SetupController
+GameController --> TurnController
 
 SetupController --> GameModel
 SetupController --> ConsoleView
 
+TurnController --> GameModel
+TurnController --> ConsoleView
+
 ' ─────────────────────────────────────────
 '  DEPENDENCY RELATIONSHIPS
-'  Used when a class has method params/returns/local usage.
 ' ─────────────────────────────────────────
 
 ConsoleView ..> GameBoard
 ConsoleView ..> Player
 ConsoleView ..> Territory
 ConsoleView ..> PlayerColor
+ConsoleView ..> BattleResult
+ConsoleView ..> RiskCard
 
 SetupManager ..> GameBoard
 SetupManager ..> Player
 SetupManager ..> PlayerColor
 
+TurnController ..> Battle
+TurnController ..> BattleResult
+
 note top of GameModel
-  Model: stores game state and
-  performs classic Risk domain logic.
+  Model: stores game state and performs
+  classic Risk domain logic (3-6 players).
+  Win condition: one player owns all 42 territories.
 end note
 
 note top of ConsoleView
@@ -243,13 +368,56 @@ end note
 
 note top of GameController
   Controller: starts the app and
-  routes user input to model methods.
+  routes user input through turn phases.
+end note
+
+note top of TurnController
+  Manages the 3-phase turn loop:
+  1. Reinforcement  2. Attack  3. Fortify
 end note
 
 note bottom of Deck
-  Classic World Domination deck:
-  42 territory cards + 2 wild cards.
-  No Secret Mission cards.
+  Classic deck: 42 territory cards + 2 wilds.
+  globalTradeInCount is shared across all
+  players and drives army escalation:
+  set 1=4, 2=6, 3=8, 4=10, 5=12, 6=15,
+  then +5 per set thereafter.
+end note
+
+note bottom of Battle
+  Attacker rolls 1-3 red dice (must have
+  army count > dice count in from-territory).
+  Defender rolls 1-2 white dice. Ties go
+  to defender. Max 2 attacker losses per roll.
+end note
+
+note right of ArmyPiece
+  Value type owned by Territory.pieces.
+  INFANTRY = 1 army
+  CAVALRY  = 5 armies
+  ARTILLERY = 10 armies
+  Any pieces may be swapped for any
+  other pieces of equal total value.
+end note
+
+note right of Territory
+  pieces: List<ArmyPiece> is the source of truth.
+  getArmyCount() derived by summing piece values.
+  placeArmies: reinforcement/setup
+  moveArmies:  fortify phase free move
+  loseArmy:    combat casualty removal
+  swapPieces:  exchange any pieces for
+    equivalent total value (e.g. 5 Infantry
+    for 1 Cavalry); no net army change.
+end note
+
+note right of GameState
+  SETUP_CLAIM:  players claim territories
+  SETUP_PLACE:  distribute remaining armies
+  REINFORCEMENT: start-of-turn army placement
+  ATTACK:        optional dice combat
+  FORTIFY:       optional single free move
+  GAME_OVER:     win condition met
 end note
 
 @enduml
