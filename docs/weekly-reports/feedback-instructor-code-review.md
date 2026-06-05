@@ -16,7 +16,7 @@ As compensation, I will add one extra code review in Week 10 (around Thursday).
 
 There is still no code in the main branch yet so there is nothing for me to review :(. 
 
-I know your team has started the project work. Hopefully, my Week 10 code review will give you some feedback on whether all the Clean Code standards are satisfied.
+I know your team has started the project work, and I see work in feature branches. Hopefully, you will have some significant chunk of code merged into main by my Week 10 code review. So you will get some feedback on whether all the Clean Code standards are satisfied before the final submission.
 
 ## Week 6 Code Review
 There is no code in the main branch yet so there is nothing for me to review.
