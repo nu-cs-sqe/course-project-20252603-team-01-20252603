@@ -6,6 +6,7 @@
 package main {
 
   +class RiskGame {
+    -gameController: GameController
     +main(args: String[]): void
   }
 }
@@ -17,11 +18,11 @@ package model {
 
   +class GameModel {
     -players: List<Player>
+    -playerCount: int
     -board: GameBoard
     -deck: Deck
     -currentPlayerIndex: int
     -gameState: GameState
-    -setupManager: SetupManager
     -winner: Player
     -capturedTerritoryThisTurn: boolean
 
@@ -34,26 +35,20 @@ package model {
     +reinforceTerritory(player: Player, territoryName: String, count: int): boolean
     +fortifyTerritory(player: Player, fromName: String, toName: String, count: int): boolean
     +eliminatePlayer(loser: Player): void
-    +checkWinCondition(): boolean
-    +isGameOver(): boolean
-    +getWinner(): Player
+    +checkWinCondition(): Player
     +getCurrentPlayer(): Player
-    +nextSetupPlayer(): Player
+    +nextPlayer(): Player
     +isSetupComplete(): boolean
     +getGameState(): GameState
     +advanceGameState(): void
-  }
-
-  +class SetupManager {
-    ' Classic game: 3-6 players only
     +isValidPlayerCount(count: int): boolean
-    +calculateStartingArmies(playerCount: int): int
-    +areColorsUnique(colors: List<PlayerColor>): boolean
-    +allTerritoriesClaimed(board: GameBoard): boolean
-    +allPlayersPlacedArmies(players: List<Player>): boolean
+    +calculateStartingArmies(): int
+    +showAvailableColors(): List<PlayerColor>
+    +allTerritoriesInitiallyClaimed(): boolean
+    +allPlayersHavePlacedInitialArmies(): boolean
   }
 
-  +class Player {
+  +abstract class Player {
     -name: String
     -color: PlayerColor
     -territories: List<Territory>
@@ -71,13 +66,51 @@ package model {
     +hasAvailableArmies(): boolean
     +getAvailableArmies(): int
     +getTerritoryCount(): int
-    +calculateReinforcements(board: GameBoard): int
-    +addCard(card: RiskCard): void
+    +calculateReinforcementsToReceiveAtTurnStart(board: GameBoard): int
     +tradeInCards(cards: List<RiskCard>): int
     +receiveCards(cards: List<RiskCard>): void
     +isEliminated(): boolean
     +mustTradeIn(): boolean
   }
+
+  +class HumanPlayer {
+    +addTerritory(territory: Territory): void
+    +removeTerritory(territory: Territory): void
+    +ownsTerritory(territory: Territory): boolean
+    ' Place armies during reinforcement phase (start of turn)
+    +reinforceTerritory(territory: Territory, count: int): boolean
+    ' Move armies at end of turn (fortify phase)
+    +fortify(from: Territory, to: Territory, count: int): boolean
+    +hasAvailableArmies(): boolean
+    +getAvailableArmies(): int
+    +getTerritoryCount(): int
+    +calculateReinforcementsToReceiveAtTurnStart(board: GameBoard): int
+    +tradeInCards(cards: List<RiskCard>): int
+    +receiveCards(cards: List<RiskCard>): void
+    +isEliminated(): boolean
+    +mustTradeIn(): boolean
+  }
+
+  +class NullPlayer {
+      +addTerritory(territory: Territory): void
+      +removeTerritory(territory: Territory): void
+      +ownsTerritory(territory: Territory): boolean
+      ' Place armies during reinforcement phase (start of turn)
+      +reinforceTerritory(territory: Territory, count: int): boolean
+      ' Move armies at end of turn (fortify phase)
+      +fortify(from: Territory, to: Territory, count: int): boolean
+      +hasAvailableArmies(): boolean
+      +getAvailableArmies(): int
+      +getTerritoryCount(): int
+      +calculateReinforcementsToReceiveAtTurnStart(board: GameBoard): int
+      +tradeInCards(cards: List<RiskCard>): int
+      +receiveCards(cards: List<RiskCard>): void
+      +isEliminated(): boolean
+      +mustTradeIn(): boolean
+    }
+
+    Player <|-- HumanPlayer
+    Player <|-- NullPlayer
 
   +class GameBoard {
     -continents: List<Continent>
@@ -160,15 +193,15 @@ package model {
     -defender: Player
     -attackingTerritory: Territory
     -defendingTerritory: Territory
-    -attackerDice: int
-    -defenderDice: int
-    -attackerRolls: List<Integer>
-    -defenderRolls: List<Integer>
+    -attackerNumberOfDice: int
+    -defenderNumberOfDice: int
+    -attackerDiceResults: List<Integer>
+    -defenderDiceResults: List<Integer>
 
     +isValidAttack(): boolean
-    +rollAttackerDice(): List<Integer>
-    +rollDefenderDice(): List<Integer>
-    +resolveRolls(): BattleResult
+    +rollAllAttackerDice(): List<Integer>
+    +rollAllDefenderDice(): List<Integer>
+    +checkRollOutcomes(): BattleResult
     +captureTerritory(): void
   }
 
@@ -254,23 +287,23 @@ package view {
 package controller {
 
   +class GameController {
-    -model: GameModel
+    -gameModel: GameModel
     -view: ConsoleView
     -setupController: SetupController
     -turnController: TurnController
 
-    +run(): void
+    +GameController(): void
+    ~gameController(gameModel: GameModel, view: ConsoleView, setupController: SetupController, -turnController: TurnController): void
     +startGame(): void
-    +routeInput(command: String): void
-    +checkAndHandleWin(): boolean
   }
 
   +class SetupController {
     -model: GameModel
     -view: ConsoleView
 
+    +SetupController(gameModel: GameModel, view: ConsoleView)
     +runSetup(): void
-    +collectPlayerInfo(): void
+    +initializePLayers(): void
     +handleTerritoryClaiming(): void
     +handleInitialArmyPlacement(): void
     +completeSetup(): void
@@ -280,7 +313,10 @@ package controller {
     -model: GameModel
     -view: ConsoleView
 
-    +runTurn(player: Player): void
+    +TurnController(gameModel: GameModel, view: ConsoleView)
+    +runTurnsTillWin(): void
+    +runPlayerTurn(player: Player): void
+    +checkAndHandleWin(): Player
     +handleReinforcement(player: Player): void
     +handleCardTradeIn(player: Player): void
     +handleAttackPhase(player: Player): void
@@ -298,7 +334,6 @@ RiskGame --> GameController
 GameModel --> "*" Player
 GameModel --> GameBoard
 GameModel --> Deck
-GameModel --> SetupManager
 GameModel --> GameState
 
 Player --> "*" Territory
@@ -347,10 +382,6 @@ ConsoleView ..> Territory
 ConsoleView ..> PlayerColor
 ConsoleView ..> BattleResult
 ConsoleView ..> RiskCard
-
-SetupManager ..> GameBoard
-SetupManager ..> Player
-SetupManager ..> PlayerColor
 
 TurnController ..> Battle
 TurnController ..> BattleResult
