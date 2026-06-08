@@ -98,4 +98,13 @@ public final class DeckTest {
 
         assertFalse(deck.isEmpty());
     }
+
+    @Test
+    public void shuffleKeepsDeckSizeSame() {
+        Deck deck = new Deck();
+
+        deck.shuffle();
+
+        assertEquals(TOTAL_CARD_COUNT, deck.size());
+    }
 }

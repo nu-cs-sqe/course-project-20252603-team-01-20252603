@@ -70,4 +70,8 @@ public class Deck {
         return cards.isEmpty();
     }
 
+    public void shuffle() {
+        Collections.shuffle(cards);
+    }
+
 }
