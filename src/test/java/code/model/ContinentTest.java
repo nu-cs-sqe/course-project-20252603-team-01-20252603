@@ -15,6 +15,7 @@ public final class ContinentTest {
     private static final int NEGATIVE_BONUS_ARMIES = -1;
     private static final int ZERO_BONUS_ARMIES = 0;
     private static final int BELOW_MIN_BONUS_ARMIES = 1;
+    private static final int ABOVE_MAX_BONUS_ARMIES = 8;
 
     @Test
     public void constructorStoresValidName() {
@@ -55,5 +56,12 @@ public final class ContinentTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Continent("Invalid", NEGATIVE_BONUS_ARMIES));
+    }
+
+    @Test
+    public void constructorRejectsBonusArmiesAboveMaximum() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Continent("Invalid", ABOVE_MAX_BONUS_ARMIES));
     }
 }
