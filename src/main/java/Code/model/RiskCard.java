@@ -3,7 +3,7 @@ package code.model;
 /**
  * Represents a Risk card associated with a territory and card type.
  */
-public final class RiskCard {
+public class RiskCard {
 
     private final Territory territory;
     private final CardType type;
