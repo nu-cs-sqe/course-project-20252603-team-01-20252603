@@ -11,15 +11,15 @@
 
 ### Method under test: `initializeBoard()`
 
-- **TC2: Delegates to model — 6 continents created** ( :x: )
+- **TC2: Delegates to model — 6 continents created** ( :white_check_mark: )
     - **State of the system**: `SetupController` constructed with a fresh `GameModel`; `initializeBoard()` called
     - **Expected output**: `model.getContinents().size()` returns `6`
 
-- **TC3: Delegates to model — 42 territories created** ( :x: )
+- **TC3: Delegates to model — 42 territories created** ( :white_check_mark: )
     - **State of the system**: `initializeBoard()` called
     - **Expected output**: Total territory count across all continents equals `42`
 
-- **TC4: Delegates to model — deck ready with 44 cards** ( :x: )
+- **TC4: Delegates to model — deck ready with 44 cards** ( :white_check_mark: )
     - **State of the system**: `initializeBoard()` called
     - **Expected output**: `model.getDeck().size()` returns `44`
 

@@ -13,4 +13,8 @@ public class SetupController {
     public SetupController(final GameModel gameModel, final ConsoleView consoleView) {
         model = gameModel;
     }
+
+    public void initializeBoard() {
+        model.initializeContinentsAndTerritories();
+    }
 }
