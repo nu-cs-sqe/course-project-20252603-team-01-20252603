@@ -5,19 +5,19 @@
 
 ### Method under test: `RiskCard(Territory territory, CardType type, boolean wild)`
 
-- **TC1: Non-wild card with territory and type** ( :x: )
+- **TC1: Non-wild card with territory and type** ( :white_check_mark: )
     - **State of the system**: Constructing `RiskCard(alaska, CardType.INFANTRY, false)`
     - **Expected output**: Object created; `isWild()` returns `false`; `getType()` returns `INFANTRY`; `matchesTerritory(alaska)` returns `true`
 
-- **TC2: Wild card** ( :x: )
+- **TC2: Wild card** ( :white_check_mark: )
     - **State of the system**: Constructing `RiskCard(null, CardType.WILD, true)`
     - **Expected output**: Object created; `isWild()` returns `true`; `getType()` returns `WILD`
 
-- **TC3: Non-wild card with CAVALRY type** ( :x: )
+- **TC3: Non-wild card with CAVALRY type** ( :white_check_mark: )
     - **State of the system**: Constructing `RiskCard(alaska, CardType.CAVALRY, false)`
     - **Expected output**: `getType()` returns `CAVALRY`
 
-- **TC4: Non-wild card with ARTILLERY type** ( :x: )
+- **TC4: Non-wild card with ARTILLERY type** ( :white_check_mark: )
     - **State of the system**: Constructing `RiskCard(alaska, CardType.ARTILLERY, false)`
     - **Expected output**: `getType()` returns `ARTILLERY`
 
@@ -61,10 +61,10 @@
     - **State of the system**: Card constructed with `alaska`; queried with `alaska`
     - **Expected output**: Returns `true`
 
-- **TC12: Does not match different territory** ( :x: )
+- **TC12: Does not match different territory** ( :white_check_mark: )
     - **State of the system**: Card constructed with `alaska`; queried with `brazil`
     - **Expected output**: Returns `false`
 
-- **TC13: Wild card does not match any territory** ( :x: )
+- **TC13: Wild card does not match any territory** ( :white_check_mark: )
     - **State of the system**: Wild card constructed with `territory = null`; queried with any territory
     - **Expected output**: Returns `false`
