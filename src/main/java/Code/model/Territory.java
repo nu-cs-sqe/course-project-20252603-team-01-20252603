@@ -12,6 +12,7 @@ public class Territory {
     private final Continent continent;
     private final List<Territory> adjacentTerritories;
     private Player owner;
+    private int armyCount;
 
     public Territory(
             final String territoryName,
@@ -23,6 +24,7 @@ public class Territory {
         continent = territoryContinent;
         adjacentTerritories = new ArrayList<>(territoryAdjacentTerritories);
         owner = null;
+        armyCount = 0;
     }
 
     public String getName() {
@@ -45,5 +47,9 @@ public class Territory {
         if (territoryName == null || territoryName.isEmpty()) {
             throw new IllegalArgumentException("Territory name cannot be empty.");
         }
+    }
+
+    public int getArmyCount() {
+        return armyCount;
     }
 }

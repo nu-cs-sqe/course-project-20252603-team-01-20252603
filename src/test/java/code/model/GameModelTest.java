@@ -42,4 +42,32 @@ public final class GameModelTest {
 
         assertEquals(TERRITORY_COUNT, territoryCount);
     }
+
+    @Test
+    public void allTerritoriesStartUnclaimed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        boolean allUnclaimed = gameModel.getContinents()
+                .stream()
+                .flatMap(continent -> continent.getTerritories().stream())
+                .allMatch(Territory::isUnclaimed);
+
+        assertTrue(allUnclaimed);
+    }
+
+    @Test
+    public void allTerritoriesStartWithZeroArmies() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        boolean allHaveZeroArmies = gameModel.getContinents()
+                .stream()
+                .flatMap(continent -> continent.getTerritories().stream())
+                .allMatch(territory -> territory.getArmyCount() == 0);
+
+        assertTrue(allHaveZeroArmies);
+    }
 }
