@@ -1,7 +1,12 @@
 package code.model;
 
+import static org.easymock.EasyMock.createMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +21,7 @@ public final class ContinentTest {
     private static final int ZERO_BONUS_ARMIES = 0;
     private static final int BELOW_MIN_BONUS_ARMIES = 1;
     private static final int ABOVE_MAX_BONUS_ARMIES = 8;
+    private static final int EUROPE_BONUS_ARMIES = 5;
 
     @Test
     public void constructorStoresValidName() {
@@ -76,5 +82,55 @@ public final class ContinentTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Continent(null, MIN_BONUS_ARMIES));
+    }
+
+    @Test
+    public void containsTerritoryFindsFirstTerritory() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Territory firstTerritory = createMock(Territory.class);
+        Territory secondTerritory = createMock(Territory.class);
+
+        continent.addTerritory(firstTerritory);
+        continent.addTerritory(secondTerritory);
+
+        assertTrue(continent.containsTerritory(firstTerritory));
+    }
+
+    @Test
+    public void containsTerritoryFindsLastTerritory() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Territory firstTerritory = createMock(Territory.class);
+        Territory lastTerritory = createMock(Territory.class);
+
+        continent.addTerritory(firstTerritory);
+        continent.addTerritory(lastTerritory);
+
+        assertTrue(continent.containsTerritory(lastTerritory));
+    }
+
+    @Test
+    public void containsTerritoryRejectsMissingTerritory() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Territory includedTerritory = createMock(Territory.class);
+        Territory missingTerritory = createMock(Territory.class);
+
+        continent.addTerritory(includedTerritory);
+
+        assertFalse(continent.containsTerritory(missingTerritory));
+    }
+
+    @Test
+    public void containsTerritoryReturnsFalseForNullTerritory() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+
+        assertFalse(continent.containsTerritory(null));
+    }
+
+    @Test
+    public void containsTerritoryReturnsFalseWhenTerritoryListIsEmpty() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Territory territory = createMock(Territory.class);
+
+        assertFalse(continent.containsTerritory(territory));
     }
 }
