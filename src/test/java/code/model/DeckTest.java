@@ -1,6 +1,8 @@
 package code.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -106,5 +108,15 @@ public final class DeckTest {
         deck.shuffle();
 
         assertEquals(TOTAL_CARD_COUNT, deck.size());
+    }
+
+    @Test
+    public void shuffleChangesDeckOrder() {
+        Deck deck = new Deck();
+        List<RiskCard> originalCards = new ArrayList<>(deck.getCards());
+
+        deck.shuffle();
+
+        assertNotEquals(originalCards, deck.getCards());
     }
 }
