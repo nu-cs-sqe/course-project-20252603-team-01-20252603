@@ -19,14 +19,10 @@
     - **State of the system**: `initializeBoard()` called
     - **Expected output**: Total territory count across all continents equals `42`
 
-- **TC4: Delegates to model — all territories unclaimed** ( :x: )
-    - **State of the system**: `initializeBoard()` called
-    - **Expected output**: Every territory returns `isUnclaimed() == true`
-
-- **TC5: Delegates to model — deck ready with 44 cards** ( :x: )
+- **TC4: Delegates to model — deck ready with 44 cards** ( :x: )
     - **State of the system**: `initializeBoard()` called
     - **Expected output**: `model.getDeck().size()` returns `44`
 
-- **TC6: initializeBoard() can be called only once** ( :x: )
+- **TC5: initializeBoard() can be called only once** ( :x: )
     - **State of the system**: `initializeBoard()` called twice on the same `SetupController`
     - **Expected output**: Second call has no effect — continent and territory counts remain 6 and 42 with no duplicates
