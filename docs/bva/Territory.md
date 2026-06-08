@@ -8,33 +8,33 @@
     - **State of the system**: Constructing `Territory("Alaska", northAmerica, List.of(northwestTerritory, alberta, kamchatka))`
     - **Expected output**: Object created; `getName()` returns `"Alaska"`; `getContinent()` returns `northAmerica`
 
-- **TC2: Territory starts unclaimed** ( :x: )
-    - **State of the system**: Freshly constructed `Territory("Alaska", northAmerica, neighbours)`
-    - **Expected output**: `isUnclaimed()` returns `true`
+  - **TC2: Territory starts unclaimed** ( :x: )
+      - **State of the system**: Freshly constructed `Territory("Alaska", northAmerica, neighbours)`
+      - **Expected output**: `isUnclaimed()` returns `true`
 
-- **TC3: Adjacency list stored correctly** ( :x: )
-    - **State of the system**: Constructed with a list of 3 neighbours
-    - **Expected output**: `getAdjacentTerritories().size()` returns `3`; list contains the correct territories
+  - **TC3: Adjacency list stored correctly** ( :x: )
+      - **State of the system**: Constructed with a list of 3 neighbours
+      - **Expected output**: `getAdjacentTerritories().size()` returns `3`; list contains the correct territories
 
-- **TC4: Empty adjacency list** ( :x: )
-    - **State of the system**: Constructed with an empty `List<Territory>`
-    - **Expected output**: `getAdjacentTerritories()` returns an empty list — no exception thrown
+  - **TC4: Empty adjacency list** ( :x: )
+      - **State of the system**: Constructed with an empty `List<Territory>`
+      - **Expected output**: `getAdjacentTerritories()` returns an empty list — no exception thrown
 
-- **TC5: Null name** ( :x: )
-    - **State of the system**: Constructing `Territory(null, northAmerica, neighbours)`
-    - **Expected output**: `IllegalArgumentException` thrown
+  - **TC5: Null name** ( :x: )
+      - **State of the system**: Constructing `Territory(null, northAmerica, neighbours)`
+      - **Expected output**: `IllegalArgumentException` thrown
 
-- **TC6: Empty name** ( :x: )
-    - **State of the system**: Constructing `Territory("", northAmerica, neighbours)`
-    - **Expected output**: `IllegalArgumentException` thrown
+  - **TC6: Empty name** ( :x: )
+      - **State of the system**: Constructing `Territory("", northAmerica, neighbours)`
+      - **Expected output**: `IllegalArgumentException` thrown
 
-- **TC7: Null continent** ( :x: )
-    - **State of the system**: Constructing `Territory("Alaska", null, neighbours)`
-    - **Expected output**: `IllegalArgumentException` thrown
+  - **TC7: Null continent** ( :x: )
+      - **State of the system**: Constructing `Territory("Alaska", null, neighbours)`
+      - **Expected output**: `IllegalArgumentException` thrown
 
-- **TC8: Null adjacency list** ( :x: )
-    - **State of the system**: Constructing `Territory("Alaska", northAmerica, null)`
-    - **Expected output**: `IllegalArgumentException` thrown
+  - **TC8: Null adjacency list** ( :x: )
+      - **State of the system**: Constructing `Territory("Alaska", northAmerica, null)`
+      - **Expected output**: `IllegalArgumentException` thrown
 
 ---
 
@@ -60,6 +60,6 @@
     - **State of the system**: Territory constructed with 3 neighbours
     - **Expected output**: Returns list of size 3 containing the correct territories
 
-- **TC12: Returns empty list when no neighbours passed** ( implemented in TC4 )
-    - **State of the system**: Territory constructed with empty adjacency list
-    - **Expected output**: Returns empty list
+  - **TC12: Returns empty list when no neighbours passed** ( implemented in TC4 )
+      - **State of the system**: Territory constructed with empty adjacency list
+      - **Expected output**: Returns empty list
