@@ -29,6 +29,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.easymock/easymock
     testImplementation("org.easymock:easymock:3.1")
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.8.6")
 }
 
 java {
