@@ -19,9 +19,12 @@ public class GameModel {
     private static final int AUSTRALIA_BONUS = 2;
 
     private final List<Continent> continents;
+    private Deck deck;
 
     public GameModel() {
         continents = new ArrayList<>();
+        deck = new Deck();
+        deck.shuffle();
     }
 
     public void initializeContinentsAndTerritories() {
@@ -240,5 +243,14 @@ public class GameModel {
         connect("New Guinea", "Western Australia");
         connect("New Guinea", "Eastern Australia");
         connect("Western Australia", "Eastern Australia");
+    }
+
+    //for bva purposes
+    public int getDeckSize() {
+        return deck.size();
+    }
+
+    public boolean isDeckEmpty() {
+        return deck.isEmpty();
     }
 }

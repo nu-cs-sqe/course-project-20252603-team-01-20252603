@@ -1,11 +1,11 @@
 package code.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests board initialization behavior for the GameModel class.
@@ -26,6 +26,7 @@ public final class GameModelTest {
     private static final int AFRICA_BONUS = 3;
     private static final int ASIA_BONUS = 7;
     private static final int AUSTRALIA_BONUS = 2;
+    private static final int DECK_CARD_COUNT = 44;
 
     @Test
     public void gameModelConstructsWithEmptyContinents() {
@@ -235,5 +236,22 @@ public final class GameModelTest {
                         .contains(territory));
 
         assertTrue(noSelfAdjacency);
+    }
+    @Test
+    public void deckHasFortyFourCardsAfterBoardInitialization() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        assertEquals(DECK_CARD_COUNT, gameModel.getDeckSize());
+    }
+
+    @Test
+    public void deckIsNotEmptyAfterBoardInitialization() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        assertFalse(gameModel.isDeckEmpty());
     }
 }
