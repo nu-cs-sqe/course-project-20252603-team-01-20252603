@@ -26,6 +26,10 @@ public class RiskCard {
         return type;
     }
 
+    public Territory getTerritory() {
+        return territory;
+    }
+
     public boolean matchesTerritory(final Territory targetTerritory) {
         return !wild && territory == targetTerritory;
     }

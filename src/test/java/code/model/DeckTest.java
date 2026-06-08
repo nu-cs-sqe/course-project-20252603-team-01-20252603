@@ -1,6 +1,7 @@
 package code.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
@@ -46,5 +47,15 @@ public final class DeckTest {
                 .count();
 
         assertEquals(WILD_CARD_COUNT, wildCardCount);
+    }
+
+    @Test
+    public void everyTerritoryCardHasTerritory() {
+        Deck deck = new Deck();
+
+        deck.getCards()
+                .stream()
+                .filter(card -> !card.isWild())
+                .forEach(card -> assertNotNull(card.getTerritory()));
     }
 }
