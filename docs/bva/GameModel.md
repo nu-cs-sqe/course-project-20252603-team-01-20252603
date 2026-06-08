@@ -19,10 +19,7 @@
     - **State of the system**: `initializeContinentsAndTerritories()` called
     - **Expected output**: Sum of `continent.getTerritories().size()` across all 6 continents equals `42`
 
-- **TC4: All territories start unclaimed** ( :white_check_mark: )
-    - **State of the system**: `initializeContinentsAndTerritories()` called
-    - **Expected output**: Every territory across all continents returns `isUnclaimed() == true`
-
+    
 - **TC5: All territories start with zero armies** ( :white_check_mark: )
     - **State of the system**: `initializeContinentsAndTerritories()` called
     - **Expected output**: Every territory across all continents returns `getArmyCount() == 0`
