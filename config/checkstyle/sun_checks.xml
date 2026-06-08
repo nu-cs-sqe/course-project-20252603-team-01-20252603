@@ -10,7 +10,7 @@
     - the Java Language Specification at
       https://docs.oracle.com/javase/specs/jls/se11/html/index.html
 
-    - the Sun Code Conventions at https://www.oracle.com/java/technologies/javase/codeconventions-contents.html
+    - the Sun code Conventions at https://www.oracle.com/java/technologies/javase/codeconventions-contents.html
 
     - the Javadoc guidelines at
       https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html
@@ -71,6 +71,7 @@
     </module>
     <module name="LineLength">
         <property name="fileExtensions" value="java"/>
+        <property name="max" value="100"/>
     </module>
 
     <!-- Checks for whitespace                               -->
@@ -192,7 +193,7 @@
             <property name="optional" value="true"/>
         </module>
 
-        <!-- Additional Checks from Clean Code Practices -->
+        <!-- Additional Checks from Clean code Practices -->
         <!-- G30/G34: Functions Do One Thing / One Level of Abstraction -->
         <module name="CyclomaticComplexity">
             <property name="max" value="10"/>
