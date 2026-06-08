@@ -17,20 +17,31 @@ package main {
 package model {
 
   +class GameModel {
-    -players: List<Player>
+  ' required
+  -continents: List<Continent>
+  +GameModel()
+  +setPlayerCount(count: int): boolean
     -playerCount: int
+    ' addPlayer should also have the if else for checking starting armies
+    +addPlayer(name: String, color: PlayerColor): Player
+    -players: List<Player>
+    +initializeContinentsAndTerritories(): void
+    -currentPlayerIndex: int
+    +setCurrentPlayerIndex(index: int): void
+    +claimTerritoryDuringSetup(player: Player, territory: Territory): boolean
+    +allTerritoriesInitiallyClaimed(): boolean
+    ' placeArmies is the general purpose function we use to place armies on territory -- this will be called from place remaining armies during setup and during fortify in game phase
+    +placeArmies(player: Player, territory: Territory, armies: HashMap<ArmyType, Integer>): boolean
+
+
+
+  ' not required
     -board: GameBoard
     -deck: Deck
-    -currentPlayerIndex: int
-    -gameState: GameState
     -winner: Player
     -capturedTerritoryThisTurn: boolean
-
-    +GameModel(playerCount: int)
     +awardEndOfTurnCard(player: Player): void
     +startGame(playerNames: List<String>, colors: List<PlayerColor>): boolean
-    +claimTerritoryDuringSetup(player: Player, territory: Territory): boolean
-    +placeInitialArmies(player: Player, territory: Territory, count: int): boolean
     +finishSetup(): boolean
     +reinforceTerritory(player: Player, territory: Territory, count: int): boolean
     +fortifyTerritory(player: Player, fromName: String, toName: String, count: int): boolean
@@ -39,12 +50,8 @@ package model {
     +getCurrentPlayer(): Player
     +nextPlayer(): Player
     +isSetupComplete(): boolean
-    +getGameState(): GameState
-    +advanceGameState(): void
-    +isValidPlayerCount(count: int): boolean
     +calculateStartingArmies(): int
     +showAvailableColors(): List<PlayerColor>
-    +allTerritoriesInitiallyClaimed(): boolean
     +allPlayersHavePlacedInitialArmies(): boolean
     +applyBattleResult(result: BattleResult, attacker: Player, defender: Player,
                        from: Territory, to: Territory): void
@@ -55,7 +62,7 @@ package model {
     -color: PlayerColor
     -territories: List<Territory>
     -hand: List<RiskCard>
-    -availableArmies: int
+    -availableArmies: HashMap<ArmyType, Integer>
     -eliminated: boolean
 
     +addTerritory(territory: Territory): void
@@ -76,6 +83,10 @@ package model {
   }
 
   +class HumanPlayer {
+  ' required
+  +HumanPlayer(name: String, color: PlayerColor, startingInfantry: int)
+
+  ' not required
     +addTerritory(territory: Territory): void
     +removeTerritory(territory: Territory): void
     +ownsTerritory(territory: Territory): boolean
@@ -114,10 +125,16 @@ package model {
     Player <|-- HumanPlayer
     Player <|-- NullPlayer
 
+ ' can delete full class -- not required
   +class GameBoard {
+  ' required
     -continents: List<Continent>
-    -territories: List<Territory>
+    ' the game board constructor should create the territories and continents and store in hash map -- hard coded
+    +GameBoard(): void
 
+
+' not required
+    -territories: List<Territory>
     +initializeBoard(): void
     +isTerritoryUnclaimed(name: String): boolean
     +claimTerritory(name: String, player: Player): boolean
@@ -128,23 +145,26 @@ package model {
   }
 
   +class Territory {
-    -name: String
-    -owner: Player
-    -pieces: List<ArmyPiece>
-    -continent: Continent
+  ' required
     -adjacentTerritories: List<Territory>
+    -name: String
+    -continent: Continent
+
+  ' not required
+    -owner: Player
+    -pieces: HashMap<ArmyType, Integer>
 
     +setOwner(player: Player): void
     +isOwnedBy(player: Player): boolean
     +isUnclaimed(): boolean
     ' Called during reinforcement or initial placement
-    +placeArmies(pieces: List<ArmyPiece>): boolean
+    +placeArmies(pieces: List<ArmyType>): boolean
     ' Called during fortify phase (end of turn, single free move)
-    +moveArmies(pieces: List<ArmyPiece>): List<ArmyPiece>
+    +moveArmies(pieces: List<ArmyType>): boolean
     ' Called to remove one army-worth of pieces after a battle casualty
-    +loseArmy(): boolean
+    +loseArmyInBattle(): boolean
     ' Swap any piece(s) for equivalent total value; enforces no net change
-    +swapPieces(remove: List<ArmyPiece>, add: List<ArmyPiece>): boolean
+    +swapPiecesForEquivalentArmies(remove: List<ArmyType>, add: List<ArmyType>): boolean
     ' Derived from summing piece values - not stored
     +getArmyCount(): int
     +getPieces(): List<ArmyPiece>
@@ -163,14 +183,19 @@ package model {
   }
 
   +class Deck {
+  ' required
+  ' constructor must create the cards (hardcoded)
+    +Deck()
     -cards: List<RiskCard>
+    +shuffle(): void
+
+
+  ' not required
     -discardPile: List<RiskCard>
     ' Global counter shared across all players; drives trade-in army escalation
     -globalTradeInCount: int
 
-    +Deck()
     +initializeClassicDeck(territories: List<Territory>): void
-    +shuffle(): void
     +drawCard(): RiskCard
     +getNextTradeInValue(): int
     +incrementTradeInCount(): void
@@ -232,15 +257,6 @@ package model {
     ARTILLERY
   }
 
-  +enum GameState {
-    SETUP_CLAIM
-    SETUP_PLACE
-    REINFORCEMENT
-    ATTACK
-    FORTIFY
-    GAME_OVER
-  }
-
   +enum CardType {
     INFANTRY
     CAVALRY
@@ -264,20 +280,26 @@ package model {
 package view {
 
   +class ConsoleView {
+    ' required
     +displayWelcomeMessage(): void
+    +getNumberOfPlayers(): int
+    +getPlayerName(): String
+    +getPlayerColor(availableColors: List<PlayerColor>): PlayerColor
+    +displayRemainingTerritoriesAndGetTerritoryChoice(player: Player, continents: HashMap<Continent, Territory>): Territory
+
+    ' not required
+
+    +displayCurrentPlayer(player: Player): void
     +displaySetupInstructions(): void
-    +promptNumberOfPlayers(): int
-    +promptPlayerName(playerNumber: int): String
-    +promptPlayerColor(playerName: String): PlayerColor
-    +promptTerritoryChoice(player: Player, territories: List<Territory>): Territory
-    +promptArmyCount(player: Player, max: int): int
+    +getTerritoryChoice(player: Player, territories: List<Territory>): Territory
+    +getArmyCount(player: Player, max: int): int
     +promptAttackDecision(player: Player): boolean
     +promptAttackTargets(player: Player): String[]
     +promptFortifyDecision(player: Player): boolean
     +promptCardTradeIn(player: Player): List<RiskCard>
     +displayBoard(board: GameBoard): void
-    +displayPlayers(players: List<Player>): void
-    +displayCurrentPlayer(player: Player): void
+
+
     +displayBattleResult(result: BattleResult): void
     +displayWinner(player: Player): void
     +displayError(message: String): void
@@ -296,21 +318,29 @@ package controller {
     -setupController: SetupController
     -turnController: TurnController
 
+    ' required
+    +startGame(): void
+
+    ' not required
     +GameController(): void
     ~gameController(gameModel: GameModel, view: ConsoleView, setupController: SetupController, -turnController: TurnController): void
-    +startGame(): void
   }
 
   +class SetupController {
+
+    ' required
     -model: GameModel
     -view: ConsoleView
-
     +SetupController(gameModel: GameModel, view: ConsoleView)
     +runSetup(): void
-    +initializePLayers(): void
+    +initializePlayers(): void
+    +initializeBoard(): void
     +handleTerritoryClaiming(): void
-    +handleInitialArmyPlacement(): void
+    +handleRemainingArmyPlacement(): void
     +completeSetup(): void
+
+
+    ' not required
   }
 
   +class TurnController {
@@ -338,7 +368,6 @@ RiskGame --> GameController
 GameModel --> "*" Player
 GameModel --> GameBoard
 GameModel --> Deck
-GameModel --> GameState
 
 Player --> "*" Territory
 Player --> "*" RiskCard
@@ -446,13 +475,6 @@ note right of Territory
     for 1 Cavalry); no net army change.
 end note
 
-note right of GameState
-  SETUP_CLAIM:  players claim territories
-  SETUP_PLACE:  distribute remaining armies
-  REINFORCEMENT: start-of-turn army placement
-  ATTACK:        optional dice combat
-  FORTIFY:       optional single free move
-  GAME_OVER:     win condition met
-end note
+
 
 @enduml
