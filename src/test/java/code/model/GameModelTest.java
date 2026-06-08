@@ -2,6 +2,8 @@ package code.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -143,5 +145,20 @@ public final class GameModelTest {
         assertEquals(
                 AUSTRALIA_BONUS,
                 findContinent(gameModel, "Australia").getBonusArmies());
+    }
+
+    @Test
+    public void everyTerritoryBelongsToExactlyOneContinent() {
+        GameModel gameModel = new GameModel();
+        Set<Territory> territories = new HashSet<>();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.getContinents()
+                .stream()
+                .flatMap(continent -> continent.getTerritories().stream())
+                .forEach(territories::add);
+
+        assertEquals(TERRITORY_COUNT, territories.size());
     }
 }
