@@ -2,10 +2,10 @@ package code.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -57,5 +57,18 @@ public final class DeckTest {
                 .stream()
                 .filter(card -> !card.isWild())
                 .forEach(card -> assertNotNull(card.getTerritory()));
+    }
+
+    @Test
+    public void everyTerritoryAppearsOnExactlyOneCard() {
+        Deck deck = new Deck();
+        Set<Territory> territories = new HashSet<>();
+
+        deck.getCards()
+                .stream()
+                .filter(card -> !card.isWild())
+                .forEach(card -> territories.add(card.getTerritory()));
+
+        assertEquals(TERRITORY_CARD_COUNT, territories.size());
     }
 }
