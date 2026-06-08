@@ -23,6 +23,6 @@
     - **State of the system**: `initializeBoard()` called
     - **Expected output**: `model.getDeck().size()` returns `44`
 
-- **TC5: initializeBoard() can be called only once** ( :x: )
+- **TC5: initializeBoard() can be called only once** ( :white_check_mark: )
     - **State of the system**: `initializeBoard()` called twice on the same `SetupController`
     - **Expected output**: Second call has no effect — continent and territory counts remain 6 and 42 with no duplicates
