@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import org.junit.jupiter.api.Test;
 
@@ -132,5 +134,21 @@ public final class ContinentTest {
         Territory territory = createMock(Territory.class);
 
         assertFalse(continent.containsTerritory(territory));
+    }
+    @ParameterizedTest
+    @CsvSource({
+            "North America, 5",
+            "South America, 2",
+            "Europe, 5",
+            "Africa, 3",
+            "Asia, 7",
+            "Australia, 2"
+    })
+    public void constructorStoresClassicRiskBonusValues(
+            final String continentName,
+            final int expectedBonusArmies) {
+        Continent continent = new Continent(continentName, expectedBonusArmies);
+
+        assertEquals(expectedBonusArmies, continent.getBonusArmies());
     }
 }
