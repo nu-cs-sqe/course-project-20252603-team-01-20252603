@@ -3,7 +3,7 @@
 
 ### Method under test: `SetupController(GameModel model, ConsoleView view)`
 
-- **TC1: Valid construction** ( :x: )
+- **TC1: Valid construction** ( :white_check_mark: )
     - **State of the system**: Constructing `SetupController` with a valid `GameModel` and `ConsoleView`
     - **Expected output**: Object created without error
 
