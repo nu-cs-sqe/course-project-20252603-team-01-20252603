@@ -9,6 +9,7 @@ public class Territory {
 
     private final String name;
     private final Continent continent;
+    private Player owner;
 
     public Territory(
             final String territoryName,
@@ -16,6 +17,7 @@ public class Territory {
             final List<Territory> territoryAdjacentTerritories) {
         name = territoryName;
         continent = territoryContinent;
+        owner = null;
     }
 
     public String getName() {
@@ -24,5 +26,9 @@ public class Territory {
 
     public Continent getContinent() {
         return continent;
+    }
+
+    public boolean isUnclaimed() {
+        return owner == null;
     }
 }
