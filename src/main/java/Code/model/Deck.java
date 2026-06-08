@@ -26,6 +26,10 @@ public class Deck {
         return cards.size();
     }
 
+    public List<RiskCard> getCards() {
+        return new ArrayList<>(cards);
+    }
+
     private void initializeTerritoryCards() {
         Continent continent = new Continent(
                 "Deck Continent",
