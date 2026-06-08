@@ -1,0 +1,32 @@
+# BVA Analysis — `SetupController`
+
+
+### Method under test: `SetupController(GameModel model, ConsoleView view)`
+
+- **TC1: Valid construction** ( :x: )
+    - **State of the system**: Constructing `SetupController` with a valid `GameModel` and `ConsoleView`
+    - **Expected output**: Object created without error
+
+---
+
+### Method under test: `initializeBoard()`
+
+- **TC2: Delegates to model — 6 continents created** ( :x: )
+    - **State of the system**: `SetupController` constructed with a fresh `GameModel`; `initializeBoard()` called
+    - **Expected output**: `model.getContinents().size()` returns `6`
+
+- **TC3: Delegates to model — 42 territories created** ( :x: )
+    - **State of the system**: `initializeBoard()` called
+    - **Expected output**: Total territory count across all continents equals `42`
+
+- **TC4: Delegates to model — all territories unclaimed** ( :x: )
+    - **State of the system**: `initializeBoard()` called
+    - **Expected output**: Every territory returns `isUnclaimed() == true`
+
+- **TC5: Delegates to model — deck ready with 44 cards** ( :x: )
+    - **State of the system**: `initializeBoard()` called
+    - **Expected output**: `model.getDeck().size()` returns `44`
+
+- **TC6: initializeBoard() can be called only once** ( :x: )
+    - **State of the system**: `initializeBoard()` called twice on the same `SetupController`
+    - **Expected output**: Second call has no effect — continent and territory counts remain 6 and 42 with no duplicates
