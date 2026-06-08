@@ -26,13 +26,13 @@ package model {
     -winner: Player
     -capturedTerritoryThisTurn: boolean
 
-    +recordTerritoryCaptured(): void
+    +GameModel(playerCount: int)
     +awardEndOfTurnCard(player: Player): void
     +startGame(playerNames: List<String>, colors: List<PlayerColor>): boolean
-    +claimTerritory(player: Player, territoryName: String): boolean
-    +placeInitialArmies(player: Player, territoryName: String, count: int): boolean
+    +claimTerritoryDuringSetup(player: Player, territory: Territory): boolean
+    +placeInitialArmies(player: Player, territory: Territory, count: int): boolean
     +finishSetup(): boolean
-    +reinforceTerritory(player: Player, territoryName: String, count: int): boolean
+    +reinforceTerritory(player: Player, territory: Territory, count: int): boolean
     +fortifyTerritory(player: Player, fromName: String, toName: String, count: int): boolean
     +eliminatePlayer(loser: Player): void
     +checkWinCondition(): Player
@@ -46,6 +46,8 @@ package model {
     +showAvailableColors(): List<PlayerColor>
     +allTerritoriesInitiallyClaimed(): boolean
     +allPlayersHavePlacedInitialArmies(): boolean
+    +applyBattleResult(result: BattleResult, attacker: Player, defender: Player,
+                       from: Territory, to: Territory): void
   }
 
   +abstract class Player {
@@ -117,7 +119,6 @@ package model {
     -territories: List<Territory>
 
     +initializeBoard(): void
-    +getTerritoryByName(name: String): Territory
     +isTerritoryUnclaimed(name: String): boolean
     +claimTerritory(name: String, player: Player): boolean
     +allTerritoriesClaimed(): boolean
@@ -167,6 +168,7 @@ package model {
     ' Global counter shared across all players; drives trade-in army escalation
     -globalTradeInCount: int
 
+    +Deck()
     +initializeClassicDeck(territories: List<Territory>): void
     +shuffle(): void
     +drawCard(): RiskCard
@@ -198,6 +200,8 @@ package model {
     -attackerDiceResults: List<Integer>
     -defenderDiceResults: List<Integer>
 
+    +Battle(attacker: Player, defender: Player,attackingTerritory: Territory,
+    defendingTerritory: Territory, attackerNumberOfDice: int, defenderNumberOfDice: int)
     +isValidAttack(): boolean
     +rollAllAttackerDice(): List<Integer>
     +rollAllDefenderDice(): List<Integer>
@@ -265,7 +269,7 @@ package view {
     +promptNumberOfPlayers(): int
     +promptPlayerName(playerNumber: int): String
     +promptPlayerColor(playerName: String): PlayerColor
-    +promptTerritoryChoice(player: Player, territories: List<Territory>): String
+    +promptTerritoryChoice(player: Player, territories: List<Territory>): Territory
     +promptArmyCount(player: Player, max: int): int
     +promptAttackDecision(player: Player): boolean
     +promptAttackTargets(player: Player): String[]
