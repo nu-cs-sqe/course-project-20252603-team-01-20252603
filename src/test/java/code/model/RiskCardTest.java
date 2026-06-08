@@ -48,4 +48,14 @@ public final class RiskCardTest {
 
         assertEquals(CardType.ARTILLERY, card.getType());
     }
+
+    @Test
+    public void nonWildCardDoesNotMatchDifferentTerritory() {
+        Territory alaska = createMock(Territory.class);
+        Territory brazil = createMock(Territory.class);
+
+        RiskCard card = new RiskCard(alaska, CardType.INFANTRY, false);
+
+        assertFalse(card.matchesTerritory(brazil));
+    }
 }
