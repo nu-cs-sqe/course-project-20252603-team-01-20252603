@@ -1,7 +1,9 @@
 package code.controller;
 
 import static org.easymock.EasyMock.createMock;
-
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import code.model.GameModel;
 import code.view.ConsoleView;
 
@@ -28,6 +30,52 @@ public final class GameControllerTest {
         GameModel model = new GameModel();
         ConsoleView view = createMock(ConsoleView.class);
 
-        new GameController(model, view);
+        GameController controller = new GameController(model, view);
+
+        assertNotNull(controller);
+    }
+
+    @Test
+
+    public void startGameInitializesBoard() {
+
+        GameModel model = new GameModel();
+
+        ConsoleView view = createMock(ConsoleView.class);
+
+        GameController controller = new GameController(model, view);
+
+        controller.startGame();
+
+        int territoryCount = model.getContinents()
+
+                .stream()
+
+                .mapToInt(continent -> continent.getTerritories().size())
+
+                .sum();
+
+        assertEquals(CONTINENT_COUNT, model.getContinents().size());
+
+        assertEquals(TERRITORY_COUNT, territoryCount);
+
+    }
+
+    @Test
+
+    public void startGameInitializesDeck() {
+
+        GameModel model = new GameModel();
+
+        ConsoleView view = createMock(ConsoleView.class);
+
+        GameController controller = new GameController(model, view);
+
+        controller.startGame();
+
+        assertEquals(DECK_CARD_COUNT, model.getDeckSize());
+
+        assertFalse(model.isDeckEmpty());
+
     }
 }

@@ -6,10 +6,10 @@ import code.model.GameModel;
 import code.view.ConsoleView;
 
 import org.junit.jupiter.api.Test;
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests setup behavior for the SetupController class.
@@ -21,7 +21,9 @@ public final class SetupControllerTest {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
 
-        new SetupController(model, view);
+        SetupController controller = new SetupController(model, view);
+
+        assertNotNull(controller);
     }
 
     @Test
@@ -57,3 +59,4 @@ public final class SetupControllerTest {
         verify(model, view);
     }
 }
+
