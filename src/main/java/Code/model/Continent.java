@@ -54,4 +54,8 @@ public class Continent {
             throw new IllegalArgumentException("Invalid continent bonus armies.");
         }
     }
+
+    public List<Territory> getTerritories() {
+        return new ArrayList<>(territories);
+    }
 }
