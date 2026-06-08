@@ -58,4 +58,13 @@ public final class RiskCardTest {
 
         assertFalse(card.matchesTerritory(brazil));
     }
+
+    @Test
+    public void wildCardDoesNotMatchTerritory() {
+        Territory alaska = createMock(Territory.class);
+
+        RiskCard card = new RiskCard(null, CardType.WILD, true);
+
+        assertFalse(card.matchesTerritory(alaska));
+    }
 }
