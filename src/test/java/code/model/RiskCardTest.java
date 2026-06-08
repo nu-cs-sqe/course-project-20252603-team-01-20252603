@@ -30,4 +30,13 @@ public final class RiskCardTest {
         assertTrue(card.isWild());
         assertEquals(CardType.WILD, card.getType());
     }
+
+    @Test
+    public void nonWildCavalryCardStoresType() {
+        Territory alaska = createMock(Territory.class);
+
+        RiskCard card = new RiskCard(alaska, CardType.CAVALRY, false);
+
+        assertEquals(CardType.CAVALRY, card.getType());
+    }
 }
