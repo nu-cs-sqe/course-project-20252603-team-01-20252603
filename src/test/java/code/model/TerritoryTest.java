@@ -2,13 +2,12 @@ package code.model;
 
 import static org.easymock.EasyMock.createMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -97,5 +96,37 @@ public final class TerritoryTest {
         Territory alaska = new Territory("Alaska", northAmerica, neighbours);
 
         assertTrue(alaska.getAdjacentTerritories().isEmpty());
+    }
+
+    @Test
+    public void constructorRejectsNullName() {
+        Continent northAmerica = createMock(Continent.class);
+        Territory northwestTerritory = createMock(Territory.class);
+        Territory alberta = createMock(Territory.class);
+        Territory kamchatka = createMock(Territory.class);
+        List<Territory> neighbours = Arrays.asList(
+                northwestTerritory,
+                alberta,
+                kamchatka);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Territory(null, northAmerica, neighbours));
+    }
+
+    @Test
+    public void constructorRejectsEmptyName() {
+        Continent northAmerica = createMock(Continent.class);
+        Territory northwestTerritory = createMock(Territory.class);
+        Territory alberta = createMock(Territory.class);
+        Territory kamchatka = createMock(Territory.class);
+        List<Territory> neighbours = Arrays.asList(
+                northwestTerritory,
+                alberta,
+                kamchatka);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Territory("", northAmerica, neighbours));
     }
 }

@@ -17,6 +17,8 @@ public class Territory {
             final String territoryName,
             final Continent territoryContinent,
             final List<Territory> territoryAdjacentTerritories) {
+        validateName(territoryName);
+
         name = territoryName;
         continent = territoryContinent;
         adjacentTerritories = new ArrayList<>(territoryAdjacentTerritories);
@@ -37,5 +39,11 @@ public class Territory {
 
     public boolean isUnclaimed() {
         return owner == null;
+    }
+
+    private void validateName(final String territoryName) {
+        if (territoryName == null || territoryName.isEmpty()) {
+            throw new IllegalArgumentException("Territory name cannot be empty.");
+        }
     }
 }
