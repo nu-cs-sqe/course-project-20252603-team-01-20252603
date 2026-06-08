@@ -22,4 +22,12 @@ public final class RiskCardTest {
         assertEquals(CardType.INFANTRY, card.getType());
         assertTrue(card.matchesTerritory(alaska));
     }
+
+    @Test
+    public void wildCardStoresWildTypeAndFlag() {
+        RiskCard card = new RiskCard(null, CardType.WILD, true);
+
+        assertTrue(card.isWild());
+        assertEquals(CardType.WILD, card.getType());
+    }
 }
