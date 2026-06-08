@@ -161,4 +161,79 @@ public final class GameModelTest {
 
         assertEquals(TERRITORY_COUNT, territories.size());
     }
+
+    private Territory findTerritory(
+            final GameModel gameModel,
+            final String territoryName) {
+        return gameModel.getContinents()
+                .stream()
+                .flatMap(continent -> continent.getTerritories().stream())
+                .filter(territory -> territory.getName().equals(territoryName))
+                .findFirst()
+                .get();
+    }
+
+    private boolean hasReciprocalAdjacency(final Territory territory) {
+        return territory.getAdjacentTerritories()
+                .stream()
+                .allMatch(adjacentTerritory -> adjacentTerritory
+                        .getAdjacentTerritories()
+                        .contains(territory));
+    }
+
+    @Test
+    public void everyTerritoryHasAtLeastOneAdjacentTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        boolean allHaveAdjacency = gameModel.getContinents()
+                .stream()
+                .flatMap(continent -> continent.getTerritories().stream())
+                .allMatch(territory -> territory.getAdjacentTerritories().size() > 0);
+
+        assertTrue(allHaveAdjacency);
+    }
+
+    @Test
+    public void adjacencyIsReciprocalForAllTerritories() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        boolean allReciprocal = gameModel.getContinents()
+                .stream()
+                .flatMap(continent -> continent.getTerritories().stream())
+                .allMatch(this::hasReciprocalAdjacency);
+
+        assertTrue(allReciprocal);
+    }
+
+    @Test
+    public void alaskaIsAdjacentToKamchatka() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        Territory alaska = findTerritory(gameModel, "Alaska");
+        Territory kamchatka = findTerritory(gameModel, "Kamchatka");
+
+        assertTrue(alaska.getAdjacentTerritories().contains(kamchatka));
+        assertTrue(kamchatka.getAdjacentTerritories().contains(alaska));
+    }
+
+    @Test
+    public void noTerritoryIsAdjacentToItself() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        boolean noSelfAdjacency = gameModel.getContinents()
+                .stream()
+                .flatMap(continent -> continent.getTerritories().stream())
+                .noneMatch(territory -> territory.getAdjacentTerritories()
+                        .contains(territory));
+
+        assertTrue(noSelfAdjacency);
+    }
 }

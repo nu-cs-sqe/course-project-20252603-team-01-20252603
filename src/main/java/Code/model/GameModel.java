@@ -3,6 +3,8 @@ package code.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents the main model for the Risk game.
@@ -31,6 +33,7 @@ public class GameModel {
         createAfrica();
         createAsia();
         createAustralia();
+        initializeAdjacencies();
     }
 
     public List<Continent> getContinents() {
@@ -130,5 +133,112 @@ public class GameModel {
                 Collections.emptyList());
 
         continent.addTerritory(territory);
+    }
+
+    private Territory findTerritoryByName(final String territoryName) {
+        return continents.stream()
+                .flatMap(continent -> continent.getTerritories().stream())
+                .filter(territory -> territory.getName().equals(territoryName))
+                .findFirst()
+                .get();
+    }
+    private void connect(
+            final String firstTerritoryName,
+            final String secondTerritoryName) {
+        Territory firstTerritory = findTerritoryByName(firstTerritoryName);
+        Territory secondTerritory = findTerritoryByName(secondTerritoryName);
+
+        firstTerritory.addAdjacentTerritory(secondTerritory);
+        secondTerritory.addAdjacentTerritory(firstTerritory);
+    }
+
+    private void initializeAdjacencies() {
+        connect("Alaska", "Northwest Territory");
+        connect("Alaska", "Alberta");
+        connect("Alaska", "Kamchatka");
+        connect("Northwest Territory", "Alberta");
+        connect("Northwest Territory", "Ontario");
+        connect("Northwest Territory", "Greenland");
+        connect("Greenland", "Ontario");
+        connect("Greenland", "Quebec");
+        connect("Greenland", "Iceland");
+        connect("Alberta", "Ontario");
+        connect("Alberta", "Western United States");
+        connect("Ontario", "Quebec");
+        connect("Ontario", "Western United States");
+        connect("Ontario", "Eastern United States");
+        connect("Quebec", "Eastern United States");
+        connect("Western United States", "Eastern United States");
+        connect("Western United States", "Central America");
+        connect("Eastern United States", "Central America");
+        connect("Central America", "Venezuela");
+
+        connect("Venezuela", "Peru");
+        connect("Venezuela", "Brazil");
+        connect("Peru", "Brazil");
+        connect("Peru", "Argentina");
+        connect("Brazil", "Argentina");
+        connect("Brazil", "North Africa");
+
+        connect("Iceland", "Scandinavia");
+        connect("Iceland", "Great Britain");
+        connect("Scandinavia", "Ukraine");
+        connect("Scandinavia", "Great Britain");
+        connect("Great Britain", "Northern Europe");
+        connect("Great Britain", "Western Europe");
+        connect("Northern Europe", "Western Europe");
+        connect("Northern Europe", "Southern Europe");
+        connect("Northern Europe", "Ukraine");
+        connect("Western Europe", "Southern Europe");
+        connect("Western Europe", "North Africa");
+        connect("Southern Europe", "North Africa");
+        connect("Southern Europe", "Egypt");
+        connect("Southern Europe", "Middle East");
+        connect("Southern Europe", "Ukraine");
+        connect("Ukraine", "Ural");
+        connect("Ukraine", "Afghanistan");
+        connect("Ukraine", "Middle East");
+
+        connect("North Africa", "Egypt");
+        connect("North Africa", "East Africa");
+        connect("North Africa", "Congo");
+        connect("Egypt", "East Africa");
+        connect("Egypt", "Middle East");
+        connect("East Africa", "Middle East");
+        connect("East Africa", "Congo");
+        connect("East Africa", "South Africa");
+        connect("East Africa", "Madagascar");
+        connect("Congo", "South Africa");
+        connect("South Africa", "Madagascar");
+
+        connect("Ural", "Siberia");
+        connect("Ural", "China");
+        connect("Ural", "Afghanistan");
+        connect("Siberia", "Yakutsk");
+        connect("Siberia", "Irkutsk");
+        connect("Siberia", "Mongolia");
+        connect("Siberia", "China");
+        connect("Yakutsk", "Kamchatka");
+        connect("Yakutsk", "Irkutsk");
+        connect("Kamchatka", "Irkutsk");
+        connect("Kamchatka", "Mongolia");
+        connect("Kamchatka", "Japan");
+        connect("Irkutsk", "Mongolia");
+        connect("Mongolia", "Japan");
+        connect("Mongolia", "China");
+        connect("Afghanistan", "China");
+        connect("Afghanistan", "Middle East");
+        connect("Afghanistan", "India");
+        connect("China", "India");
+        connect("China", "Siam");
+        connect("Middle East", "India");
+        connect("India", "Siam");
+        connect("Siam", "Indonesia");
+
+        connect("Indonesia", "New Guinea");
+        connect("Indonesia", "Western Australia");
+        connect("New Guinea", "Western Australia");
+        connect("New Guinea", "Eastern Australia");
+        connect("Western Australia", "Eastern Australia");
     }
 }

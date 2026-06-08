@@ -52,4 +52,8 @@ public class Territory {
     public int getArmyCount() {
         return armyCount;
     }
+
+    void addAdjacentTerritory(final Territory adjacentTerritory) {
+        adjacentTerritories.add(adjacentTerritory);
+    }
 }
