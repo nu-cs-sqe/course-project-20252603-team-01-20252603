@@ -7,7 +7,11 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Tests boundary values and core behavior for the Deck class.
@@ -15,7 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public final class DeckTest {
 
     private static final int TOTAL_CARD_COUNT = 44;
+
     private static final int TERRITORY_CARD_COUNT = 42;
+
     private static final int WILD_CARD_COUNT = 2;
 
     @Test

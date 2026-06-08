@@ -3,8 +3,6 @@ package code.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Represents the main model for the Risk game.
@@ -12,13 +10,19 @@ import java.util.Map;
 public class GameModel {
 
     private static final int NORTH_AMERICA_BONUS = 5;
+
     private static final int SOUTH_AMERICA_BONUS = 2;
+
     private static final int EUROPE_BONUS = 5;
+
     private static final int AFRICA_BONUS = 3;
+
     private static final int ASIA_BONUS = 7;
+
     private static final int AUSTRALIA_BONUS = 2;
 
     private final List<Continent> continents;
+
     private Deck deck;
 
     public GameModel() {
@@ -37,10 +41,19 @@ public class GameModel {
         createAsia();
         createAustralia();
         initializeAdjacencies();
+        initializeDeck();
     }
 
     public List<Continent> getContinents() {
         return new ArrayList<>(continents);
+    }
+
+    public int getDeckSize() {
+        return deck.size();
+    }
+
+    public boolean isDeckEmpty() {
+        return deck.isEmpty();
     }
 
     private void createNorthAmerica() {
@@ -145,6 +158,7 @@ public class GameModel {
                 .findFirst()
                 .get();
     }
+
     private void connect(
             final String firstTerritoryName,
             final String secondTerritoryName) {
@@ -245,12 +259,8 @@ public class GameModel {
         connect("Western Australia", "Eastern Australia");
     }
 
-    //for bva purposes
-    public int getDeckSize() {
-        return deck.size();
-    }
-
-    public boolean isDeckEmpty() {
-        return deck.isEmpty();
+    private void initializeDeck() {
+        deck = new Deck();
+        deck.shuffle();
     }
 }

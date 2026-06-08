@@ -5,7 +5,9 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests board initialization behavior for the GameModel class.
@@ -13,19 +15,33 @@ import static org.junit.jupiter.api.Assertions.*;
 public final class GameModelTest {
 
     private static final int CONTINENT_COUNT = 6;
+
     private static final int TERRITORY_COUNT = 42;
+
     private static final int NORTH_AMERICA_TERRITORY_COUNT = 9;
+
     private static final int SOUTH_AMERICA_TERRITORY_COUNT = 4;
+
     private static final int EUROPE_TERRITORY_COUNT = 7;
+
     private static final int AFRICA_TERRITORY_COUNT = 6;
+
     private static final int ASIA_TERRITORY_COUNT = 12;
+
     private static final int AUSTRALIA_TERRITORY_COUNT = 4;
+
     private static final int NORTH_AMERICA_BONUS = 5;
+
     private static final int SOUTH_AMERICA_BONUS = 2;
+
     private static final int EUROPE_BONUS = 5;
+
     private static final int AFRICA_BONUS = 3;
+
     private static final int ASIA_BONUS = 7;
+
     private static final int AUSTRALIA_BONUS = 2;
+
     private static final int DECK_CARD_COUNT = 44;
 
     @Test
@@ -56,20 +72,6 @@ public final class GameModelTest {
                 .sum();
 
         assertEquals(TERRITORY_COUNT, territoryCount);
-    }
-
-    @Test
-    public void allTerritoriesStartUnclaimed() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.initializeContinentsAndTerritories();
-
-        boolean allUnclaimed = gameModel.getContinents()
-                .stream()
-                .flatMap(continent -> continent.getTerritories().stream())
-                .allMatch(Territory::isUnclaimed);
-
-        assertTrue(allUnclaimed);
     }
 
     @Test
@@ -237,6 +239,7 @@ public final class GameModelTest {
 
         assertTrue(noSelfAdjacency);
     }
+
     @Test
     public void deckHasFortyFourCardsAfterBoardInitialization() {
         GameModel gameModel = new GameModel();

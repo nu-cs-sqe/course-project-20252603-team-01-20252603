@@ -1,14 +1,22 @@
 package code.model;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Represents a Risk card associated with a territory and card type.
  */
 public class RiskCard {
 
     private final Territory territory;
+
     private final CardType type;
+
     private final boolean wild;
 
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "RiskCard stores a reference to the board territory it represents."
+    )
     public RiskCard(
             final Territory cardTerritory,
             final CardType cardType,
@@ -26,7 +34,7 @@ public class RiskCard {
         return type;
     }
 
-    public Territory getTerritory() {
+    Territory getTerritory() {
         return territory;
     }
 

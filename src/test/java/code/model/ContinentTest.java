@@ -10,7 +10,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import org.junit.jupiter.api.Test;
 
-import org.junit.jupiter.api.Test;
 
 /**
  * Tests boundary values and core behavior for the Continent class.
@@ -18,12 +17,16 @@ import org.junit.jupiter.api.Test;
 public final class ContinentTest {
 
     private static final int MIN_BONUS_ARMIES = 2;
+
     private static final int MAX_BONUS_ARMIES = 7;
+
     private static final int NEGATIVE_BONUS_ARMIES = -1;
+
     private static final int ZERO_BONUS_ARMIES = 0;
+
     private static final int BELOW_MIN_BONUS_ARMIES = 1;
+
     private static final int ABOVE_MAX_BONUS_ARMIES = 8;
-    private static final int EUROPE_BONUS_ARMIES = 5;
 
     @Test
     public void constructorStoresValidName() {
@@ -45,6 +48,7 @@ public final class ContinentTest {
 
         assertEquals(MAX_BONUS_ARMIES, continent.getBonusArmies());
     }
+
     @Test
     public void constructorRejectsBonusArmiesBelowMinimum() {
         assertThrows(
@@ -72,6 +76,7 @@ public final class ContinentTest {
                 IllegalArgumentException.class,
                 () -> new Continent("Invalid", ABOVE_MAX_BONUS_ARMIES));
     }
+
     @Test
     public void constructorRejectsEmptyName() {
         assertThrows(
@@ -135,6 +140,7 @@ public final class ContinentTest {
 
         assertFalse(continent.containsTerritory(territory));
     }
+
     @ParameterizedTest
     @CsvSource({
             "North America, 5",

@@ -6,13 +6,16 @@ import java.util.List;
 /**
  * Represents a continent in the Risk game.
  */
-public class Continent {
+public final class Continent {
 
     private static final int MIN_BONUS_ARMIES = 2;
+
     private static final int MAX_BONUS_ARMIES = 7;
 
     private final String name;
+
     private final int bonusArmies;
+
     private final List<Territory> territories;
 
     public Continent(final String continentName, final int continentBonusArmies) {

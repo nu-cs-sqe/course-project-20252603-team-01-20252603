@@ -10,8 +10,12 @@ import java.util.List;
 public class Deck {
 
     private static final int TERRITORY_CARD_COUNT = 42;
+
+
     private static final int WILD_CARD_COUNT = 2;
+
     private static final int DEFAULT_CONTINENT_BONUS = 5;
+
     private static final int CARD_TYPE_COUNT = 3;
 
     private final List<RiskCard> cards;

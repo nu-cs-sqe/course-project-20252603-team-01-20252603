@@ -2,6 +2,8 @@ package code.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 
 /**
  * Represents a territory on the Risk game board.
@@ -9,45 +11,41 @@ import java.util.List;
 public class Territory {
 
     private final String name;
+
     private final Continent continent;
+
     private final List<Territory> adjacentTerritories;
-    private Player owner;
+
     private int armyCount;
 
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "Territory stores a reference to its continent in the board model."
+    )
     public Territory(
             final String territoryName,
             final Continent territoryContinent,
             final List<Territory> territoryAdjacentTerritories) {
-        validateName(territoryName);
+
 
         name = territoryName;
         continent = territoryContinent;
         adjacentTerritories = new ArrayList<>(territoryAdjacentTerritories);
-        owner = null;
         armyCount = 0;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public Continent getContinent() {
+    Continent getContinent() {
         return continent;
     }
 
-    public List<Territory> getAdjacentTerritories() {
+    List<Territory> getAdjacentTerritories() {
         return new ArrayList<>(adjacentTerritories);
     }
 
-    public boolean isUnclaimed() {
-        return owner == null;
-    }
-
-    private void validateName(final String territoryName) {
-        if (territoryName == null || territoryName.isEmpty()) {
-            throw new IllegalArgumentException("Territory name cannot be empty.");
-        }
-    }
 
     public int getArmyCount() {
         return armyCount;
