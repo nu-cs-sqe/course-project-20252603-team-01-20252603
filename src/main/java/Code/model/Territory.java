@@ -1,5 +1,6 @@
 package code.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,6 +10,7 @@ public class Territory {
 
     private final String name;
     private final Continent continent;
+    private final List<Territory> adjacentTerritories;
     private Player owner;
 
     public Territory(
@@ -17,6 +19,7 @@ public class Territory {
             final List<Territory> territoryAdjacentTerritories) {
         name = territoryName;
         continent = territoryContinent;
+        adjacentTerritories = new ArrayList<>(territoryAdjacentTerritories);
         owner = null;
     }
 
@@ -26,6 +29,10 @@ public class Territory {
 
     public Continent getContinent() {
         return continent;
+    }
+
+    public List<Territory> getAdjacentTerritories() {
+        return new ArrayList<>(adjacentTerritories);
     }
 
     public boolean isUnclaimed() {
