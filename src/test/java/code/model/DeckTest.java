@@ -1,13 +1,11 @@
 package code.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests boundary values and core behavior for the Deck class.
@@ -92,5 +90,12 @@ public final class DeckTest {
         assertTrue(hasInfantry);
         assertTrue(hasCavalry);
         assertTrue(hasArtillery);
+    }
+
+    @Test
+    public void freshDeckIsNotEmpty() {
+        Deck deck = new Deck();
+
+        assertFalse(deck.isEmpty());
     }
 }

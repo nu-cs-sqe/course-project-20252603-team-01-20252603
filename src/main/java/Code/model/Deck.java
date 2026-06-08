@@ -66,4 +66,8 @@ public class Deck {
         return CardType.ARTILLERY;
     }
 
+    public boolean isEmpty() {
+        return cards.isEmpty();
+    }
+
 }
