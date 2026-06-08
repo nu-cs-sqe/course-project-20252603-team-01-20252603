@@ -15,8 +15,18 @@ public class GameController {
     private final SetupController setupController;
 
     public GameController() {
-        model = new GameModel();
-        view = new ConsoleView();
+        this(new GameModel(), new ConsoleView());
+    }
+
+    GameController(
+            final GameModel gameModel,
+            final ConsoleView consoleView) {
+        model = gameModel;
+        view = consoleView;
         setupController = new SetupController(model, view);
+    }
+
+    public void startGame() {
+        setupController.initializeBoard();
     }
 }
