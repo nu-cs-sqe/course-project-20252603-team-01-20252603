@@ -64,4 +64,17 @@ public final class ContinentTest {
                 IllegalArgumentException.class,
                 () -> new Continent("Invalid", ABOVE_MAX_BONUS_ARMIES));
     }
+    @Test
+    public void constructorRejectsEmptyName() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Continent("", MIN_BONUS_ARMIES));
+    }
+
+    @Test
+    public void constructorRejectsNullName() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Continent(null, MIN_BONUS_ARMIES));
+    }
 }

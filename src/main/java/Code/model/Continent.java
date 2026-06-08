@@ -12,6 +12,7 @@ public final class Continent {
     private final int bonusArmies;
 
     public Continent(final String continentName, final int continentBonusArmies) {
+        validateName(continentName);
         validateBonusArmies(continentBonusArmies);
 
         name = continentName;
@@ -26,11 +27,16 @@ public final class Continent {
         return bonusArmies;
     }
 
+    private void validateName(final String continentName) {
+        if (continentName.isEmpty()) {
+            throw new IllegalArgumentException("Continent name cannot be empty.");
+        }
+    }
+
     private void validateBonusArmies(final int continentBonusArmies) {
         if (continentBonusArmies < MIN_BONUS_ARMIES
                 || continentBonusArmies > MAX_BONUS_ARMIES) {
             throw new IllegalArgumentException("Invalid continent bonus armies.");
         }
     }
-
 }
