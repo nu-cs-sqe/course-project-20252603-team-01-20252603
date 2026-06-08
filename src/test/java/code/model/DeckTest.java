@@ -71,4 +71,26 @@ public final class DeckTest {
 
         assertEquals(TERRITORY_CARD_COUNT, territories.size());
     }
+
+    @Test
+    public void deckContainsEachNonWildCardType() {
+        Deck deck = new Deck();
+
+        boolean hasInfantry = deck.getCards()
+                .stream()
+                .filter(card -> !card.isWild())
+                .anyMatch(card -> card.getType() == CardType.INFANTRY);
+        boolean hasCavalry = deck.getCards()
+                .stream()
+                .filter(card -> !card.isWild())
+                .anyMatch(card -> card.getType() == CardType.CAVALRY);
+        boolean hasArtillery = deck.getCards()
+                .stream()
+                .filter(card -> !card.isWild())
+                .anyMatch(card -> card.getType() == CardType.ARTILLERY);
+
+        assertTrue(hasInfantry);
+        assertTrue(hasCavalry);
+        assertTrue(hasArtillery);
+    }
 }
