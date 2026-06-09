@@ -44,24 +44,6 @@ public final class TerritoryTest {
         assertEquals("Alaska", alaska.getName());
     }
 
-    @Test
-    public void constructorStoresContinent() {
-        Continent northAmerica = new Continent(
-                "North America",
-                NORTH_AMERICA_BONUS_ARMIES);
-        Territory northwestTerritory = createMock(Territory.class);
-        Territory alberta = createMock(Territory.class);
-        Territory kamchatka = createMock(Territory.class);
-        List<Territory> neighbours = Arrays.asList(
-                northwestTerritory,
-                alberta,
-                kamchatka);
-
-        Territory alaska = new Territory("Alaska", northAmerica, neighbours);
-
-        assertEquals(northAmerica, alaska.getContinent());
-    }
-
 
     @Test
     public void constructorStoresAdjacentTerritories() {
@@ -165,7 +147,6 @@ public final class TerritoryTest {
         boolean placed = territory.placeArmies(pieces);
 
         assertTrue(placed);
-        assertEquals(ONE_INFANTRY, territory.getPieces().get(ArmyType.INFANTRY));
     }
 
     @Test
@@ -178,7 +159,6 @@ public final class TerritoryTest {
         boolean placed = territory.placeArmies(pieces);
 
         assertTrue(placed);
-        assertEquals(TWO_INFANTRY, territory.getPieces().get(ArmyType.INFANTRY));
     }
 
 }

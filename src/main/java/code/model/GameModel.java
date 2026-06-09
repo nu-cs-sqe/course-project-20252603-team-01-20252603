@@ -42,14 +42,19 @@ public class GameModel {
 
     private final List<Player> players;
 
+    private static final int TOTAL_TERRITORY_COUNT = 42;
+
     private int playerCount;
 
     private Deck deck;
 
     private int currentPlayerIndex;
 
+    private final List<Territory> territories;
+
     public GameModel() {
         continents = new ArrayList<>();
+        territories = new ArrayList<>();
         players = new ArrayList<>();
         deck = new Deck();
         deck.shuffle();
@@ -57,6 +62,7 @@ public class GameModel {
 
     public void initializeContinentsAndTerritories() {
         continents.clear();
+        territories.clear();
 
         createNorthAmerica();
         createSouthAmerica();
@@ -68,9 +74,9 @@ public class GameModel {
         initializeDeck();
     }
 
-    public List<Continent> getContinents() {
-        return new ArrayList<>(continents);
-    }
+//    public List<Continent> getContinents() {
+//        return new ArrayList<>(continents);
+//    }
 
     public int getDeckSize() {
         return deck.size();
@@ -241,16 +247,14 @@ public class GameModel {
                 Collections.emptyList());
 
         continent.addTerritory(territory);
+        territories.add(territory);
     }
 
     private Territory findTerritoryByName(final String territoryName) {
-        return continents.stream()
-                .flatMap(continent -> continent.getTerritories().stream())
+        return territories.stream()
                 .filter(territory -> territory.getName().equals(territoryName))
                 .findFirst()
-                .orElseThrow(
-                        () -> new IllegalArgumentException("Territory not found: " + territoryName)
-                );
+                .get();
     }
 
     private void connect(

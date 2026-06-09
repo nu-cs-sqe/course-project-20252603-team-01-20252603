@@ -47,10 +47,6 @@ public class Territory {
         return name;
     }
 
-    Continent getContinent() {
-        return continent;
-    }
-
     List<Territory> getAdjacentTerritories() {
         return new ArrayList<>(adjacentTerritories);
     }
@@ -100,7 +96,4 @@ public class Territory {
         return true;
     }
 
-    public HashMap<ArmyType, Integer> getPieces() {
-        return new HashMap<>(pieces);
-    }
 }
