@@ -195,3 +195,23 @@
 - **TC41: Returns true when all territories are claimed** ( :x: )
     - **State of the system**: All 42 territories have been claimed
     - **Expected output**: Returns `true`
+
+---
+
+### Method under test: `advanceCurrentPlayerIndex()`
+
+- **TC34: Advances from first player to second player** ( :x: )
+    - **State of the system**: Three-player game has been created; current player index is `0`
+    - **Expected output**: Current player advances to index `1`; `getCurrentPlayer()` returns the second player
+
+- **TC35: Advances from middle player to next player** ( :x: )
+    - **State of the system**: Three-player game has been created; current player index is `1`
+    - **Expected output**: Current player advances to index `2`; `getCurrentPlayer()` returns the third player
+
+- **TC36: Wraps from last player back to first player** ( :x: )
+    - **State of the system**: Three-player game has been created; current player index is `2`
+    - **Expected output**: Current player advances to index `0`; `getCurrentPlayer()` returns the first player
+
+- **TC37: Does not advance when no players are registered** ( :x: )
+    - **State of the system**: GameModel has no registered players
+    - **Expected output**: Current player remains unavailable; method does not change player state
