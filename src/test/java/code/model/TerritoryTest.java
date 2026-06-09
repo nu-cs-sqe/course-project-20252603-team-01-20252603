@@ -156,4 +156,12 @@ public final class TerritoryTest {
         assertTrue(territory.isOwnedBy(player));
     }
 
+    @Test
+    public void isOwnedByReturnsFalseWhenTerritoryIsUnclaimed() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        Player player = createMock(Player.class);
+
+        assertFalse(territory.isOwnedBy(player));
+    }
+
 }
