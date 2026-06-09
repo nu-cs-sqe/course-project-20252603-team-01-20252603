@@ -47,7 +47,7 @@
     - **State of the system**: Board initialized; second player first selects a color already chosen by player 1, then selects an available color
     - **Expected output**: Error is displayed for duplicate color; second player is asked for color again; final registered players have unique colors
 
-- **TC10: Sets first player to lowest random index** ( :x: )
+- **TC10: Sets first player to lowest random index** ( :white_check_mark: )
     - **State of the system**: Three players registered; random starting index resolves to `0`
     - **Expected output**: Current player index is set to `0`; view announces the first registered player
 
