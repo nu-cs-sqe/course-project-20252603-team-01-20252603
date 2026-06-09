@@ -1,11 +1,13 @@
 package code.model;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import static org.easymock.EasyMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -67,6 +69,8 @@ public final class GameModelTest {
     private static final int SIX_PLAYER_STARTING_INFANTRY = 20;
 
     private static final int TOTAL_PLAYER_COLORS = PlayerColor.values().length - 1;
+
+    private static final int ONE_INFANTRY = 1;
 
     @Test
     public void gameModelConstructsWithEmptyContinents() {
@@ -499,5 +503,41 @@ public final class GameModelTest {
         final Player lastPlayer = gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.setCurrentPlayerIndex(2);
         assertEquals(lastPlayer, gameModel.getCurrentPlayer());
+    }
+
+    private HashMap<ArmyType, Integer> createInfantryPieces(final int infantryCount) {
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, infantryCount);
+
+        return pieces;
+    }
+
+    @Test
+    public void claimTerritoryDuringSetupUnclaimedTerritoryWithOneInfantryReturnsTrue() {
+        GameModel gameModel = new GameModel();
+        Player player = createMock(Player.class);
+        Territory territory = createMock(Territory.class);
+        HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
+
+        expect(territory.isUnclaimed()).andReturn(true);
+        expect(player.hasAvailableArmies(pieces)).andReturn(true);
+
+        territory.setOwner(player);
+        expectLastCall().once();
+
+        expect(territory.placeArmies(pieces)).andReturn(true);
+
+        player.addTerritory(territory);
+        expectLastCall().once();
+
+        player.removeArmies(pieces);
+        expectLastCall().once();
+
+        replay(player, territory);
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup(player, territory, pieces);
+
+        assertTrue(claimed);
+        verify(player, territory);
     }
 }

@@ -1,9 +1,6 @@
 package code.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +35,8 @@ public class GameModel {
     private static final int FIVE_PLAYER_STARTING_INFANTRY = 25;
 
     private static final int SIX_PLAYER_STARTING_INFANTRY = 20;
+
+    private static final int SETUP_INFANTRY_COUNT = 1;
 
     private final List<Continent> continents;
 
@@ -357,5 +356,34 @@ public class GameModel {
     private void initializeDeck() {
         deck = new Deck();
         deck.shuffle();
+    }
+
+    public boolean claimTerritoryDuringSetup(
+            final Player player,
+            final Territory territory,
+            final HashMap<ArmyType, Integer> pieces) {
+        if (!territory.isUnclaimed()) {
+            return false;
+        }
+
+        if (!isExactlyOneInfantry(pieces)) {
+            return false;
+        }
+
+        if (!player.hasAvailableArmies(pieces)) {
+            return false;
+        }
+
+        territory.setOwner(player);
+        territory.placeArmies(pieces);
+        player.addTerritory(territory);
+        player.removeArmies(pieces);
+
+        return true;
+    }
+
+    private boolean isExactlyOneInfantry(final HashMap<ArmyType, Integer> pieces) {
+        return pieces.size() == SETUP_INFANTRY_COUNT
+                && pieces.getOrDefault(ArmyType.INFANTRY, 0) == SETUP_INFANTRY_COUNT;
     }
 }
