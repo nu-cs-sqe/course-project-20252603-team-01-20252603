@@ -1,6 +1,7 @@
 package code.controller;
 
 import code.model.GameModel;
+import code.model.NullPlayer;
 import code.model.Player;
 import code.model.PlayerColor;
 import code.view.ConsoleView;
@@ -59,9 +60,15 @@ public class SetupController {
 
         for (int playerNumber = 1; playerNumber <= playerCount; playerNumber++) {
             String playerName = view.promptPlayerName(playerNumber);
-            List<PlayerColor> availableColors = model.showAvailableColors();
-            PlayerColor playerColor = view.promptPlayerColor(playerName, availableColors);
-            model.addPlayer(playerName, playerColor);
+            Player player = new NullPlayer();
+            while (player instanceof NullPlayer) {
+                List<PlayerColor> availableColors = model.showAvailableColors();
+                PlayerColor playerColor = view.promptPlayerColor(playerName, availableColors);
+                player = model.addPlayer(playerName, playerColor);
+                if (player instanceof NullPlayer) {
+                    view.displayError("Color already selected.");
+                }
+            }
         }
 
         List<Player> players = model.getPlayers();

@@ -43,7 +43,7 @@
     - **State of the system**: Board initialized; view first returns player count `2`, then returns `3`
     - **Expected output**: Error is displayed after `2`; setup asks again and continues registration using player count `3`
 
-- **TC9: Re-prompts after duplicate color** ( :x: )
+- **TC9: Re-prompts after duplicate color** ( :white_check_mark: )
     - **State of the system**: Board initialized; second player first selects a color already chosen by player 1, then selects an available color
     - **Expected output**: Error is displayed for duplicate color; second player is asked for color again; final registered players have unique colors
 
