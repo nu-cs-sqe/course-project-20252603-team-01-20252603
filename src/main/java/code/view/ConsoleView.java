@@ -57,4 +57,8 @@ public class ConsoleView {
     public void displayStartingPlayer(final String startingPlayer) {
         output.println(startingPlayer);
     }
+
+    public void displayUnclaimedTerritoriesByContinent(final String unclaimedTerritories) {
+        output.println(unclaimedTerritories);
+    }
 }

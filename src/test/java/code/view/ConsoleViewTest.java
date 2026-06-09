@@ -186,4 +186,15 @@ public final class ConsoleViewTest {
 
         assertTrue(output.toString().contains("Player 1 RED"));
     }
+
+    @Test
+    public void displayUnclaimedTerritoriesByContinentPrintsTerritories() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(new Scanner(""), new PrintStream(output));
+        String unclaimedTerritories = "North America: Alaska, Alberta";
+
+        view.displayUnclaimedTerritoriesByContinent(unclaimedTerritories);
+
+        assertTrue(output.toString().contains(unclaimedTerritories));
+    }
 }
