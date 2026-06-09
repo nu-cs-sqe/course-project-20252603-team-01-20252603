@@ -206,4 +206,18 @@ public final class HumanPlayerTest {
         assertTrue(availableArmies.contains("19"));
     }
 
+    @Test
+    public void removeArmiesRemovesLastInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ONE_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
+        armiesToRemove.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        player.removeArmies(armiesToRemove);
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains("0"));
+    }
+
 }
