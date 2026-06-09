@@ -39,7 +39,7 @@
     - **State of the system**: Board initialized; view returns player count `6`; view returns six unique names and colors
     - **Expected output**: Model stores exactly six players, each with `20` available Infantry
 
-- **TC8: Re-prompts after invalid player count** ( :x: )
+- **TC8: Re-prompts after invalid player count** ( :white_check_mark: )
     - **State of the system**: Board initialized; view first returns player count `2`, then returns `3`
     - **Expected output**: Error is displayed after `2`; setup asks again and continues registration using player count `3`
 

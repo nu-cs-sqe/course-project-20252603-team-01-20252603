@@ -52,7 +52,10 @@ public class SetupController {
 
     public void initializePlayers() {
         int playerCount = view.promptNumberOfPlayers();
-        model.setPlayerCount(playerCount);
+        while (!model.setPlayerCount(playerCount)) {
+            view.displayError("Invalid number of players.");
+            playerCount = view.promptNumberOfPlayers();
+        }
 
         for (int playerNumber = 1; playerNumber <= playerCount; playerNumber++) {
             String playerName = view.promptPlayerName(playerNumber);
