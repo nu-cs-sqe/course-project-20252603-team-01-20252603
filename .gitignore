@@ -90,7 +90,7 @@ bin/
 /.nb-gradle/
 
 ########################
-### VS Code ###
+### VS code ###
 ########################
 .vscode/
 .code-workspace
