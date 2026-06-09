@@ -35,6 +35,6 @@
 
 ### Method under test: `hasAvailableArmies()`
 
-- **TC5: Returns false for placeholder player** ( :x: )
+- **TC5: Returns false for placeholder player** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed with no assigned armies
     - **Expected output**: Returns `false`

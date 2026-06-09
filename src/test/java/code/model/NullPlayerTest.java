@@ -1,6 +1,7 @@
 package code.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.util.HashMap;
@@ -40,5 +41,12 @@ public final class NullPlayerTest {
         assertEquals(0, availableArmies.get(ArmyType.INFANTRY));
         assertEquals(0, availableArmies.get(ArmyType.CAVALRY));
         assertEquals(0, availableArmies.get(ArmyType.ARTILLERY));
+    }
+
+    @Test
+    public void hasAvailableArmies_UnassignedOwnership_ReturnsFalse() {
+        NullPlayer player = new NullPlayer();
+
+        assertFalse(player.hasAvailableArmies());
     }
 }
