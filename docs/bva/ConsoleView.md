@@ -15,7 +15,7 @@
     - **State of the system**: User enters `2` when prompted for number of players
     - **Expected output**: Returns `2` so `GameModel.setPlayerCount(2)` can reject it and setup can re-prompt
 
-- **TC4: Reads above-maximum player count for model validation** ( :x: )
+- **TC4: Reads above-maximum player count for model validation** ( :white_check_mark: )
     - **State of the system**: User enters `7` when prompted for number of players
     - **Expected output**: Returns `7` so `GameModel.setPlayerCount(7)` can reject it and setup can re-prompt
 
