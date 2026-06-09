@@ -1,5 +1,6 @@
 package code.view;
 
+import code.model.Player;
 import code.model.PlayerColor;
 import java.io.PrintStream;
 import java.util.List;
@@ -35,5 +36,12 @@ public class ConsoleView {
             final List<PlayerColor> availableColors) {
         output.print("Enter color for " + playerName + ": ");
         return PlayerColor.valueOf(scanner.nextLine().trim().toUpperCase());
+    }
+
+    public void displayPlayers(final List<Player> players) {
+        output.println("Registered players:");
+        for (Player player : players) {
+            output.println(player.getName() + " - " + player.getColor());
+        }
     }
 }

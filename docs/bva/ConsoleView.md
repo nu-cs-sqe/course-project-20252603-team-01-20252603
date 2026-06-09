@@ -51,7 +51,7 @@
 
 ### Method under test: `displayPlayers(List<Player> players)`
 
-- **TC10: Displays minimum registered player list** ( :x: )
+- **TC10: Displays minimum registered player list** ( :white_check_mark: )
     - **State of the system**: Three players have been registered with unique colors
     - **Expected output**: Displays all three player names and colors for confirmation
 

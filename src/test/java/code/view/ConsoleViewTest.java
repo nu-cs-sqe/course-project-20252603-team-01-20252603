@@ -1,7 +1,10 @@
 package code.view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import code.model.HumanPlayer;
+import code.model.Player;
 import code.model.PlayerColor;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -91,9 +94,33 @@ public final class ConsoleViewTest {
                 view.promptPlayerColor("Bob", List.of(PlayerColor.BLUE)));
     }
 
+    @Test
+    public void displayPlayers_MinimumRegisteredPlayers_DisplaysPlayers() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        List<Player> players = List.of(
+                new HumanPlayer("Alice", PlayerColor.RED, 35),
+                new HumanPlayer("Bob", PlayerColor.BLUE, 35),
+                new HumanPlayer("Cara", PlayerColor.GREEN, 35));
+
+        view.displayPlayers(players);
+        String displayedText = output.toString();
+
+        assertTrue(displayedText.contains("Alice"));
+        assertTrue(displayedText.contains("RED"));
+        assertTrue(displayedText.contains("Bob"));
+        assertTrue(displayedText.contains("BLUE"));
+        assertTrue(displayedText.contains("Cara"));
+        assertTrue(displayedText.contains("GREEN"));
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         return new ConsoleView(
                 new Scanner(input),
                 new PrintStream(new ByteArrayOutputStream()));
+    }
+
+    private ConsoleView createViewWithOutput(final ByteArrayOutputStream output) {
+        return new ConsoleView(new Scanner(""), new PrintStream(output));
     }
 }
