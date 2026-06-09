@@ -35,6 +35,8 @@ public class GameModel {
 
     private Deck deck;
 
+    private int currentPlayerIndex;
+
     public GameModel() {
         continents = new ArrayList<>();
         players = new ArrayList<>();
@@ -100,6 +102,14 @@ public class GameModel {
                 .filter(color -> color != PlayerColor.UNASSIGNED)
                 .filter(color -> !isColorAlreadyChosen(color))
                 .collect(Collectors.toList());
+    }
+
+    public void setCurrentPlayerIndex(final int index) {
+        currentPlayerIndex = index;
+    }
+
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
     }
 
     private boolean isColorAlreadyChosen(final PlayerColor color) {

@@ -128,7 +128,7 @@
 
 ### Method under test: `setCurrentPlayerIndex(int index)`
 
-- **TC28: Accepts first player index** ( :x: )
+- **TC28: Accepts first player index** ( :white_check_mark: )
     - **State of the system**: Three players have been registered; `setCurrentPlayerIndex(0)` called
     - **Expected output**: Current player becomes the first registered player
 
