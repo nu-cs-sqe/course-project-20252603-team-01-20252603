@@ -70,11 +70,11 @@
 
 ### Method under test: `addArmies(HashMap<ArmyType, Integer> armiesToAdd)`
 
-- **TC15: Add one Infantry to available armies** ( :x: )
+- **TC15: Add one Infantry to available armies** ( :white_check_mark: )
     - **State of the system**: Human player has available armies containing `INFANTRY -> 0`; `addArmies()` is called with a map containing `INFANTRY -> 1`
     - **Expected output**: Player available armies are updated to contain exactly one Infantry
 
-- **TC16: Add multiple Infantry to available armies** ( :x: )
+- **TC16: Add multiple Infantry to available armies** ( :white_check_mark: )
     - **State of the system**: Human player has available armies containing `INFANTRY -> 0`; `addArmies()` is called with a map containing `INFANTRY -> 20`
     - **Expected output**: Player available armies are updated to contain exactly twenty Infantry
   
@@ -82,11 +82,11 @@
 
 ### Method under test: `removeArmies(HashMap<ArmyType, Integer> armiesToRemove)`
 
-- **TC17: Remove one Infantry from available armies** ( :x: )
+- **TC17: Remove one Infantry from available armies** ( :white_check_mark: )
     - **State of the system**: Player has available armies containing `INFANTRY -> 20`; `removeArmies()` is called with a map containing `INFANTRY -> 1`
     - **Expected output**: Player available armies are updated to contain exactly nineteen Infantry
 
-- **TC18: Remove last available Infantry** ( :x: )
+- **TC18: Remove last available Infantry** ( :white_check_mark: )
     - **State of the system**: Player has available armies containing `INFANTRY -> 1`; `removeArmies()` is called with a map containing `INFANTRY -> 1`
     - **Expected output**: Player available armies are updated to contain exactly zero Infantry
 
