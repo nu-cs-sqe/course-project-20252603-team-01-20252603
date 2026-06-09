@@ -86,6 +86,10 @@ public class GameModel {
     }
 
     private int calculateStartingInfantry() {
+        if (playerCount == 4) {
+            return 30;
+        }
+
         return 35;
     }
 

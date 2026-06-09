@@ -88,7 +88,7 @@
     - **State of the system**: `setPlayerCount(3)` has returned `true`; `addPlayer("Player 1", PlayerColor.RED)` called
     - **Expected output**: Returns a player named `"Player 1"` with color `RED` and `35` available Infantry
 
-- **TC20: Adds player with correct four-player infantry** ( :x: )
+- **TC20: Adds player with correct four-player infantry** ( :white_check_mark: )
     - **State of the system**: `setPlayerCount(4)` has returned `true`; `addPlayer("Player 1", PlayerColor.BLUE)` called
     - **Expected output**: Returns a player with `30` available Infantry
 
