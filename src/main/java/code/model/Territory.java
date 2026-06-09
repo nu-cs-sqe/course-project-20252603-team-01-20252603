@@ -18,6 +18,8 @@ public class Territory {
 
     private int armyCount;
 
+    private Player owner;
+
     @SuppressFBWarnings(
             value = "EI_EXPOSE_REP2",
             justification = "Territory stores a reference to its continent in the board model."
@@ -32,6 +34,7 @@ public class Territory {
         continent = territoryContinent;
         adjacentTerritories = new ArrayList<>(territoryAdjacentTerritories);
         armyCount = 0;
+        owner = new NullPlayer();
     }
 
     String getName() {
@@ -53,5 +56,9 @@ public class Territory {
 
     void addAdjacentTerritory(final Territory adjacentTerritory) {
         adjacentTerritories.add(adjacentTerritory);
+    }
+
+    public boolean isUnclaimed() {
+        return owner instanceof NullPlayer;
     }
 }
