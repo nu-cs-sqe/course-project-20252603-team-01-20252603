@@ -114,6 +114,35 @@ public final class ConsoleViewTest {
         assertTrue(displayedText.contains("GREEN"));
     }
 
+    @Test
+    public void displayPlayers_MaximumRegisteredPlayers_DisplaysPlayers() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        List<Player> players = List.of(
+                new HumanPlayer("Alice", PlayerColor.RED, 20),
+                new HumanPlayer("Bob", PlayerColor.BLUE, 20),
+                new HumanPlayer("Cara", PlayerColor.GREEN, 20),
+                new HumanPlayer("Dan", PlayerColor.YELLOW, 20),
+                new HumanPlayer("Eli", PlayerColor.BLACK, 20),
+                new HumanPlayer("Frank", PlayerColor.PURPLE, 20));
+
+        view.displayPlayers(players);
+        String displayedText = output.toString();
+
+        assertTrue(displayedText.contains("Alice"));
+        assertTrue(displayedText.contains("RED"));
+        assertTrue(displayedText.contains("Bob"));
+        assertTrue(displayedText.contains("BLUE"));
+        assertTrue(displayedText.contains("Cara"));
+        assertTrue(displayedText.contains("GREEN"));
+        assertTrue(displayedText.contains("Dan"));
+        assertTrue(displayedText.contains("YELLOW"));
+        assertTrue(displayedText.contains("Eli"));
+        assertTrue(displayedText.contains("BLACK"));
+        assertTrue(displayedText.contains("Frank"));
+        assertTrue(displayedText.contains("PURPLE"));
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         return new ConsoleView(
                 new Scanner(input),
