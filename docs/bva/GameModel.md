@@ -72,7 +72,7 @@
     - **State of the system**: `GameModel` constructed; `setPlayerCount(3)` called
     - **Expected output**: Returns `true`; player count is stored as `3`
 
-- **TC17: Accepts maximum player count** ( :x: )
+- **TC17: Accepts maximum player count** ( :white_check_mark: )
     - **State of the system**: `GameModel` constructed; `setPlayerCount(6)` called
     - **Expected output**: Returns `true`; player count is stored as `6`
 

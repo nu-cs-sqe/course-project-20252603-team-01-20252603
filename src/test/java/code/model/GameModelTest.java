@@ -48,6 +48,8 @@ public final class GameModelTest {
 
     private static final int MIN_PLAYER_COUNT = 3;
 
+    private static final int MAX_PLAYER_COUNT = 6;
+
     @Test
     public void gameModelConstructsWithEmptyContinents() {
         GameModel gameModel = new GameModel();
@@ -275,5 +277,13 @@ public final class GameModelTest {
 
         assertTrue(gameModel.setPlayerCount(MIN_PLAYER_COUNT));
         assertEquals(MIN_PLAYER_COUNT, gameModel.getPlayerCount());
+    }
+
+    @Test
+    public void setPlayerCount_MaximumPlayerCount_ReturnsTrue() {
+        GameModel gameModel = new GameModel();
+
+        assertTrue(gameModel.setPlayerCount(MAX_PLAYER_COUNT));
+        assertEquals(MAX_PLAYER_COUNT, gameModel.getPlayerCount());
     }
 }
