@@ -53,4 +53,16 @@ public class ConsoleView {
     public void displayError(final String message) {
         output.println(message);
     }
+
+    public void displayTerritoryClaimingStatus() {
+    }
+
+    public Object getTerritoryChoiceDuringSetup() {
+    }
+
+    public Object getInfantryChoiceDuringSetup() {
+    }
+
+    public void displayUpdatedBoard() {
+    }
 }

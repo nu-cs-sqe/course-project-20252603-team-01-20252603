@@ -215,3 +215,14 @@
 - **TC37: Does not advance when no players are registered** ( :white_check_mark: )
     - **State of the system**: GameModel has no registered players
     - **Expected output**: Current player remains unavailable; method does not change player state
+---
+
+### Method under test: `getCurrentPlayerName()`
+
+- **TC42: Returns first player's name when current player index is first player** ( :x: )
+    - **State of the system**: Three-player game has been created; current player index is `0`
+    - **Expected output**: Returns `"Player 1"`
+
+- **TC43: Returns middle player's name when current player index is middle player** ( :x: )
+    - **State of the system**: Three-player game has been created; current player index is `1`
+    - **Expected output**: Returns `"Player 2"`

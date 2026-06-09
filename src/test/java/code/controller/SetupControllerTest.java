@@ -7,12 +7,10 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import code.model.GameModel;
-import code.model.HumanPlayer;
-import code.model.NullPlayer;
-import code.model.Player;
-import code.model.PlayerColor;
+import code.model.*;
 import code.view.ConsoleView;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
@@ -45,6 +43,12 @@ public final class SetupControllerTest {
     private static final int SIXTH_PLAYER_INDEX = 5;
 
     private static final int HIGHEST_PLAYER_INDEX = 2;
+
+    private static final int ZERO_INFANTRY = 0;
+
+    private static final int ONE_INFANTRY = 1;
+
+    private static final int TWO_INFANTRY = 2;
 
     @Test
     public void setupControllerConstructsWithModelAndView() {
@@ -492,5 +496,49 @@ public final class SetupControllerTest {
         public int nextInt(final int bound) {
             return value;
         }
+    }
+
+    private HashMap<ArmyType, Integer> createInfantryPieces(final int infantryCount) {
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, infantryCount);
+
+        return pieces;
+    }
+
+    @Test
+    public void handleTerritoryClaimingSuccessfulClaimAdvancesToNextPlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        SetupController controller = new SetupController(model, view);
+        HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(false);
+
+        view.displayTerritoryClaimingStatus();
+        expectLastCall().once();
+
+        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Alaska");
+        expect(view.getInfantryChoiceDuringSetup()).andReturn(ONE_INFANTRY);
+
+        expect(model.claimTerritoryDuringSetup("Alaska", pieces)).andReturn(true);
+
+        view.displayUpdatedBoard();
+        expectLastCall().once();
+
+        view.displayCurrentPlayerRemainingArmies();
+        expectLastCall().once();
+
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+
+        view.displayAllTerritoriesClaimed();
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
     }
 }
