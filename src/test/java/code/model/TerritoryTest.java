@@ -128,4 +128,17 @@ public final class TerritoryTest {
         assertTrue(territory.isOwnedBy(player));
     }
 
+    @Test
+    public void setOwnerFromHumanPlayerToAnotherHumanPlayerUpdatesOwner() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        Player playerOne = createMock(Player.class);
+        Player playerTwo = createMock(Player.class);
+
+        territory.setOwner(playerOne);
+        territory.setOwner(playerTwo);
+
+        assertFalse(territory.isOwnedBy(playerOne));
+        assertTrue(territory.isOwnedBy(playerTwo));
+    }
+
 }
