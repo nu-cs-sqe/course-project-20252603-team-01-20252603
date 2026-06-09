@@ -562,5 +562,22 @@ public final class GameModelTest {
         assertFalse(gameModel.areAllTerritoriesClaimed());
     }
 
+    @Test
+    public void areAllTerritoriesClaimedReturnsTrueWhenAllTerritoriesClaimed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        player.addArmies(createInfantryPieces(TERRITORY_COUNT));
+
+        claimTerritories(gameModel, TERRITORY_COUNT);
+
+        assertTrue(gameModel.areAllTerritoriesClaimed());
+    }
+
 
 }
