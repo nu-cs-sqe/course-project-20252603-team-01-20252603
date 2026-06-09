@@ -1,6 +1,7 @@
 package code.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -20,6 +21,8 @@ public class Territory {
 
     private Player owner;
 
+    private final HashMap<ArmyType, Integer> pieces;
+
     @SuppressFBWarnings(
             value = "EI_EXPOSE_REP2",
             justification = "Territory stores a reference to its continent in the board model."
@@ -35,6 +38,7 @@ public class Territory {
         adjacentTerritories = new ArrayList<>(territoryAdjacentTerritories);
         armyCount = 0;
         owner = new NullPlayer();
+        pieces = new HashMap<>();
     }
 
     String getName() {
@@ -71,5 +75,19 @@ public class Territory {
 
     public boolean isOwnedBy(final Player player) {
         return owner.equals(player);
+    }
+
+    public boolean placeArmies(final HashMap<ArmyType, Integer> newPieces) {
+        for (ArmyType armyType : newPieces.keySet()) {
+            int currentCount = pieces.getOrDefault(armyType, 0);
+            int addedCount = newPieces.get(armyType);
+            pieces.put(armyType, currentCount + addedCount);
+        }
+
+        return true;
+    }
+
+    public HashMap<ArmyType, Integer> getPieces() {
+        return new HashMap<>(pieces);
     }
 }

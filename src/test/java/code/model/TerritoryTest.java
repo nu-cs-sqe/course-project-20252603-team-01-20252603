@@ -34,6 +34,8 @@ public final class TerritoryTest {
 
     private static final int CONTINENT_BONUS = 5;
 
+    private static final int ONE_INFANTRY = 1;
+
     @Test
     public void constructorStoresValidName() {
         Continent northAmerica = new Continent(
@@ -162,6 +164,18 @@ public final class TerritoryTest {
         Player player = createMock(Player.class);
 
         assertFalse(territory.isOwnedBy(player));
+    }
+
+    @Test
+    public void placeArmiesAddsOneInfantryToEmptyTerritory() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        boolean placed = territory.placeArmies(pieces);
+
+        assertTrue(placed);
+        assertEquals(ONE_INFANTRY, territory.getPieces().get(ArmyType.INFANTRY));
     }
 
 }
