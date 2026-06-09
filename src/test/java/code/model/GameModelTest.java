@@ -406,4 +406,20 @@ public final class GameModelTest {
         assertEquals(5, availableColors.size());
         assertFalse(availableColors.contains(PlayerColor.RED));
     }
+
+    @Test
+    public void showAvailableColors_FiveColorsAlreadyChosen_ReturnsOneColor() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MAX_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.addPlayer("Player 4", PlayerColor.YELLOW);
+        gameModel.addPlayer("Player 5", PlayerColor.BLACK);
+        List<PlayerColor> availableColors = gameModel.showAvailableColors();
+
+        assertEquals(1, availableColors.size());
+        assertTrue(availableColors.contains(PlayerColor.PURPLE));
+    }
 }

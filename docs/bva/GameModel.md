@@ -120,7 +120,7 @@
     - **State of the system**: One player with color `RED` has already been added
     - **Expected output**: Returned colors do not include `RED`; the remaining five colors are available
 
-- **TC27: Shows one remaining color when almost full** ( :x: )
+- **TC27: Shows one remaining color when almost full** ( :white_check_mark: )
     - **State of the system**: Five players with five distinct colors have already been added
     - **Expected output**: Returned color list contains exactly the one unchosen color
 
