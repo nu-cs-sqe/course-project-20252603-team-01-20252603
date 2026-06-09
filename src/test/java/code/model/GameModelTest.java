@@ -49,6 +49,9 @@ public final class GameModelTest {
     private static final int TWO_INFANTRY = 2;
 
     private static final int THIRTY_FOUR_INFANTRY = 34;
+
+    private static final int TERRITORY_COUNT = 42;
+
     @Test
     public void deckHasFortyFourCardsAfterBoardInitialization() {
         GameModel gameModel = new GameModel();
@@ -484,4 +487,80 @@ public final class GameModelTest {
 
         assertFalse(gameModel.areAllTerritoriesClaimed());
     }
+
+    private List<String> getTerritoryNames() {
+        return List.of(
+                "Alaska",
+                "Northwest Territory",
+                "Greenland",
+                "Alberta",
+                "Ontario",
+                "Quebec",
+                "Western United States",
+                "Eastern United States",
+                "Central America",
+                "Venezuela",
+                "Peru",
+                "Brazil",
+                "Argentina",
+                "Iceland",
+                "Scandinavia",
+                "Ukraine",
+                "Great Britain",
+                "Northern Europe",
+                "Western Europe",
+                "Southern Europe",
+                "North Africa",
+                "Egypt",
+                "East Africa",
+                "Congo",
+                "South Africa",
+                "Madagascar",
+                "Ural",
+                "Siberia",
+                "Yakutsk",
+                "Kamchatka",
+                "Irkutsk",
+                "Mongolia",
+                "Japan",
+                "Afghanistan",
+                "China",
+                "Middle East",
+                "India",
+                "Siam",
+                "Indonesia",
+                "New Guinea",
+                "Western Australia",
+                "Eastern Australia");
+    }
+
+    private void claimTerritories(
+            final GameModel gameModel,
+            final int territoryCount) {
+        HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
+        List<String> territoryNames = getTerritoryNames();
+
+        for (int index = 0; index < territoryCount; index++) {
+            gameModel.claimTerritoryDuringSetup(territoryNames.get(index), pieces);
+        }
+    }
+
+    @Test
+    public void areAllTerritoriesClaimedReturnsFalseWhenOneTerritoryRemainsUnclaimed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        player.addArmies(createInfantryPieces(TERRITORY_COUNT));
+
+        claimTerritories(gameModel, TERRITORY_COUNT - ONE_INFANTRY);
+
+        assertFalse(gameModel.areAllTerritoriesClaimed());
+    }
+
+
 }
