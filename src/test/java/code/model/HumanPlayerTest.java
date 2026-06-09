@@ -39,4 +39,14 @@ public final class HumanPlayerTest {
         assertEquals(PlayerColor.BLUE, player.getColor());
         assertEquals(MAX_SETUP_INFANTRY, availableArmies.get(ArmyType.INFANTRY));
     }
+
+    @Test
+    public void getName_RegisteredPlayer_ReturnsRegisteredName() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                MIN_SETUP_INFANTRY);
+
+        assertEquals("Player 1", player.getName());
+    }
 }

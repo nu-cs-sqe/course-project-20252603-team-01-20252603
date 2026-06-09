@@ -15,7 +15,7 @@
 
 ### Method under test: `getName()`
 
-- **TC3: Returns registered player name** ( :x: )
+- **TC3: Returns registered player name** ( :white_check_mark: )
     - **State of the system**: Human player constructed with name `"Player 1"`
     - **Expected output**: Returns `"Player 1"`
 
