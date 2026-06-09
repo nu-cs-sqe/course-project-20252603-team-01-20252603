@@ -27,27 +27,6 @@
     - **State of the system**: Human player constructed with color `PlayerColor.RED`
     - **Expected output**: Returns `PlayerColor.RED`
 
----
-
-### Method under test: `getAvailableArmies()`
-
-- **TC5: Returns available Infantry at lower setup boundary** ( :white_check_mark: )
-    - **State of the system**: Human player constructed with `20` starting Infantry
-    - **Expected output**: Available armies contain `20` Infantry and no Cavalry or Artillery
-
-- **TC6: Returns available Infantry at upper setup boundary** ( :white_check_mark: )
-    - **State of the system**: Human player constructed with `35` starting Infantry
-    - **Expected output**: Available armies contain `35` Infantry and no Cavalry or Artillery
-
----
-
-### Method under test: `hasAvailableArmies()`
-
-- **TC7: Returns true after setup army assignment** ( :white_check_mark: )
-    - **State of the system**: Human player constructed with any valid setup Infantry count from `20` to `35`
-    - **Expected output**: Returns `true`
-
----
 
 ### Method under test: `addTerritory(Territory territory)`
 
