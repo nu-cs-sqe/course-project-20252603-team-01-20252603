@@ -31,7 +31,7 @@
 
 ### Method under test: `initializePlayers()`
 
-- **TC6: Registers minimum number of players** ( :x: )
+- **TC6: Registers minimum number of players** ( :white_check_mark: )
     - **State of the system**: Board initialized; view returns player count `3`; view returns three unique names and colors
     - **Expected output**: Model stores exactly three players, each with `35` available Infantry
 
