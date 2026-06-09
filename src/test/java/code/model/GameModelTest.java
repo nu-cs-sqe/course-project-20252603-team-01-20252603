@@ -475,4 +475,13 @@ public final class GameModelTest {
         assertTrue(advanced);
         assertEquals(secondPlayer, gameModel.getCurrentPlayer());
     }
+
+    @Test
+    public void areAllTerritoriesClaimedReturnsFalseWhenNoTerritoriesClaimed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        assertFalse(gameModel.areAllTerritoriesClaimed());
+    }
 }

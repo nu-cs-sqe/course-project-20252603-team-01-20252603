@@ -402,4 +402,9 @@ public class GameModel {
 
         return true;
     }
+
+    public boolean areAllTerritoriesClaimed() {
+        return territories.size() == TOTAL_TERRITORY_COUNT
+                && territories.stream().allMatch(territory -> !territory.isUnclaimed());
+    }
 }
