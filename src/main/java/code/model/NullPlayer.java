@@ -27,8 +27,13 @@ public class NullPlayer extends Player {
     }
 
     @Override
-    public void setAvailableArmies(final HashMap<ArmyType, Integer> availableArmies) {
-        throw new UnsupportedOperationException("NullPlayer cannot have available armies.");
+    public void addArmies(final HashMap<ArmyType, Integer> armiesToAdd) {
+        throw new UnsupportedOperationException("NullPlayer cannot receive armies.");
+    }
+
+    @Override
+    public void removeArmies(final HashMap<ArmyType, Integer> armiesToRemove) {
+        throw new UnsupportedOperationException("NullPlayer cannot remove armies.");
     }
 
     @Override

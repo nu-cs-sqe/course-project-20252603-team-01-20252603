@@ -40,8 +40,11 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public void setAvailableArmies(final HashMap<ArmyType, Integer> newAvailableArmies) {
-        availableArmies = new HashMap<>(newAvailableArmies);
+    public void addArmies(final HashMap<ArmyType, Integer> armiesToAdd) {
+    }
+
+    @Override
+    public void removeArmies(final HashMap<ArmyType, Integer> armiesToRemove) {
     }
 
     @Override
