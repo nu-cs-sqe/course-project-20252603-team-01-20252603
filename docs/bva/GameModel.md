@@ -251,6 +251,6 @@
     - **State of the system**: Current player has claimed `"Alaska"` in `"North America"`
     - **Expected output**: Returned string contains `"North America"` and `"Alaska"`
 
-- **TC50: Excludes territories owned by other players** ( :white_check_mark: )
+- **TC50: Excludes territories owned by other players** ( :white_check_mark:)
     - **State of the system**: Player 1 owns `"Alaska"`; current player is Player 2
     - **Expected output**: Returned string does not contain `"Alaska"`
