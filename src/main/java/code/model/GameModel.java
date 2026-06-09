@@ -98,6 +98,7 @@ public class GameModel {
     public List<PlayerColor> showAvailableColors() {
         return Arrays.stream(PlayerColor.values())
                 .filter(color -> color != PlayerColor.UNASSIGNED)
+                .filter(color -> !isColorAlreadyChosen(color))
                 .collect(Collectors.toList());
     }
 

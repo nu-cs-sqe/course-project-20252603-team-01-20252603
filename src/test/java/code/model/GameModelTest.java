@@ -394,4 +394,16 @@ public final class GameModelTest {
         assertTrue(availableColors.contains(PlayerColor.BLACK));
         assertTrue(availableColors.contains(PlayerColor.PURPLE));
     }
+
+    @Test
+    public void showAvailableColors_RedAlreadyChosen_ReturnsRemainingColors() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        List<PlayerColor> availableColors = gameModel.showAvailableColors();
+
+        assertEquals(5, availableColors.size());
+        assertFalse(availableColors.contains(PlayerColor.RED));
+    }
 }

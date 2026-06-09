@@ -116,7 +116,7 @@
     - **State of the system**: `GameModel` constructed; no players have been added
     - **Expected output**: Returns all six colors: Red, Blue, Green, Yellow, Black, Purple
 
-- **TC26: Excludes a chosen color** ( :x: )
+- **TC26: Excludes a chosen color** ( :white_check_mark: )
     - **State of the system**: One player with color `RED` has already been added
     - **Expected output**: Returned colors do not include `RED`; the remaining five colors are available
 
