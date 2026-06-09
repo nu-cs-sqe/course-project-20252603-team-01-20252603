@@ -476,4 +476,17 @@ public final class GameModelTest {
 
         assertEquals(secondPlayer, gameModel.getCurrentPlayer());
     }
+
+    @Test
+    public void getCurrentPlayer_FirstPlayerIndex_ReturnsFirstPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player firstPlayer = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertEquals(firstPlayer, gameModel.getCurrentPlayer());
+    }
 }

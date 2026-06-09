@@ -148,7 +148,7 @@
 
 ### Method under test: `getCurrentPlayer()`
 
-- **TC32: Returns selected first player** ( :x: )
+- **TC32: Returns selected first player** ( :white_check_mark: )
     - **State of the system**: Three players have been registered; current player index is set to `0`
     - **Expected output**: Returns the first registered player
 
