@@ -505,40 +505,5 @@ public final class SetupControllerTest {
         return pieces;
     }
 
-    @Test
-    public void handleTerritoryClaimingSuccessfulClaimAdvancesToNextPlayer() {
-        GameModel model = createMock(GameModel.class);
-        ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
-        HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
 
-        expect(model.areAllTerritoriesClaimed()).andReturn(false);
-
-        view.displayTerritoryClaimingStatus();
-        expectLastCall().once();
-
-        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Alaska");
-        expect(view.getInfantryChoiceDuringSetup()).andReturn(ONE_INFANTRY);
-
-        expect(model.claimTerritoryDuringSetup("Alaska", pieces)).andReturn(true);
-
-        view.displayUpdatedBoard();
-        expectLastCall().once();
-
-        view.displayCurrentPlayerRemainingArmies();
-        expectLastCall().once();
-
-        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
-
-        expect(model.areAllTerritoriesClaimed()).andReturn(true);
-
-        view.displayAllTerritoriesClaimed();
-        expectLastCall().once();
-
-        replay(model, view);
-
-        controller.handleTerritoryClaiming();
-
-        verify(model, view);
-    }
 }

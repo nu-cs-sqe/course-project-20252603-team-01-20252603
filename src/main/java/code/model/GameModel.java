@@ -411,4 +411,5 @@ public class GameModel {
     public String getCurrentPlayerName() {
         return players.get(currentPlayerIndex).getName();
     }
+
 }

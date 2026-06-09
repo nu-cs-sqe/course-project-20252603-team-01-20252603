@@ -226,3 +226,31 @@
 - **TC43: Returns middle player's name when current player index is middle player** ( :x: )
     - **State of the system**: Three-player game has been created; current player index is `1`
     - **Expected output**: Returns `"Player 2"`
+
+---
+
+### Method under test: `getUnclaimedTerritoriesByContinent()`
+
+- **TC46: Returns all territories grouped by continent when no territories are claimed** ( :x: )
+    - **State of the system**: Game board has been initialized; all territories are unclaimed
+    - **Expected output**: Returns a string containing continent names and all unclaimed territory names grouped under their continents
+
+- **TC47: Excludes claimed territory from unclaimed territory display** ( :x: )
+    - **State of the system**: Game board has been initialized; `"Alaska"` has been claimed by the current player
+    - **Expected output**: Returned string contains `"North America"` but does not contain `"Alaska"`
+
+---
+
+### Method under test: `getCurrentPlayerTerritoriesByContinent()`
+
+- **TC48: Returns empty grouped display when current player owns no territories** ( :x: )
+    - **State of the system**: Three-player game has been created; current player owns no territories
+    - **Expected output**: Returns a string that does not list any territory names for the current player
+
+- **TC49: Returns current player's owned territories grouped by continent** ( :x: )
+    - **State of the system**: Current player has claimed `"Alaska"` in `"North America"`
+    - **Expected output**: Returned string contains `"North America"` and `"Alaska"`
+
+- **TC50: Excludes territories owned by other players** ( :x: )
+    - **State of the system**: Player 1 owns `"Alaska"`; current player is Player 2
+    - **Expected output**: Returned string does not contain `"Alaska"`
