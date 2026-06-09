@@ -7,7 +7,7 @@
     - **State of the system**: `new HumanPlayer("Player 1", PlayerColor.RED, 20)` called for a six-player game
     - **Expected output**: Object is created with name `"Player 1"`, color `RED`, and `20` available Infantry
 
-- **TC2: Constructs player with maximum setup infantry** ( :x: )
+- **TC2: Constructs player with maximum setup infantry** ( :white_check_mark: )
     - **State of the system**: `new HumanPlayer("Player 1", PlayerColor.BLUE, 35)` called for a three-player game
     - **Expected output**: Object is created with name `"Player 1"`, color `BLUE`, and `35` available Infantry
 
