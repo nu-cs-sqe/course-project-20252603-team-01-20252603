@@ -132,7 +132,7 @@
     - **State of the system**: Three players have been registered; `setCurrentPlayerIndex(0)` called
     - **Expected output**: Current player becomes the first registered player
 
-- **TC29: Accepts last valid player index** ( :x: )
+- **TC29: Accepts last valid player index** ( :white_check_mark: )
     - **State of the system**: Three players have been registered; `setCurrentPlayerIndex(2)` called
     - **Expected output**: Current player becomes the third registered player
 
