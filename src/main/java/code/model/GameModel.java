@@ -1,8 +1,10 @@
 package code.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents the main model for the Risk game.
@@ -21,12 +23,35 @@ public class GameModel {
 
     private static final int AUSTRALIA_BONUS = 2;
 
+    private static final int MIN_PLAYER_COUNT = 3;
+
+    private static final int FOUR_PLAYER_COUNT = 4;
+
+    private static final int FIVE_PLAYER_COUNT = 5;
+
+    private static final int MAX_PLAYER_COUNT = 6;
+
+    private static final int THREE_PLAYER_STARTING_INFANTRY = 35;
+
+    private static final int FOUR_PLAYER_STARTING_INFANTRY = 30;
+
+    private static final int FIVE_PLAYER_STARTING_INFANTRY = 25;
+
+    private static final int SIX_PLAYER_STARTING_INFANTRY = 20;
+
     private final List<Continent> continents;
+
+    private final List<Player> players;
+
+    private int playerCount;
 
     private Deck deck;
 
+    private int currentPlayerIndex;
+
     public GameModel() {
         continents = new ArrayList<>();
+        players = new ArrayList<>();
         deck = new Deck();
         deck.shuffle();
     }
@@ -54,6 +79,74 @@ public class GameModel {
 
     public boolean isDeckEmpty() {
         return deck.isEmpty();
+    }
+
+    public boolean setPlayerCount(final int count) {
+        if (count < MIN_PLAYER_COUNT || count > MAX_PLAYER_COUNT) {
+            return false;
+        }
+
+        playerCount = count;
+        return true;
+    }
+
+    public int getPlayerCount() {
+        return playerCount;
+    }
+
+    public Player addPlayer(final String name, final PlayerColor color) {
+        if (players.size() >= playerCount || isColorAlreadyChosen(color)) {
+            return new NullPlayer();
+        }
+
+        Player player = new HumanPlayer(name, color, calculateStartingInfantry());
+
+        players.add(player);
+        return player;
+    }
+
+    public List<Player> getPlayers() {
+        return new ArrayList<>(players);
+    }
+
+    public List<PlayerColor> showAvailableColors() {
+        return Arrays.stream(PlayerColor.values())
+                .filter(color -> color != PlayerColor.UNASSIGNED)
+                .filter(color -> !isColorAlreadyChosen(color))
+                .collect(Collectors.toList());
+    }
+
+    public void setCurrentPlayerIndex(final int index) {
+        if (index < 0 || index >= players.size()) {
+            return;
+        }
+
+        currentPlayerIndex = index;
+    }
+
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
+    }
+
+    private boolean isColorAlreadyChosen(final PlayerColor color) {
+        return players.stream()
+                .anyMatch(player -> player.getColor() == color);
+    }
+
+    private int calculateStartingInfantry() {
+        if (playerCount == FOUR_PLAYER_COUNT) {
+            return FOUR_PLAYER_STARTING_INFANTRY;
+        }
+
+        if (playerCount == FIVE_PLAYER_COUNT) {
+            return FIVE_PLAYER_STARTING_INFANTRY;
+        }
+
+        if (playerCount == MAX_PLAYER_COUNT) {
+            return SIX_PLAYER_STARTING_INFANTRY;
+        }
+
+        return THREE_PLAYER_STARTING_INFANTRY;
     }
 
     private void createNorthAmerica() {
@@ -156,7 +249,9 @@ public class GameModel {
                 .flatMap(continent -> continent.getTerritories().stream())
                 .filter(territory -> territory.getName().equals(territoryName))
                 .findFirst()
-                .get();
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Territory not found: " + territoryName)
+                );
     }
 
     private void connect(
