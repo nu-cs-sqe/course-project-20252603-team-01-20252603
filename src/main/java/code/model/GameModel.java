@@ -27,6 +27,8 @@ public class GameModel {
 
     private final List<Continent> continents;
 
+    private int playerCount;
+
     private Deck deck;
 
     public GameModel() {
@@ -61,7 +63,16 @@ public class GameModel {
     }
 
     public boolean setPlayerCount(final int count) {
-        return count >= MIN_PLAYER_COUNT && count <= MAX_PLAYER_COUNT;
+        if (count < MIN_PLAYER_COUNT || count > MAX_PLAYER_COUNT) {
+            return false;
+        }
+
+        playerCount = count;
+        return true;
+    }
+
+    public int getPlayerCount() {
+        return playerCount;
     }
 
     private void createNorthAmerica() {

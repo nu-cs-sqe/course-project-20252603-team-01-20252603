@@ -68,7 +68,7 @@
     - **State of the system**: `GameModel` constructed; `setPlayerCount(2)` called
     - **Expected output**: Returns `false`; player count is not accepted because valid player counts are in `[3, 6]`
 
-- **TC16: Accepts minimum player count** ( :x: )
+- **TC16: Accepts minimum player count** ( :white_check_mark: )
     - **State of the system**: `GameModel` constructed; `setPlayerCount(3)` called
     - **Expected output**: Returns `true`; player count is stored as `3`
 
