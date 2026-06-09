@@ -43,7 +43,7 @@
     - **State of the system**: `availableColors` contains exactly one color; user selects that color
     - **Expected output**: Returns the only available `PlayerColor`
 
-- **TC9: Reads unavailable color for model validation** ( :x: )
+- **TC9: Reads unavailable color for model validation** ( :white_check_mark: )
     - **State of the system**: `availableColors` does not contain `RED`; user selects `RED`
     - **Expected output**: Returns `PlayerColor.RED` so `GameModel.addPlayer(...)` can reject the duplicate color and setup can re-prompt
 
