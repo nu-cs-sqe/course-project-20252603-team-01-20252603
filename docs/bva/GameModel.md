@@ -104,7 +104,7 @@
     - **State of the system**: `setPlayerCount(3)` has returned `true`; one player with color `RED` already exists
     - **Expected output**: A second call using `PlayerColor.RED` is rejected; no duplicate-color player is added
 
-- **TC24: Rejects adding more players than configured** ( :x: )
+- **TC24: Rejects adding more players than configured** ( :white_check_mark: )
     - **State of the system**: `setPlayerCount(3)` has returned `true`; three players have already been added
     - **Expected output**: A fourth `addPlayer(...)` call is rejected; player list remains size `3`
 

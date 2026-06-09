@@ -79,7 +79,7 @@ public class GameModel {
     }
 
     public Player addPlayer(final String name, final PlayerColor color) {
-        if (isColorAlreadyChosen(color)) {
+        if (players.size() >= playerCount || isColorAlreadyChosen(color)) {
             return new NullPlayer();
         }
 

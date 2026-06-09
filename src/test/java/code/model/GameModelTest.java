@@ -365,4 +365,18 @@ public final class GameModelTest {
         assertTrue(duplicatePlayer instanceof NullPlayer);
         assertEquals(1, gameModel.getPlayers().size());
     }
+
+    @Test
+    public void addPlayer_PlayerListAlreadyFull_ReturnsNullPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        Player extraPlayer = gameModel.addPlayer("Player 4", PlayerColor.YELLOW);
+
+        assertTrue(extraPlayer instanceof NullPlayer);
+        assertEquals(MIN_PLAYER_COUNT, gameModel.getPlayers().size());
+    }
 }
