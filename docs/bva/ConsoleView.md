@@ -35,7 +35,7 @@
 
 ### Method under test: `promptPlayerColor(String playerName, List<PlayerColor> availableColors)`
 
-- **TC7: Reads color when all colors are available** ( :x: )
+- **TC7: Reads color when all colors are available** ( :white_check_mark: )
     - **State of the system**: `availableColors` contains all six colors; user selects `RED`
     - **Expected output**: Returns `PlayerColor.RED`
 

@@ -1,6 +1,8 @@
 package code.view;
 
+import code.model.PlayerColor;
 import java.io.PrintStream;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleView {
@@ -26,5 +28,12 @@ public class ConsoleView {
     public String promptPlayerName(final int playerNumber) {
         output.print("Enter player " + playerNumber + " name: ");
         return scanner.nextLine();
+    }
+
+    public PlayerColor promptPlayerColor(
+            final String playerName,
+            final List<PlayerColor> availableColors) {
+        output.print("Enter color for " + playerName + ": ");
+        return PlayerColor.valueOf(scanner.nextLine().trim().toUpperCase());
     }
 }

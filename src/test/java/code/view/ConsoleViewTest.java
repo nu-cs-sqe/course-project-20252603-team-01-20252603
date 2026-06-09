@@ -2,8 +2,10 @@ package code.view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import code.model.PlayerColor;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.List;
 import java.util.Scanner;
 import org.junit.jupiter.api.Test;
 
@@ -60,6 +62,15 @@ public final class ConsoleViewTest {
         ConsoleView view = createViewWithInput("Frank\n");
 
         assertEquals("Frank", view.promptPlayerName(6));
+    }
+
+    @Test
+    public void promptPlayerColor_AllColorsAvailable_ReturnsSelectedColor() {
+        ConsoleView view = createViewWithInput("RED\n");
+
+        assertEquals(
+                PlayerColor.RED,
+                view.promptPlayerColor("Alice", List.of(PlayerColor.values())));
     }
 
     private ConsoleView createViewWithInput(final String input) {
