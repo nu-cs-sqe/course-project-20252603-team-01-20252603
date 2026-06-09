@@ -66,3 +66,35 @@
 - **TC12: Displays selected starting player** ( :white_check_mark: )
     - **State of the system**: A first player has been selected automatically by setup
     - **Expected output**: Displays the selected player's name and color
+
+---
+
+### Method under test: `displayAvailableTerritoriesByContinentDuringSetup(List<Continent> continents)`
+
+- **TCX: Displays only unclaimed territories grouped by continent** ( :x: )
+    - **State of the system**: Continents contain both unclaimed and claimed territories
+    - **Expected output**: Output displays unclaimed territory names under their continent names and does not display claimed territory names
+
+---
+
+### Method under test: `displayPlayerClaimingStatus(Player player)`
+
+- **TCX: Displays player claiming status** ( :x: )
+    - **State of the system**: Player has available Infantry and owns one or more territories
+    - **Expected output**: Output displays the player's name, available Infantry, and owned territory names
+
+---
+
+### Method under test: `getTerritoryChoice(Player player, List<Territory> availableTerritories)`
+
+- **TCX: Returns selected available territory** ( :x: )
+    - **State of the system**: Available territory list contains multiple territories; player enters a valid territory choice
+    - **Expected output**: Returns the selected territory from the available territory list
+
+---
+
+### Method under test: `getInfantryChoiceDuringSetup(Player player, int max)`
+
+- **TCX: Returns entered Infantry count during setup** ( :x: )
+    - **State of the system**: Player is prompted for Infantry count during setup
+    - **Expected output**: Returns the Infantry count entered by the player so the model can validate it

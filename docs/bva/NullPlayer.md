@@ -27,14 +27,18 @@
 
 ### Method under test: `getAvailableArmies()`
 
-- **TC4: Returns empty available-army pool** ( :white_check_mark: )
+- **TC4: Returns empty available-army display string** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `getAvailableArmies()` called
-    - **Expected output**: Available armies contain zero Infantry, zero Cavalry, and zero Artillery
+      **Expected output**: Exception is raised because `NullPlayer` does not represent a real player with an available army pool
 
 ---
 
-### Method under test: `hasAvailableArmies()`
+### Method under test: `hasAvailableArmies(HashMap<ArmyType, Integer> requiredArmies)`
 
-- **TC5: Returns false for placeholder player** ( :white_check_mark: )
-    - **State of the system**: `NullPlayer` constructed with no assigned armies
-    - **Expected output**: Returns `false`
+- **TC5: Returns false when one Infantry is required** ( :white_check_mark: )
+    - **State of the system**: `NullPlayer` constructed; `hasAvailableArmies()` is called with a map containing `INFANTRY -> 1`
+    - **Expected output**: Exception is raised because `NullPlayer` does not represent a real player with an available army pool
+
+- **TC6: Returns false when zero Infantry is required** ( :x: )
+    - **State of the system**: `NullPlayer` constructed; `hasAvailableArmies()` is called with a map containing `INFANTRY -> 0`
+    - **Expected output**: Exception is raised because `NullPlayer` does not represent a real player with an available army pool
