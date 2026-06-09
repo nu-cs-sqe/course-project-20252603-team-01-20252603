@@ -16,6 +16,12 @@ public final class HumanPlayerTest {
 
     private static final int STARTING_INFANTRY = 20;
 
+    private static final int ZERO_INFANTRY = 0;
+
+    private static final int ONE_INFANTRY = 1;
+
+    private static final int TWENTY_INFANTRY = 20;
+
 //    @Test
 //    public void constructorMinimumSetupInfantryCreatesPlayer() {
 //        HumanPlayer player = new HumanPlayer(
@@ -139,6 +145,42 @@ public final class HumanPlayerTest {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
 
         assertEquals(0, player.getTerritoryCount());
+    }
+
+    @Test
+    public void setAvailableArmiesSetsOneInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        HashMap<ArmyType, Integer> availableArmies = new HashMap<>();
+        availableArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        player.setAvailableArmies(availableArmies);
+
+        assertTrue(player.getAvailableArmies().contains("INFANTRY"));
+        assertTrue(player.getAvailableArmies().contains("1"));
+    }
+
+    @Test
+    public void setAvailableArmiesSetsMultipleInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        HashMap<ArmyType, Integer> availableArmies = new HashMap<>();
+        availableArmies.put(ArmyType.INFANTRY, TWENTY_INFANTRY);
+
+        player.setAvailableArmies(availableArmies);
+
+        assertTrue(player.getAvailableArmies().contains("INFANTRY"));
+        assertTrue(player.getAvailableArmies().contains("20"));
+    }
+
+    @Test
+    public void setAvailableArmiesSetsZeroInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        HashMap<ArmyType, Integer> availableArmies = new HashMap<>();
+        availableArmies.put(ArmyType.INFANTRY, ZERO_INFANTRY);
+
+        player.setAvailableArmies(availableArmies);
+
+        assertTrue(player.getAvailableArmies().contains("INFANTRY"));
+        assertTrue(player.getAvailableArmies().contains("0"));
     }
 
 }
