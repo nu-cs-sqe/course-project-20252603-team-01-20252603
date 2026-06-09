@@ -43,6 +43,6 @@
 
 ### Method under test: `hasAvailableArmies()`
 
-- **TC7: Returns true after setup army assignment** ( :x: )
+- **TC7: Returns true after setup army assignment** ( :white_check_mark: )
     - **State of the system**: Human player constructed with any valid setup Infantry count from `20` to `35`
     - **Expected output**: Returns `true`

@@ -36,4 +36,8 @@ public abstract class Player {
     public HashMap<ArmyType, Integer> getAvailableArmies() {
         return new HashMap<>(availableArmies);
     }
+
+    public boolean hasAvailableArmies() {
+        return availableArmies.values().stream().anyMatch(armyCount -> armyCount > 0);
+    }
 }

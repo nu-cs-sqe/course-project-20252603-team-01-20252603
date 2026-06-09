@@ -1,6 +1,7 @@
 package code.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
@@ -84,5 +85,15 @@ public final class HumanPlayerTest {
         assertEquals(MAX_SETUP_INFANTRY, availableArmies.get(ArmyType.INFANTRY));
         assertEquals(0, availableArmies.get(ArmyType.CAVALRY));
         assertEquals(0, availableArmies.get(ArmyType.ARTILLERY));
+    }
+
+    @Test
+    public void hasAvailableArmies_SetupArmyAssignment_ReturnsTrue() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                MIN_SETUP_INFANTRY);
+
+        assertTrue(player.hasAvailableArmies());
     }
 }
