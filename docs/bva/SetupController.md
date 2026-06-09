@@ -59,26 +59,26 @@
 
 ### Method under test: `handleTerritoryClaiming()`
 
-- **TC12: Current player claims one unclaimed territory successfully** ( :x: )
+- **TC12: Current player claims one unclaimed territory successfully** ( :white_check_mark: )
     - **State of the system**: Setup controller has a model with at least one unclaimed territory; current player selects an unclaimed territory and exactly one Infantry
     - **Expected output**: `claimTerritoryDuringSetup()` is called successfully; updated board is displayed; current player's remaining armies are displayed; controller advances to the next player
 
-- **TC13: Players take turns in established order while territories remain unclaimed** ( :x: )
+- **TC13: Players take turns in established order while territories remain unclaimed** ( :white_check_mark: )
     - **State of the system**: Setup controller has multiple players in an established turn order; more than one territory remains unclaimed
     - **Expected output**: Each successful claim advances to the next player in order; after the last player claims, turn order wraps back to the first player
 
-- **TC14: Already claimed territory re-prompts same player** ( :x: )
+- **TC14: Already claimed territory re-prompts same player** ( :white_check_mark: )
     - **State of the system**: Current player selects a territory already owned by another player
     - **Expected output**: Error message is displayed; controller does not advance to the next player; same player is prompted again
 
-- **TC15: Invalid Infantry count re-prompts same player** ( :x: )
+- **TC15: Invalid Infantry count re-prompts same player** ( :white_check_mark: )
     - **State of the system**: Current player selects an unclaimed territory but enters a number of Infantry other than exactly `1`
     - **Expected output**: Error message is displayed; controller does not advance to the next player; same player is prompted again
 
-- **TC16: Territory claiming stops when all territories are claimed** ( :x: )
+- **TC16: Territory claiming stops when all territories are claimed** ( :white_check_mark: )
     - **State of the system**: Controller is running territory claiming; the final unclaimed territory is successfully claimed
     - **Expected output**: Claiming loop ends; system announces that all territories have been claimed; controller proceeds toward initial army placement
 
-- **TC17: Territory claiming continues when one territory remains unclaimed** ( :x: )
+- **TC17: Territory claiming continues when one territory remains unclaimed** ( :white_check_mark: )
     - **State of the system**: 41 territories are claimed and exactly 1 territory remains unclaimed
     - **Expected output**: Controller continues prompting players; claiming phase does not end yet

@@ -71,7 +71,7 @@
 
 ### Method under test: `displayUnclaimedTerritoriesByContinent(String unclaimedTerritories)`
 
-- **TC13: Displays unclaimed territories grouped by continent** ( :x: )
+- **TC13: Displays unclaimed territories grouped by continent** ( :white_check_mark: )
     - **State of the system**: Model provides a formatted string containing only unclaimed territories grouped by continent
     - **Expected output**: Output displays the unclaimed territories string exactly as provided by the model
 
@@ -79,7 +79,7 @@
 
 ### Method under test: `displayCurrentPlayerClaimingStatus(String playerClaimingStatus)`
 
-- **TC14: Displays current player's claiming status** ( :x: )
+- **TC14: Displays current player's claiming status** ( :white_check_mark: )
     - **State of the system**: Model provides a formatted string containing the current player's name, available Infantry, and currently owned territories
     - **Expected output**: Output displays the current player's claiming status exactly as provided by the model
 
@@ -87,7 +87,7 @@
 
 ### Method under test: `getTerritoryChoiceDuringSetup()`
 
-- **TC15: Returns entered territory choice during setup** ( :x: )
+- **TC15: Returns entered territory choice during setup** ( :white_check_mark: )
     - **State of the system**: Player is prompted to enter the name of a territory to claim
     - **Expected output**: Returns the territory name entered by the player
 
@@ -95,6 +95,6 @@
 
 ### Method under test: `getInfantryChoiceDuringSetup()`
 
-- **TC16: Returns entered Infantry count during setup** ( :x: )
+- **TC16: Returns entered Infantry count during setup** ( :white_check_mark: )
     - **State of the system**: Player is prompted to enter the number of Infantry to place
     - **Expected output**: Returns the Infantry count entered by the player so the model can validate it
