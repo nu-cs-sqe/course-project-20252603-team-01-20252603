@@ -27,7 +27,7 @@
 
 ### Method under test: `getAvailableArmies()`
 
-- **TC4: Returns empty available-army pool** ( :x: )
+- **TC4: Returns empty available-army pool** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `getAvailableArmies()` called
     - **Expected output**: Available armies contain zero Infantry, zero Cavalry, and zero Artillery
 
