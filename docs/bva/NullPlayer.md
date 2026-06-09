@@ -3,7 +3,7 @@
 
 ### Method under test: `NullPlayer()`
 
-- **TC1: Constructs placeholder player for unassigned ownership** ( :x: )
+- **TC1: Constructs placeholder player for unassigned ownership** ( :white_check_mark: )
     - **State of the system**: `new NullPlayer()` called for an unclaimed territory owner
     - **Expected output**: Object is created and can be used anywhere a `Player` reference is required for unassigned ownership
 
