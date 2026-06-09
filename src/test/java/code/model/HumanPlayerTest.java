@@ -192,4 +192,18 @@ public final class HumanPlayerTest {
         assertTrue(player.hasAvailableArmies(requiredArmies));
     }
 
+    @Test
+    public void hasAvailableArmiesReturnsTrueWhenRequiredInfantryEqualsAvailableInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        HashMap<ArmyType, Integer> availableArmies = new HashMap<>();
+        HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
+
+        availableArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+        requiredArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        player.setAvailableArmies(availableArmies);
+
+        assertTrue(player.hasAvailableArmies(requiredArmies));
+    }
+
 }
