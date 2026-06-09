@@ -17,6 +17,8 @@ public final class HumanPlayerTest {
 
     private static final int MAX_SETUP_INFANTRY = 35;
 
+    private static final int STARTING_INFANTRY = 20;
+
 //    @Test
 //    public void constructorMinimumSetupInfantryCreatesPlayer() {
 //        HumanPlayer player = new HumanPlayer(
@@ -107,5 +109,19 @@ public final class HumanPlayerTest {
 
         assertEquals(1, player.getTerritoryCount());
         assertTrue(player.ownsTerritory(territory));
+    }
+
+    @Test
+    public void addTerritoryAddsAnotherClaimedTerritory() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        Territory alaska = createMock(Territory.class);
+        Territory alberta = createMock(Territory.class);
+
+        player.addTerritory(alaska);
+        player.addTerritory(alberta);
+
+        assertEquals(2, player.getTerritoryCount());
+        assertTrue(player.ownsTerritory(alaska));
+        assertTrue(player.ownsTerritory(alberta));
     }
 }
