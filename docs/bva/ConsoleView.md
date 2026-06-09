@@ -7,7 +7,7 @@
     - **State of the system**: User enters `3` when prompted for number of players
     - **Expected output**: Returns `3`
 
-- **TC2: Reads maximum valid player count** ( :x: )
+- **TC2: Reads maximum valid player count** ( :white_check_mark: )
     - **State of the system**: User enters `6` when prompted for number of players
     - **Expected output**: Returns `6`
 
