@@ -152,6 +152,6 @@
     - **State of the system**: Three players have been registered; current player index is set to `0`
     - **Expected output**: Returns the first registered player
 
-- **TC33: Returns selected last player** ( :x: )
+- **TC33: Returns selected last player** ( :white_check_mark: )
     - **State of the system**: Three players have been registered; current player index is set to `2`
     - **Expected output**: Returns the third registered player

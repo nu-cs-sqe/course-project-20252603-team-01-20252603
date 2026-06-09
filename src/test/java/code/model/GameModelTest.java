@@ -489,4 +489,17 @@ public final class GameModelTest {
 
         assertEquals(firstPlayer, gameModel.getCurrentPlayer());
     }
+
+    @Test
+    public void getCurrentPlayer_LastPlayerIndex_ReturnsLastPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        Player lastPlayer = gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(2);
+
+        assertEquals(lastPlayer, gameModel.getCurrentPlayer());
+    }
 }
