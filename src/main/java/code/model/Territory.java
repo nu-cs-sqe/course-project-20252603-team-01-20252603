@@ -61,4 +61,12 @@ public class Territory {
     public boolean isUnclaimed() {
         return owner instanceof NullPlayer;
     }
+
+    public void setOwner(final Player player) {
+        owner = player;
+    }
+
+    public boolean isOwnedBy(final Player player) {
+        return owner.equals(player);
+    }
 }

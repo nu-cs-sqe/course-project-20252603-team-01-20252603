@@ -117,4 +117,15 @@ public final class TerritoryTest {
         assertTrue(territory.isUnclaimed());
     }
 
+    @Test
+    public void setOwnerFromNullPlayerToHumanPlayerUpdatesOwner() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        Player player = createMock(Player.class);
+
+        territory.setOwner(player);
+
+        assertFalse(territory.isUnclaimed());
+        assertTrue(territory.isOwnedBy(player));
+    }
+
 }
