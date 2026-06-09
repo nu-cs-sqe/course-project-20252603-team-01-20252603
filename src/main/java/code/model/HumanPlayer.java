@@ -3,6 +3,8 @@ package code.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 /**
  * Represents a human player in the Risk game.
  */
@@ -46,4 +48,21 @@ public class HumanPlayer extends Player {
     public String getAvailableArmies() {
         return availableArmies.toString();
     }
+
+    @Override
+    public boolean hasAvailableArmies(final HashMap<ArmyType, Integer> requiredArmies) {
+        for (Map.Entry<ArmyType, Integer> entry : requiredArmies.entrySet()) {
+            ArmyType armyType = entry.getKey();
+            int requiredCount = entry.getValue();
+            int availableCount = availableArmies.getOrDefault(armyType, 0);
+
+            if (availableCount < requiredCount) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
 }
