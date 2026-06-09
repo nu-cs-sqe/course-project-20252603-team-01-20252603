@@ -44,4 +44,8 @@ public class ConsoleView {
             output.println(player.getName() + " - " + player.getColor());
         }
     }
+
+    public void displayStartingPlayer(final Player player) {
+        output.println("Starting player: " + player.getName() + " - " + player.getColor());
+    }
 }

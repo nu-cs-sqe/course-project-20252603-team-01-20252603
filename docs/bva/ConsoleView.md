@@ -63,6 +63,6 @@
 
 ### Method under test: `displayStartingPlayer(Player player)`
 
-- **TC12: Displays selected starting player** ( :x: )
+- **TC12: Displays selected starting player** ( :white_check_mark: )
     - **State of the system**: A first player has been selected automatically by setup
     - **Expected output**: Displays the selected player's name and color

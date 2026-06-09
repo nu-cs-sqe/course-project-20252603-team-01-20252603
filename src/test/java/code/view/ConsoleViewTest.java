@@ -143,6 +143,19 @@ public final class ConsoleViewTest {
         assertTrue(displayedText.contains("PURPLE"));
     }
 
+    @Test
+    public void displayStartingPlayer_SelectedStartingPlayer_DisplaysStartingPlayer() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        Player player = new HumanPlayer("Alice", PlayerColor.RED, 35);
+
+        view.displayStartingPlayer(player);
+        String displayedText = output.toString();
+
+        assertTrue(displayedText.contains("Alice"));
+        assertTrue(displayedText.contains("RED"));
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         return new ConsoleView(
                 new Scanner(input),
