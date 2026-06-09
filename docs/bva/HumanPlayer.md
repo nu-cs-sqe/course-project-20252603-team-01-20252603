@@ -35,7 +35,7 @@
     - **State of the system**: Human player constructed with `20` starting Infantry
     - **Expected output**: Available armies contain `20` Infantry and no Cavalry or Artillery
 
-- **TC6: Returns available Infantry at upper setup boundary** ( :x: )
+- **TC6: Returns available Infantry at upper setup boundary** ( :white_check_mark: )
     - **State of the system**: Human player constructed with `35` starting Infantry
     - **Expected output**: Available armies contain `35` Infantry and no Cavalry or Artillery
 

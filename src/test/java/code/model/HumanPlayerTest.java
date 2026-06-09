@@ -72,4 +72,17 @@ public final class HumanPlayerTest {
         assertEquals(0, availableArmies.get(ArmyType.CAVALRY));
         assertEquals(0, availableArmies.get(ArmyType.ARTILLERY));
     }
+
+    @Test
+    public void getAvailableArmies_MaximumSetupInfantry_ReturnsAvailableArmies() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.BLUE,
+                MAX_SETUP_INFANTRY);
+        HashMap<ArmyType, Integer> availableArmies = player.getAvailableArmies();
+
+        assertEquals(MAX_SETUP_INFANTRY, availableArmies.get(ArmyType.INFANTRY));
+        assertEquals(0, availableArmies.get(ArmyType.CAVALRY));
+        assertEquals(0, availableArmies.get(ArmyType.ARTILLERY));
+    }
 }
