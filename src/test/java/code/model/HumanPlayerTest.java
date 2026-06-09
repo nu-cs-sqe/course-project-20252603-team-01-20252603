@@ -1,9 +1,6 @@
 package code.model;
 import static org.easymock.EasyMock.createMock;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
@@ -123,5 +120,17 @@ public final class HumanPlayerTest {
         assertEquals(2, player.getTerritoryCount());
         assertTrue(player.ownsTerritory(alaska));
         assertTrue(player.ownsTerritory(alberta));
+    }
+
+    @Test
+    public void ownsTerritoryReturnsFalseForUnownedTerritory() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        Territory alaska = createMock(Territory.class);
+        Territory alberta = createMock(Territory.class);
+
+        player.addTerritory(alaska);
+
+        assertTrue(player.ownsTerritory(alaska));
+        assertFalse(player.ownsTerritory(alberta));
     }
 }
