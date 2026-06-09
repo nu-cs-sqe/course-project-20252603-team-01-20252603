@@ -671,4 +671,40 @@ public final class SetupControllerTest {
         verify(model, view);
     }
 
+    @Test
+    public void handleTerritoryClaimingContinuesWhenOneTerritoryRemainsUnclaimed() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        SetupController controller = new SetupController(model, view);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 3");
+        view.displayStartingPlayer("Player 3");
+        expectLastCall().once();
+
+        expect(model.getUnclaimedTerritoriesByContinent())
+                .andReturn("Australia: Eastern Australia");
+        view.displayUnclaimedTerritoriesByContinent("Australia: Eastern Australia");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Player 3 territories:");
+        view.displayCurrentPlayerClaimingStatus("Player 3 territories:");
+        expectLastCall().once();
+
+        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Eastern Australia");
+        expect(model.claimTerritoryDuringSetup("Eastern Australia", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+
+        replay(model, view);
+
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
 }
