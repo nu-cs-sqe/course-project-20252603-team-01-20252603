@@ -68,6 +68,10 @@ public class Territory {
         return owner instanceof NullPlayer;
     }
 
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "Territory stores a reference to player."
+    )
     public void setOwner(final Player player) {
         if (player instanceof NullPlayer) {
             throw new IllegalArgumentException("Owner cannot be NullPlayer.");

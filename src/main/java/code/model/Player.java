@@ -39,7 +39,7 @@ public abstract class Player {
 
     public abstract int getTerritoryCount();
 
-    public abstract void setAvailableArmies(HashMap<ArmyType, Integer> availableArmies);
+    public abstract void setAvailableArmies(HashMap<ArmyType, Integer> newAvailableArmies);
 
     public abstract boolean hasAvailableArmies(HashMap<ArmyType, Integer> requiredArmies);
 
