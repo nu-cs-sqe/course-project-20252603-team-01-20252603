@@ -8,6 +8,7 @@ import code.model.Player;
 import code.model.PlayerColor;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
 import org.junit.jupiter.api.Test;
@@ -110,7 +111,7 @@ public final class ConsoleViewTest {
                 new HumanPlayer("Cara", PlayerColor.GREEN, STARTING_ARMIES_THREE_PLAYERS));
 
         view.displayPlayers(players);
-        String displayedText = output.toString();
+        String displayedText = output.toString(StandardCharsets.UTF_8);
 
         assertTrue(displayedText.contains("Alice"));
         assertTrue(displayedText.contains("RED"));
@@ -133,7 +134,7 @@ public final class ConsoleViewTest {
                 new HumanPlayer("Frank", PlayerColor.PURPLE, STARTING_ARMIES_SIX_PLAYERS));
 
         view.displayPlayers(players);
-        String displayedText = output.toString();
+        String displayedText = output.toString(StandardCharsets.UTF_8);
 
         assertTrue(displayedText.contains("Alice"));
         assertTrue(displayedText.contains("RED"));
@@ -156,19 +157,23 @@ public final class ConsoleViewTest {
         Player player = new HumanPlayer("Alice", PlayerColor.RED, STARTING_ARMIES_THREE_PLAYERS);
 
         view.displayStartingPlayer(player);
-        String displayedText = output.toString();
+        String displayedText = output.toString(StandardCharsets.UTF_8);
 
         assertTrue(displayedText.contains("Alice"));
         assertTrue(displayedText.contains("RED"));
     }
 
     private ConsoleView createViewWithInput(final String input) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
         return new ConsoleView(
                 new Scanner(input),
-                new PrintStream(new ByteArrayOutputStream()));
+                new PrintStream(output, true, StandardCharsets.UTF_8));
     }
 
     private ConsoleView createViewWithOutput(final ByteArrayOutputStream output) {
-        return new ConsoleView(new Scanner(""), new PrintStream(output));
+        return new ConsoleView(
+                new Scanner(""),
+                new PrintStream(output, true, StandardCharsets.UTF_8));
     }
 }
