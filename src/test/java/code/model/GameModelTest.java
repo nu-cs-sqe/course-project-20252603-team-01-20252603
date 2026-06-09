@@ -540,4 +540,21 @@ public final class GameModelTest {
         assertTrue(claimed);
         verify(player, territory);
     }
+
+    @Test
+    public void claimTerritoryDuringSetupAlreadyClaimedTerritoryReturnsFalse() {
+        GameModel gameModel = new GameModel();
+        Player player = createMock(Player.class);
+        Territory territory = createMock(Territory.class);
+        HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
+
+        expect(territory.isUnclaimed()).andReturn(false);
+
+        replay(player, territory);
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup(player, territory, pieces);
+
+        assertFalse(claimed);
+        verify(player, territory);
+    }
 }
