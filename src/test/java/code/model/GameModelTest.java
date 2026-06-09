@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
  * Tests board initialization behavior for the GameModel class.
@@ -49,6 +50,10 @@ public final class GameModelTest {
 
     private static final int MIN_PLAYER_COUNT = 3;
 
+    private static final int FOUR_PLAYER_COUNT = 4;
+
+    private static final int FIVE_PLAYER_COUNT = 5;
+
     private static final int MAX_PLAYER_COUNT = 6;
 
     private static final int ABOVE_MAX_PLAYER_COUNT = 7;
@@ -60,6 +65,8 @@ public final class GameModelTest {
     private static final int FIVE_PLAYER_STARTING_INFANTRY = 25;
 
     private static final int SIX_PLAYER_STARTING_INFANTRY = 20;
+
+    private static final int TOTAL_PLAYER_COLORS = PlayerColor.values().length - 1;
 
     @Test
     public void gameModelConstructsWithEmptyContinents() {
@@ -112,7 +119,7 @@ public final class GameModelTest {
                 .stream()
                 .filter(continent -> continent.getName().equals(continentName))
                 .findFirst()
-                .get();
+                .orElseThrow(() -> new AssertionError("Continent not found: " + continentName));
     }
 
     @Test
@@ -147,23 +154,17 @@ public final class GameModelTest {
 
         gameModel.initializeContinentsAndTerritories();
 
-        assertEquals(
-                NORTH_AMERICA_BONUS,
+        assertEquals(NORTH_AMERICA_BONUS,
                 findContinent(gameModel, "North America").getBonusArmies());
-        assertEquals(
-                SOUTH_AMERICA_BONUS,
+        assertEquals(SOUTH_AMERICA_BONUS,
                 findContinent(gameModel, "South America").getBonusArmies());
-        assertEquals(
-                EUROPE_BONUS,
+        assertEquals(EUROPE_BONUS,
                 findContinent(gameModel, "Europe").getBonusArmies());
-        assertEquals(
-                AFRICA_BONUS,
+        assertEquals(AFRICA_BONUS,
                 findContinent(gameModel, "Africa").getBonusArmies());
-        assertEquals(
-                ASIA_BONUS,
+        assertEquals(ASIA_BONUS,
                 findContinent(gameModel, "Asia").getBonusArmies());
-        assertEquals(
-                AUSTRALIA_BONUS,
+        assertEquals(AUSTRALIA_BONUS,
                 findContinent(gameModel, "Australia").getBonusArmies());
     }
 
@@ -190,7 +191,7 @@ public final class GameModelTest {
                 .flatMap(continent -> continent.getTerritories().stream())
                 .filter(territory -> territory.getName().equals(territoryName))
                 .findFirst()
-                .get();
+                .orElseThrow(() -> new AssertionError("Territory not found: " + territoryName));
     }
 
     private boolean hasReciprocalAdjacency(final Territory territory) {
@@ -210,7 +211,7 @@ public final class GameModelTest {
         boolean allHaveAdjacency = gameModel.getContinents()
                 .stream()
                 .flatMap(continent -> continent.getTerritories().stream())
-                .allMatch(territory -> territory.getAdjacentTerritories().size() > 0);
+                .noneMatch(territory -> territory.getAdjacentTerritories().isEmpty());
 
         assertTrue(allHaveAdjacency);
     }
@@ -276,14 +277,14 @@ public final class GameModelTest {
     }
 
     @Test
-    public void setPlayerCount_BelowMinimumPlayerCount_ReturnsFalse() {
+    public void setPlayerCountBelowMinimumPlayerCountReturnsFalse() {
         GameModel gameModel = new GameModel();
 
         assertFalse(gameModel.setPlayerCount(BELOW_MIN_PLAYER_COUNT));
     }
 
     @Test
-    public void setPlayerCount_MinimumPlayerCount_ReturnsTrue() {
+    public void setPlayerCountMinimumPlayerCountReturnsTrue() {
         GameModel gameModel = new GameModel();
 
         assertTrue(gameModel.setPlayerCount(MIN_PLAYER_COUNT));
@@ -291,7 +292,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void setPlayerCount_MaximumPlayerCount_ReturnsTrue() {
+    public void setPlayerCountMaximumPlayerCountReturnsTrue() {
         GameModel gameModel = new GameModel();
 
         assertTrue(gameModel.setPlayerCount(MAX_PLAYER_COUNT));
@@ -299,14 +300,14 @@ public final class GameModelTest {
     }
 
     @Test
-    public void setPlayerCount_AboveMaximumPlayerCount_ReturnsFalse() {
+    public void setPlayerCountAboveMaximumPlayerCountReturnsFalse() {
         GameModel gameModel = new GameModel();
 
         assertFalse(gameModel.setPlayerCount(ABOVE_MAX_PLAYER_COUNT));
     }
 
     @Test
-    public void addPlayer_ThreePlayerGameWithNoRegisteredPlayers_ReturnsPlayer() {
+    public void addPlayerThreePlayerGameWithNoRegisteredPlayersReturnsPlayer() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -314,61 +315,57 @@ public final class GameModelTest {
 
         assertEquals("Player 1", player.getName());
         assertEquals(PlayerColor.RED, player.getColor());
-        assertEquals(
-                THREE_PLAYER_STARTING_INFANTRY,
-                player.getAvailableArmies().get(ArmyType.INFANTRY));
+        assertEquals(THREE_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
+                .get(ArmyType.INFANTRY));
     }
 
     @Test
-    public void addPlayer_FourPlayerGameWithNoRegisteredPlayers_ReturnsPlayer() {
+    public void addPlayerFourPlayerGameWithNoRegisteredPlayersReturnsPlayer() {
         GameModel gameModel = new GameModel();
 
-        gameModel.setPlayerCount(4);
+        gameModel.setPlayerCount(FOUR_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.BLUE);
 
-        assertEquals(
-                FOUR_PLAYER_STARTING_INFANTRY,
-                player.getAvailableArmies().get(ArmyType.INFANTRY));
+        assertEquals(FOUR_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
+                .get(ArmyType.INFANTRY));
     }
 
     @Test
-    public void addPlayer_FivePlayerGameWithNoRegisteredPlayers_ReturnsPlayer() {
+    public void addPlayerFivePlayerGameWithNoRegisteredPlayersReturnsPlayer() {
         GameModel gameModel = new GameModel();
 
-        gameModel.setPlayerCount(5);
+        gameModel.setPlayerCount(FIVE_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.GREEN);
 
-        assertEquals(
-                FIVE_PLAYER_STARTING_INFANTRY,
-                player.getAvailableArmies().get(ArmyType.INFANTRY));
+        assertEquals(FIVE_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
+                .get(ArmyType.INFANTRY));
     }
 
     @Test
-    public void addPlayer_SixPlayerGameWithNoRegisteredPlayers_ReturnsPlayer() {
+    public void addPlayerSixPlayerGameWithNoRegisteredPlayersReturnsPlayer() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MAX_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.YELLOW);
 
-        assertEquals(
-                SIX_PLAYER_STARTING_INFANTRY,
-                player.getAvailableArmies().get(ArmyType.INFANTRY));
+        assertEquals(SIX_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
+                .get(ArmyType.INFANTRY));
     }
 
     @Test
-    public void addPlayer_DuplicatePlayerColor_ReturnsNullPlayer() {
+    public void addPlayerDuplicatePlayerColorReturnsNullPlayer() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
         Player duplicatePlayer = gameModel.addPlayer("Player 2", PlayerColor.RED);
 
-        assertTrue(duplicatePlayer instanceof NullPlayer);
+        assertInstanceOf(NullPlayer.class, duplicatePlayer);
         assertEquals(1, gameModel.getPlayers().size());
     }
 
     @Test
-    public void addPlayer_PlayerListAlreadyFull_ReturnsNullPlayer() {
+    public void addPlayerPlayerListAlreadyFullReturnsNullPlayer() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -377,16 +374,16 @@ public final class GameModelTest {
         gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         Player extraPlayer = gameModel.addPlayer("Player 4", PlayerColor.YELLOW);
 
-        assertTrue(extraPlayer instanceof NullPlayer);
+        assertInstanceOf(NullPlayer.class, extraPlayer);
         assertEquals(MIN_PLAYER_COUNT, gameModel.getPlayers().size());
     }
 
     @Test
-    public void showAvailableColors_NoRegisteredPlayers_ReturnsAllColors() {
+    public void showAvailableColorsNoRegisteredPlayersReturnsAllColors() {
         GameModel gameModel = new GameModel();
         List<PlayerColor> availableColors = gameModel.showAvailableColors();
 
-        assertEquals(6, availableColors.size());
+        assertEquals(TOTAL_PLAYER_COLORS, availableColors.size());
         assertTrue(availableColors.contains(PlayerColor.RED));
         assertTrue(availableColors.contains(PlayerColor.BLUE));
         assertTrue(availableColors.contains(PlayerColor.GREEN));
@@ -396,19 +393,19 @@ public final class GameModelTest {
     }
 
     @Test
-    public void showAvailableColors_RedAlreadyChosen_ReturnsRemainingColors() {
+    public void showAvailableColorsRedAlreadyChosenReturnsRemainingColors() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
         List<PlayerColor> availableColors = gameModel.showAvailableColors();
 
-        assertEquals(5, availableColors.size());
+        assertEquals(TOTAL_PLAYER_COLORS - 1, availableColors.size());
         assertFalse(availableColors.contains(PlayerColor.RED));
     }
 
     @Test
-    public void showAvailableColors_FiveColorsAlreadyChosen_ReturnsOneColor() {
+    public void showAvailableColorsFiveColorsAlreadyChosenReturnsOneColor() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MAX_PLAYER_COUNT);
@@ -419,16 +416,16 @@ public final class GameModelTest {
         gameModel.addPlayer("Player 5", PlayerColor.BLACK);
         List<PlayerColor> availableColors = gameModel.showAvailableColors();
 
-        assertEquals(1, availableColors.size());
+        assertEquals(TOTAL_PLAYER_COLORS - (MAX_PLAYER_COUNT - 1), availableColors.size());
         assertTrue(availableColors.contains(PlayerColor.PURPLE));
     }
 
     @Test
-    public void setCurrentPlayerIndex_FirstPlayerIndex_SetsCurrentPlayer() {
+    public void setCurrentPlayerIndexFirstPlayerIndexSetsCurrentPlayer() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player firstPlayer = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        final Player firstPlayer = gameModel.addPlayer("Player 1", PlayerColor.RED);
         gameModel.addPlayer("Player 2", PlayerColor.BLUE);
         gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.setCurrentPlayerIndex(0);
@@ -437,25 +434,25 @@ public final class GameModelTest {
     }
 
     @Test
-    public void setCurrentPlayerIndex_LastPlayerIndex_SetsCurrentPlayer() {
+    public void setCurrentPlayerIndexLastPlayerIndexSetsCurrentPlayer() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
         gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        Player lastPlayer = gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        final Player lastPlayer = gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.setCurrentPlayerIndex(2);
 
         assertEquals(lastPlayer, gameModel.getCurrentPlayer());
     }
 
     @Test
-    public void setCurrentPlayerIndex_IndexBelowRange_DoesNotChangeCurrentPlayer() {
+    public void setCurrentPlayerIndexIndexBelowRangeDoesNotChangeCurrentPlayer() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
-        Player secondPlayer = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        final Player secondPlayer = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
         gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.setCurrentPlayerIndex(1);
         gameModel.setCurrentPlayerIndex(-1);
@@ -464,42 +461,39 @@ public final class GameModelTest {
     }
 
     @Test
-    public void setCurrentPlayerIndex_IndexAboveRange_DoesNotChangeCurrentPlayer() {
+    public void setCurrentPlayerIndexIndexAboveRangeDoesNotChangeCurrentPlayer() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
-        Player secondPlayer = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        final Player secondPlayer = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
         gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.setCurrentPlayerIndex(1);
         gameModel.setCurrentPlayerIndex(MIN_PLAYER_COUNT);
-
         assertEquals(secondPlayer, gameModel.getCurrentPlayer());
     }
 
     @Test
-    public void getCurrentPlayer_FirstPlayerIndex_ReturnsFirstPlayer() {
+    public void getCurrentPlayerFirstPlayerIndexReturnsFirstPlayer() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player firstPlayer = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        final Player firstPlayer = gameModel.addPlayer("Player 1", PlayerColor.RED);
         gameModel.addPlayer("Player 2", PlayerColor.BLUE);
         gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.setCurrentPlayerIndex(0);
-
         assertEquals(firstPlayer, gameModel.getCurrentPlayer());
     }
 
     @Test
-    public void getCurrentPlayer_LastPlayerIndex_ReturnsLastPlayer() {
+    public void getCurrentPlayerLastPlayerIndexReturnsLastPlayer() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
         gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        Player lastPlayer = gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        final Player lastPlayer = gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.setCurrentPlayerIndex(2);
-
         assertEquals(lastPlayer, gameModel.getCurrentPlayer());
     }
 }

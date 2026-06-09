@@ -13,28 +13,28 @@ import org.junit.jupiter.api.Test;
 public final class NullPlayerTest {
 
     @Test
-    public void constructor_UnassignedOwnership_CreatesPlayerPlaceholder() {
+    public void constructorUnassignedOwnershipCreatesPlayerPlaceholder() {
         NullPlayer player = new NullPlayer();
 
         assertInstanceOf(Player.class, player);
     }
 
     @Test
-    public void getName_UnassignedOwnership_ReturnsEmptyName() {
+    public void getNameUnassignedOwnershipReturnsEmptyName() {
         NullPlayer player = new NullPlayer();
 
         assertEquals("", player.getName());
     }
 
     @Test
-    public void getColor_UnassignedOwnership_ReturnsUnassignedColor() {
+    public void getColorUnassignedOwnershipReturnsUnassignedColor() {
         NullPlayer player = new NullPlayer();
 
         assertEquals(PlayerColor.UNASSIGNED, player.getColor());
     }
 
     @Test
-    public void getAvailableArmies_UnassignedOwnership_ReturnsEmptyArmyPool() {
+    public void getAvailableArmiesUnassignedOwnershipReturnsEmptyArmyPool() {
         NullPlayer player = new NullPlayer();
         HashMap<ArmyType, Integer> availableArmies = player.getAvailableArmies();
 
@@ -44,7 +44,7 @@ public final class NullPlayerTest {
     }
 
     @Test
-    public void hasAvailableArmies_UnassignedOwnership_ReturnsFalse() {
+    public void hasAvailableArmiesUnassignedOwnershipReturnsFalse() {
         NullPlayer player = new NullPlayer();
 
         assertFalse(player.hasAvailableArmies());

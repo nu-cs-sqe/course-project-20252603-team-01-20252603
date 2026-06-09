@@ -3,6 +3,7 @@ package code.view;
 import code.model.Player;
 import code.model.PlayerColor;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,7 +14,7 @@ public class ConsoleView {
     private final PrintStream output;
 
     public ConsoleView() {
-        this(new Scanner(System.in), System.out);
+        this(new Scanner(System.in, StandardCharsets.UTF_8), System.out);
     }
 
     ConsoleView(final Scanner inputScanner, final PrintStream outputStream) {

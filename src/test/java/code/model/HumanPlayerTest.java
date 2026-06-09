@@ -16,7 +16,7 @@ public final class HumanPlayerTest {
     private static final int MAX_SETUP_INFANTRY = 35;
 
     @Test
-    public void constructor_MinimumSetupInfantry_CreatesPlayer() {
+    public void constructorMinimumSetupInfantryCreatesPlayer() {
         HumanPlayer player = new HumanPlayer(
                 "Player 1",
                 PlayerColor.RED,
@@ -29,7 +29,7 @@ public final class HumanPlayerTest {
     }
 
     @Test
-    public void constructor_MaximumSetupInfantry_CreatesPlayer() {
+    public void constructorMaximumSetupInfantryCreatesPlayer() {
         HumanPlayer player = new HumanPlayer(
                 "Player 1",
                 PlayerColor.BLUE,
@@ -42,7 +42,7 @@ public final class HumanPlayerTest {
     }
 
     @Test
-    public void getName_RegisteredPlayer_ReturnsRegisteredName() {
+    public void getNameRegisteredPlayerReturnsRegisteredName() {
         HumanPlayer player = new HumanPlayer(
                 "Player 1",
                 PlayerColor.RED,
@@ -52,7 +52,7 @@ public final class HumanPlayerTest {
     }
 
     @Test
-    public void getColor_RegisteredPlayer_ReturnsRegisteredColor() {
+    public void getColorRegisteredPlayerReturnsRegisteredColor() {
         HumanPlayer player = new HumanPlayer(
                 "Player 1",
                 PlayerColor.RED,
@@ -62,7 +62,7 @@ public final class HumanPlayerTest {
     }
 
     @Test
-    public void getAvailableArmies_MinimumSetupInfantry_ReturnsAvailableArmies() {
+    public void getAvailableArmiesMinimumSetupInfantryReturnsAvailableArmies() {
         HumanPlayer player = new HumanPlayer(
                 "Player 1",
                 PlayerColor.RED,
@@ -75,7 +75,7 @@ public final class HumanPlayerTest {
     }
 
     @Test
-    public void getAvailableArmies_MaximumSetupInfantry_ReturnsAvailableArmies() {
+    public void getAvailableArmiesMaximumSetupInfantryReturnsAvailableArmies() {
         HumanPlayer player = new HumanPlayer(
                 "Player 1",
                 PlayerColor.BLUE,
@@ -88,7 +88,7 @@ public final class HumanPlayerTest {
     }
 
     @Test
-    public void hasAvailableArmies_SetupArmyAssignment_ReturnsTrue() {
+    public void hasAvailableArmiesSetupArmyAssignmentReturnsTrue() {
         HumanPlayer player = new HumanPlayer(
                 "Player 1",
                 PlayerColor.RED,

@@ -25,50 +25,56 @@ public final class ConsoleViewTest {
 
     private static final int ABOVE_MAX_PLAYER_COUNT = 7;
 
+    private static final int SIXTH_PLAYER_POSITION = 6;
+
+    private static final int STARTING_ARMIES_THREE_PLAYERS = 35;
+
+    private static final int STARTING_ARMIES_SIX_PLAYERS = 20;
+
     @Test
-    public void promptNumberOfPlayers_MinimumPlayerCount_ReturnsPlayerCount() {
+    public void promptNumberOfPlayersMinimumPlayerCountReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("3\n");
 
         assertEquals(MIN_PLAYER_COUNT, view.promptNumberOfPlayers());
     }
 
     @Test
-    public void promptNumberOfPlayers_MaximumPlayerCount_ReturnsPlayerCount() {
+    public void promptNumberOfPlayersMaximumPlayerCountReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("6\n");
 
         assertEquals(MAX_PLAYER_COUNT, view.promptNumberOfPlayers());
     }
 
     @Test
-    public void promptNumberOfPlayers_BelowMinimumPlayerCount_ReturnsPlayerCount() {
+    public void promptNumberOfPlayersBelowMinimumPlayerCountReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("2\n");
 
         assertEquals(BELOW_MIN_PLAYER_COUNT, view.promptNumberOfPlayers());
     }
 
     @Test
-    public void promptNumberOfPlayers_AboveMaximumPlayerCount_ReturnsPlayerCount() {
+    public void promptNumberOfPlayersAboveMaximumPlayerCountReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("7\n");
 
         assertEquals(ABOVE_MAX_PLAYER_COUNT, view.promptNumberOfPlayers());
     }
 
     @Test
-    public void promptPlayerName_FirstPlayer_ReturnsPlayerName() {
+    public void promptPlayerNameFirstPlayerReturnsPlayerName() {
         ConsoleView view = createViewWithInput("Alice\n");
 
         assertEquals("Alice", view.promptPlayerName(1));
     }
 
     @Test
-    public void promptPlayerName_SixthPlayer_ReturnsPlayerName() {
+    public void promptPlayerNameSixthPlayerReturnsPlayerName() {
         ConsoleView view = createViewWithInput("Frank\n");
 
-        assertEquals("Frank", view.promptPlayerName(6));
+        assertEquals("Frank", view.promptPlayerName(SIXTH_PLAYER_POSITION));
     }
 
     @Test
-    public void promptPlayerColor_AllColorsAvailable_ReturnsSelectedColor() {
+    public void promptPlayerColorAllColorsAvailableReturnsSelectedColor() {
         ConsoleView view = createViewWithInput("RED\n");
 
         assertEquals(
@@ -77,7 +83,7 @@ public final class ConsoleViewTest {
     }
 
     @Test
-    public void promptPlayerColor_OneColorAvailable_ReturnsSelectedColor() {
+    public void promptPlayerColorOneColorAvailableReturnsSelectedColor() {
         ConsoleView view = createViewWithInput("PURPLE\n");
 
         assertEquals(
@@ -86,7 +92,7 @@ public final class ConsoleViewTest {
     }
 
     @Test
-    public void promptPlayerColor_UnavailableColorEntered_ReturnsSelectedColor() {
+    public void promptPlayerColorUnavailableColorEnteredReturnsSelectedColor() {
         ConsoleView view = createViewWithInput("RED\n");
 
         assertEquals(
@@ -95,13 +101,13 @@ public final class ConsoleViewTest {
     }
 
     @Test
-    public void displayPlayers_MinimumRegisteredPlayers_DisplaysPlayers() {
+    public void displayPlayersMinimumRegisteredPlayersDisplaysPlayers() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(output);
         List<Player> players = List.of(
-                new HumanPlayer("Alice", PlayerColor.RED, 35),
-                new HumanPlayer("Bob", PlayerColor.BLUE, 35),
-                new HumanPlayer("Cara", PlayerColor.GREEN, 35));
+                new HumanPlayer("Alice", PlayerColor.RED, STARTING_ARMIES_THREE_PLAYERS),
+                new HumanPlayer("Bob", PlayerColor.BLUE, STARTING_ARMIES_THREE_PLAYERS),
+                new HumanPlayer("Cara", PlayerColor.GREEN, STARTING_ARMIES_THREE_PLAYERS));
 
         view.displayPlayers(players);
         String displayedText = output.toString();
@@ -115,16 +121,16 @@ public final class ConsoleViewTest {
     }
 
     @Test
-    public void displayPlayers_MaximumRegisteredPlayers_DisplaysPlayers() {
+    public void displayPlayersMaximumRegisteredPlayersDisplaysPlayers() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(output);
         List<Player> players = List.of(
-                new HumanPlayer("Alice", PlayerColor.RED, 20),
-                new HumanPlayer("Bob", PlayerColor.BLUE, 20),
-                new HumanPlayer("Cara", PlayerColor.GREEN, 20),
-                new HumanPlayer("Dan", PlayerColor.YELLOW, 20),
-                new HumanPlayer("Eli", PlayerColor.BLACK, 20),
-                new HumanPlayer("Frank", PlayerColor.PURPLE, 20));
+                new HumanPlayer("Alice", PlayerColor.RED, STARTING_ARMIES_SIX_PLAYERS),
+                new HumanPlayer("Bob", PlayerColor.BLUE, STARTING_ARMIES_SIX_PLAYERS),
+                new HumanPlayer("Cara", PlayerColor.GREEN, STARTING_ARMIES_SIX_PLAYERS),
+                new HumanPlayer("Dan", PlayerColor.YELLOW, STARTING_ARMIES_SIX_PLAYERS),
+                new HumanPlayer("Eli", PlayerColor.BLACK, STARTING_ARMIES_SIX_PLAYERS),
+                new HumanPlayer("Frank", PlayerColor.PURPLE, STARTING_ARMIES_SIX_PLAYERS));
 
         view.displayPlayers(players);
         String displayedText = output.toString();
@@ -144,10 +150,10 @@ public final class ConsoleViewTest {
     }
 
     @Test
-    public void displayStartingPlayer_SelectedStartingPlayer_DisplaysStartingPlayer() {
+    public void displayStartingPlayerSelectedStartingPlayerDisplaysStartingPlayer() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(output);
-        Player player = new HumanPlayer("Alice", PlayerColor.RED, 35);
+        Player player = new HumanPlayer("Alice", PlayerColor.RED, STARTING_ARMIES_THREE_PLAYERS);
 
         view.displayStartingPlayer(player);
         String displayedText = output.toString();

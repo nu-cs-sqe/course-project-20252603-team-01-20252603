@@ -25,7 +25,19 @@ public class GameModel {
 
     private static final int MIN_PLAYER_COUNT = 3;
 
+    private static final int FOUR_PLAYER_COUNT = 4;
+
+    private static final int FIVE_PLAYER_COUNT = 5;
+
     private static final int MAX_PLAYER_COUNT = 6;
+
+    private static final int THREE_PLAYER_STARTING_INFANTRY = 35;
+
+    private static final int FOUR_PLAYER_STARTING_INFANTRY = 30;
+
+    private static final int FIVE_PLAYER_STARTING_INFANTRY = 25;
+
+    private static final int SIX_PLAYER_STARTING_INFANTRY = 20;
 
     private final List<Continent> continents;
 
@@ -122,19 +134,19 @@ public class GameModel {
     }
 
     private int calculateStartingInfantry() {
-        if (playerCount == 4) {
-            return 30;
+        if (playerCount == FOUR_PLAYER_COUNT) {
+            return FOUR_PLAYER_STARTING_INFANTRY;
         }
 
-        if (playerCount == 5) {
-            return 25;
+        if (playerCount == FIVE_PLAYER_COUNT) {
+            return FIVE_PLAYER_STARTING_INFANTRY;
         }
 
         if (playerCount == MAX_PLAYER_COUNT) {
-            return 20;
+            return SIX_PLAYER_STARTING_INFANTRY;
         }
 
-        return 35;
+        return THREE_PLAYER_STARTING_INFANTRY;
     }
 
     private void createNorthAmerica() {
@@ -237,7 +249,9 @@ public class GameModel {
                 .flatMap(continent -> continent.getTerritories().stream())
                 .filter(territory -> territory.getName().equals(territoryName))
                 .findFirst()
-                .get();
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Territory not found: " + territoryName)
+                );
     }
 
     private void connect(
