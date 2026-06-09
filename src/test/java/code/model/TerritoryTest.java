@@ -141,4 +141,19 @@ public final class TerritoryTest {
         assertTrue(territory.isOwnedBy(playerTwo));
     }
 
+    @Test
+    public void setOwnerToNullPlayerRaisesExceptionAndKeepsCurrentOwner() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        Player player = createMock(Player.class);
+        Player nullPlayer = new NullPlayer();
+
+        territory.setOwner(player);
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> territory.setOwner(nullPlayer));
+
+        assertTrue(territory.isOwnedBy(player));
+    }
+
 }

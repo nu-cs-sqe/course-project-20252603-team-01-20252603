@@ -63,6 +63,9 @@ public class Territory {
     }
 
     public void setOwner(final Player player) {
+        if (player instanceof NullPlayer) {
+            throw new IllegalArgumentException("Owner cannot be NullPlayer.");
+        }
         owner = player;
     }
 
