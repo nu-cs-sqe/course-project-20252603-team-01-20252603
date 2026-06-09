@@ -49,4 +49,14 @@ public final class HumanPlayerTest {
 
         assertEquals("Player 1", player.getName());
     }
+
+    @Test
+    public void getColor_RegisteredPlayer_ReturnsRegisteredColor() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                MIN_SETUP_INFANTRY);
+
+        assertEquals(PlayerColor.RED, player.getColor());
+    }
 }

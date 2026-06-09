@@ -23,7 +23,7 @@
 
 ### Method under test: `getColor()`
 
-- **TC4: Returns registered player color** ( :x: )
+- **TC4: Returns registered player color** ( :white_check_mark: )
     - **State of the system**: Human player constructed with color `PlayerColor.RED`
     - **Expected output**: Returns `PlayerColor.RED`
 
