@@ -74,6 +74,8 @@ public final class GameModelTest {
 
     private static final int ZERO_INFANTRY = 0;
 
+    private static final int TWO_INFANTRY = 2;
+
     @Test
     public void gameModelConstructsWithEmptyContinents() {
         GameModel gameModel = new GameModel();
@@ -566,6 +568,23 @@ public final class GameModelTest {
         Player player = createMock(Player.class);
         Territory territory = createMock(Territory.class);
         HashMap<ArmyType, Integer> pieces = createInfantryPieces(ZERO_INFANTRY);
+
+        expect(territory.isUnclaimed()).andReturn(true);
+
+        replay(player, territory);
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup(player, territory, pieces);
+
+        assertFalse(claimed);
+        verify(player, territory);
+    }
+
+    @Test
+    public void claimTerritoryDuringSetupMoreThanOneInfantryReturnsFalse() {
+        GameModel gameModel = new GameModel();
+        Player player = createMock(Player.class);
+        Territory territory = createMock(Territory.class);
+        HashMap<ArmyType, Integer> pieces = createInfantryPieces(TWO_INFANTRY);
 
         expect(territory.isUnclaimed()).andReturn(true);
 
