@@ -61,4 +61,8 @@ public class ConsoleView {
     public void displayUnclaimedTerritoriesByContinent(final String unclaimedTerritories) {
         output.println(unclaimedTerritories);
     }
+
+    public void displayCurrentPlayerClaimingStatus(final String playerClaimingStatus) {
+        output.println(playerClaimingStatus);
+    }
 }

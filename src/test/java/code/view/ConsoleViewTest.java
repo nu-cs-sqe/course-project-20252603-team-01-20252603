@@ -197,4 +197,16 @@ public final class ConsoleViewTest {
 
         assertTrue(output.toString().contains(unclaimedTerritories));
     }
+
+    @Test
+    public void displayCurrentPlayerClaimingStatusPrintsStatus() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(new Scanner(""), new PrintStream(output));
+        String playerClaimingStatus = "Player 1 territories: Alaska";
+
+        view.displayCurrentPlayerClaimingStatus(playerClaimingStatus);
+
+        assertTrue(output.toString().contains(playerClaimingStatus));
+    }
+
 }
