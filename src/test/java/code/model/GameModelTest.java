@@ -620,4 +620,25 @@ public final class GameModelTest {
         assertTrue(unclaimedTerritories.contains("Eastern Australia"));
     }
 
+    @Test
+    public void getUnclaimedTerritoriesByContinentExcludesClaimedTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup(
+                "Alaska",
+                createInfantryPieces(ONE_INFANTRY));
+
+        String unclaimedTerritories = gameModel.getUnclaimedTerritoriesByContinent();
+
+        assertTrue(unclaimedTerritories.contains("North America"));
+        assertFalse(unclaimedTerritories.contains("Alaska"));
+        assertTrue(unclaimedTerritories.contains("Alberta"));
+    }
+
 }
