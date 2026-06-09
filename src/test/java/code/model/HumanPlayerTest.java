@@ -1,5 +1,7 @@
 package code.model;
-
+import static org.easymock.EasyMock.createMock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -96,4 +98,14 @@ public final class HumanPlayerTest {
 //
 //        assertTrue(player.hasAvailableArmies());
 //    }
+    @Test
+    public void addTerritoryAddsFirstClaimedTerritory() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, MIN_SETUP_INFANTRY);
+        Territory territory = createMock(Territory.class);
+
+        player.addTerritory(territory);
+
+        assertEquals(1, player.getTerritoryCount());
+        assertTrue(player.ownsTerritory(territory));
+    }
 }
