@@ -3,6 +3,8 @@ package code.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 
@@ -78,11 +80,18 @@ public class Territory {
     }
 
     public boolean placeArmies(final HashMap<ArmyType, Integer> newPieces) {
-        for (ArmyType armyType : newPieces.keySet()) {
+        for (Map.Entry<ArmyType, Integer> entry : newPieces.entrySet()) {
+            ArmyType armyType = entry.getKey();
             int currentCount = pieces.getOrDefault(armyType, 0);
-            int addedCount = newPieces.get(armyType);
+            int addedCount = entry.getValue();
+
             pieces.put(armyType, currentCount + addedCount);
         }
+
+        armyCount += newPieces.values()
+                .stream()
+                .mapToInt(Integer::intValue)
+                .sum();
 
         return true;
     }
