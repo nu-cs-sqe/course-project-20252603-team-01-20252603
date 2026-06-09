@@ -59,4 +59,17 @@ public final class HumanPlayerTest {
 
         assertEquals(PlayerColor.RED, player.getColor());
     }
+
+    @Test
+    public void getAvailableArmies_MinimumSetupInfantry_ReturnsAvailableArmies() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                MIN_SETUP_INFANTRY);
+        HashMap<ArmyType, Integer> availableArmies = player.getAvailableArmies();
+
+        assertEquals(MIN_SETUP_INFANTRY, availableArmies.get(ArmyType.INFANTRY));
+        assertEquals(0, availableArmies.get(ArmyType.CAVALRY));
+        assertEquals(0, availableArmies.get(ArmyType.ARTILLERY));
+    }
 }

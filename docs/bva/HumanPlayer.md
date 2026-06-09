@@ -31,7 +31,7 @@
 
 ### Method under test: `getAvailableArmies()`
 
-- **TC5: Returns available Infantry at lower setup boundary** ( :x: )
+- **TC5: Returns available Infantry at lower setup boundary** ( :white_check_mark: )
     - **State of the system**: Human player constructed with `20` starting Infantry
     - **Expected output**: Available armies contain `20` Infantry and no Cavalry or Artillery
 
