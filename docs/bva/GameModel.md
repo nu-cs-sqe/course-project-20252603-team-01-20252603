@@ -76,7 +76,7 @@
     - **State of the system**: `GameModel` constructed; `setPlayerCount(6)` called
     - **Expected output**: Returns `true`; player count is stored as `6`
 
-- **TC18: Rejects player count above maximum** ( :x: )
+- **TC18: Rejects player count above maximum** ( :white_check_mark: )
     - **State of the system**: `GameModel` constructed; `setPlayerCount(7)` called
     - **Expected output**: Returns `false`; player count is not accepted because valid player counts are in `[3, 6]`
 

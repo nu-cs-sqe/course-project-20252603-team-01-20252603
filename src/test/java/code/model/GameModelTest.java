@@ -50,6 +50,8 @@ public final class GameModelTest {
 
     private static final int MAX_PLAYER_COUNT = 6;
 
+    private static final int ABOVE_MAX_PLAYER_COUNT = 7;
+
     @Test
     public void gameModelConstructsWithEmptyContinents() {
         GameModel gameModel = new GameModel();
@@ -285,5 +287,12 @@ public final class GameModelTest {
 
         assertTrue(gameModel.setPlayerCount(MAX_PLAYER_COUNT));
         assertEquals(MAX_PLAYER_COUNT, gameModel.getPlayerCount());
+    }
+
+    @Test
+    public void setPlayerCount_AboveMaximumPlayerCount_ReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        assertFalse(gameModel.setPlayerCount(ABOVE_MAX_PLAYER_COUNT));
     }
 }
