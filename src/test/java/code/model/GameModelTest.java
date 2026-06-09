@@ -312,11 +312,12 @@ public final class GameModelTest {
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        String availableArmies = player.getAvailableArmies();
 
         assertEquals("Player 1", player.getName());
         assertEquals(PlayerColor.RED, player.getColor());
-        assertEquals(THREE_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
-                .get(ArmyType.INFANTRY));
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(THREE_PLAYER_STARTING_INFANTRY)));
     }
 
     @Test
@@ -325,9 +326,10 @@ public final class GameModelTest {
 
         gameModel.setPlayerCount(FOUR_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.BLUE);
+        String availableArmies = player.getAvailableArmies();
 
-        assertEquals(FOUR_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
-                .get(ArmyType.INFANTRY));
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(FOUR_PLAYER_STARTING_INFANTRY)));
     }
 
     @Test
@@ -336,9 +338,10 @@ public final class GameModelTest {
 
         gameModel.setPlayerCount(FIVE_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.GREEN);
+        String availableArmies = player.getAvailableArmies();
 
-        assertEquals(FIVE_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
-                .get(ArmyType.INFANTRY));
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(FIVE_PLAYER_STARTING_INFANTRY)));
     }
 
     @Test
@@ -347,9 +350,10 @@ public final class GameModelTest {
 
         gameModel.setPlayerCount(MAX_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.YELLOW);
+        String availableArmies = player.getAvailableArmies();
 
-        assertEquals(SIX_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
-                .get(ArmyType.INFANTRY));
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(SIX_PLAYER_STARTING_INFANTRY)));
     }
 
     @Test

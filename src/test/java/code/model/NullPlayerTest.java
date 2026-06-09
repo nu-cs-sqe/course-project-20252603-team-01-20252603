@@ -1,8 +1,6 @@
 package code.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
@@ -12,42 +10,45 @@ import org.junit.jupiter.api.Test;
  */
 public final class NullPlayerTest {
 
-//    @Test
-//    public void constructorUnassignedOwnershipCreatesPlayerPlaceholder() {
-//        NullPlayer player = new NullPlayer();
-//
-//        assertInstanceOf(Player.class, player);
-//    }
-//
-//    @Test
-//    public void getNameUnassignedOwnershipReturnsEmptyName() {
-//        NullPlayer player = new NullPlayer();
-//
-//        assertEquals("", player.getName());
-//    }
-//
-//    @Test
-//    public void getColorUnassignedOwnershipReturnsUnassignedColor() {
-//        NullPlayer player = new NullPlayer();
-//
-//        assertEquals(PlayerColor.UNASSIGNED, player.getColor());
-//    }
-//
-//    @Test
-//    public void getAvailableArmiesUnassignedOwnershipReturnsEmptyArmyPool() {
-//        NullPlayer player = new NullPlayer();
-//        HashMap<ArmyType, Integer> availableArmies = player.getAvailableArmies();
-//
-//        assertEquals(0, availableArmies.get(ArmyType.INFANTRY));
-//        assertEquals(0, availableArmies.get(ArmyType.CAVALRY));
-//        assertEquals(0, availableArmies.get(ArmyType.ARTILLERY));
-//    }
-//
-//    @Test
-//    public void hasAvailableArmiesUnassignedOwnershipReturnsFalse() {
-//        NullPlayer player = new NullPlayer();
-//
-//        assertFalse(player.hasAvailableArmies());
-//    }
+    private static final int ONE_INFANTRY = 1;
+
+    @Test
+    public void constructorUnassignedOwnershipCreatesPlayerPlaceholder() {
+        NullPlayer player = new NullPlayer();
+
+        assertInstanceOf(Player.class, player);
+    }
+
+    @Test
+    public void getNameUnassignedOwnershipReturnsEmptyName() {
+        NullPlayer player = new NullPlayer();
+
+        assertEquals("", player.getName());
+    }
+
+    @Test
+    public void getColorUnassignedOwnershipReturnsUnassignedColor() {
+        NullPlayer player = new NullPlayer();
+
+        assertEquals(PlayerColor.UNASSIGNED, player.getColor());
+    }
+
+    @Test
+    public void getAvailableArmiesUnassignedOwnershipRaisesException() {
+        NullPlayer player = new NullPlayer();
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                player::getAvailableArmies);
+    }
+
+    @Test
+    public void hasAvailableArmiesUnassignedOwnershipReturnsFalse() {
+        NullPlayer player = new NullPlayer();
+        HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
+        requiredArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        assertFalse(player.hasAvailableArmies(requiredArmies));
+    }
 
 }
