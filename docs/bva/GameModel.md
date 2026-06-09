@@ -136,7 +136,7 @@
     - **State of the system**: Three players have been registered; `setCurrentPlayerIndex(2)` called
     - **Expected output**: Current player becomes the third registered player
 
-- **TC30: Rejects index below valid range** ( :x: )
+- **TC30: Rejects index below valid range** ( :white_check_mark: )
     - **State of the system**: Three players have been registered; `setCurrentPlayerIndex(-1)` called
     - **Expected output**: Current player index is not changed because valid indices are in `[0, playerCount - 1]`
 

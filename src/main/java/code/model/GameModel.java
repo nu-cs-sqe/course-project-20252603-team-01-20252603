@@ -105,6 +105,10 @@ public class GameModel {
     }
 
     public void setCurrentPlayerIndex(final int index) {
+        if (index < 0 || index >= players.size()) {
+            return;
+        }
+
         currentPlayerIndex = index;
     }
 
