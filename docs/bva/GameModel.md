@@ -160,23 +160,23 @@
 
 ### Method under test: `claimTerritoryDuringSetup(Player player, Territory territory, HashMap<ArmyType, Integer> pieces)`
 
-- **TC34: Claim unclaimed territory with exactly one Infantry** ( :x: )
+- **TC34: Claim unclaimed territory with exactly one Infantry** ( :white_check_mark: )
     - **State of the system**: Territory is unclaimed; player has available armies containing at least `INFANTRY -> 1`; `claimTerritoryDuringSetup()` is called with a pieces map containing exactly `INFANTRY -> 1`
     - **Expected output**: Method returns `true`; territory owner is set to the player; territory contains exactly one Infantry; player owns the territory; player's available Infantry decreases by one
 
-- **TC35: Cannot claim already claimed territory** ( :x: )
+- **TC35: Cannot claim already claimed territory** ( :white_check_mark: )
     - **State of the system**: Territory is already owned by `playerOne`; `playerTwo` attempts to claim the same territory with exactly `INFANTRY -> 1`
     - **Expected output**: Method returns `false`; territory owner remains `playerOne`; territory Infantry count remains unchanged; `playerTwo` does not gain the territory; `playerTwo`'s available Infantry count remains unchanged
 
-- **TC36: Cannot claim territory with zero Infantry** ( :x: )
+- **TC36: Cannot claim territory with zero Infantry** ( :white_check_mark: )
     - **State of the system**: Territory is unclaimed; player has available Infantry; `claimTerritoryDuringSetup()` is called with a pieces map containing `INFANTRY -> 0`
     - **Expected output**: Method returns `false`; territory remains unclaimed; no Infantry is placed; player does not gain the territory; player's available Infantry count remains unchanged
 
-- **TC37: Cannot claim territory with more than one Infantry** ( :x: )
+- **TC37: Cannot claim territory with more than one Infantry** ( :white_check_mark: )
     - **State of the system**: Territory is unclaimed; player has available Infantry; `claimTerritoryDuringSetup()` is called with a pieces map containing `INFANTRY -> 2`
     - **Expected output**: Method returns `false`; territory remains unclaimed; no Infantry is placed; player does not gain the territory; player's available Infantry count remains unchanged
 
-- **TC38: Cannot claim territory when player lacks available Infantry** ( :x: )
+- **TC38: Cannot claim territory when player lacks available Infantry** ( :white_check_mark: )
     - **State of the system**: Territory is unclaimed; player has available armies containing `INFANTRY -> 0`; `claimTerritoryDuringSetup()` is called with a pieces map containing exactly `INFANTRY -> 1`
     - **Expected output**: Method returns `false`; territory remains unclaimed; no Infantry is placed; player does not gain the territory
 
@@ -184,15 +184,15 @@
 
 ### Method under test: `areAllTerritoriesClaimed()`
 
-- **TC39: Returns false when no territories are claimed** ( :x: )
+- **TC39: Returns false when no territories are claimed** ( :white_check_mark: )
     - **State of the system**: Game board has been initialized; all territories are still unclaimed
     - **Expected output**: Returns `false`
 
-- **TC40: Returns false when one territory remains unclaimed** ( :x: )
+- **TC40: Returns false when one territory remains unclaimed** ( :white_check_mark: )
     - **State of the system**: 41 territories are claimed and exactly 1 territory is still unclaimed
     - **Expected output**: Returns `false`
 
-- **TC41: Returns true when all territories are claimed** ( :x: )
+- **TC41: Returns true when all territories are claimed** ( :white_check_mark: )
     - **State of the system**: All 42 territories have been claimed
     - **Expected output**: Returns `true`
 
@@ -200,18 +200,18 @@
 
 ### Method under test: `advanceCurrentPlayerIndex()`
 
-- **TC34: Advances from first player to second player** ( :x: )
+- **TC34: Advances from first player to second player** ( :white_check_mark: )
     - **State of the system**: Three-player game has been created; current player index is `0`
     - **Expected output**: Current player advances to index `1`; `getCurrentPlayer()` returns the second player
 
-- **TC35: Advances from middle player to next player** ( :x: )
+- **TC35: Advances from middle player to next player** ( :white_check_mark: )
     - **State of the system**: Three-player game has been created; current player index is `1`
     - **Expected output**: Current player advances to index `2`; `getCurrentPlayer()` returns the third player
 
-- **TC36: Wraps from last player back to first player** ( :x: )
+- **TC36: Wraps from last player back to first player** ( :white_check_mark: )
     - **State of the system**: Three-player game has been created; current player index is `2`
     - **Expected output**: Current player advances to index `0`; `getCurrentPlayer()` returns the first player
 
-- **TC37: Does not advance when no players are registered** ( :x: )
+- **TC37: Does not advance when no players are registered** ( :white_check_mark: )
     - **State of the system**: GameModel has no registered players
     - **Expected output**: Current player remains unavailable; method does not change player state
