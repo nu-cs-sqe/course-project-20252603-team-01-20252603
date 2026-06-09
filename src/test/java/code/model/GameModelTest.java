@@ -44,6 +44,8 @@ public final class GameModelTest {
 
     private static final int DECK_CARD_COUNT = 44;
 
+    private static final int BELOW_MIN_PLAYER_COUNT = 2;
+
     @Test
     public void gameModelConstructsWithEmptyContinents() {
         GameModel gameModel = new GameModel();
@@ -256,5 +258,12 @@ public final class GameModelTest {
         gameModel.initializeContinentsAndTerritories();
 
         assertFalse(gameModel.isDeckEmpty());
+    }
+
+    @Test
+    public void setPlayerCount_BelowMinimumPlayerCount_ReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        assertFalse(gameModel.setPlayerCount(BELOW_MIN_PLAYER_COUNT));
     }
 }

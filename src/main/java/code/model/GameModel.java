@@ -21,6 +21,10 @@ public class GameModel {
 
     private static final int AUSTRALIA_BONUS = 2;
 
+    private static final int MIN_PLAYER_COUNT = 3;
+
+    private static final int MAX_PLAYER_COUNT = 6;
+
     private final List<Continent> continents;
 
     private Deck deck;
@@ -54,6 +58,10 @@ public class GameModel {
 
     public boolean isDeckEmpty() {
         return deck.isEmpty();
+    }
+
+    public boolean setPlayerCount(final int count) {
+        return count >= MIN_PLAYER_COUNT && count <= MAX_PLAYER_COUNT;
     }
 
     private void createNorthAmerica() {

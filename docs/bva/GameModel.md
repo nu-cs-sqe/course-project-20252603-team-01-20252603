@@ -64,7 +64,7 @@
 
 ### Method under test: `setPlayerCount(int count)`
 
-- **TC15: Rejects player count below minimum** ( :x: )
+- **TC15: Rejects player count below minimum** ( :white_check_mark: )
     - **State of the system**: `GameModel` constructed; `setPlayerCount(2)` called
     - **Expected output**: Returns `false`; player count is not accepted because valid player counts are in `[3, 6]`
 
