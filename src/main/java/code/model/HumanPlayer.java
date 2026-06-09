@@ -52,6 +52,13 @@ public class HumanPlayer extends Player {
 
     @Override
     public void removeArmies(final HashMap<ArmyType, Integer> armiesToRemove) {
+        for (Map.Entry<ArmyType, Integer> entry : armiesToRemove.entrySet()) {
+            ArmyType armyType = entry.getKey();
+            int removedCount = entry.getValue();
+            int currentCount = availableArmies.getOrDefault(armyType, 0);
+
+            availableArmies.put(armyType, currentCount - removedCount);
+        }
     }
 
     @Override
