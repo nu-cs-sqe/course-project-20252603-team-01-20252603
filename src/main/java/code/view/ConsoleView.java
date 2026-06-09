@@ -65,4 +65,12 @@ public class ConsoleView {
     public void displayCurrentPlayerClaimingStatus(final String playerClaimingStatus) {
         output.println(playerClaimingStatus);
     }
+
+    public String getTerritoryChoiceDuringSetup() {
+        output.print("Enter territory to claim: ");
+
+        return scanner.nextLine();
+    }
+
+
 }

@@ -209,4 +209,15 @@ public final class ConsoleViewTest {
         assertTrue(output.toString().contains(playerClaimingStatus));
     }
 
+    @Test
+    public void getTerritoryChoiceDuringSetupReturnsEnteredTerritory() {
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska\n"),
+                new PrintStream(new ByteArrayOutputStream()));
+
+        String territoryChoice = view.getTerritoryChoiceDuringSetup();
+
+        assertEquals("Alaska", territoryChoice);
+    }
+
 }
