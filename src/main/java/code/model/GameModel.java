@@ -407,4 +407,8 @@ public class GameModel {
         return territories.size() == TOTAL_TERRITORY_COUNT
                 && territories.stream().allMatch(territory -> !territory.isUnclaimed());
     }
+
+    public String getCurrentPlayerName() {
+        return players.get(currentPlayerIndex).getName();
+    }
 }
