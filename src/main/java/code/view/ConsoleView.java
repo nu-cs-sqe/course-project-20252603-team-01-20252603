@@ -22,4 +22,9 @@ public class ConsoleView {
         output.print("Enter number of players: ");
         return scanner.nextInt();
     }
+
+    public String promptPlayerName(final int playerNumber) {
+        output.print("Enter player " + playerNumber + " name: ");
+        return scanner.nextLine();
+    }
 }

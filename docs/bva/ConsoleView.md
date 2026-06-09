@@ -23,7 +23,7 @@
 
 ### Method under test: `promptPlayerName(int playerNumber)`
 
-- **TC5: Reads first player name** ( :x: )
+- **TC5: Reads first player name** ( :white_check_mark: )
     - **State of the system**: `promptPlayerName(1)` called and user enters a non-empty name
     - **Expected output**: Returns the entered name for player 1
 

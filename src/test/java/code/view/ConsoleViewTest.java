@@ -48,6 +48,13 @@ public final class ConsoleViewTest {
         assertEquals(ABOVE_MAX_PLAYER_COUNT, view.promptNumberOfPlayers());
     }
 
+    @Test
+    public void promptPlayerName_FirstPlayer_ReturnsPlayerName() {
+        ConsoleView view = createViewWithInput("Alice\n");
+
+        assertEquals("Alice", view.promptPlayerName(1));
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         return new ConsoleView(
                 new Scanner(input),
