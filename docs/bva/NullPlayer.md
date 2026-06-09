@@ -11,7 +11,7 @@
 
 ### Method under test: `getName()`
 
-- **TC2: Returns empty name placeholder** ( :x: )
+- **TC2: Returns empty name placeholder** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `getName()` called
     - **Expected output**: Returns an empty string or other agreed placeholder value indicating no assigned player
 

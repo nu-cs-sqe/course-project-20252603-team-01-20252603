@@ -1,5 +1,6 @@
 package code.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.junit.jupiter.api.Test;
@@ -14,5 +15,12 @@ public final class NullPlayerTest {
         NullPlayer player = new NullPlayer();
 
         assertInstanceOf(Player.class, player);
+    }
+
+    @Test
+    public void getName_UnassignedOwnership_ReturnsEmptyName() {
+        NullPlayer player = new NullPlayer();
+
+        assertEquals("", player.getName());
     }
 }
