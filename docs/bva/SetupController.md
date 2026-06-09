@@ -35,7 +35,7 @@
     - **State of the system**: Board initialized; view returns player count `3`; view returns three unique names and colors
     - **Expected output**: Model stores exactly three players, each with `35` available Infantry
 
-- **TC7: Registers maximum number of players** ( :x: )
+- **TC7: Registers maximum number of players** ( :white_check_mark: )
     - **State of the system**: Board initialized; view returns player count `6`; view returns six unique names and colors
     - **Expected output**: Model stores exactly six players, each with `20` available Infantry
 
