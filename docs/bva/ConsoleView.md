@@ -3,7 +3,7 @@
 
 ### Method under test: `promptNumberOfPlayers()`
 
-- **TC1: Reads minimum valid player count** ( :x: )
+- **TC1: Reads minimum valid player count** ( :white_check_mark: )
     - **State of the system**: User enters `3` when prompted for number of players
     - **Expected output**: Returns `3`
 
