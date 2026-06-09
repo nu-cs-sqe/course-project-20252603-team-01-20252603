@@ -176,4 +176,14 @@ public final class ConsoleViewTest {
                 new Scanner(""),
                 new PrintStream(output, true, StandardCharsets.UTF_8));
     }
+
+    @Test
+    public void displayStartingPlayerPrintsStartingPlayer() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(new Scanner(""), new PrintStream(output));
+
+        view.displayStartingPlayer("Player 1 RED");
+
+        assertTrue(output.toString().contains("Player 1 RED"));
+    }
 }

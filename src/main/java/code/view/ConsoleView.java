@@ -54,15 +54,7 @@ public class ConsoleView {
         output.println(message);
     }
 
-//    public void displayTerritoryClaimingStatus() {
-//    }
-//
-//    public Object getTerritoryChoiceDuringSetup() {
-//    }
-//
-//    public Object getInfantryChoiceDuringSetup() {
-//    }
-//
-//    public void displayUpdatedBoard() {
-//    }
+    public void displayStartingPlayer(final String startingPlayer) {
+        output.println(startingPlayer);
+    }
 }
