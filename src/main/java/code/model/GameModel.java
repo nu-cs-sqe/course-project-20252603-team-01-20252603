@@ -1,8 +1,10 @@
 package code.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents the main model for the Risk game.
@@ -91,6 +93,12 @@ public class GameModel {
 
     public List<Player> getPlayers() {
         return new ArrayList<>(players);
+    }
+
+    public List<PlayerColor> showAvailableColors() {
+        return Arrays.stream(PlayerColor.values())
+                .filter(color -> color != PlayerColor.UNASSIGNED)
+                .collect(Collectors.toList());
     }
 
     private boolean isColorAlreadyChosen(final PlayerColor color) {

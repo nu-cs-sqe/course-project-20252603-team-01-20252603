@@ -112,7 +112,7 @@
 
 ### Method under test: `showAvailableColors()`
 
-- **TC25: Shows all colors before registration** ( :x: )
+- **TC25: Shows all colors before registration** ( :white_check_mark: )
     - **State of the system**: `GameModel` constructed; no players have been added
     - **Expected output**: Returns all six colors: Red, Blue, Green, Yellow, Black, Purple
 

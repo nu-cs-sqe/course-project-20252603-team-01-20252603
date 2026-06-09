@@ -1,6 +1,7 @@
 package code.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -378,5 +379,19 @@ public final class GameModelTest {
 
         assertTrue(extraPlayer instanceof NullPlayer);
         assertEquals(MIN_PLAYER_COUNT, gameModel.getPlayers().size());
+    }
+
+    @Test
+    public void showAvailableColors_NoRegisteredPlayers_ReturnsAllColors() {
+        GameModel gameModel = new GameModel();
+        List<PlayerColor> availableColors = gameModel.showAvailableColors();
+
+        assertEquals(6, availableColors.size());
+        assertTrue(availableColors.contains(PlayerColor.RED));
+        assertTrue(availableColors.contains(PlayerColor.BLUE));
+        assertTrue(availableColors.contains(PlayerColor.GREEN));
+        assertTrue(availableColors.contains(PlayerColor.YELLOW));
+        assertTrue(availableColors.contains(PlayerColor.BLACK));
+        assertTrue(availableColors.contains(PlayerColor.PURPLE));
     }
 }
