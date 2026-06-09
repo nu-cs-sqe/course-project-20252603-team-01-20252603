@@ -16,6 +16,8 @@ public final class ConsoleViewTest {
 
     private static final int MAX_PLAYER_COUNT = 6;
 
+    private static final int BELOW_MIN_PLAYER_COUNT = 2;
+
     @Test
     public void promptNumberOfPlayers_MinimumPlayerCount_ReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("3\n");
@@ -28,6 +30,13 @@ public final class ConsoleViewTest {
         ConsoleView view = createViewWithInput("6\n");
 
         assertEquals(MAX_PLAYER_COUNT, view.promptNumberOfPlayers());
+    }
+
+    @Test
+    public void promptNumberOfPlayers_BelowMinimumPlayerCount_ReturnsPlayerCount() {
+        ConsoleView view = createViewWithInput("2\n");
+
+        assertEquals(BELOW_MIN_PLAYER_COUNT, view.promptNumberOfPlayers());
     }
 
     private ConsoleView createViewWithInput(final String input) {

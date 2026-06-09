@@ -11,7 +11,7 @@
     - **State of the system**: User enters `6` when prompted for number of players
     - **Expected output**: Returns `6`
 
-- **TC3: Reads below-minimum player count for model validation** ( :x: )
+- **TC3: Reads below-minimum player count for model validation** ( :white_check_mark: )
     - **State of the system**: User enters `2` when prompted for number of players
     - **Expected output**: Returns `2` so `GameModel.setPlayerCount(2)` can reject it and setup can re-prompt
 
