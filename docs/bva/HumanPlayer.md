@@ -68,19 +68,27 @@
 
 ---
 
-### Method under test: `setAvailableArmies(HashMap<ArmyType, Integer> availableArmies)`
+### Method under test: `addArmies(HashMap<ArmyType, Integer> armiesToAdd)`
 
-- **TC15: Set available armies to one Infantry** ( :white_check_mark: )
-    - **State of the system**: Human player has an available army map; `setAvailableArmies()` is called with a map containing `INFANTRY -> 1`
+- **TC15: Add one Infantry to available armies** ( :x: )
+    - **State of the system**: Human player has available armies containing `INFANTRY -> 0`; `addArmies()` is called with a map containing `INFANTRY -> 1`
     - **Expected output**: Player available armies are updated to contain exactly one Infantry
 
-- **TC16: Set available armies to multiple Infantry** ( :white_check_mark: )
-    - **State of the system**: Human player has an available army map; `setAvailableArmies()` is called with a map containing `INFANTRY -> 20`
+- **TC16: Add multiple Infantry to available armies** ( :x: )
+    - **State of the system**: Human player has available armies containing `INFANTRY -> 0`; `addArmies()` is called with a map containing `INFANTRY -> 20`
     - **Expected output**: Player available armies are updated to contain exactly twenty Infantry
+  
+---
 
-- **TC17: Set available armies to zero Infantry** ( :white_check_mark: )
-    - **State of the system**: Human player has an available army map; `setAvailableArmies()` is called with a map containing `INFANTRY -> 0`
-    - **Expected output**: Player available armies are updated to contain zero Infantry
+### Method under test: `removeArmies(HashMap<ArmyType, Integer> armiesToRemove)`
+
+- **TC17: Remove one Infantry from available armies** ( :x: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 20`; `removeArmies()` is called with a map containing `INFANTRY -> 1`
+    - **Expected output**: Player available armies are updated to contain exactly nineteen Infantry
+
+- **TC18: Remove last available Infantry** ( :x: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 1`; `removeArmies()` is called with a map containing `INFANTRY -> 1`
+    - **Expected output**: Player available armies are updated to contain exactly zero Infantry
 
 ---
 
