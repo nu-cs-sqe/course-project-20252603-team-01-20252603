@@ -51,6 +51,6 @@
     - **State of the system**: Three players registered; random starting index resolves to `0`
     - **Expected output**: Current player index is set to `0`; view announces the first registered player
 
-- **TC11: Sets first player to highest random index** ( :x: )
+- **TC11: Sets first player to highest random index** ( :white_check_mark: )
     - **State of the system**: Three players registered; random starting index resolves to `2`
     - **Expected output**: Current player index is set to `2`; view announces the third registered player

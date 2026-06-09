@@ -394,6 +394,36 @@ public final class SetupControllerTest {
         verify(model, view);
     }
 
+    @Test
+    public void initializePlayers_HighestRandomIndex_SetsCurrentPlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        Player firstPlayer = new HumanPlayer("Alice", PlayerColor.RED, 35);
+        Player secondPlayer = new HumanPlayer("Bob", PlayerColor.BLUE, 35);
+        Player thirdPlayer = new HumanPlayer("Cara", PlayerColor.GREEN, 35);
+        List<Player> players = List.of(firstPlayer, secondPlayer, thirdPlayer);
+
+        expectThreePlayerRegistration(model, view, firstPlayer, secondPlayer, thirdPlayer);
+        expect(model.getPlayers()).andReturn(players);
+        view.displayPlayers(players);
+        expectLastCall().once();
+        model.setCurrentPlayerIndex(2);
+        expectLastCall().once();
+        expect(model.getCurrentPlayer()).andReturn(thirdPlayer);
+        view.displayStartingPlayer(thirdPlayer);
+        expectLastCall().once();
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(
+                model,
+                view,
+                new FixedRandom(2));
+        controller.initializePlayers();
+
+        verify(model, view);
+    }
+
     private void expectThreePlayerRegistration(
             final GameModel model,
             final ConsoleView view,
