@@ -33,4 +33,16 @@ public abstract class Player {
         return color;
     }
 
+    public abstract void addTerritory(Territory territory);
+
+    public abstract boolean ownsTerritory(Territory territory);
+
+    public abstract int getTerritoryCount();
+
+    public abstract void setAvailableArmies(HashMap<ArmyType, Integer> availableArmies);
+
+    public abstract boolean hasAvailableArmies(HashMap<ArmyType, Integer> requiredArmies);
+
+    public abstract String getAvailableArmies();
+
 }
