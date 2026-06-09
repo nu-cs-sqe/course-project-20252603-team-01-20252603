@@ -23,4 +23,11 @@ public final class NullPlayerTest {
 
         assertEquals("", player.getName());
     }
+
+    @Test
+    public void getColor_UnassignedOwnership_ReturnsUnassignedColor() {
+        NullPlayer player = new NullPlayer();
+
+        assertEquals(PlayerColor.UNASSIGNED, player.getColor());
+    }
 }

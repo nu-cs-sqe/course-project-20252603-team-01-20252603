@@ -19,7 +19,7 @@
 
 ### Method under test: `getColor()`
 
-- **TC3: Returns no-color placeholder** ( :x: )
+- **TC3: Returns no-color placeholder** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `getColor()` called
     - **Expected output**: Returns no playable color, an unassigned color value, or another agreed placeholder that cannot conflict with Red, Blue, Green, Yellow, Black, or Purple
 
