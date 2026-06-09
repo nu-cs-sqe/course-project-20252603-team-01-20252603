@@ -442,4 +442,13 @@ public final class GameModelTest {
         assertTrue(advanced);
         assertEquals(firstPlayer, gameModel.getCurrentPlayer());
     }
+
+    @Test
+    public void advanceCurrentPlayerIndexNoPlayersReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        boolean advanced = gameModel.advanceCurrentPlayerIndex();
+
+        assertFalse(advanced);
+    }
 }
