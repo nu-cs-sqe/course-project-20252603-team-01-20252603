@@ -658,5 +658,25 @@ public final class GameModelTest {
         assertFalse(ownedTerritories.contains("Brazil"));
     }
 
+    @Test
+    public void getCurrentPlayerTerritoriesByContinentExcludesOtherPlayerTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup(
+                "Alaska",
+                createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+
+        String ownedTerritories = gameModel.getCurrentPlayerTerritoriesByContinent();
+
+        assertTrue(ownedTerritories.contains("Player 2"));
+        assertFalse(ownedTerritories.contains("Alaska"));
+    }
 
 }
