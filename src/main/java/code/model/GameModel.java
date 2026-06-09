@@ -412,4 +412,22 @@ public class GameModel {
         return players.get(currentPlayerIndex).getName();
     }
 
+    public String getUnclaimedTerritoriesByContinent() {
+        StringBuilder territoriesByContinent = new StringBuilder();
+
+        for (Continent continent : continents) {
+            territoriesByContinent.append(continent.getName()).append(": ");
+
+            for (Territory territory : territories) {
+                if (territory.getContinentName().equals(continent.getName())
+                        && territory.isUnclaimed()) {
+                    territoriesByContinent.append(territory.getName()).append(", ");
+                }
+            }
+
+            territoriesByContinent.append(System.lineSeparator());
+        }
+
+        return territoriesByContinent.toString();
+    }
 }

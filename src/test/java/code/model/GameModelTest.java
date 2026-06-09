@@ -604,5 +604,20 @@ public final class GameModelTest {
         assertEquals("Player 2", gameModel.getCurrentPlayerName());
     }
 
+    @Test
+    public void getUnclaimedTerritoriesByContinentReturnsAllTerritoriesWhenNoneClaimed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        String unclaimedTerritories = gameModel.getUnclaimedTerritoriesByContinent();
+
+        assertTrue(unclaimedTerritories.contains("North America"));
+        assertTrue(unclaimedTerritories.contains("Alaska"));
+        assertTrue(unclaimedTerritories.contains("South America"));
+        assertTrue(unclaimedTerritories.contains("Brazil"));
+        assertTrue(unclaimedTerritories.contains("Australia"));
+        assertTrue(unclaimedTerritories.contains("Eastern Australia"));
+    }
 
 }
