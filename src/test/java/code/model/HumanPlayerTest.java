@@ -238,4 +238,24 @@ public final class HumanPlayerTest {
         assertFalse(player.hasAvailableArmies(requiredArmies));
     }
 
+    @Test
+    public void getAvailableArmiesReturnsDisplayStringWhenInfantryAvailable() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, TWENTY_INFANTRY);
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains("20"));
+    }
+
+    @Test
+    public void getAvailableArmiesReturnsDisplayStringWhenNoInfantryAvailable() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains("0"));
+    }
+
 }
