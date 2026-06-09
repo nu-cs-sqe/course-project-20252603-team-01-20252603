@@ -41,6 +41,13 @@ public class HumanPlayer extends Player {
 
     @Override
     public void addArmies(final HashMap<ArmyType, Integer> armiesToAdd) {
+        for (Map.Entry<ArmyType, Integer> entry : armiesToAdd.entrySet()) {
+            ArmyType armyType = entry.getKey();
+            int addedCount = entry.getValue();
+            int currentCount = availableArmies.getOrDefault(armyType, 0);
+
+            availableArmies.put(armyType, currentCount + addedCount);
+        }
     }
 
     @Override

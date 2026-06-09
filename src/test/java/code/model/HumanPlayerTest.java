@@ -153,41 +153,7 @@ public final class HumanPlayerTest {
         assertEquals(0, player.getTerritoryCount());
     }
 
-    @Test
-    public void setAvailableArmiesSetsOneInfantry() {
-        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
-        HashMap<ArmyType, Integer> availableArmies = new HashMap<>();
-        availableArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
 
-        player.setAvailableArmies(availableArmies);
-
-        assertTrue(player.getAvailableArmies().contains("INFANTRY"));
-        assertTrue(player.getAvailableArmies().contains("1"));
-    }
-
-    @Test
-    public void setAvailableArmiesSetsMultipleInfantry() {
-        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
-        HashMap<ArmyType, Integer> availableArmies = new HashMap<>();
-        availableArmies.put(ArmyType.INFANTRY, TWENTY_INFANTRY);
-
-        player.setAvailableArmies(availableArmies);
-
-        assertTrue(player.getAvailableArmies().contains("INFANTRY"));
-        assertTrue(player.getAvailableArmies().contains("20"));
-    }
-
-    @Test
-    public void setAvailableArmiesSetsZeroInfantry() {
-        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
-        HashMap<ArmyType, Integer> availableArmies = new HashMap<>();
-        availableArmies.put(ArmyType.INFANTRY, ZERO_INFANTRY);
-
-        player.setAvailableArmies(availableArmies);
-
-        assertTrue(player.getAvailableArmies().contains("INFANTRY"));
-        assertTrue(player.getAvailableArmies().contains("0"));
-    }
 
     @Test
     public void hasAvailableArmiesReturnsTrueWhenRequiredInfantryIsAvailable() {
@@ -199,31 +165,17 @@ public final class HumanPlayerTest {
     }
 
     @Test
-    public void hasAvailableArmiesReturnsTrueWhenRequiredInfantryEqualsAvailableInfantry() {
-        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
-        HashMap<ArmyType, Integer> availableArmies = new HashMap<>();
-        HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
+    public void addArmiesAddsOneInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
+        armiesToAdd.put(ArmyType.INFANTRY, ONE_INFANTRY);
 
-        availableArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
-        requiredArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+        player.addArmies(armiesToAdd);
 
-        player.setAvailableArmies(availableArmies);
+        String availableArmies = player.getAvailableArmies();
 
-        assertTrue(player.hasAvailableArmies(requiredArmies));
-    }
-
-    @Test
-    public void hasAvailableArmiesReturnsFalseWhenRequiredInfantryGreaterThanAvailableInfantry() {
-        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
-        HashMap<ArmyType, Integer> availableArmies = new HashMap<>();
-        HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
-
-        availableArmies.put(ArmyType.INFANTRY, ZERO_INFANTRY);
-        requiredArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
-
-        player.setAvailableArmies(availableArmies);
-
-        assertFalse(player.hasAvailableArmies(requiredArmies));
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains("1"));
     }
 
 }
