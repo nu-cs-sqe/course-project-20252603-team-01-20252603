@@ -395,4 +395,19 @@ public final class GameModelTest {
         assertFalse(claimed);
         verify(player, territory);
     }
+
+    @Test
+    public void advanceCurrentPlayerIndexFirstPlayerAdvancesToSecondPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player secondPlayer = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        boolean advanced = gameModel.advanceCurrentPlayerIndex();
+
+        assertTrue(advanced);
+        assertEquals(secondPlayer, gameModel.getCurrentPlayer());
+    }
 }

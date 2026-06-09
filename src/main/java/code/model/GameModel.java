@@ -390,4 +390,18 @@ public class GameModel {
         return pieces.size() == SETUP_INFANTRY_COUNT
                 && pieces.getOrDefault(ArmyType.INFANTRY, 0) == SETUP_INFANTRY_COUNT;
     }
+
+    public boolean advanceCurrentPlayerIndex() {
+        if (players.isEmpty()) {
+            return false;
+        }
+
+        currentPlayerIndex++;
+
+        if (currentPlayerIndex >= players.size()) {
+            currentPlayerIndex = 0;
+        }
+
+        return true;
+    }
 }
