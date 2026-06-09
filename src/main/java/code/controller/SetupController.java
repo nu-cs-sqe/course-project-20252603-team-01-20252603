@@ -1,11 +1,10 @@
 package code.controller;
 
-import code.model.GameModel;
-import code.model.NullPlayer;
-import code.model.Player;
-import code.model.PlayerColor;
+import code.model.*;
 import code.view.ConsoleView;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -21,6 +20,8 @@ public class SetupController {
     private final Random random;
 
     private boolean initialized;
+
+    private static final int SETUP_INFANTRY_COUNT = 1;
 
     @SuppressFBWarnings(
             value = "EI_EXPOSE_REP2",
@@ -75,5 +76,30 @@ public class SetupController {
         view.displayPlayers(players);
         model.setCurrentPlayerIndex(random.nextInt(playerCount));
         view.displayStartingPlayer(model.getCurrentPlayer());
+    }
+
+    public void handleTerritoryClaiming() {
+
+        while (!model.areAllTerritoriesClaimed()) {
+            view.displayStartingPlayer(model.getCurrentPlayerName());
+            view.displayUnclaimedTerritoriesByContinent(
+                    model.getUnclaimedTerritoriesByContinent());
+            view.displayCurrentPlayerClaimingStatus(
+                    model.getCurrentPlayerTerritoriesByContinent());
+            String territoryName = view.getTerritoryChoiceDuringSetup();
+            HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+            boolean claimed = model.claimTerritoryDuringSetup(territoryName, pieces);
+            if (claimed) {
+                model.advanceCurrentPlayerIndex();
+            } else {
+                view.displayError("Invalid territory claim.");
+            }
+        }
+    }
+
+    private HashMap<ArmyType, Integer> createOneInfantryPiece() {
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, SETUP_INFANTRY_COUNT);
+        return pieces;
     }
 }

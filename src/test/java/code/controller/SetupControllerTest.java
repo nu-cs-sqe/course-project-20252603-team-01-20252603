@@ -50,6 +50,8 @@ public final class SetupControllerTest {
 
     private static final int TWO_INFANTRY = 2;
 
+    private static final int SETUP_INFANTRY_COUNT = 1;
+
     @Test
     public void setupControllerConstructsWithModelAndView() {
         GameModel model = createMock(GameModel.class);
@@ -498,12 +500,46 @@ public final class SetupControllerTest {
         }
     }
 
-    private HashMap<ArmyType, Integer> createInfantryPieces(final int infantryCount) {
+    private HashMap<ArmyType, Integer> createOneInfantryPiece() {
         HashMap<ArmyType, Integer> pieces = new HashMap<>();
-        pieces.put(ArmyType.INFANTRY, infantryCount);
+        pieces.put(ArmyType.INFANTRY, SETUP_INFANTRY_COUNT);
 
         return pieces;
     }
+    @Test
+    public void handleTerritoryClaimingSuccessfulClaimAdvancesToNextPlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        SetupController controller = new SetupController(model, view);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
+        expect(model.areAllTerritoriesClaimed()).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayStartingPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getUnclaimedTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayUnclaimedTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Player 1 territories:");
+        view.displayCurrentPlayerClaimingStatus("Player 1 territories:");
+        expectLastCall().once();
+
+        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Alaska");
+        expect(model.claimTerritoryDuringSetup("Alaska", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+
+        replay(model, view);
+
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
 
 }
