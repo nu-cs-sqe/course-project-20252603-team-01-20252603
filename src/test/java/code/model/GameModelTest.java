@@ -353,4 +353,16 @@ public final class GameModelTest {
                 SIX_PLAYER_STARTING_INFANTRY,
                 player.getAvailableArmies().get(ArmyType.INFANTRY));
     }
+
+    @Test
+    public void addPlayer_DuplicatePlayerColor_ReturnsNullPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player duplicatePlayer = gameModel.addPlayer("Player 2", PlayerColor.RED);
+
+        assertTrue(duplicatePlayer instanceof NullPlayer);
+        assertEquals(1, gameModel.getPlayers().size());
+    }
 }

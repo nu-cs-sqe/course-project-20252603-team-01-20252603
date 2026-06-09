@@ -100,7 +100,7 @@
     - **State of the system**: `setPlayerCount(6)` has returned `true`; `addPlayer("Player 1", PlayerColor.YELLOW)` called
     - **Expected output**: Returns a player with `20` available Infantry
 
-- **TC23: Rejects duplicate color** ( :x: )
+- **TC23: Rejects duplicate color** ( :white_check_mark: )
     - **State of the system**: `setPlayerCount(3)` has returned `true`; one player with color `RED` already exists
     - **Expected output**: A second call using `PlayerColor.RED` is rejected; no duplicate-color player is added
 

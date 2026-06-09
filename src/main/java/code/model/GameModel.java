@@ -79,10 +79,23 @@ public class GameModel {
     }
 
     public Player addPlayer(final String name, final PlayerColor color) {
+        if (isColorAlreadyChosen(color)) {
+            return new NullPlayer();
+        }
+
         Player player = new HumanPlayer(name, color, calculateStartingInfantry());
 
         players.add(player);
         return player;
+    }
+
+    public List<Player> getPlayers() {
+        return new ArrayList<>(players);
+    }
+
+    private boolean isColorAlreadyChosen(final PlayerColor color) {
+        return players.stream()
+                .anyMatch(player -> player.getColor() == color);
     }
 
     private int calculateStartingInfantry() {
