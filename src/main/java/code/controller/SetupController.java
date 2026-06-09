@@ -1,6 +1,11 @@
 package code.controller;
 
-import code.model.*;
+
+import code.model.GameModel;
+import code.model.NullPlayer;
+import code.model.Player;
+import code.model.PlayerColor;
+import code.model.ArmyType;
 import code.view.ConsoleView;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 

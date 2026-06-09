@@ -7,7 +7,12 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import code.model.*;
+import code.model.GameModel;
+import code.model.NullPlayer;
+import code.model.Player;
+import code.model.PlayerColor;
+import code.model.ArmyType;
+import code.model.HumanPlayer;
 import code.view.ConsoleView;
 
 import java.util.HashMap;
@@ -506,6 +511,7 @@ public final class SetupControllerTest {
 
         return pieces;
     }
+
     @Test
     public void handleTerritoryClaimingSuccessfulClaimAdvancesToNextPlayer() {
         GameModel model = createMock(GameModel.class);
@@ -546,7 +552,7 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingSuccessfulClaimsAdvanceEachTurn() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
+
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
@@ -590,7 +596,7 @@ public final class SetupControllerTest {
         expect(model.advanceCurrentPlayerIndex()).andReturn(true);
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
-
+        SetupController controller = new SetupController(model, view);
         replay(model, view);
 
         controller.handleTerritoryClaiming();
@@ -602,7 +608,7 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingAlreadyClaimedTerritoryRepromptsSamePlayer() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
+
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
@@ -650,7 +656,7 @@ public final class SetupControllerTest {
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
 
         replay(model, view);
-
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
