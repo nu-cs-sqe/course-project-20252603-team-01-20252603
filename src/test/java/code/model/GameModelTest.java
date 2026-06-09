@@ -462,4 +462,18 @@ public final class GameModelTest {
 
         assertEquals(secondPlayer, gameModel.getCurrentPlayer());
     }
+
+    @Test
+    public void setCurrentPlayerIndex_IndexAboveRange_DoesNotChangeCurrentPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player secondPlayer = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(1);
+        gameModel.setCurrentPlayerIndex(MIN_PLAYER_COUNT);
+
+        assertEquals(secondPlayer, gameModel.getCurrentPlayer());
+    }
 }
