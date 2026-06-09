@@ -178,4 +178,18 @@ public final class HumanPlayerTest {
         assertTrue(availableArmies.contains("1"));
     }
 
+    @Test
+    public void addArmiesAddsMultipleInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
+        armiesToAdd.put(ArmyType.INFANTRY, TWENTY_INFANTRY);
+
+        player.addArmies(armiesToAdd);
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains("20"));
+    }
+
 }
