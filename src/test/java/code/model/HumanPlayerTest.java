@@ -229,4 +229,13 @@ public final class HumanPlayerTest {
         assertTrue(player.hasAvailableArmies(requiredArmies));
     }
 
+    @Test
+    public void hasAvailableArmiesReturnsFalseWhenRequiredInfantryGreaterThanAvailableInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+        HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
+        requiredArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        assertFalse(player.hasAvailableArmies(requiredArmies));
+    }
+
 }
