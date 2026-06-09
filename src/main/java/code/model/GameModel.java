@@ -27,12 +27,15 @@ public class GameModel {
 
     private final List<Continent> continents;
 
+    private final List<Player> players;
+
     private int playerCount;
 
     private Deck deck;
 
     public GameModel() {
         continents = new ArrayList<>();
+        players = new ArrayList<>();
         deck = new Deck();
         deck.shuffle();
     }
@@ -73,6 +76,17 @@ public class GameModel {
 
     public int getPlayerCount() {
         return playerCount;
+    }
+
+    public Player addPlayer(final String name, final PlayerColor color) {
+        Player player = new HumanPlayer(name, color, calculateStartingInfantry());
+
+        players.add(player);
+        return player;
+    }
+
+    private int calculateStartingInfantry() {
+        return 35;
     }
 
     private void createNorthAmerica() {

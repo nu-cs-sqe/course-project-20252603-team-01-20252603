@@ -52,6 +52,8 @@ public final class GameModelTest {
 
     private static final int ABOVE_MAX_PLAYER_COUNT = 7;
 
+    private static final int THREE_PLAYER_STARTING_INFANTRY = 35;
+
     @Test
     public void gameModelConstructsWithEmptyContinents() {
         GameModel gameModel = new GameModel();
@@ -294,5 +296,19 @@ public final class GameModelTest {
         GameModel gameModel = new GameModel();
 
         assertFalse(gameModel.setPlayerCount(ABOVE_MAX_PLAYER_COUNT));
+    }
+
+    @Test
+    public void addPlayer_ThreePlayerGameWithNoRegisteredPlayers_ReturnsPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+
+        assertEquals("Player 1", player.getName());
+        assertEquals(PlayerColor.RED, player.getColor());
+        assertEquals(
+                THREE_PLAYER_STARTING_INFANTRY,
+                player.getAvailableArmies().get(ArmyType.INFANTRY));
     }
 }
