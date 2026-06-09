@@ -48,6 +48,7 @@ public final class GameModelTest {
 
     private static final int TWO_INFANTRY = 2;
 
+    private static final int THIRTY_FOUR_INFANTRY = 34;
     @Test
     public void deckHasFortyFourCardsAfterBoardInitialization() {
         GameModel gameModel = new GameModel();
@@ -301,130 +302,131 @@ public final class GameModelTest {
     @Test
     public void claimTerritoryDuringSetupUnclaimedTerritoryWithOneInfantryReturnsTrue() {
         GameModel gameModel = new GameModel();
-        Player player = createMock(Player.class);
-        Territory territory = createMock(Territory.class);
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
         HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
 
-        expect(territory.isUnclaimed()).andReturn(true);
-        expect(player.hasAvailableArmies(pieces)).andReturn(true);
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", pieces);
 
-        territory.setOwner(player);
-        expectLastCall().once();
-
-        expect(territory.placeArmies(pieces)).andReturn(true);
-
-        player.addTerritory(territory);
-        expectLastCall().once();
-
-        player.removeArmies(pieces);
-        expectLastCall().once();
-
-        replay(player, territory);
-
-        boolean claimed = gameModel.claimTerritoryDuringSetup(player, territory, pieces);
+        String availableArmies = player.getAvailableArmies();
 
         assertTrue(claimed);
-        verify(player, territory);
+        assertEquals(ONE_INFANTRY, player.getTerritoryCount());
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(THIRTY_FOUR_INFANTRY)));
     }
 
     @Test
     public void claimTerritoryDuringSetupAlreadyClaimedTerritoryReturnsFalse() {
         GameModel gameModel = new GameModel();
-        Player player = createMock(Player.class);
-        Territory territory = createMock(Territory.class);
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player playerOne = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player playerTwo = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
         HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
 
-        expect(territory.isUnclaimed()).andReturn(false);
+        gameModel.claimTerritoryDuringSetup("Alaska", pieces);
+        gameModel.advanceCurrentPlayerIndex();
 
-        replay(player, territory);
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", pieces);
 
-        boolean claimed = gameModel.claimTerritoryDuringSetup(player, territory, pieces);
+        String playerTwoAvailableArmies = playerTwo.getAvailableArmies();
 
         assertFalse(claimed);
-        verify(player, territory);
+        assertEquals(ONE_INFANTRY, playerOne.getTerritoryCount());
+        assertEquals(ZERO_INFANTRY, playerTwo.getTerritoryCount());
+        assertTrue(playerTwoAvailableArmies.contains("INFANTRY"));
+        assertTrue(playerTwoAvailableArmies.contains(
+                String.valueOf(THREE_PLAYER_STARTING_INFANTRY)));
     }
 
     @Test
     public void claimTerritoryDuringSetupZeroInfantryReturnsFalse() {
         GameModel gameModel = new GameModel();
-        Player player = createMock(Player.class);
-        Territory territory = createMock(Territory.class);
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
         HashMap<ArmyType, Integer> pieces = createInfantryPieces(ZERO_INFANTRY);
 
-        expect(territory.isUnclaimed()).andReturn(true);
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", pieces);
 
-        replay(player, territory);
-
-        boolean claimed = gameModel.claimTerritoryDuringSetup(player, territory, pieces);
+        String availableArmies = player.getAvailableArmies();
 
         assertFalse(claimed);
-        verify(player, territory);
+        assertEquals(ZERO_INFANTRY, player.getTerritoryCount());
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(
+                String.valueOf(THREE_PLAYER_STARTING_INFANTRY)));
     }
 
     @Test
     public void claimTerritoryDuringSetupMoreThanOneInfantryReturnsFalse() {
         GameModel gameModel = new GameModel();
-        Player player = createMock(Player.class);
-        Territory territory = createMock(Territory.class);
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
         HashMap<ArmyType, Integer> pieces = createInfantryPieces(TWO_INFANTRY);
 
-        expect(territory.isUnclaimed()).andReturn(true);
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", pieces);
 
-        replay(player, territory);
-
-        boolean claimed = gameModel.claimTerritoryDuringSetup(player, territory, pieces);
+        String availableArmies = player.getAvailableArmies();
 
         assertFalse(claimed);
-        verify(player, territory);
+        assertEquals(ZERO_INFANTRY, player.getTerritoryCount());
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(
+                String.valueOf(THREE_PLAYER_STARTING_INFANTRY)));
     }
 
     @Test
     public void claimTerritoryDuringSetupNoAvailableInfantryReturnsFalse() {
         GameModel gameModel = new GameModel();
-        Player player = createMock(Player.class);
-        Territory territory = createMock(Territory.class);
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> allAvailableArmies =
+                createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY);
         HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
 
-        expect(territory.isUnclaimed()).andReturn(true);
-        expect(player.hasAvailableArmies(pieces)).andReturn(false);
+        player.removeArmies(allAvailableArmies);
 
-        replay(player, territory);
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", pieces);
 
-        boolean claimed = gameModel.claimTerritoryDuringSetup(player, territory, pieces);
+        String availableArmies = player.getAvailableArmies();
 
         assertFalse(claimed);
-        verify(player, territory);
+        assertEquals(ZERO_INFANTRY, player.getTerritoryCount());
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(ZERO_INFANTRY)));
     }
 
     @Test
-    public void advanceCurrentPlayerIndexFirstPlayerAdvancesToSecondPlayer() {
+    public void advanceCurrentPlayerIndexNoPlayersReturnsFalse() {
         GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        Player secondPlayer = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
 
         boolean advanced = gameModel.advanceCurrentPlayerIndex();
 
-        assertTrue(advanced);
-        assertEquals(secondPlayer, gameModel.getCurrentPlayer());
-    }
-
-    @Test
-    public void advanceCurrentPlayerIndexMiddlePlayerAdvancesToNextPlayer() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        Player thirdPlayer = gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.setCurrentPlayerIndex(1);
-
-        boolean advanced = gameModel.advanceCurrentPlayerIndex();
-
-        assertTrue(advanced);
-        assertEquals(thirdPlayer, gameModel.getCurrentPlayer());
+        assertFalse(advanced);
     }
 
     @Test
@@ -444,11 +446,33 @@ public final class GameModelTest {
     }
 
     @Test
-    public void advanceCurrentPlayerIndexNoPlayersReturnsFalse() {
+    public void advanceCurrentPlayerIndexMiddlePlayerAdvancesToNextPlayer() {
         GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        Player thirdPlayer = gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(1);
 
         boolean advanced = gameModel.advanceCurrentPlayerIndex();
 
-        assertFalse(advanced);
+        assertTrue(advanced);
+        assertEquals(thirdPlayer, gameModel.getCurrentPlayer());
+    }
+
+    @Test
+    public void advanceCurrentPlayerIndexFirstPlayerAdvancesToSecondPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player secondPlayer = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        boolean advanced = gameModel.advanceCurrentPlayerIndex();
+
+        assertTrue(advanced);
+        assertEquals(secondPlayer, gameModel.getCurrentPlayer());
     }
 }

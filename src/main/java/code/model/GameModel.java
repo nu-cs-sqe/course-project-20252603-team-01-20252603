@@ -74,10 +74,6 @@ public class GameModel {
         initializeDeck();
     }
 
-//    public List<Continent> getContinents() {
-//        return new ArrayList<>(continents);
-//    }
-
     public int getDeckSize() {
         return deck.size();
     }
@@ -363,9 +359,11 @@ public class GameModel {
     }
 
     public boolean claimTerritoryDuringSetup(
-            final Player player,
-            final Territory territory,
+            final String territoryName,
             final HashMap<ArmyType, Integer> pieces) {
+        Player player = players.get(currentPlayerIndex);
+        Territory territory = findTerritoryByName(territoryName);
+
         if (!territory.isUnclaimed()) {
             return false;
         }
