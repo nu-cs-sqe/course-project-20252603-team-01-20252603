@@ -27,7 +27,7 @@
     - **State of the system**: `promptPlayerName(1)` called and user enters a non-empty name
     - **Expected output**: Returns the entered name for player 1
 
-- **TC6: Reads last player name in maximum-size game** ( :x: )
+- **TC6: Reads last player name in maximum-size game** ( :white_check_mark: )
     - **State of the system**: Six-player game; `promptPlayerName(6)` called and user enters a non-empty name
     - **Expected output**: Returns the entered name for player 6
 

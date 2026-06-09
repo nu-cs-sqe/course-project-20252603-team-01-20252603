@@ -55,6 +55,13 @@ public final class ConsoleViewTest {
         assertEquals("Alice", view.promptPlayerName(1));
     }
 
+    @Test
+    public void promptPlayerName_SixthPlayer_ReturnsPlayerName() {
+        ConsoleView view = createViewWithInput("Frank\n");
+
+        assertEquals("Frank", view.promptPlayerName(6));
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         return new ConsoleView(
                 new Scanner(input),
