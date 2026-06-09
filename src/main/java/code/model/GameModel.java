@@ -94,6 +94,10 @@ public class GameModel {
             return 25;
         }
 
+        if (playerCount == MAX_PLAYER_COUNT) {
+            return 20;
+        }
+
         return 35;
     }
 

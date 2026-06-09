@@ -96,7 +96,7 @@
     - **State of the system**: `setPlayerCount(5)` has returned `true`; `addPlayer("Player 1", PlayerColor.GREEN)` called
     - **Expected output**: Returns a player with `25` available Infantry
 
-- **TC22: Adds player with correct maximum-count infantry** ( :x: )
+- **TC22: Adds player with correct maximum-count infantry** ( :white_check_mark: )
     - **State of the system**: `setPlayerCount(6)` has returned `true`; `addPlayer("Player 1", PlayerColor.YELLOW)` called
     - **Expected output**: Returns a player with `20` available Infantry
 
