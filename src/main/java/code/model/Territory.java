@@ -96,4 +96,7 @@ public class Territory {
         return true;
     }
 
+    public Object getContinentName() {
+        return continent.getName();
+    }
 }

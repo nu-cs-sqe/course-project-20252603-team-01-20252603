@@ -430,4 +430,27 @@ public class GameModel {
 
         return territoriesByContinent.toString();
     }
+
+    public String getCurrentPlayerTerritoriesByContinent() {
+        Player player = getCurrentPlayer();
+        StringBuilder territoriesByContinent = new StringBuilder();
+
+        territoriesByContinent.append(player.getName()).append(" territories:");
+        territoriesByContinent.append(System.lineSeparator());
+
+        for (Continent continent : continents) {
+            territoriesByContinent.append(continent.getName()).append(": ");
+
+            for (Territory territory : territories) {
+                if (territory.getContinentName().equals(continent.getName())
+                        && territory.isOwnedBy(player)) {
+                    territoriesByContinent.append(territory.getName()).append(", ");
+                }
+            }
+
+            territoriesByContinent.append(System.lineSeparator());
+        }
+
+        return territoriesByContinent.toString();
+    }
 }

@@ -641,4 +641,22 @@ public final class GameModelTest {
         assertTrue(unclaimedTerritories.contains("Alberta"));
     }
 
+    @Test
+    public void getCurrentPlayerTerritoriesByContinentReturnsNoTerritoriesWhenNoneOwned() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        String ownedTerritories = gameModel.getCurrentPlayerTerritoriesByContinent();
+
+        assertTrue(ownedTerritories.contains("Player 1"));
+        assertFalse(ownedTerritories.contains("Alaska"));
+        assertFalse(ownedTerritories.contains("Brazil"));
+    }
+
+
 }
