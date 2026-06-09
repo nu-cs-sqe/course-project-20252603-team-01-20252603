@@ -73,6 +73,15 @@ public final class ConsoleViewTest {
                 view.promptPlayerColor("Alice", List.of(PlayerColor.values())));
     }
 
+    @Test
+    public void promptPlayerColor_OneColorAvailable_ReturnsSelectedColor() {
+        ConsoleView view = createViewWithInput("PURPLE\n");
+
+        assertEquals(
+                PlayerColor.PURPLE,
+                view.promptPlayerColor("Frank", List.of(PlayerColor.PURPLE)));
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         return new ConsoleView(
                 new Scanner(input),

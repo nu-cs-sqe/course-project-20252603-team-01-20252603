@@ -39,7 +39,7 @@
     - **State of the system**: `availableColors` contains all six colors; user selects `RED`
     - **Expected output**: Returns `PlayerColor.RED`
 
-- **TC8: Reads color when one color remains** ( :x: )
+- **TC8: Reads color when one color remains** ( :white_check_mark: )
     - **State of the system**: `availableColors` contains exactly one color; user selects that color
     - **Expected output**: Returns the only available `PlayerColor`
 
