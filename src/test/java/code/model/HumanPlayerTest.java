@@ -133,4 +133,12 @@ public final class HumanPlayerTest {
         assertTrue(player.ownsTerritory(alaska));
         assertFalse(player.ownsTerritory(alberta));
     }
+
+    @Test
+    public void getTerritoryCountReturnsZeroBeforeTerritoryClaimed() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+
+        assertEquals(0, player.getTerritoryCount());
+    }
+
 }
