@@ -56,6 +56,8 @@ public final class GameModelTest {
 
     private static final int FOUR_PLAYER_STARTING_INFANTRY = 30;
 
+    private static final int FIVE_PLAYER_STARTING_INFANTRY = 25;
+
     @Test
     public void gameModelConstructsWithEmptyContinents() {
         GameModel gameModel = new GameModel();
@@ -323,6 +325,18 @@ public final class GameModelTest {
 
         assertEquals(
                 FOUR_PLAYER_STARTING_INFANTRY,
+                player.getAvailableArmies().get(ArmyType.INFANTRY));
+    }
+
+    @Test
+    public void addPlayer_FivePlayerGameWithNoRegisteredPlayers_ReturnsPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(5);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.GREEN);
+
+        assertEquals(
+                FIVE_PLAYER_STARTING_INFANTRY,
                 player.getAvailableArmies().get(ArmyType.INFANTRY));
     }
 }

@@ -90,6 +90,10 @@ public class GameModel {
             return 30;
         }
 
+        if (playerCount == 5) {
+            return 25;
+        }
+
         return 35;
     }
 
