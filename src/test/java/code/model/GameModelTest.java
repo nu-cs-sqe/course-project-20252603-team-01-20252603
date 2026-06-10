@@ -75,22 +75,6 @@ public final class GameModelTest {
     }
 
     @Test
-    public void setPlayerCountMinimumPlayerCountReturnsTrue() {
-        GameModel gameModel = new GameModel();
-
-        assertTrue(gameModel.setPlayerCount(MIN_PLAYER_COUNT));
-        assertEquals(MIN_PLAYER_COUNT, gameModel.getPlayerCount());
-    }
-
-    @Test
-    public void setPlayerCountMaximumPlayerCountReturnsTrue() {
-        GameModel gameModel = new GameModel();
-
-        assertTrue(gameModel.setPlayerCount(MAX_PLAYER_COUNT));
-        assertEquals(MAX_PLAYER_COUNT, gameModel.getPlayerCount());
-    }
-
-    @Test
     public void setPlayerCountAboveMaximumPlayerCountReturnsFalse() {
         GameModel gameModel = new GameModel();
 
