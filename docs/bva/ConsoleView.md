@@ -49,23 +49,11 @@
 
 ---
 
-### Method under test: `displayPlayers(List<Player> players)`
-
-- **TC10: Displays minimum registered player list** ( :white_check_mark: )
-    - **State of the system**: Three players have been registered with unique colors
-    - **Expected output**: Displays all three player names and colors for confirmation
-
-- **TC11: Displays maximum registered player list** ( :white_check_mark: )
-    - **State of the system**: Six players have been registered with unique colors
-    - **Expected output**: Displays all six player names and colors for confirmation
-
----
-
-### Method under test: `displayStartingPlayer(String startingPlayer)`
+### Method under test: `displayCurrentPlayer(String currentPlayerName)`
 
 - **TC12: Displays selected starting player** ( :white_check_mark: )
-    - **State of the system**: A first player has been selected automatically by setup; `startingPlayer` contains the selected player's name and color
-    - **Expected output**: Output displays the selected starting player information
+    - **State of the system**: A first player has been selected automatically by setup; `currentPlayerName` contains the selected player name
+    - **Expected output**: Output displays the selected current player name
 
 ---
 

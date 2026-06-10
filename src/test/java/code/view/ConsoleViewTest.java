@@ -3,8 +3,6 @@ package code.view;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import code.model.HumanPlayer;
-import code.model.Player;
 import code.model.PlayerColor;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -27,10 +25,6 @@ public final class ConsoleViewTest {
     private static final int ABOVE_MAX_PLAYER_COUNT = 7;
 
     private static final int SIXTH_PLAYER_POSITION = 6;
-
-    private static final int STARTING_ARMIES_THREE_PLAYERS = 35;
-
-    private static final int STARTING_ARMIES_SIX_PLAYERS = 20;
 
     @Test
     public void promptNumberOfPlayersMinimumPlayerCountReturnsPlayerCount() {
@@ -93,76 +87,14 @@ public final class ConsoleViewTest {
     }
 
     @Test
-    public void displayPlayersMinimumRegisteredPlayersDisplaysPlayers() {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        ConsoleView view = createViewWithOutput(output);
-        List<Player> players = List.of(
-                new HumanPlayer("Alice", PlayerColor.RED, STARTING_ARMIES_THREE_PLAYERS),
-                new HumanPlayer("Bob", PlayerColor.BLUE, STARTING_ARMIES_THREE_PLAYERS),
-                new HumanPlayer("Cara", PlayerColor.GREEN, STARTING_ARMIES_THREE_PLAYERS));
-
-        view.displayPlayers(players);
-        String displayedText = output.toString(StandardCharsets.UTF_8);
-
-        assertTrue(displayedText.contains("Alice"));
-        assertTrue(displayedText.contains("RED"));
-        assertTrue(displayedText.contains("Bob"));
-        assertTrue(displayedText.contains("BLUE"));
-        assertTrue(displayedText.contains("Cara"));
-        assertTrue(displayedText.contains("GREEN"));
-    }
-
-    @Test
-    public void displayPlayersMaximumRegisteredPlayersDisplaysPlayers() {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        ConsoleView view = createViewWithOutput(output);
-        List<Player> players = List.of(
-                new HumanPlayer("Alice", PlayerColor.RED, STARTING_ARMIES_SIX_PLAYERS),
-                new HumanPlayer("Bob", PlayerColor.BLUE, STARTING_ARMIES_SIX_PLAYERS),
-                new HumanPlayer("Cara", PlayerColor.GREEN, STARTING_ARMIES_SIX_PLAYERS),
-                new HumanPlayer("Dan", PlayerColor.YELLOW, STARTING_ARMIES_SIX_PLAYERS),
-                new HumanPlayer("Eli", PlayerColor.BLACK, STARTING_ARMIES_SIX_PLAYERS),
-                new HumanPlayer("Frank", PlayerColor.PURPLE, STARTING_ARMIES_SIX_PLAYERS));
-
-        view.displayPlayers(players);
-        String displayedText = output.toString(StandardCharsets.UTF_8);
-
-        assertTrue(displayedText.contains("Alice"));
-        assertTrue(displayedText.contains("RED"));
-        assertTrue(displayedText.contains("Bob"));
-        assertTrue(displayedText.contains("BLUE"));
-        assertTrue(displayedText.contains("Cara"));
-        assertTrue(displayedText.contains("GREEN"));
-        assertTrue(displayedText.contains("Dan"));
-        assertTrue(displayedText.contains("YELLOW"));
-        assertTrue(displayedText.contains("Eli"));
-        assertTrue(displayedText.contains("BLACK"));
-        assertTrue(displayedText.contains("Frank"));
-        assertTrue(displayedText.contains("PURPLE"));
-    }
-
-    @Test
-    public void displayStartingPlayerSelectedStartingPlayerDisplaysStartingPlayer() {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        ConsoleView view = createViewWithOutput(output);
-        Player player = new HumanPlayer("Alice", PlayerColor.RED, STARTING_ARMIES_THREE_PLAYERS);
-
-        view.displayStartingPlayer(player);
-        String displayedText = output.toString(StandardCharsets.UTF_8);
-
-        assertTrue(displayedText.contains("Alice"));
-        assertTrue(displayedText.contains("RED"));
-    }
-
-    @Test
-    public void displayStartingPlayerPrintsStartingPlayer() {
+    public void displayCurrentPlayerPrintsCurrentPlayer() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(output);
 
-        view.displayStartingPlayer("Player 1 RED");
+        view.displayCurrentPlayer("Player 1");
         String displayedText = output.toString(StandardCharsets.UTF_8);
 
-        assertTrue(displayedText.contains("Player 1 RED"));
+        assertTrue(displayedText.contains("Player 1"));
     }
 
     @Test

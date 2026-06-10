@@ -47,7 +47,7 @@ package model {
     +fortifyTerritory(player: Player, fromName: String, toName: String, count: int): boolean
     +eliminatePlayer(loser: Player): void
     +checkWinCondition(): Player
-    +getCurrentPlayer(): Player
+    +getCurrentPlayerName(): String
     +nextPlayer(): Player
     +isSetupComplete(): boolean
     +calculateStartingArmies(): int
@@ -288,7 +288,7 @@ package view {
 
     ' not required
 
-    +displayCurrentPlayer(player: Player): void
+    +displayCurrentPlayer(currentPlayerName: String): void
     +displaySetupInstructions(): void
     +getTerritoryChoice(player: Player, territories: List<Territory>): Territory
     +getArmyCount(player: Player, max: int): int

@@ -1,6 +1,5 @@
 package code.view;
 
-import code.model.Player;
 import code.model.PlayerColor;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
@@ -39,23 +38,12 @@ public class ConsoleView {
         return PlayerColor.valueOf(scanner.nextLine().trim().toUpperCase());
     }
 
-    public void displayPlayers(final List<Player> players) {
-        output.println("Registered players:");
-        for (Player player : players) {
-            output.println(player);
-        }
-    }
-
-    public void displayStartingPlayer(final Player player) {
-        output.println("Starting player: " + player);
-    }
-
     public void displayError(final String message) {
         output.println(message);
     }
 
-    public void displayStartingPlayer(final String startingPlayer) {
-        output.println(startingPlayer);
+    public void displayCurrentPlayer(final String currentPlayerName) {
+        output.println(currentPlayerName);
     }
 
     public void displayUnclaimedTerritoriesByContinent(final String unclaimedTerritories) {

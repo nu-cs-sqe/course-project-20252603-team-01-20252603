@@ -92,16 +92,14 @@ public class SetupController {
             }
         }
 
-        List<Player> players = model.getPlayers();
-        view.displayPlayers(players);
         model.setCurrentPlayerIndex(random.nextInt(playerCount));
-        view.displayStartingPlayer(model.getCurrentPlayer());
+        view.displayCurrentPlayer(model.getCurrentPlayerName());
     }
 
     public void handleTerritoryClaiming() {
 
         while (!model.areAllTerritoriesClaimed()) {
-            view.displayStartingPlayer(model.getCurrentPlayerName());
+            view.displayCurrentPlayer(model.getCurrentPlayerName());
             view.displayUnclaimedTerritoriesByContinent(
                     model.getUnclaimedTerritoriesByContinent());
             view.displayCurrentPlayerClaimingStatus(

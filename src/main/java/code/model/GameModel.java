@@ -105,20 +105,12 @@ public class GameModel {
         return player;
     }
 
-    public List<Player> getPlayers() {
-        return new ArrayList<>(players);
-    }
-
     public void setCurrentPlayerIndex(final int index) {
         if (index < 0 || index >= players.size()) {
             return;
         }
 
         currentPlayerIndex = index;
-    }
-
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex);
     }
 
     private int calculateStartingInfantry() {
@@ -419,7 +411,7 @@ public class GameModel {
     }
 
     public String getCurrentPlayerTerritoriesByContinent() {
-        Player player = getCurrentPlayer();
+        Player player = players.get(currentPlayerIndex);
         StringBuilder territoriesByContinent = new StringBuilder();
 
         territoriesByContinent.append(player.getName()).append(" territories:");

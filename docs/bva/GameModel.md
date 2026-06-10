@@ -126,15 +126,15 @@
 
 ---
 
-### Method under test: `getCurrentPlayer()`
+### Method under test: `getCurrentPlayerName()`
 
-- **TC32: Returns selected first player** ( :white_check_mark: )
+- **TC32: Returns selected first player name** ( :white_check_mark: )
     - **State of the system**: Three players have been registered; current player index is set to `0`
-    - **Expected output**: Returns the first registered player
+    - **Expected output**: Returns the first registered player name
 
-- **TC33: Returns selected last player** ( :white_check_mark: )
+- **TC33: Returns selected last player name** ( :white_check_mark: )
     - **State of the system**: Three players have been registered; current player index is set to `2`
-    - **Expected output**: Returns the third registered player
+    - **Expected output**: Returns the third registered player name
 
 ---
 
@@ -182,15 +182,15 @@
 
 - **TC34: Advances from first player to second player** ( :white_check_mark: )
     - **State of the system**: Three-player game has been created; current player index is `0`
-    - **Expected output**: Current player advances to index `1`; `getCurrentPlayer()` returns the second player
+    - **Expected output**: Current player advances to index `1`; `getCurrentPlayerName()` returns the second player name
 
 - **TC35: Advances from middle player to next player** ( :white_check_mark: )
     - **State of the system**: Three-player game has been created; current player index is `1`
-    - **Expected output**: Current player advances to index `2`; `getCurrentPlayer()` returns the third player
+    - **Expected output**: Current player advances to index `2`; `getCurrentPlayerName()` returns the third player name
 
 - **TC36: Wraps from last player back to first player** ( :white_check_mark: )
     - **State of the system**: Three-player game has been created; current player index is `2`
-    - **Expected output**: Current player advances to index `0`; `getCurrentPlayer()` returns the first player
+    - **Expected output**: Current player advances to index `0`; `getCurrentPlayerName()` returns the first player name
 
 - **TC37: Does not advance when no players are registered** ( :white_check_mark: )
     - **State of the system**: GameModel has no registered players
