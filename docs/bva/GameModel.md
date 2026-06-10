@@ -100,29 +100,9 @@
     - **State of the system**: `setPlayerCount(6)` has returned `true`; `addPlayer("Player 1", PlayerColor.YELLOW)` called
     - **Expected output**: Returns a player with `20` available Infantry
 
-- **TC23: Rejects duplicate color** ( :white_check_mark: )
-    - **State of the system**: `setPlayerCount(3)` has returned `true`; one player with color `RED` already exists
-    - **Expected output**: A second call using `PlayerColor.RED` is rejected; no duplicate-color player is added
-
 - **TC24: Rejects adding more players than configured** ( :white_check_mark: )
     - **State of the system**: `setPlayerCount(3)` has returned `true`; three players have already been added
     - **Expected output**: A fourth `addPlayer(...)` call is rejected; player list remains size `3`
-
----
-
-### Method under test: `showAvailableColors()`
-
-- **TC25: Shows all colors before registration** ( :white_check_mark: )
-    - **State of the system**: `GameModel` constructed; no players have been added
-    - **Expected output**: Returns all six colors: Red, Blue, Green, Yellow, Black, Purple
-
-- **TC26: Excludes a chosen color** ( :white_check_mark: )
-    - **State of the system**: One player with color `RED` has already been added
-    - **Expected output**: Returned colors do not include `RED`; the remaining five colors are available
-
-- **TC27: Shows one remaining color when almost full** ( :white_check_mark: )
-    - **State of the system**: Five players with five distinct colors have already been added
-    - **Expected output**: Returned color list contains exactly the one unchosen color
 
 ---
 

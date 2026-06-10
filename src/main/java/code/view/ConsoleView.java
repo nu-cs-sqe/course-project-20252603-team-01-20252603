@@ -42,12 +42,12 @@ public class ConsoleView {
     public void displayPlayers(final List<Player> players) {
         output.println("Registered players:");
         for (Player player : players) {
-            output.println(player.getName() + " - " + player.getColor());
+            output.println(player);
         }
     }
 
     public void displayStartingPlayer(final Player player) {
-        output.println("Starting player: " + player.getName() + " - " + player.getColor());
+        output.println("Starting player: " + player);
     }
 
     public void displayError(final String message) {

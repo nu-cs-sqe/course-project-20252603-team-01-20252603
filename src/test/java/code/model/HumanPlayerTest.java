@@ -34,7 +34,6 @@ public final class HumanPlayerTest {
         String availableArmies = player.getAvailableArmies();
 
         assertEquals("Player 1", player.getName());
-        assertEquals(PlayerColor.RED, player.getColor());
         assertTrue(availableArmies.contains("INFANTRY"));
         assertTrue(availableArmies.contains(String.valueOf(MIN_SETUP_INFANTRY)));
     }
@@ -48,7 +47,6 @@ public final class HumanPlayerTest {
         String availableArmies = player.getAvailableArmies();
 
         assertEquals("Player 1", player.getName());
-        assertEquals(PlayerColor.BLUE, player.getColor());
         assertTrue(availableArmies.contains("INFANTRY"));
         assertTrue(availableArmies.contains(String.valueOf(MAX_SETUP_INFANTRY)));
     }
@@ -61,16 +59,6 @@ public final class HumanPlayerTest {
                 MIN_SETUP_INFANTRY);
 
         assertEquals("Player 1", player.getName());
-    }
-
-    @Test
-    public void getColorRegisteredPlayerReturnsRegisteredColor() {
-        HumanPlayer player = new HumanPlayer(
-                "Player 1",
-                PlayerColor.RED,
-                MIN_SETUP_INFANTRY);
-
-        assertEquals(PlayerColor.RED, player.getColor());
     }
 
     @Test

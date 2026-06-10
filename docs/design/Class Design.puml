@@ -51,7 +51,6 @@ package model {
     +nextPlayer(): Player
     +isSetupComplete(): boolean
     +calculateStartingArmies(): int
-    +showAvailableColors(): List<PlayerColor>
     +allPlayersHavePlacedInitialArmies(): boolean
     +applyBattleResult(result: BattleResult, attacker: Player, defender: Player,
                        from: Territory, to: Territory): void
