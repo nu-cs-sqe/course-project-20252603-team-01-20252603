@@ -33,11 +33,18 @@ public abstract class Player {
         return color;
     }
 
-    public HashMap<ArmyType, Integer> getAvailableArmies() {
-        return new HashMap<>(availableArmies);
-    }
+    public abstract void addTerritory(Territory territory);
 
-    public boolean hasAvailableArmies() {
-        return availableArmies.values().stream().anyMatch(armyCount -> armyCount > 0);
-    }
+    public abstract boolean ownsTerritory(Territory territory);
+
+    public abstract int getTerritoryCount();
+
+    public abstract void addArmies(HashMap<ArmyType, Integer> armiesToAdd);
+
+    public abstract void removeArmies(HashMap<ArmyType, Integer> armiesToRemove);
+
+    public abstract boolean hasAvailableArmies(HashMap<ArmyType, Integer> requiredArmies);
+
+    public abstract String getAvailableArmies();
+
 }

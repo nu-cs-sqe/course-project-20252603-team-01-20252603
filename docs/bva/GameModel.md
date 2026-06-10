@@ -155,3 +155,102 @@
 - **TC33: Returns selected last player** ( :white_check_mark: )
     - **State of the system**: Three players have been registered; current player index is set to `2`
     - **Expected output**: Returns the third registered player
+
+---
+
+### Method under test: `claimTerritoryDuringSetup(Player player, Territory territory, HashMap<ArmyType, Integer> pieces)`
+
+- **TC34: Claim unclaimed territory with exactly one Infantry** ( :white_check_mark: )
+    - **State of the system**: Territory is unclaimed; player has available armies containing at least `INFANTRY -> 1`; `claimTerritoryDuringSetup()` is called with a pieces map containing exactly `INFANTRY -> 1`
+    - **Expected output**: Method returns `true`; territory owner is set to the player; territory contains exactly one Infantry; player owns the territory; player's available Infantry decreases by one
+
+- **TC35: Cannot claim already claimed territory** ( :white_check_mark: )
+    - **State of the system**: Territory is already owned by `playerOne`; `playerTwo` attempts to claim the same territory with exactly `INFANTRY -> 1`
+    - **Expected output**: Method returns `false`; territory owner remains `playerOne`; territory Infantry count remains unchanged; `playerTwo` does not gain the territory; `playerTwo`'s available Infantry count remains unchanged
+
+- **TC36: Cannot claim territory with zero Infantry** ( :white_check_mark: )
+    - **State of the system**: Territory is unclaimed; player has available Infantry; `claimTerritoryDuringSetup()` is called with a pieces map containing `INFANTRY -> 0`
+    - **Expected output**: Method returns `false`; territory remains unclaimed; no Infantry is placed; player does not gain the territory; player's available Infantry count remains unchanged
+
+- **TC37: Cannot claim territory with more than one Infantry** ( :white_check_mark: )
+    - **State of the system**: Territory is unclaimed; player has available Infantry; `claimTerritoryDuringSetup()` is called with a pieces map containing `INFANTRY -> 2`
+    - **Expected output**: Method returns `false`; territory remains unclaimed; no Infantry is placed; player does not gain the territory; player's available Infantry count remains unchanged
+
+- **TC38: Cannot claim territory when player lacks available Infantry** ( :white_check_mark: )
+    - **State of the system**: Territory is unclaimed; player has available armies containing `INFANTRY -> 0`; `claimTerritoryDuringSetup()` is called with a pieces map containing exactly `INFANTRY -> 1`
+    - **Expected output**: Method returns `false`; territory remains unclaimed; no Infantry is placed; player does not gain the territory
+
+---
+
+### Method under test: `areAllTerritoriesClaimed()`
+
+- **TC39: Returns false when no territories are claimed** ( :white_check_mark: )
+    - **State of the system**: Game board has been initialized; all territories are still unclaimed
+    - **Expected output**: Returns `false`
+
+- **TC40: Returns false when one territory remains unclaimed** ( :white_check_mark: )
+    - **State of the system**: 41 territories are claimed and exactly 1 territory is still unclaimed
+    - **Expected output**: Returns `false`
+
+- **TC41: Returns true when all territories are claimed** ( :white_check_mark: )
+    - **State of the system**: All 42 territories have been claimed
+    - **Expected output**: Returns `true`
+
+---
+
+### Method under test: `advanceCurrentPlayerIndex()`
+
+- **TC34: Advances from first player to second player** ( :white_check_mark: )
+    - **State of the system**: Three-player game has been created; current player index is `0`
+    - **Expected output**: Current player advances to index `1`; `getCurrentPlayer()` returns the second player
+
+- **TC35: Advances from middle player to next player** ( :white_check_mark: )
+    - **State of the system**: Three-player game has been created; current player index is `1`
+    - **Expected output**: Current player advances to index `2`; `getCurrentPlayer()` returns the third player
+
+- **TC36: Wraps from last player back to first player** ( :white_check_mark: )
+    - **State of the system**: Three-player game has been created; current player index is `2`
+    - **Expected output**: Current player advances to index `0`; `getCurrentPlayer()` returns the first player
+
+- **TC37: Does not advance when no players are registered** ( :white_check_mark: )
+    - **State of the system**: GameModel has no registered players
+    - **Expected output**: Current player remains unavailable; method does not change player state
+---
+
+### Method under test: `getCurrentPlayerName()`
+
+- **TC42: Returns first player's name when current player index is first player** ( :white_check_mark: )
+    - **State of the system**: Three-player game has been created; current player index is `0`
+    - **Expected output**: Returns `"Player 1"`
+
+- **TC43: Returns middle player's name when current player index is middle player** ( :white_check_mark: )
+    - **State of the system**: Three-player game has been created; current player index is `1`
+    - **Expected output**: Returns `"Player 2"`
+
+---
+
+### Method under test: `getUnclaimedTerritoriesByContinent()`
+
+- **TC46: Returns all territories grouped by continent when no territories are claimed** ( :white_check_mark: )
+    - **State of the system**: Game board has been initialized; all territories are unclaimed
+    - **Expected output**: Returns a string containing continent names and all unclaimed territory names grouped under their continents
+
+- **TC47: Excludes claimed territory from unclaimed territory display** ( :white_check_mark: )
+    - **State of the system**: Game board has been initialized; `"Alaska"` has been claimed by the current player
+    - **Expected output**: Returned string contains `"North America"` but does not contain `"Alaska"`
+
+---
+
+### Method under test: `getCurrentPlayerTerritoriesByContinent()`
+
+- **TC48: Returns empty grouped display when current player owns no territories** ( :white_check_mark: )
+    - **State of the system**: Three-player game has been created; current player owns no territories
+    - **Expected output**: Returns a string that does not list any territory names for the current player
+
+- **TC49: Returns current player's owned territories grouped by continent** ( :white_check_mark: )
+    - **State of the system**: Current player has claimed `"Alaska"` in `"North America"`
+    - **Expected output**: Returned string contains `"North America"` and `"Alaska"`
+
+- **TC50: Excludes territories owned by other players** ( :white_check_mark:)
+    - **State of the system**: Player 1 owns `"Alaska"`; current player is Player 2
+    - **Expected output**: Returned string does not contain `"Alaska"`

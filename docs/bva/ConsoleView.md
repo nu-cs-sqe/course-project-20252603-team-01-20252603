@@ -61,8 +61,40 @@
 
 ---
 
-### Method under test: `displayStartingPlayer(Player player)`
+### Method under test: `displayStartingPlayer(String startingPlayer)`
 
 - **TC12: Displays selected starting player** ( :white_check_mark: )
-    - **State of the system**: A first player has been selected automatically by setup
-    - **Expected output**: Displays the selected player's name and color
+    - **State of the system**: A first player has been selected automatically by setup; `startingPlayer` contains the selected player's name and color
+    - **Expected output**: Output displays the selected starting player information
+
+---
+
+### Method under test: `displayUnclaimedTerritoriesByContinent(String unclaimedTerritories)`
+
+- **TC13: Displays unclaimed territories grouped by continent** ( :white_check_mark: )
+    - **State of the system**: Model provides a formatted string containing only unclaimed territories grouped by continent
+    - **Expected output**: Output displays the unclaimed territories string exactly as provided by the model
+
+---
+
+### Method under test: `displayCurrentPlayerClaimingStatus(String playerClaimingStatus)`
+
+- **TC14: Displays current player's claiming status** ( :white_check_mark: )
+    - **State of the system**: Model provides a formatted string containing the current player's name, available Infantry, and currently owned territories
+    - **Expected output**: Output displays the current player's claiming status exactly as provided by the model
+
+---
+
+### Method under test: `getTerritoryChoiceDuringSetup()`
+
+- **TC15: Returns entered territory choice during setup** ( :white_check_mark: )
+    - **State of the system**: Player is prompted to enter the name of a territory to claim
+    - **Expected output**: Returns the territory name entered by the player
+
+---
+
+### Method under test: `getInfantryChoiceDuringSetup()`
+
+- **TC16: Returns entered Infantry count during setup** ( :white_check_mark: )
+    - **State of the system**: Player is prompted to enter the number of Infantry to place
+    - **Expected output**: Returns the Infantry count entered by the player so the model can validate it

@@ -53,4 +53,24 @@ public class ConsoleView {
     public void displayError(final String message) {
         output.println(message);
     }
+
+    public void displayStartingPlayer(final String startingPlayer) {
+        output.println(startingPlayer);
+    }
+
+    public void displayUnclaimedTerritoriesByContinent(final String unclaimedTerritories) {
+        output.println(unclaimedTerritories);
+    }
+
+    public void displayCurrentPlayerClaimingStatus(final String playerClaimingStatus) {
+        output.println(playerClaimingStatus);
+    }
+
+    public String getTerritoryChoiceDuringSetup() {
+        output.print("Enter territory to claim: ");
+
+        return scanner.nextLine();
+    }
+
+
 }

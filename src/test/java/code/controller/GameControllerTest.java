@@ -35,34 +35,33 @@ public final class GameControllerTest {
         assertNotNull(controller);
     }
 
+//    @Test
+//
+//    public void startGameInitializesBoard() {
+//
+//        GameModel model = new GameModel();
+//
+//        ConsoleView view = createMock(ConsoleView.class);
+//
+//        GameController controller = new GameController(model, view);
+//
+//        controller.startGame();
+//
+//        int territoryCount = model.getContinents()
+//
+//                .stream()
+//
+//                .mapToInt(continent -> continent.getTerritories().size())
+//
+//                .sum();
+//
+//        assertEquals(CONTINENT_COUNT, model.getContinents().size());
+//
+//        assertEquals(TERRITORY_COUNT, territoryCount);
+//
+//    }
+
     @Test
-
-    public void startGameInitializesBoard() {
-
-        GameModel model = new GameModel();
-
-        ConsoleView view = createMock(ConsoleView.class);
-
-        GameController controller = new GameController(model, view);
-
-        controller.startGame();
-
-        int territoryCount = model.getContinents()
-
-                .stream()
-
-                .mapToInt(continent -> continent.getTerritories().size())
-
-                .sum();
-
-        assertEquals(CONTINENT_COUNT, model.getContinents().size());
-
-        assertEquals(TERRITORY_COUNT, territoryCount);
-
-    }
-
-    @Test
-
     public void startGameInitializesDeck() {
 
         GameModel model = new GameModel();

@@ -1,8 +1,9 @@
 package code.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.Test;
  * Tests boundary values and core behavior for the NullPlayer class.
  */
 public final class NullPlayerTest {
+
+    private static final int ONE_INFANTRY = 1;
 
     @Test
     public void constructorUnassignedOwnershipCreatesPlayerPlaceholder() {
@@ -34,19 +37,21 @@ public final class NullPlayerTest {
     }
 
     @Test
-    public void getAvailableArmiesUnassignedOwnershipReturnsEmptyArmyPool() {
+    public void getAvailableArmiesUnassignedOwnershipRaisesException() {
         NullPlayer player = new NullPlayer();
-        HashMap<ArmyType, Integer> availableArmies = player.getAvailableArmies();
 
-        assertEquals(0, availableArmies.get(ArmyType.INFANTRY));
-        assertEquals(0, availableArmies.get(ArmyType.CAVALRY));
-        assertEquals(0, availableArmies.get(ArmyType.ARTILLERY));
+        assertThrows(
+                UnsupportedOperationException.class,
+                player::getAvailableArmies);
     }
 
     @Test
     public void hasAvailableArmiesUnassignedOwnershipReturnsFalse() {
         NullPlayer player = new NullPlayer();
+        HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
+        requiredArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
 
-        assertFalse(player.hasAvailableArmies());
+        assertFalse(player.hasAvailableArmies(requiredArmies));
     }
+
 }

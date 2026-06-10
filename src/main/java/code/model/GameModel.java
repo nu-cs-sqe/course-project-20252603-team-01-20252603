@@ -1,10 +1,12 @@
 package code.model;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.HashMap;
 
 /**
  * Represents the main model for the Risk game.
@@ -39,9 +41,13 @@ public class GameModel {
 
     private static final int SIX_PLAYER_STARTING_INFANTRY = 20;
 
+    private static final int SETUP_INFANTRY_COUNT = 1;
+
     private final List<Continent> continents;
 
     private final List<Player> players;
+
+    private static final int TOTAL_TERRITORY_COUNT = 42;
 
     private int playerCount;
 
@@ -49,8 +55,11 @@ public class GameModel {
 
     private int currentPlayerIndex;
 
+    private final List<Territory> territories;
+
     public GameModel() {
         continents = new ArrayList<>();
+        territories = new ArrayList<>();
         players = new ArrayList<>();
         deck = new Deck();
         deck.shuffle();
@@ -58,6 +67,7 @@ public class GameModel {
 
     public void initializeContinentsAndTerritories() {
         continents.clear();
+        territories.clear();
 
         createNorthAmerica();
         createSouthAmerica();
@@ -67,10 +77,6 @@ public class GameModel {
         createAustralia();
         initializeAdjacencies();
         initializeDeck();
-    }
-
-    public List<Continent> getContinents() {
-        return new ArrayList<>(continents);
     }
 
     public int getDeckSize() {
@@ -242,16 +248,14 @@ public class GameModel {
                 Collections.emptyList());
 
         continent.addTerritory(territory);
+        territories.add(territory);
     }
 
     private Territory findTerritoryByName(final String territoryName) {
-        return continents.stream()
-                .flatMap(continent -> continent.getTerritories().stream())
+        return territories.stream()
                 .filter(territory -> territory.getName().equals(territoryName))
                 .findFirst()
-                .orElseThrow(
-                        () -> new IllegalArgumentException("Territory not found: " + territoryName)
-                );
+                .get();
     }
 
     private void connect(
@@ -357,5 +361,101 @@ public class GameModel {
     private void initializeDeck() {
         deck = new Deck();
         deck.shuffle();
+    }
+
+    public boolean claimTerritoryDuringSetup(
+            final String territoryName,
+            final HashMap<ArmyType, Integer> pieces) {
+        Player player = players.get(currentPlayerIndex);
+        Territory territory = findTerritoryByName(territoryName);
+
+        if (!territory.isUnclaimed()) {
+            return false;
+        }
+
+        if (!isExactlyOneInfantry(pieces)) {
+            return false;
+        }
+
+        if (!player.hasAvailableArmies(pieces)) {
+            return false;
+        }
+
+        territory.setOwner(player);
+        territory.placeArmies(pieces);
+        player.addTerritory(territory);
+        player.removeArmies(pieces);
+
+        return true;
+    }
+
+    private boolean isExactlyOneInfantry(final HashMap<ArmyType, Integer> pieces) {
+        return pieces.size() == SETUP_INFANTRY_COUNT
+                && pieces.getOrDefault(ArmyType.INFANTRY, 0) == SETUP_INFANTRY_COUNT;
+    }
+
+    public boolean advanceCurrentPlayerIndex() {
+        if (players.isEmpty()) {
+            return false;
+        }
+
+        currentPlayerIndex++;
+
+        if (currentPlayerIndex >= players.size()) {
+            currentPlayerIndex = 0;
+        }
+
+        return true;
+    }
+
+    public boolean areAllTerritoriesClaimed() {
+        return territories.size() == TOTAL_TERRITORY_COUNT
+                && territories.stream().allMatch(territory -> !territory.isUnclaimed());
+    }
+
+    public String getCurrentPlayerName() {
+        return players.get(currentPlayerIndex).getName();
+    }
+
+    public String getUnclaimedTerritoriesByContinent() {
+        StringBuilder territoriesByContinent = new StringBuilder();
+
+        for (Continent continent : continents) {
+            territoriesByContinent.append(continent.getName()).append(": ");
+
+            for (Territory territory : territories) {
+                if (territory.getContinentName().equals(continent.getName())
+                        && territory.isUnclaimed()) {
+                    territoriesByContinent.append(territory.getName()).append(", ");
+                }
+            }
+
+            territoriesByContinent.append(System.lineSeparator());
+        }
+
+        return territoriesByContinent.toString();
+    }
+
+    public String getCurrentPlayerTerritoriesByContinent() {
+        Player player = getCurrentPlayer();
+        StringBuilder territoriesByContinent = new StringBuilder();
+
+        territoriesByContinent.append(player.getName()).append(" territories:");
+        territoriesByContinent.append(System.lineSeparator());
+
+        for (Continent continent : continents) {
+            territoriesByContinent.append(continent.getName()).append(": ");
+
+            for (Territory territory : territories) {
+                if (territory.getContinentName().equals(continent.getName())
+                        && territory.isOwnedBy(player)) {
+                    territoriesByContinent.append(territory.getName()).append(", ");
+                }
+            }
+
+            territoriesByContinent.append(System.lineSeparator());
+        }
+
+        return territoriesByContinent.toString();
     }
 }

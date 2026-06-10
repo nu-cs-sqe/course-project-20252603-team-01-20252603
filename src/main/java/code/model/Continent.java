@@ -58,7 +58,4 @@ public final class Continent {
         }
     }
 
-    public List<Territory> getTerritories() {
-        return new ArrayList<>(territories);
-    }
 }

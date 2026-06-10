@@ -1,14 +1,85 @@
 package code.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Represents a human player in the Risk game.
  */
 public class HumanPlayer extends Player {
+
+    private final List<Territory> territories;
+
+    private HashMap<ArmyType, Integer> availableArmies;
 
     public HumanPlayer(
             final String playerName,
             final PlayerColor playerColor,
             final int startingInfantry) {
         super(playerName, playerColor, startingInfantry);
+        territories = new ArrayList<>();
+        availableArmies = new HashMap<>();
+        availableArmies.put(ArmyType.INFANTRY, startingInfantry);
     }
+
+    @Override
+    public void addTerritory(final Territory territory) {
+        territories.add(territory);
+    }
+
+    @Override
+    public boolean ownsTerritory(final Territory territory) {
+        return territories.contains(territory);
+    }
+
+    @Override
+    public int getTerritoryCount() {
+        return territories.size();
+    }
+
+    @Override
+    public void addArmies(final HashMap<ArmyType, Integer> armiesToAdd) {
+        for (Map.Entry<ArmyType, Integer> entry : armiesToAdd.entrySet()) {
+            ArmyType armyType = entry.getKey();
+            int addedCount = entry.getValue();
+            int currentCount = availableArmies.getOrDefault(armyType, 0);
+
+            availableArmies.put(armyType, currentCount + addedCount);
+        }
+    }
+
+    @Override
+    public void removeArmies(final HashMap<ArmyType, Integer> armiesToRemove) {
+        for (Map.Entry<ArmyType, Integer> entry : armiesToRemove.entrySet()) {
+            ArmyType armyType = entry.getKey();
+            int removedCount = entry.getValue();
+            int currentCount = availableArmies.getOrDefault(armyType, 0);
+
+            availableArmies.put(armyType, currentCount - removedCount);
+        }
+    }
+
+    @Override
+    public String getAvailableArmies() {
+        return availableArmies.toString();
+    }
+
+    @Override
+    public boolean hasAvailableArmies(final HashMap<ArmyType, Integer> requiredArmies) {
+        for (Map.Entry<ArmyType, Integer> entry : requiredArmies.entrySet()) {
+            ArmyType armyType = entry.getKey();
+            int requiredCount = entry.getValue();
+            int availableCount = availableArmies.getOrDefault(armyType, 0);
+
+            if (availableCount < requiredCount) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
 }

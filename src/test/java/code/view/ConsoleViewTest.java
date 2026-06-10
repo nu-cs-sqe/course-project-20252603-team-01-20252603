@@ -35,49 +35,42 @@ public final class ConsoleViewTest {
     @Test
     public void promptNumberOfPlayersMinimumPlayerCountReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("3\n");
-
         assertEquals(MIN_PLAYER_COUNT, view.promptNumberOfPlayers());
     }
 
     @Test
     public void promptNumberOfPlayersMaximumPlayerCountReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("6\n");
-
         assertEquals(MAX_PLAYER_COUNT, view.promptNumberOfPlayers());
     }
 
     @Test
     public void promptNumberOfPlayersBelowMinimumPlayerCountReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("2\n");
-
         assertEquals(BELOW_MIN_PLAYER_COUNT, view.promptNumberOfPlayers());
     }
 
     @Test
     public void promptNumberOfPlayersAboveMaximumPlayerCountReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("7\n");
-
         assertEquals(ABOVE_MAX_PLAYER_COUNT, view.promptNumberOfPlayers());
     }
 
     @Test
     public void promptPlayerNameFirstPlayerReturnsPlayerName() {
         ConsoleView view = createViewWithInput("Alice\n");
-
         assertEquals("Alice", view.promptPlayerName(1));
     }
 
     @Test
     public void promptPlayerNameSixthPlayerReturnsPlayerName() {
         ConsoleView view = createViewWithInput("Frank\n");
-
         assertEquals("Frank", view.promptPlayerName(SIXTH_PLAYER_POSITION));
     }
 
     @Test
     public void promptPlayerColorAllColorsAvailableReturnsSelectedColor() {
         ConsoleView view = createViewWithInput("RED\n");
-
         assertEquals(
                 PlayerColor.RED,
                 view.promptPlayerColor("Alice", List.of(PlayerColor.values())));
@@ -86,7 +79,6 @@ public final class ConsoleViewTest {
     @Test
     public void promptPlayerColorOneColorAvailableReturnsSelectedColor() {
         ConsoleView view = createViewWithInput("PURPLE\n");
-
         assertEquals(
                 PlayerColor.PURPLE,
                 view.promptPlayerColor("Frank", List.of(PlayerColor.PURPLE)));
@@ -95,7 +87,6 @@ public final class ConsoleViewTest {
     @Test
     public void promptPlayerColorUnavailableColorEnteredReturnsSelectedColor() {
         ConsoleView view = createViewWithInput("RED\n");
-
         assertEquals(
                 PlayerColor.RED,
                 view.promptPlayerColor("Bob", List.of(PlayerColor.BLUE)));
@@ -161,6 +152,50 @@ public final class ConsoleViewTest {
 
         assertTrue(displayedText.contains("Alice"));
         assertTrue(displayedText.contains("RED"));
+    }
+
+    @Test
+    public void displayStartingPlayerPrintsStartingPlayer() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+
+        view.displayStartingPlayer("Player 1 RED");
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertTrue(displayedText.contains("Player 1 RED"));
+    }
+
+    @Test
+    public void displayUnclaimedTerritoriesByContinentPrintsTerritories() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        String unclaimedTerritories = "North America: Alaska, Alberta";
+
+        view.displayUnclaimedTerritoriesByContinent(unclaimedTerritories);
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertTrue(displayedText.contains(unclaimedTerritories));
+    }
+
+    @Test
+    public void displayCurrentPlayerClaimingStatusPrintsStatus() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        String playerClaimingStatus = "Player 1 territories: Alaska";
+
+        view.displayCurrentPlayerClaimingStatus(playerClaimingStatus);
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertTrue(displayedText.contains(playerClaimingStatus));
+    }
+
+    @Test
+    public void getTerritoryChoiceDuringSetupReturnsEnteredTerritory() {
+        ConsoleView view = createViewWithInput("Alaska\n");
+
+        String territoryChoice = view.getTerritoryChoiceDuringSetup();
+
+        assertEquals("Alaska", territoryChoice);
     }
 
     private ConsoleView createViewWithInput(final String input) {

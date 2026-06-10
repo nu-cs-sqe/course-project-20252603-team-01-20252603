@@ -8,11 +8,14 @@ import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import code.model.GameModel;
-import code.model.HumanPlayer;
 import code.model.NullPlayer;
 import code.model.Player;
 import code.model.PlayerColor;
+import code.model.ArmyType;
+import code.model.HumanPlayer;
 import code.view.ConsoleView;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
@@ -45,6 +48,14 @@ public final class SetupControllerTest {
     private static final int SIXTH_PLAYER_INDEX = 5;
 
     private static final int HIGHEST_PLAYER_INDEX = 2;
+
+    private static final int ZERO_INFANTRY = 0;
+
+    private static final int ONE_INFANTRY = 1;
+
+    private static final int TWO_INFANTRY = 2;
+
+    private static final int SETUP_INFANTRY_COUNT = 1;
 
     @Test
     public void setupControllerConstructsWithModelAndView() {
@@ -493,4 +504,213 @@ public final class SetupControllerTest {
             return value;
         }
     }
+
+    private HashMap<ArmyType, Integer> createOneInfantryPiece() {
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, SETUP_INFANTRY_COUNT);
+
+        return pieces;
+    }
+
+    @Test
+    public void handleTerritoryClaimingSuccessfulClaimAdvancesToNextPlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        SetupController controller = new SetupController(model, view);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayStartingPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getUnclaimedTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayUnclaimedTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Player 1 territories:");
+        view.displayCurrentPlayerClaimingStatus("Player 1 territories:");
+        expectLastCall().once();
+
+        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Alaska");
+        expect(model.claimTerritoryDuringSetup("Alaska", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+
+        replay(model, view);
+
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingSuccessfulClaimsAdvanceEachTurn() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayStartingPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getUnclaimedTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayUnclaimedTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Player 1 territories:");
+        view.displayCurrentPlayerClaimingStatus("Player 1 territories:");
+        expectLastCall().once();
+
+        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Alaska");
+        expect(model.claimTerritoryDuringSetup("Alaska", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 2");
+        view.displayStartingPlayer("Player 2");
+        expectLastCall().once();
+
+        expect(model.getUnclaimedTerritoriesByContinent())
+                .andReturn("North America: Alberta");
+        view.displayUnclaimedTerritoriesByContinent("North America: Alberta");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Player 2 territories:");
+        view.displayCurrentPlayerClaimingStatus("Player 2 territories:");
+        expectLastCall().once();
+
+        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Alberta");
+        expect(model.claimTerritoryDuringSetup("Alberta", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        SetupController controller = new SetupController(model, view);
+        replay(model, view);
+
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingAlreadyClaimedTerritoryRepromptsSamePlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayStartingPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getUnclaimedTerritoriesByContinent())
+                .andReturn("North America: Alberta");
+        view.displayUnclaimedTerritoriesByContinent("North America: Alberta");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Player 1 territories:");
+        view.displayCurrentPlayerClaimingStatus("Player 1 territories:");
+        expectLastCall().once();
+
+        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Alaska");
+        expect(model.claimTerritoryDuringSetup("Alaska", pieces)).andReturn(false);
+
+        view.displayError("Invalid territory claim.");
+        expectLastCall().once();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayStartingPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getUnclaimedTerritoriesByContinent())
+                .andReturn("North America: Alberta");
+        view.displayUnclaimedTerritoriesByContinent("North America: Alberta");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Player 1 territories:");
+        view.displayCurrentPlayerClaimingStatus("Player 1 territories:");
+        expectLastCall().once();
+
+        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Alberta");
+        expect(model.claimTerritoryDuringSetup("Alberta", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+
+        replay(model, view);
+        SetupController controller = new SetupController(model, view);
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingStopsWhenAllTerritoriesClaimed() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        SetupController controller = new SetupController(model, view);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+
+        replay(model, view);
+
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingContinuesWhenOneTerritoryRemainsUnclaimed() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        SetupController controller = new SetupController(model, view);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 3");
+        view.displayStartingPlayer("Player 3");
+        expectLastCall().once();
+
+        expect(model.getUnclaimedTerritoriesByContinent())
+                .andReturn("Australia: Eastern Australia");
+        view.displayUnclaimedTerritoriesByContinent("Australia: Eastern Australia");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Player 3 territories:");
+        view.displayCurrentPlayerClaimingStatus("Player 3 territories:");
+        expectLastCall().once();
+
+        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Eastern Australia");
+        expect(model.claimTerritoryDuringSetup("Eastern Australia", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+
+        replay(model, view);
+
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
 }

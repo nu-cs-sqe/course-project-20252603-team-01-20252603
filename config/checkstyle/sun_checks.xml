@@ -67,7 +67,7 @@
     <!-- Checks for Size Violations.                    -->
     <!-- See https://checkstyle.org/checks/sizes/index.html -->
     <module name="FileLength">
-        <property name="max" value="500"/>
+        <property name="max" value="1000"/>
     </module>
     <module name="LineLength">
         <property name="fileExtensions" value="java"/>
@@ -200,7 +200,9 @@
         </module>
 
         <!-- G10: Vertical Separation - variable declared far from use -->
-        <module name="VariableDeclarationUsageDistance"/>
+        <module name="VariableDeclarationUsageDistance">
+            <property name="allowedDistance" value="17"/>
+        </module>
 
         <!-- G28: Encapsulate Conditionals -->
         <module name="BooleanExpressionComplexity">

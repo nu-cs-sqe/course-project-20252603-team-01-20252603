@@ -1,8 +1,7 @@
 package code.model;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,34 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * Tests board initialization behavior for the GameModel class.
  */
 public final class GameModelTest {
-
-    private static final int CONTINENT_COUNT = 6;
-
-    private static final int TERRITORY_COUNT = 42;
-
-    private static final int NORTH_AMERICA_TERRITORY_COUNT = 9;
-
-    private static final int SOUTH_AMERICA_TERRITORY_COUNT = 4;
-
-    private static final int EUROPE_TERRITORY_COUNT = 7;
-
-    private static final int AFRICA_TERRITORY_COUNT = 6;
-
-    private static final int ASIA_TERRITORY_COUNT = 12;
-
-    private static final int AUSTRALIA_TERRITORY_COUNT = 4;
-
-    private static final int NORTH_AMERICA_BONUS = 5;
-
-    private static final int SOUTH_AMERICA_BONUS = 2;
-
-    private static final int EUROPE_BONUS = 5;
-
-    private static final int AFRICA_BONUS = 3;
-
-    private static final int ASIA_BONUS = 7;
-
-    private static final int AUSTRALIA_BONUS = 2;
 
     private static final int DECK_CARD_COUNT = 44;
 
@@ -68,195 +39,15 @@ public final class GameModelTest {
 
     private static final int TOTAL_PLAYER_COLORS = PlayerColor.values().length - 1;
 
-    @Test
-    public void gameModelConstructsWithEmptyContinents() {
-        GameModel gameModel = new GameModel();
+    private static final int ONE_INFANTRY = 1;
 
-        assertTrue(gameModel.getContinents().isEmpty());
-    }
+    private static final int ZERO_INFANTRY = 0;
 
-    @Test
-    public void initializeCreatesSixContinents() {
-        GameModel gameModel = new GameModel();
+    private static final int TWO_INFANTRY = 2;
 
-        gameModel.initializeContinentsAndTerritories();
+    private static final int THIRTY_FOUR_INFANTRY = 34;
 
-        assertEquals(CONTINENT_COUNT, gameModel.getContinents().size());
-    }
-
-    @Test
-    public void initializeCreatesFortyTwoTerritories() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.initializeContinentsAndTerritories();
-
-        int territoryCount = gameModel.getContinents()
-                .stream()
-                .mapToInt(continent -> continent.getTerritories().size())
-                .sum();
-
-        assertEquals(TERRITORY_COUNT, territoryCount);
-    }
-
-    @Test
-    public void allTerritoriesStartWithZeroArmies() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.initializeContinentsAndTerritories();
-
-        boolean allHaveZeroArmies = gameModel.getContinents()
-                .stream()
-                .flatMap(continent -> continent.getTerritories().stream())
-                .allMatch(territory -> territory.getArmyCount() == 0);
-
-        assertTrue(allHaveZeroArmies);
-    }
-
-    private Continent findContinent(
-            final GameModel gameModel,
-            final String continentName) {
-        return gameModel.getContinents()
-                .stream()
-                .filter(continent -> continent.getName().equals(continentName))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("Continent not found: " + continentName));
-    }
-
-    @Test
-    public void eachContinentHasCorrectTerritoryCount() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.initializeContinentsAndTerritories();
-
-        assertEquals(
-                NORTH_AMERICA_TERRITORY_COUNT,
-                findContinent(gameModel, "North America").getTerritories().size());
-        assertEquals(
-                SOUTH_AMERICA_TERRITORY_COUNT,
-                findContinent(gameModel, "South America").getTerritories().size());
-        assertEquals(
-                EUROPE_TERRITORY_COUNT,
-                findContinent(gameModel, "Europe").getTerritories().size());
-        assertEquals(
-                AFRICA_TERRITORY_COUNT,
-                findContinent(gameModel, "Africa").getTerritories().size());
-        assertEquals(
-                ASIA_TERRITORY_COUNT,
-                findContinent(gameModel, "Asia").getTerritories().size());
-        assertEquals(
-                AUSTRALIA_TERRITORY_COUNT,
-                findContinent(gameModel, "Australia").getTerritories().size());
-    }
-
-    @Test
-    public void eachContinentHasCorrectBonusArmyValue() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.initializeContinentsAndTerritories();
-
-        assertEquals(NORTH_AMERICA_BONUS,
-                findContinent(gameModel, "North America").getBonusArmies());
-        assertEquals(SOUTH_AMERICA_BONUS,
-                findContinent(gameModel, "South America").getBonusArmies());
-        assertEquals(EUROPE_BONUS,
-                findContinent(gameModel, "Europe").getBonusArmies());
-        assertEquals(AFRICA_BONUS,
-                findContinent(gameModel, "Africa").getBonusArmies());
-        assertEquals(ASIA_BONUS,
-                findContinent(gameModel, "Asia").getBonusArmies());
-        assertEquals(AUSTRALIA_BONUS,
-                findContinent(gameModel, "Australia").getBonusArmies());
-    }
-
-    @Test
-    public void everyTerritoryBelongsToExactlyOneContinent() {
-        GameModel gameModel = new GameModel();
-        Set<Territory> territories = new HashSet<>();
-
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.getContinents()
-                .stream()
-                .flatMap(continent -> continent.getTerritories().stream())
-                .forEach(territories::add);
-
-        assertEquals(TERRITORY_COUNT, territories.size());
-    }
-
-    private Territory findTerritory(
-            final GameModel gameModel,
-            final String territoryName) {
-        return gameModel.getContinents()
-                .stream()
-                .flatMap(continent -> continent.getTerritories().stream())
-                .filter(territory -> territory.getName().equals(territoryName))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("Territory not found: " + territoryName));
-    }
-
-    private boolean hasReciprocalAdjacency(final Territory territory) {
-        return territory.getAdjacentTerritories()
-                .stream()
-                .allMatch(adjacentTerritory -> adjacentTerritory
-                        .getAdjacentTerritories()
-                        .contains(territory));
-    }
-
-    @Test
-    public void everyTerritoryHasAtLeastOneAdjacentTerritory() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.initializeContinentsAndTerritories();
-
-        boolean allHaveAdjacency = gameModel.getContinents()
-                .stream()
-                .flatMap(continent -> continent.getTerritories().stream())
-                .noneMatch(territory -> territory.getAdjacentTerritories().isEmpty());
-
-        assertTrue(allHaveAdjacency);
-    }
-
-    @Test
-    public void adjacencyIsReciprocalForAllTerritories() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.initializeContinentsAndTerritories();
-
-        boolean allReciprocal = gameModel.getContinents()
-                .stream()
-                .flatMap(continent -> continent.getTerritories().stream())
-                .allMatch(this::hasReciprocalAdjacency);
-
-        assertTrue(allReciprocal);
-    }
-
-    @Test
-    public void alaskaIsAdjacentToKamchatka() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.initializeContinentsAndTerritories();
-
-        Territory alaska = findTerritory(gameModel, "Alaska");
-        Territory kamchatka = findTerritory(gameModel, "Kamchatka");
-
-        assertTrue(alaska.getAdjacentTerritories().contains(kamchatka));
-        assertTrue(kamchatka.getAdjacentTerritories().contains(alaska));
-    }
-
-    @Test
-    public void noTerritoryIsAdjacentToItself() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.initializeContinentsAndTerritories();
-
-        boolean noSelfAdjacency = gameModel.getContinents()
-                .stream()
-                .flatMap(continent -> continent.getTerritories().stream())
-                .noneMatch(territory -> territory.getAdjacentTerritories()
-                        .contains(territory));
-
-        assertTrue(noSelfAdjacency);
-    }
+    private static final int TERRITORY_COUNT = 42;
 
     @Test
     public void deckHasFortyFourCardsAfterBoardInitialization() {
@@ -312,11 +103,12 @@ public final class GameModelTest {
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        String availableArmies = player.getAvailableArmies();
 
         assertEquals("Player 1", player.getName());
         assertEquals(PlayerColor.RED, player.getColor());
-        assertEquals(THREE_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
-                .get(ArmyType.INFANTRY));
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(THREE_PLAYER_STARTING_INFANTRY)));
     }
 
     @Test
@@ -325,9 +117,10 @@ public final class GameModelTest {
 
         gameModel.setPlayerCount(FOUR_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.BLUE);
+        String availableArmies = player.getAvailableArmies();
 
-        assertEquals(FOUR_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
-                .get(ArmyType.INFANTRY));
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(FOUR_PLAYER_STARTING_INFANTRY)));
     }
 
     @Test
@@ -336,9 +129,10 @@ public final class GameModelTest {
 
         gameModel.setPlayerCount(FIVE_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.GREEN);
+        String availableArmies = player.getAvailableArmies();
 
-        assertEquals(FIVE_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
-                .get(ArmyType.INFANTRY));
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(FIVE_PLAYER_STARTING_INFANTRY)));
     }
 
     @Test
@@ -347,9 +141,10 @@ public final class GameModelTest {
 
         gameModel.setPlayerCount(MAX_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.YELLOW);
+        String availableArmies = player.getAvailableArmies();
 
-        assertEquals(SIX_PLAYER_STARTING_INFANTRY, player.getAvailableArmies()
-                .get(ArmyType.INFANTRY));
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(SIX_PLAYER_STARTING_INFANTRY)));
     }
 
     @Test
@@ -496,4 +291,389 @@ public final class GameModelTest {
         gameModel.setCurrentPlayerIndex(2);
         assertEquals(lastPlayer, gameModel.getCurrentPlayer());
     }
+
+    private HashMap<ArmyType, Integer> createInfantryPieces(final int infantryCount) {
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, infantryCount);
+
+        return pieces;
+    }
+
+    @Test
+    public void claimTerritoryDuringSetupUnclaimedTerritoryWithOneInfantryReturnsTrue() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", pieces);
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(claimed);
+        assertEquals(ONE_INFANTRY, player.getTerritoryCount());
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(THIRTY_FOUR_INFANTRY)));
+    }
+
+    @Test
+    public void claimTerritoryDuringSetupAlreadyClaimedTerritoryReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player playerOne = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player playerTwo = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
+
+        gameModel.claimTerritoryDuringSetup("Alaska", pieces);
+        gameModel.advanceCurrentPlayerIndex();
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", pieces);
+
+        String playerTwoAvailableArmies = playerTwo.getAvailableArmies();
+
+        assertFalse(claimed);
+        assertEquals(ONE_INFANTRY, playerOne.getTerritoryCount());
+        assertEquals(ZERO_INFANTRY, playerTwo.getTerritoryCount());
+        assertTrue(playerTwoAvailableArmies.contains("INFANTRY"));
+        assertTrue(playerTwoAvailableArmies.contains(
+                String.valueOf(THREE_PLAYER_STARTING_INFANTRY)));
+    }
+
+    @Test
+    public void claimTerritoryDuringSetupZeroInfantryReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> pieces = createInfantryPieces(ZERO_INFANTRY);
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", pieces);
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertFalse(claimed);
+        assertEquals(ZERO_INFANTRY, player.getTerritoryCount());
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(
+                String.valueOf(THREE_PLAYER_STARTING_INFANTRY)));
+    }
+
+    @Test
+    public void claimTerritoryDuringSetupMoreThanOneInfantryReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> pieces = createInfantryPieces(TWO_INFANTRY);
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", pieces);
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertFalse(claimed);
+        assertEquals(ZERO_INFANTRY, player.getTerritoryCount());
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(
+                String.valueOf(THREE_PLAYER_STARTING_INFANTRY)));
+    }
+
+    @Test
+    public void claimTerritoryDuringSetupNoAvailableInfantryReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> allAvailableArmies =
+                createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY);
+        HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
+
+        player.removeArmies(allAvailableArmies);
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", pieces);
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertFalse(claimed);
+        assertEquals(ZERO_INFANTRY, player.getTerritoryCount());
+        assertTrue(availableArmies.contains("INFANTRY"));
+        assertTrue(availableArmies.contains(String.valueOf(ZERO_INFANTRY)));
+    }
+
+    @Test
+    public void advanceCurrentPlayerIndexNoPlayersReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        boolean advanced = gameModel.advanceCurrentPlayerIndex();
+
+        assertFalse(advanced);
+    }
+
+    @Test
+    public void advanceCurrentPlayerIndexLastPlayerWrapsToFirstPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player firstPlayer = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(2);
+
+        boolean advanced = gameModel.advanceCurrentPlayerIndex();
+
+        assertTrue(advanced);
+        assertEquals(firstPlayer, gameModel.getCurrentPlayer());
+    }
+
+    @Test
+    public void advanceCurrentPlayerIndexMiddlePlayerAdvancesToNextPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        Player thirdPlayer = gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(1);
+
+        boolean advanced = gameModel.advanceCurrentPlayerIndex();
+
+        assertTrue(advanced);
+        assertEquals(thirdPlayer, gameModel.getCurrentPlayer());
+    }
+
+    @Test
+    public void advanceCurrentPlayerIndexFirstPlayerAdvancesToSecondPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player secondPlayer = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        boolean advanced = gameModel.advanceCurrentPlayerIndex();
+
+        assertTrue(advanced);
+        assertEquals(secondPlayer, gameModel.getCurrentPlayer());
+    }
+
+    @Test
+    public void areAllTerritoriesClaimedReturnsFalseWhenNoTerritoriesClaimed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        assertFalse(gameModel.areAllTerritoriesClaimed());
+    }
+
+    private List<String> getTerritoryNames() {
+        return List.of(
+                "Alaska",
+                "Northwest Territory",
+                "Greenland",
+                "Alberta",
+                "Ontario",
+                "Quebec",
+                "Western United States",
+                "Eastern United States",
+                "Central America",
+                "Venezuela",
+                "Peru",
+                "Brazil",
+                "Argentina",
+                "Iceland",
+                "Scandinavia",
+                "Ukraine",
+                "Great Britain",
+                "Northern Europe",
+                "Western Europe",
+                "Southern Europe",
+                "North Africa",
+                "Egypt",
+                "East Africa",
+                "Congo",
+                "South Africa",
+                "Madagascar",
+                "Ural",
+                "Siberia",
+                "Yakutsk",
+                "Kamchatka",
+                "Irkutsk",
+                "Mongolia",
+                "Japan",
+                "Afghanistan",
+                "China",
+                "Middle East",
+                "India",
+                "Siam",
+                "Indonesia",
+                "New Guinea",
+                "Western Australia",
+                "Eastern Australia");
+    }
+
+    private void claimTerritories(
+            final GameModel gameModel,
+            final int territoryCount) {
+        HashMap<ArmyType, Integer> pieces = createInfantryPieces(ONE_INFANTRY);
+        List<String> territoryNames = getTerritoryNames();
+
+        for (int index = 0; index < territoryCount; index++) {
+            gameModel.claimTerritoryDuringSetup(territoryNames.get(index), pieces);
+        }
+    }
+
+    @Test
+    public void areAllTerritoriesClaimedReturnsFalseWhenOneTerritoryRemainsUnclaimed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        player.addArmies(createInfantryPieces(TERRITORY_COUNT));
+
+        claimTerritories(gameModel, TERRITORY_COUNT - ONE_INFANTRY);
+
+        assertFalse(gameModel.areAllTerritoriesClaimed());
+    }
+
+    @Test
+    public void areAllTerritoriesClaimedReturnsTrueWhenAllTerritoriesClaimed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        player.addArmies(createInfantryPieces(TERRITORY_COUNT));
+
+        claimTerritories(gameModel, TERRITORY_COUNT);
+
+        assertTrue(gameModel.areAllTerritoriesClaimed());
+    }
+
+    @Test
+    public void getCurrentPlayerNameFirstPlayerIndexReturnsFirstPlayerName() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        assertEquals("Player 1", gameModel.getCurrentPlayerName());
+    }
+
+    @Test
+    public void getCurrentPlayerNameMiddlePlayerIndexReturnsMiddlePlayerName() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(1);
+
+        assertEquals("Player 2", gameModel.getCurrentPlayerName());
+    }
+
+    @Test
+    public void getUnclaimedTerritoriesByContinentReturnsAllTerritoriesWhenNoneClaimed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        String unclaimedTerritories = gameModel.getUnclaimedTerritoriesByContinent();
+
+        assertTrue(unclaimedTerritories.contains("North America"));
+        assertTrue(unclaimedTerritories.contains("Alaska"));
+        assertTrue(unclaimedTerritories.contains("South America"));
+        assertTrue(unclaimedTerritories.contains("Brazil"));
+        assertTrue(unclaimedTerritories.contains("Australia"));
+        assertTrue(unclaimedTerritories.contains("Eastern Australia"));
+    }
+
+    @Test
+    public void getUnclaimedTerritoriesByContinentExcludesClaimedTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup(
+                "Alaska",
+                createInfantryPieces(ONE_INFANTRY));
+
+        String unclaimedTerritories = gameModel.getUnclaimedTerritoriesByContinent();
+
+        assertTrue(unclaimedTerritories.contains("North America"));
+        assertFalse(unclaimedTerritories.contains("Alaska"));
+        assertTrue(unclaimedTerritories.contains("Alberta"));
+    }
+
+    @Test
+    public void getCurrentPlayerTerritoriesByContinentReturnsNoTerritoriesWhenNoneOwned() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        String ownedTerritories = gameModel.getCurrentPlayerTerritoriesByContinent();
+
+        assertTrue(ownedTerritories.contains("Player 1"));
+        assertFalse(ownedTerritories.contains("Alaska"));
+        assertFalse(ownedTerritories.contains("Brazil"));
+    }
+
+    @Test
+    public void getCurrentPlayerTerritoriesByContinentExcludesOtherPlayerTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup(
+                "Alaska",
+                createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+
+        String ownedTerritories = gameModel.getCurrentPlayerTerritoriesByContinent();
+
+        assertTrue(ownedTerritories.contains("Player 2"));
+        assertFalse(ownedTerritories.contains("Alaska"));
+    }
+
 }

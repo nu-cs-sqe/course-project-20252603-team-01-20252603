@@ -27,22 +27,93 @@
     - **State of the system**: Human player constructed with color `PlayerColor.RED`
     - **Expected output**: Returns `PlayerColor.RED`
 
+
+### Method under test: `addTerritory(Territory territory)`
+
+- **TC8: Add first claimed territory** ( :white_check_mark: )
+    - **State of the system**: Human player owns no territories; `addTerritory(alaska)` is called
+    - **Expected output**: Player territory count becomes `1`; `ownsTerritory(alaska)` returns `true`
+
+- **TC9: Add another claimed territory** ( :white_check_mark: )
+    - **State of the system**: Human player already owns one territory; `addTerritory(alberta)` is called
+    - **Expected output**: Player territory count becomes `2`; `ownsTerritory(alberta)` returns `true`; previously owned territory is still owned
+
+---
+
+### Method under test: `ownsTerritory(Territory territory)`
+
+- **TC10: Returns true for owned territory** ( implemented in TC8 )
+    - **State of the system**: `addTerritory(alaska)` has been called
+    - **Expected output**: `ownsTerritory(alaska)` returns `true`
+
+- **TC11: Returns false for territory not owned by player** ( :white_check_mark: )
+    - **State of the system**: Human player owns `alaska`; `alberta` has not been added to this player
+    - **Expected output**: `ownsTerritory(alberta)` returns `false`
+
+---
+
+### Method under test: `getTerritoryCount()`
+
+- **TC12: Returns zero before any territory is claimed** ( :white_check_mark: )
+    - **State of the system**: Human player has just been constructed
+    - **Expected output**: `getTerritoryCount()` returns `0`
+
+- **TC13: Returns one after first territory is claimed** ( implemented in TC8 )
+    - **State of the system**: One territory has been added to the player
+    - **Expected output**: `getTerritoryCount()` returns `1`
+
+- **TC14: Returns more than one after multiple territories are claimed** ( implemented in TC9 )
+    - **State of the system**: Two territories have been added to the player
+    - **Expected output**: `getTerritoryCount()` returns `2`
+
+---
+
+### Method under test: `addArmies(HashMap<ArmyType, Integer> armiesToAdd)`
+
+- **TC15: Add one Infantry to available armies** ( :white_check_mark: )
+    - **State of the system**: Human player has available armies containing `INFANTRY -> 0`; `addArmies()` is called with a map containing `INFANTRY -> 1`
+    - **Expected output**: Player available armies are updated to contain exactly one Infantry
+
+- **TC16: Add multiple Infantry to available armies** ( :white_check_mark: )
+    - **State of the system**: Human player has available armies containing `INFANTRY -> 0`; `addArmies()` is called with a map containing `INFANTRY -> 20`
+    - **Expected output**: Player available armies are updated to contain exactly twenty Infantry
+  
+---
+
+### Method under test: `removeArmies(HashMap<ArmyType, Integer> armiesToRemove)`
+
+- **TC17: Remove one Infantry from available armies** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 20`; `removeArmies()` is called with a map containing `INFANTRY -> 1`
+    - **Expected output**: Player available armies are updated to contain exactly nineteen Infantry
+
+- **TC18: Remove last available Infantry** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 1`; `removeArmies()` is called with a map containing `INFANTRY -> 1`
+    - **Expected output**: Player available armies are updated to contain exactly zero Infantry
+
+---
+
+### Method under test: `hasAvailableArmies(HashMap<ArmyType, Integer> requiredArmies)`
+
+- **TC18: Returns true when required Infantry is available** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 20`; `hasAvailableArmies()` is called with `INFANTRY -> 1`
+    - **Expected output**: Returns `true`
+
+- **TC19: Returns true when required Infantry exactly equals available Infantry** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 1`; `hasAvailableArmies()` is called with `INFANTRY -> 1`
+    - **Expected output**: Returns `true`
+
+- **TC20: Returns false when required Infantry is greater than available Infantry** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 0`; `hasAvailableArmies()` is called with `INFANTRY -> 1`
+    - **Expected output**: Returns `false`
+
 ---
 
 ### Method under test: `getAvailableArmies()`
 
-- **TC5: Returns available Infantry at lower setup boundary** ( :white_check_mark: )
-    - **State of the system**: Human player constructed with `20` starting Infantry
-    - **Expected output**: Available armies contain `20` Infantry and no Cavalry or Artillery
+- **TC21: Returns available army map as display string when Infantry is available** ( :white_check_mark: )
+    - **State of the system**: Player available armies contain `INFANTRY -> 20`
+    - **Expected output**: Returns a string containing `INFANTRY` and `20`
 
-- **TC6: Returns available Infantry at upper setup boundary** ( :white_check_mark: )
-    - **State of the system**: Human player constructed with `35` starting Infantry
-    - **Expected output**: Available armies contain `35` Infantry and no Cavalry or Artillery
-
----
-
-### Method under test: `hasAvailableArmies()`
-
-- **TC7: Returns true after setup army assignment** ( :white_check_mark: )
-    - **State of the system**: Human player constructed with any valid setup Infantry count from `20` to `35`
-    - **Expected output**: Returns `true`
+- **TC22: Returns available army map as display string when no Infantry is available** ( :white_check_mark: )
+    - **State of the system**: Player available armies contain `INFANTRY -> 0`
+    - **Expected output**: Returns a string containing `INFANTRY` and `0`
