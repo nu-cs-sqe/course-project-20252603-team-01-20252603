@@ -100,29 +100,9 @@
     - **State of the system**: `setPlayerCount(6)` has returned `true`; `addPlayer("Player 1", PlayerColor.YELLOW)` called
     - **Expected output**: Returns a player with `20` available Infantry
 
-- **TC23: Rejects duplicate color** ( :white_check_mark: )
-    - **State of the system**: `setPlayerCount(3)` has returned `true`; one player with color `RED` already exists
-    - **Expected output**: A second call using `PlayerColor.RED` is rejected; no duplicate-color player is added
-
 - **TC24: Rejects adding more players than configured** ( :white_check_mark: )
     - **State of the system**: `setPlayerCount(3)` has returned `true`; three players have already been added
     - **Expected output**: A fourth `addPlayer(...)` call is rejected; player list remains size `3`
-
----
-
-### Method under test: `showAvailableColors()`
-
-- **TC25: Shows all colors before registration** ( :white_check_mark: )
-    - **State of the system**: `GameModel` constructed; no players have been added
-    - **Expected output**: Returns all six colors: Red, Blue, Green, Yellow, Black, Purple
-
-- **TC26: Excludes a chosen color** ( :white_check_mark: )
-    - **State of the system**: One player with color `RED` has already been added
-    - **Expected output**: Returned colors do not include `RED`; the remaining five colors are available
-
-- **TC27: Shows one remaining color when almost full** ( :white_check_mark: )
-    - **State of the system**: Five players with five distinct colors have already been added
-    - **Expected output**: Returned color list contains exactly the one unchosen color
 
 ---
 
@@ -146,15 +126,15 @@
 
 ---
 
-### Method under test: `getCurrentPlayer()`
+### Method under test: `getCurrentPlayerName()`
 
-- **TC32: Returns selected first player** ( :white_check_mark: )
+- **TC32: Returns selected first player name** ( :white_check_mark: )
     - **State of the system**: Three players have been registered; current player index is set to `0`
-    - **Expected output**: Returns the first registered player
+    - **Expected output**: Returns the first registered player name
 
-- **TC33: Returns selected last player** ( :white_check_mark: )
+- **TC33: Returns selected last player name** ( :white_check_mark: )
     - **State of the system**: Three players have been registered; current player index is set to `2`
-    - **Expected output**: Returns the third registered player
+    - **Expected output**: Returns the third registered player name
 
 ---
 
@@ -202,15 +182,15 @@
 
 - **TC34: Advances from first player to second player** ( :white_check_mark: )
     - **State of the system**: Three-player game has been created; current player index is `0`
-    - **Expected output**: Current player advances to index `1`; `getCurrentPlayer()` returns the second player
+    - **Expected output**: Current player advances to index `1`; `getCurrentPlayerName()` returns the second player name
 
 - **TC35: Advances from middle player to next player** ( :white_check_mark: )
     - **State of the system**: Three-player game has been created; current player index is `1`
-    - **Expected output**: Current player advances to index `2`; `getCurrentPlayer()` returns the third player
+    - **Expected output**: Current player advances to index `2`; `getCurrentPlayerName()` returns the third player name
 
 - **TC36: Wraps from last player back to first player** ( :white_check_mark: )
     - **State of the system**: Three-player game has been created; current player index is `2`
-    - **Expected output**: Current player advances to index `0`; `getCurrentPlayer()` returns the first player
+    - **Expected output**: Current player advances to index `0`; `getCurrentPlayerName()` returns the first player name
 
 - **TC37: Does not advance when no players are registered** ( :white_check_mark: )
     - **State of the system**: GameModel has no registered players

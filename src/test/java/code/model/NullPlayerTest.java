@@ -30,13 +30,6 @@ public final class NullPlayerTest {
     }
 
     @Test
-    public void getColorUnassignedOwnershipReturnsUnassignedColor() {
-        NullPlayer player = new NullPlayer();
-
-        assertEquals(PlayerColor.UNASSIGNED, player.getColor());
-    }
-
-    @Test
     public void getAvailableArmiesUnassignedOwnershipRaisesException() {
         NullPlayer player = new NullPlayer();
 

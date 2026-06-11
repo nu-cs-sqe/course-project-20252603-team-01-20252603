@@ -29,10 +29,6 @@ public abstract class Player {
         return name;
     }
 
-    public PlayerColor getColor() {
-        return color;
-    }
-
     public abstract void addTerritory(Territory territory);
 
     public abstract boolean ownsTerritory(Territory territory);
@@ -47,4 +43,8 @@ public abstract class Player {
 
     public abstract String getAvailableArmies();
 
+    @Override
+    public String toString() {
+        return name + " - " + color;
+    }
 }

@@ -7,12 +7,11 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import code.model.ArmyType;
 import code.model.GameModel;
-import code.model.NullPlayer;
+import code.model.HumanPlayer;
 import code.model.Player;
 import code.model.PlayerColor;
-import code.model.ArmyType;
-import code.model.HumanPlayer;
 import code.view.ConsoleView;
 
 import java.util.HashMap;
@@ -56,6 +55,14 @@ public final class SetupControllerTest {
     private static final int TWO_INFANTRY = 2;
 
     private static final int SETUP_INFANTRY_COUNT = 1;
+
+    private final List<PlayerColor> allPlayableColors = List.of(
+            PlayerColor.RED,
+            PlayerColor.BLUE,
+            PlayerColor.GREEN,
+            PlayerColor.YELLOW,
+            PlayerColor.BLACK,
+            PlayerColor.PURPLE);
 
     @Test
     public void setupControllerConstructsWithModelAndView() {
@@ -108,23 +115,15 @@ public final class SetupControllerTest {
         final Player firstPlayer = new HumanPlayer("Alice", PlayerColor.RED, startingArmies);
         final Player secondPlayer = new HumanPlayer("Bob", PlayerColor.BLUE, startingArmies);
         final Player thirdPlayer = new HumanPlayer("Cara", PlayerColor.GREEN, startingArmies);
-        final List<Player> players = List.of(firstPlayer, secondPlayer, thirdPlayer);
 
         int playerCount = MINIMUM_PLAYER_COUNT;
         expect(view.promptNumberOfPlayers()).andReturn(playerCount);
         expect(model.setPlayerCount(playerCount)).andReturn(true);
         expect(view.promptPlayerName(FIRST_PLAYER_INDEX + 1)).andReturn("Alice");
-        expect(model.showAvailableColors()).andReturn(List.of(PlayerColor.values()));
-        expect(view.promptPlayerColor("Alice", List.of(PlayerColor.values())))
+        expect(view.promptPlayerColor("Alice", allPlayableColors))
                 .andReturn(PlayerColor.RED);
         expect(model.addPlayer("Alice", PlayerColor.RED)).andReturn(firstPlayer);
         expect(view.promptPlayerName(SECOND_PLAYER_INDEX + 1)).andReturn("Bob");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.BLUE,
-                PlayerColor.GREEN,
-                PlayerColor.YELLOW,
-                PlayerColor.BLACK,
-                PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Bob", List.of(
                 PlayerColor.BLUE,
                 PlayerColor.GREEN,
@@ -133,24 +132,16 @@ public final class SetupControllerTest {
                 PlayerColor.PURPLE))).andReturn(PlayerColor.BLUE);
         expect(model.addPlayer("Bob", PlayerColor.BLUE)).andReturn(secondPlayer);
         expect(view.promptPlayerName(THIRD_PLAYER_INDEX + 1)).andReturn("Cara");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.GREEN,
-                PlayerColor.YELLOW,
-                PlayerColor.BLACK,
-                PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Cara", List.of(
                 PlayerColor.GREEN,
                 PlayerColor.YELLOW,
                 PlayerColor.BLACK,
                 PlayerColor.PURPLE))).andReturn(PlayerColor.GREEN);
         expect(model.addPlayer("Cara", PlayerColor.GREEN)).andReturn(thirdPlayer);
-        expect(model.getPlayers()).andReturn(players);
-        view.displayPlayers(players);
-        expectLastCall().once();
         model.setCurrentPlayerIndex(FIRST_PLAYER_INDEX);
         expectLastCall().once();
-        expect(model.getCurrentPlayer()).andReturn(firstPlayer);
-        view.displayStartingPlayer(firstPlayer);
+        expect(model.getCurrentPlayerName()).andReturn("Alice");
+        view.displayCurrentPlayer("Alice");
         expectLastCall().once();
 
         replay(model, view);
@@ -175,28 +166,14 @@ public final class SetupControllerTest {
         final Player fourthPlayer = new HumanPlayer("Dan", PlayerColor.YELLOW, startingArmies);
         final Player fifthPlayer = new HumanPlayer("Eli", PlayerColor.BLACK, startingArmies);
         final Player sixthPlayer = new HumanPlayer("Frank", PlayerColor.PURPLE, startingArmies);
-        final List<Player> players = List.of(
-                firstPlayer,
-                secondPlayer,
-                thirdPlayer,
-                fourthPlayer,
-                fifthPlayer,
-                sixthPlayer);
 
         expect(view.promptNumberOfPlayers()).andReturn(MAXIMUM_PLAYER_COUNT);
         expect(model.setPlayerCount(MAXIMUM_PLAYER_COUNT)).andReturn(true);
         expect(view.promptPlayerName(FIRST_PLAYER_INDEX + 1)).andReturn("Alice");
-        expect(model.showAvailableColors()).andReturn(List.of(PlayerColor.values()));
-        expect(view.promptPlayerColor("Alice", List.of(PlayerColor.values())))
+        expect(view.promptPlayerColor("Alice", allPlayableColors))
                 .andReturn(PlayerColor.RED);
         expect(model.addPlayer("Alice", PlayerColor.RED)).andReturn(firstPlayer);
         expect(view.promptPlayerName(SECOND_PLAYER_INDEX + 1)).andReturn("Bob");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.BLUE,
-                PlayerColor.GREEN,
-                PlayerColor.YELLOW,
-                PlayerColor.BLACK,
-                PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Bob", List.of(
                 PlayerColor.BLUE,
                 PlayerColor.GREEN,
@@ -205,11 +182,6 @@ public final class SetupControllerTest {
                 PlayerColor.PURPLE))).andReturn(PlayerColor.BLUE);
         expect(model.addPlayer("Bob", PlayerColor.BLUE)).andReturn(secondPlayer);
         expect(view.promptPlayerName(THIRD_PLAYER_INDEX + 1)).andReturn("Cara");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.GREEN,
-                PlayerColor.YELLOW,
-                PlayerColor.BLACK,
-                PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Cara", List.of(
                 PlayerColor.GREEN,
                 PlayerColor.YELLOW,
@@ -217,35 +189,24 @@ public final class SetupControllerTest {
                 PlayerColor.PURPLE))).andReturn(PlayerColor.GREEN);
         expect(model.addPlayer("Cara", PlayerColor.GREEN)).andReturn(thirdPlayer);
         expect(view.promptPlayerName(FOURTH_PLAYER_INDEX + 1)).andReturn("Dan");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.YELLOW,
-                PlayerColor.BLACK,
-                PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Dan", List.of(
                 PlayerColor.YELLOW,
                 PlayerColor.BLACK,
                 PlayerColor.PURPLE))).andReturn(PlayerColor.YELLOW);
         expect(model.addPlayer("Dan", PlayerColor.YELLOW)).andReturn(fourthPlayer);
         expect(view.promptPlayerName(FIFTH_PLAYER_INDEX + 1)).andReturn("Eli");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.BLACK,
-                PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Eli", List.of(
                 PlayerColor.BLACK,
                 PlayerColor.PURPLE))).andReturn(PlayerColor.BLACK);
         expect(model.addPlayer("Eli", PlayerColor.BLACK)).andReturn(fifthPlayer);
         expect(view.promptPlayerName(SIXTH_PLAYER_INDEX + 1)).andReturn("Frank");
-        expect(model.showAvailableColors()).andReturn(List.of(PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Frank", List.of(PlayerColor.PURPLE)))
                 .andReturn(PlayerColor.PURPLE);
         expect(model.addPlayer("Frank", PlayerColor.PURPLE)).andReturn(sixthPlayer);
-        expect(model.getPlayers()).andReturn(players);
-        view.displayPlayers(players);
-        expectLastCall().once();
         model.setCurrentPlayerIndex(FIRST_PLAYER_INDEX);
         expectLastCall().once();
-        expect(model.getCurrentPlayer()).andReturn(firstPlayer);
-        view.displayStartingPlayer(firstPlayer);
+        expect(model.getCurrentPlayerName()).andReturn("Alice");
+        view.displayCurrentPlayer("Alice");
         expectLastCall().once();
 
         replay(model, view);
@@ -267,7 +228,6 @@ public final class SetupControllerTest {
         final Player firstPlayer = new HumanPlayer("Alice", PlayerColor.RED, startingArmies);
         final Player secondPlayer = new HumanPlayer("Bob", PlayerColor.BLUE, startingArmies);
         final Player thirdPlayer = new HumanPlayer("Cara", PlayerColor.GREEN, startingArmies);
-        final List<Player> players = List.of(firstPlayer, secondPlayer, thirdPlayer);
 
         expect(view.promptNumberOfPlayers()).andReturn(INVALID_PLAYER_COUNT);
         expect(model.setPlayerCount(INVALID_PLAYER_COUNT)).andReturn(false);
@@ -276,17 +236,10 @@ public final class SetupControllerTest {
         expect(view.promptNumberOfPlayers()).andReturn(MINIMUM_PLAYER_COUNT);
         expect(model.setPlayerCount(MINIMUM_PLAYER_COUNT)).andReturn(true);
         expect(view.promptPlayerName(FIRST_PLAYER_INDEX + 1)).andReturn("Alice");
-        expect(model.showAvailableColors()).andReturn(List.of(PlayerColor.values()));
-        expect(view.promptPlayerColor("Alice", List.of(PlayerColor.values())))
+        expect(view.promptPlayerColor("Alice", allPlayableColors))
                 .andReturn(PlayerColor.RED);
         expect(model.addPlayer("Alice", PlayerColor.RED)).andReturn(firstPlayer);
         expect(view.promptPlayerName(SECOND_PLAYER_INDEX + 1)).andReturn("Bob");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.BLUE,
-                PlayerColor.GREEN,
-                PlayerColor.YELLOW,
-                PlayerColor.BLACK,
-                PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Bob", List.of(
                 PlayerColor.BLUE,
                 PlayerColor.GREEN,
@@ -295,24 +248,16 @@ public final class SetupControllerTest {
                 PlayerColor.PURPLE))).andReturn(PlayerColor.BLUE);
         expect(model.addPlayer("Bob", PlayerColor.BLUE)).andReturn(secondPlayer);
         expect(view.promptPlayerName(THIRD_PLAYER_INDEX + 1)).andReturn("Cara");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.GREEN,
-                PlayerColor.YELLOW,
-                PlayerColor.BLACK,
-                PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Cara", List.of(
                 PlayerColor.GREEN,
                 PlayerColor.YELLOW,
                 PlayerColor.BLACK,
                 PlayerColor.PURPLE))).andReturn(PlayerColor.GREEN);
         expect(model.addPlayer("Cara", PlayerColor.GREEN)).andReturn(thirdPlayer);
-        expect(model.getPlayers()).andReturn(players);
-        view.displayPlayers(players);
-        expectLastCall().once();
         model.setCurrentPlayerIndex(FIRST_PLAYER_INDEX);
         expectLastCall().once();
-        expect(model.getCurrentPlayer()).andReturn(firstPlayer);
-        view.displayStartingPlayer(firstPlayer);
+        expect(model.getCurrentPlayerName()).andReturn("Alice");
+        view.displayCurrentPlayer("Alice");
         expectLastCall().once();
 
         replay(model, view);
@@ -332,51 +277,34 @@ public final class SetupControllerTest {
         final Player firstPlayer = new HumanPlayer("Alice", PlayerColor.RED, startingArmies);
         final Player secondPlayer = new HumanPlayer("Bob", PlayerColor.BLUE, startingArmies);
         final Player thirdPlayer = new HumanPlayer("Cara", PlayerColor.GREEN, startingArmies);
-        final List<Player> players = List.of(firstPlayer, secondPlayer, thirdPlayer);
 
         expect(view.promptNumberOfPlayers()).andReturn(MINIMUM_PLAYER_COUNT);
         expect(model.setPlayerCount(MINIMUM_PLAYER_COUNT)).andReturn(true);
         expect(view.promptPlayerName(FIRST_PLAYER_INDEX + 1)).andReturn("Alice");
-        expect(model.showAvailableColors()).andReturn(List.of(PlayerColor.values()));
-        expect(view.promptPlayerColor("Alice", List.of(PlayerColor.values())))
+        expect(view.promptPlayerColor("Alice", allPlayableColors))
                 .andReturn(PlayerColor.RED);
         expect(model.addPlayer("Alice", PlayerColor.RED)).andReturn(firstPlayer);
         expect(view.promptPlayerName(SECOND_PLAYER_INDEX + 1)).andReturn("Bob");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.BLUE,
-                PlayerColor.GREEN,
-                PlayerColor.YELLOW,
-                PlayerColor.BLACK,
-                PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Bob", List.of(
                 PlayerColor.BLUE, PlayerColor.GREEN, PlayerColor.YELLOW,
                 PlayerColor.BLACK, PlayerColor.PURPLE)))
                 .andReturn(PlayerColor.RED);
-        expect(model.addPlayer("Bob", PlayerColor.RED)).andReturn(new NullPlayer());
         view.displayError("Color already selected.");
         expectLastCall().once();
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.BLUE, PlayerColor.GREEN, PlayerColor.YELLOW,
-                PlayerColor.BLACK, PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Bob", List.of(
                 PlayerColor.BLUE, PlayerColor.GREEN, PlayerColor.YELLOW,
                 PlayerColor.BLACK, PlayerColor.PURPLE)))
                 .andReturn(PlayerColor.BLUE);
         expect(model.addPlayer("Bob", PlayerColor.BLUE)).andReturn(secondPlayer);
         expect(view.promptPlayerName(THIRD_PLAYER_INDEX + 1)).andReturn("Cara");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.GREEN, PlayerColor.YELLOW, PlayerColor.BLACK, PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Cara", List.of(
                 PlayerColor.GREEN, PlayerColor.YELLOW, PlayerColor.BLACK, PlayerColor.PURPLE)))
                 .andReturn(PlayerColor.GREEN);
         expect(model.addPlayer("Cara", PlayerColor.GREEN)).andReturn(thirdPlayer);
-        expect(model.getPlayers()).andReturn(players);
-        view.displayPlayers(players);
-        expectLastCall().once();
         model.setCurrentPlayerIndex(FIRST_PLAYER_INDEX);
         expectLastCall().once();
-        expect(model.getCurrentPlayer()).andReturn(firstPlayer);
-        view.displayStartingPlayer(firstPlayer);
+        expect(model.getCurrentPlayerName()).andReturn("Alice");
+        view.displayCurrentPlayer("Alice");
         expectLastCall().once();
 
         replay(model, view);
@@ -399,13 +327,10 @@ public final class SetupControllerTest {
         final List<Player> players = List.of(firstPlayer, secondPlayer, thirdPlayer);
 
         expectThreePlayerRegistration(model, view, players);
-        expect(model.getPlayers()).andReturn(players);
-        view.displayPlayers(players);
-        expectLastCall().once();
         model.setCurrentPlayerIndex(FIRST_PLAYER_INDEX);
         expectLastCall().once();
-        expect(model.getCurrentPlayer()).andReturn(firstPlayer);
-        view.displayStartingPlayer(firstPlayer);
+        expect(model.getCurrentPlayerName()).andReturn("Alice");
+        view.displayCurrentPlayer("Alice");
         expectLastCall().once();
 
         replay(model, view);
@@ -430,13 +355,10 @@ public final class SetupControllerTest {
         final List<Player> players = List.of(firstPlayer, secondPlayer, thirdPlayer);
 
         expectThreePlayerRegistration(model, view, players);
-        expect(model.getPlayers()).andReturn(players);
-        view.displayPlayers(players);
-        expectLastCall().once();
         model.setCurrentPlayerIndex(HIGHEST_PLAYER_INDEX);
         expectLastCall().once();
-        expect(model.getCurrentPlayer()).andReturn(thirdPlayer);
-        view.displayStartingPlayer(thirdPlayer);
+        expect(model.getCurrentPlayerName()).andReturn("Cara");
+        view.displayCurrentPlayer("Cara");
         expectLastCall().once();
 
         replay(model, view);
@@ -457,17 +379,10 @@ public final class SetupControllerTest {
         expect(view.promptNumberOfPlayers()).andReturn(MINIMUM_PLAYER_COUNT);
         expect(model.setPlayerCount(MINIMUM_PLAYER_COUNT)).andReturn(true);
         expect(view.promptPlayerName(FIRST_PLAYER_INDEX + 1)).andReturn("Alice");
-        expect(model.showAvailableColors()).andReturn(List.of(PlayerColor.values()));
-        expect(view.promptPlayerColor("Alice", List.of(PlayerColor.values())))
+        expect(view.promptPlayerColor("Alice", allPlayableColors))
                 .andReturn(PlayerColor.RED);
         expect(model.addPlayer("Alice", PlayerColor.RED)).andReturn(players.get(0));
         expect(view.promptPlayerName(SECOND_PLAYER_INDEX + 1)).andReturn("Bob");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.BLUE,
-                PlayerColor.GREEN,
-                PlayerColor.YELLOW,
-                PlayerColor.BLACK,
-                PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Bob", List.of(
                 PlayerColor.BLUE,
                 PlayerColor.GREEN,
@@ -478,11 +393,6 @@ public final class SetupControllerTest {
                 .andReturn(players.get(1));
         expect(view.promptPlayerName(THIRD_PLAYER_INDEX + 1))
                 .andReturn("Cara");
-        expect(model.showAvailableColors()).andReturn(List.of(
-                PlayerColor.GREEN,
-                PlayerColor.YELLOW,
-                PlayerColor.BLACK,
-                PlayerColor.PURPLE));
         expect(view.promptPlayerColor("Cara", List.of(
                 PlayerColor.GREEN,
                 PlayerColor.YELLOW,
@@ -522,7 +432,7 @@ public final class SetupControllerTest {
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
 
         expect(model.getCurrentPlayerName()).andReturn("Player 1");
-        view.displayStartingPlayer("Player 1");
+        view.displayCurrentPlayer("Player 1");
         expectLastCall().once();
 
         expect(model.getUnclaimedTerritoriesByContinent())
@@ -558,7 +468,7 @@ public final class SetupControllerTest {
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
 
         expect(model.getCurrentPlayerName()).andReturn("Player 1");
-        view.displayStartingPlayer("Player 1");
+        view.displayCurrentPlayer("Player 1");
         expectLastCall().once();
 
         expect(model.getUnclaimedTerritoriesByContinent())
@@ -578,7 +488,7 @@ public final class SetupControllerTest {
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
 
         expect(model.getCurrentPlayerName()).andReturn("Player 2");
-        view.displayStartingPlayer("Player 2");
+        view.displayCurrentPlayer("Player 2");
         expectLastCall().once();
 
         expect(model.getUnclaimedTerritoriesByContinent())
@@ -614,7 +524,7 @@ public final class SetupControllerTest {
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
 
         expect(model.getCurrentPlayerName()).andReturn("Player 1");
-        view.displayStartingPlayer("Player 1");
+        view.displayCurrentPlayer("Player 1");
         expectLastCall().once();
 
         expect(model.getUnclaimedTerritoriesByContinent())
@@ -636,7 +546,7 @@ public final class SetupControllerTest {
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
 
         expect(model.getCurrentPlayerName()).andReturn("Player 1");
-        view.displayStartingPlayer("Player 1");
+        view.displayCurrentPlayer("Player 1");
         expectLastCall().once();
 
         expect(model.getUnclaimedTerritoriesByContinent())
@@ -687,7 +597,7 @@ public final class SetupControllerTest {
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
 
         expect(model.getCurrentPlayerName()).andReturn("Player 3");
-        view.displayStartingPlayer("Player 3");
+        view.displayCurrentPlayer("Player 3");
         expectLastCall().once();
 
         expect(model.getUnclaimedTerritoriesByContinent())

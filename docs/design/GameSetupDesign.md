@@ -56,7 +56,7 @@
 - `claimTerritory(player: Player, territoryName: String): boolean`
 - `placeInitialArmies(player: Player, territoryName: String, pieces: List<ArmyPiece>): boolean`
 - `finishSetup(): boolean`
-- `getCurrentPlayer(): Player`
+- `getCurrentPlayerName(): String`
 - `nextSetupPlayer(): Player`
 - `isSetupComplete(): boolean`
 - `getGameState(): GameState`
@@ -172,8 +172,7 @@
 - `promptTerritoryChoice(player: Player, territories: List<Territory>): String`
 - `promptArmyCount(player: Player, max: int): int`
 - `displayBoard(board: GameBoard): void`
-- `displayPlayers(players: List<Player>): void`
-- `displayCurrentPlayer(player: Player): void`
+- - `displayCurrentPlayer(currentPlayerName: String): void`
 - `displayError(message: String): void`
 - `displaySetupComplete(): void`
 

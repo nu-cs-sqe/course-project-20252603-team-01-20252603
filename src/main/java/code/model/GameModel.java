@@ -2,11 +2,9 @@ package code.model;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Represents the main model for the Risk game.
@@ -96,12 +94,8 @@ public class GameModel {
         return true;
     }
 
-    public int getPlayerCount() {
-        return playerCount;
-    }
-
     public Player addPlayer(final String name, final PlayerColor color) {
-        if (players.size() >= playerCount || isColorAlreadyChosen(color)) {
+        if (players.size() >= playerCount) {
             return new NullPlayer();
         }
 
@@ -111,32 +105,12 @@ public class GameModel {
         return player;
     }
 
-    public List<Player> getPlayers() {
-        return new ArrayList<>(players);
-    }
-
-    public List<PlayerColor> showAvailableColors() {
-        return Arrays.stream(PlayerColor.values())
-                .filter(color -> color != PlayerColor.UNASSIGNED)
-                .filter(color -> !isColorAlreadyChosen(color))
-                .collect(Collectors.toList());
-    }
-
     public void setCurrentPlayerIndex(final int index) {
         if (index < 0 || index >= players.size()) {
             return;
         }
 
         currentPlayerIndex = index;
-    }
-
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex);
-    }
-
-    private boolean isColorAlreadyChosen(final PlayerColor color) {
-        return players.stream()
-                .anyMatch(player -> player.getColor() == color);
     }
 
     private int calculateStartingInfantry() {
@@ -437,7 +411,7 @@ public class GameModel {
     }
 
     public String getCurrentPlayerTerritoriesByContinent() {
-        Player player = getCurrentPlayer();
+        Player player = players.get(currentPlayerIndex);
         StringBuilder territoriesByContinent = new StringBuilder();
 
         territoriesByContinent.append(player.getName()).append(" territories:");

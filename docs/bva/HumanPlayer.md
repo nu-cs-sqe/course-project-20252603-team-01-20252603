@@ -19,15 +19,6 @@
     - **State of the system**: Human player constructed with name `"Player 1"`
     - **Expected output**: Returns `"Player 1"`
 
----
-
-### Method under test: `getColor()`
-
-- **TC4: Returns registered player color** ( :white_check_mark: )
-    - **State of the system**: Human player constructed with color `PlayerColor.RED`
-    - **Expected output**: Returns `PlayerColor.RED`
-
-
 ### Method under test: `addTerritory(Territory territory)`
 
 - **TC8: Add first claimed territory** ( :white_check_mark: )
