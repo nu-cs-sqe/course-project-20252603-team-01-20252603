@@ -1,479 +1,230 @@
 @startuml
 
-' ─────────────────────────────────────────
-'  ENTRY POINT
-' ─────────────────────────────────────────
-package main {
-
-  +class RiskGame {
-    -gameController: GameController
-    +main(args: String[]): void
-  }
-}
-
-' ─────────────────────────────────────────
-'  MODEL
-' ─────────────────────────────────────────
-package model {
-
-  +class GameModel {
-  ' required
-  -continents: List<Continent>
-  +GameModel()
-  +setPlayerCount(count: int): boolean
-    -playerCount: int
-    ' addPlayer should also have the if else for checking starting armies
-    +addPlayer(name: String, color: PlayerColor): Player
-    -players: List<Player>
-    +initializeContinentsAndTerritories(): void
-    -currentPlayerIndex: int
-    +setCurrentPlayerIndex(index: int): void
-    +claimTerritoryDuringSetup(player: Player, territory: Territory): boolean
-    +allTerritoriesInitiallyClaimed(): boolean
-    ' placeArmies is the general purpose function we use to place armies on territory -- this will be called from place remaining armies during setup and during fortify in game phase
-    +placeArmies(player: Player, territory: Territory, armies: HashMap<ArmyType, Integer>): boolean
-
-
-
-  ' not required
-    -board: GameBoard
-    -deck: Deck
-    -winner: Player
-    -capturedTerritoryThisTurn: boolean
-    +awardEndOfTurnCard(player: Player): void
-    +startGame(playerNames: List<String>, colors: List<PlayerColor>): boolean
-    +finishSetup(): boolean
-    +reinforceTerritory(player: Player, territory: Territory, count: int): boolean
-    +fortifyTerritory(player: Player, fromName: String, toName: String, count: int): boolean
-    +eliminatePlayer(loser: Player): void
-    +checkWinCondition(): Player
-    +getCurrentPlayerName(): String
-    +nextPlayer(): Player
-    +isSetupComplete(): boolean
-    +calculateStartingArmies(): int
-    +allPlayersHavePlacedInitialArmies(): boolean
-    +applyBattleResult(result: BattleResult, attacker: Player, defender: Player,
-                       from: Territory, to: Territory): void
-  }
-
-  +abstract class Player {
-    -name: String
-    -color: PlayerColor
-    -territories: List<Territory>
-    -hand: List<RiskCard>
-    -availableArmies: HashMap<ArmyType, Integer>
-    -eliminated: boolean
-
-    +addTerritory(territory: Territory): void
-    +removeTerritory(territory: Territory): void
-    +ownsTerritory(territory: Territory): boolean
-    ' Place armies during reinforcement phase (start of turn)
-    +reinforceTerritory(territory: Territory, count: int): boolean
-    ' Move armies at end of turn (fortify phase)
-    +fortify(from: Territory, to: Territory, count: int): boolean
-    +hasAvailableArmies(): boolean
-    +getAvailableArmies(): int
-    +getTerritoryCount(): int
-    +calculateReinforcementsToReceiveAtTurnStart(board: GameBoard): int
-    +tradeInCards(cards: List<RiskCard>): int
-    +receiveCards(cards: List<RiskCard>): void
-    +isEliminated(): boolean
-    +mustTradeIn(): boolean
-  }
-
-  +class HumanPlayer {
-  ' required
-  +HumanPlayer(name: String, color: PlayerColor, startingInfantry: int)
-
-  ' not required
-    +addTerritory(territory: Territory): void
-    +removeTerritory(territory: Territory): void
-    +ownsTerritory(territory: Territory): boolean
-    ' Place armies during reinforcement phase (start of turn)
-    +reinforceTerritory(territory: Territory, count: int): boolean
-    ' Move armies at end of turn (fortify phase)
-    +fortify(from: Territory, to: Territory, count: int): boolean
-    +hasAvailableArmies(): boolean
-    +getAvailableArmies(): int
-    +getTerritoryCount(): int
-    +calculateReinforcementsToReceiveAtTurnStart(board: GameBoard): int
-    +tradeInCards(cards: List<RiskCard>): int
-    +receiveCards(cards: List<RiskCard>): void
-    +isEliminated(): boolean
-    +mustTradeIn(): boolean
-  }
-
-  +class NullPlayer {
-      +addTerritory(territory: Territory): void
-      +removeTerritory(territory: Territory): void
-      +ownsTerritory(territory: Territory): boolean
-      ' Place armies during reinforcement phase (start of turn)
-      +reinforceTerritory(territory: Territory, count: int): boolean
-      ' Move armies at end of turn (fortify phase)
-      +fortify(from: Territory, to: Territory, count: int): boolean
-      +hasAvailableArmies(): boolean
-      +getAvailableArmies(): int
-      +getTerritoryCount(): int
-      +calculateReinforcementsToReceiveAtTurnStart(board: GameBoard): int
-      +tradeInCards(cards: List<RiskCard>): int
-      +receiveCards(cards: List<RiskCard>): void
-      +isEliminated(): boolean
-      +mustTradeIn(): boolean
+package code.model {
+    enum ArmyType {
+        INFANTRY
+        CAVALRY
+        ARTILLERY
     }
 
-    Player <|-- HumanPlayer
-    Player <|-- NullPlayer
+    enum CardType {
+        INFANTRY
+        CAVALRY
+        ARTILLERY
+        WILD
+    }
 
- ' can delete full class -- not required
-  +class GameBoard {
-  ' required
-    -continents: List<Continent>
-    ' the game board constructor should create the territories and continents and store in hash map -- hard coded
-    +GameBoard(): void
+    enum PlayerColor {
+        UNASSIGNED
+        RED
+        BLUE
+        GREEN
+        YELLOW
+        BLACK
+        PURPLE
+    }
 
+    enum TradeInPossibility {
+        NOT_ALLOWED
+        ALLOWED
+        REQUIRED
+    }
 
-' not required
-    -territories: List<Territory>
-    +initializeBoard(): void
-    +isTerritoryUnclaimed(name: String): boolean
-    +claimTerritory(name: String, player: Player): boolean
-    +allTerritoriesClaimed(): boolean
-    +getUnclaimedTerritories(): List<Territory>
-    +areAdjacent(t1: Territory, t2: Territory): boolean
-    +getAdjacentEnemyTerritories(territory: Territory, player: Player): List<Territory>
-  }
+    abstract class Player {
+        {abstract} + getName() : String
+        {abstract} + addTerritory(territory : Territory) : void
+        {abstract} + ownsTerritory(territory : Territory) : boolean
+        {abstract} + getTerritoryCount() : int
+        {abstract} + addArmies(armiesToAdd : HashMap<ArmyType, Integer>) : void
+        {abstract} + removeArmies(armiesToRemove : HashMap<ArmyType, Integer>) : void
+        {abstract} + hasAvailableArmies(requiredArmies : HashMap<ArmyType, Integer>) : boolean
+        {abstract} + getAvailableArmies() : String
+        {abstract} + addArmiesToAvailableBasedOnTerritories(): void
+        {abstract} + addArmiesToAvailableBasedOnContinents(): void
+        {abstract} + tradeCardsAndAddArmies(cardIndices: List<Integer>, deck: Deck, numSetsTradedIn: int): boolean
+    }
 
-  +class Territory {
-  ' required
-    -adjacentTerritories: List<Territory>
-    -name: String
-    -continent: Continent
+    class HumanPlayer {
+        - name : String
+        - color : PlayerColor
+        - territories : List<Territory>
+        - availableArmies : HashMap<ArmyType, Integer>
+        - availableArmies : HashMap<ArmyType, Integer>
+        - availableCards: List<RiskCard>
+        + HumanPlayer(playerName : String, playerColor : PlayerColor, startingInfantry : int)
+    }
 
-  ' not required
-    -owner: Player
-    -pieces: HashMap<ArmyType, Integer>
+    class NullPlayer {
+        + NullPlayer()
+    }
 
-    +setOwner(player: Player): void
-    +isOwnedBy(player: Player): boolean
-    +isUnclaimed(): boolean
-    ' Called during reinforcement or initial placement
-    +placeArmies(pieces: List<ArmyType>): boolean
-    ' Called during fortify phase (end of turn, single free move)
-    +moveArmies(pieces: List<ArmyType>): boolean
-    ' Called to remove one army-worth of pieces after a battle casualty
-    +loseArmyInBattle(): boolean
-    ' Swap any piece(s) for equivalent total value; enforces no net change
-    +swapPiecesForEquivalentArmies(remove: List<ArmyType>, add: List<ArmyType>): boolean
-    ' Derived from summing piece values - not stored
-    +getArmyCount(): int
-    +getPieces(): List<ArmyPiece>
-    +getName(): String
-    +canAttackFrom(): boolean
-  }
+    class Continent {
+        - name : String
+        - bonusArmies : int
+        - territories : List<Territory>
+        + Continent(continentName : String, continentBonusArmies : int)
+        + getName() : String
+        + getBonusArmies() : int
+        + addTerritory(territory : Territory) : void
+        + containsTerritory(territory : Territory) : boolean
+    }
 
-  +class Continent {
-    -name: String
-    -territories: List<Territory>
-    -bonusArmies: int
+    class Territory {
+        - name : String
+        - continent : Continent
+        - adjacentTerritories : List<Territory>
+        - armyCount : int
+        - owner : Player
+        - pieces : HashMap<ArmyType, Integer>
+        + Territory(territoryName : String, territoryContinent : Continent, territoryAdjacentTerritories : List<Territory>)
+        ~ getName() : String
+        ~ getAdjacentTerritories() : List<Territory>
+        + getArmyCount() : int
+        ~ addAdjacentTerritory(adjacentTerritory : Territory) : void
+        + isUnclaimed() : boolean
+        + setOwner(player : Player) : void
+        + isOwnedBy(player : Player) : boolean
+        + placeArmies(newPieces : HashMap<ArmyType, Integer>) : boolean
+        + getContinentName() : String
+    }
 
-    +containsTerritory(territory: Territory): boolean
-    +isControlledBy(player: Player): boolean
-    +getBonusArmies(): int
-  }
+    class RiskCard {
+        - territoryName : String
+        - type : CardType
+        + RiskCard(cardTerritory : Territory, cardType : CardType, isWildCard : boolean)
+        + getType() : CardType
+        + getTerritoryName() : String
+    }
 
-  +class Deck {
-  ' required
-  ' constructor must create the cards (hardcoded)
-    +Deck()
-    -cards: List<RiskCard>
-    +shuffle(): void
+    class Deck {
+        - cards : List<RiskCard>
+        + Deck()
+        + size() : int
+        + getCards() : List<RiskCard>
+        + isEmpty() : boolean
+        + shuffle() : void
+    }
 
-
-  ' not required
-    -discardPile: List<RiskCard>
-    ' Global counter shared across all players; drives trade-in army escalation
-    -globalTradeInCount: int
-
-    +initializeClassicDeck(territories: List<Territory>): void
-    +drawCard(): RiskCard
-    +getNextTradeInValue(): int
-    +incrementTradeInCount(): void
-    +size(): int
-    +isEmpty(): boolean
-    +reshuffleDiscard(): void
-  }
-
-  +class RiskCard {
-    -territory: Territory
-    -type: CardType
-    -wild: boolean
-
-    +getType(): CardType
-    +isWild(): boolean
-    +matchesTerritory(territory: Territory): boolean
-  }
-
-  ' Encapsulates one dice-roll exchange between attacker and defender
-  +class Battle {
-    -attacker: Player
-    -defender: Player
-    -attackingTerritory: Territory
-    -defendingTerritory: Territory
-    -attackerNumberOfDice: int
-    -defenderNumberOfDice: int
-    -attackerDiceResults: List<Integer>
-    -defenderDiceResults: List<Integer>
-
-    +Battle(attacker: Player, defender: Player,attackingTerritory: Territory,
-    defendingTerritory: Territory, attackerNumberOfDice: int, defenderNumberOfDice: int)
-    +isValidAttack(): boolean
-    +rollAllAttackerDice(): List<Integer>
-    +rollAllDefenderDice(): List<Integer>
-    +checkRollOutcomes(): BattleResult
-    +captureTerritory(): void
-  }
-
-  +class BattleResult {
-    -attackerLosses: int
-    -defenderLosses: int
-    -territoryCapture: boolean
-
-    +getAttackerLosses(): int
-    +getDefenderLosses(): int
-    +isCaptured(): boolean
-  }
-
-  +class ArmyPiece {
-    -type: ArmyType
-    ' Value in Infantry: INFANTRY=1, CAVALRY=5, ARTILLERY=10
-    +getValue(): int
-    +getType(): ArmyType
-  }
-
-  +enum ArmyType {
-    INFANTRY
-    CAVALRY
-    ARTILLERY
-  }
-
-  +enum CardType {
-    INFANTRY
-    CAVALRY
-    ARTILLERY
-    WILD
-  }
-
-  +enum PlayerColor {
-    RED
-    BLUE
-    GREEN
-    YELLOW
-    BLACK
-    PURPLE
-  }
+    class GameModel {
+        - continents : List<Continent>
+        - players : List<Player>
+        - playerCount : int
+        - deck : Deck
+        - currentPlayerIndex : int
+        - territories : List<Territory>
+        - numSetsTradedIn : int
+        + GameModel()
+        + initializeContinentsAndTerritories() : void
+        + getDeckSize() : int
+        + isDeckEmpty() : boolean
+        + setPlayerCount(count : int) : boolean
+        + addPlayer(name : String, color : PlayerColor) : Player
+        + setCurrentPlayerIndex(index : int) : void
+        + claimTerritoryDuringSetup(territoryName : String, pieces : HashMap<ArmyType, Integer>) : boolean
+        + advanceCurrentPlayerIndex() : boolean
+        + areAllTerritoriesClaimed() : boolean
+        + getCurrentPlayerName() : String
+        + getUnclaimedTerritoriesByContinent() : String
+        + getCurrentPlayerTerritoriesByContinent() : String
+        + getCurrentPlayerAvailableArmies() : String
+        + checkCardTradeInPossibility() : TradeInPossibility
+        + handleCardTradeIn(cardIndices : List<Integer>) : boolean
+        + getCurrentPlayerCards() : String
+        +addArmiesDuringSetup(territoryName: String) : boolean
+        +addArmiesDuringReinforcement(territoryName: String, pieces : HashMap<ArmyType, Integer>) : boolean
+        + validateTerritoriesForAttackAndReturnDefenderName(attackerTerritoryName : String, defenderTerritoryName : String, currentPlayerName : String) : String
+        +validateNumberOfDice(attackerNumDice: int, defenderNumDice: int) : boolean
+        ' last element of the battle result list is a bool flag for whether territory was captured or not
+        +executeBattleAndReturnWinner() : List<String>
+        +handlePlayerElimination(): boolean
+    }
 }
 
-' ─────────────────────────────────────────
-'  VIEW
-' ─────────────────────────────────────────
-package view {
-
-  +class ConsoleView {
-    ' required
-    +displayWelcomeMessage(): void
-    +getNumberOfPlayers(): int
-    +getPlayerName(): String
-    +getPlayerColor(availableColors: List<PlayerColor>): PlayerColor
-    +displayRemainingTerritoriesAndGetTerritoryChoice(player: Player, continents: HashMap<Continent, Territory>): Territory
-
-    ' not required
-
-    +displayCurrentPlayer(currentPlayerName: String): void
-    +displaySetupInstructions(): void
-    +getTerritoryChoice(player: Player, territories: List<Territory>): Territory
-    +getArmyCount(player: Player, max: int): int
-    +promptAttackDecision(player: Player): boolean
-    +promptAttackTargets(player: Player): String[]
-    +promptFortifyDecision(player: Player): boolean
-    +promptCardTradeIn(player: Player): List<RiskCard>
-    +displayBoard(board: GameBoard): void
-
-
-    +displayBattleResult(result: BattleResult): void
-    +displayWinner(player: Player): void
-    +displayError(message: String): void
-    +displaySetupComplete(): void
-  }
+package code.view {
+    class ConsoleView {
+        - scanner : Scanner
+        - output : PrintStream
+        + ConsoleView()
+        ~ ConsoleView(inputScanner : Scanner, outputStream : PrintStream)
+        + promptNumberOfPlayers() : int
+        + promptPlayerName(playerNumber : int) : String
+        + promptPlayerColor(playerName : String, availableColors : List<PlayerColor>) : PlayerColor
+        + displayError(message : String) : void
+        + displayCurrentPlayer(currentPlayerName : String) : void
+        + displayUnclaimedTerritoriesByContinent(unclaimedTerritories : String) : void
+        + displayCurrentPlayerClaimingStatus(playerClaimingStatus : String) : void
+        + getTerritoryChoiceDuringSetup() : String
+        + displayCurrentPlayerArmies(availableArmies: String) : void
+        + displayCurrentPlayerCards(cards: String): void
+        + promptChooseCardsToTradeIn(): List<Integer>
+        + promptReinforcement(): List<String>
+        + promptTerritoriesToAttack(): List<String>
+        + promptNumberOfDice(attackerName: String, defenderName: String): List<int>
+        + displayBattleResult(battleResult: List<String>): void
+        + displayPlayerElimination(playerName: String): void
+    }
 }
 
-' ─────────────────────────────────────────
-'  CONTROLLER
-' ─────────────────────────────────────────
-package controller {
+package code.controller {
+    class GameController {
+        - model : GameModel
+        - view : ConsoleView
+        - setupController : SetupController
+        + GameController()
+        ~ GameController(gameModel : GameModel, consoleView : ConsoleView)
+        + startGame() : void
+    }
 
-  +class GameController {
-    -gameModel: GameModel
-    -view: ConsoleView
-    -setupController: SetupController
-    -turnController: TurnController
+    class SetupController {
+        - model : GameModel
+        - view : ConsoleView
+        - random : Random
+        - initialized : boolean
+        + SetupController(gameModel : GameModel, consoleView : ConsoleView)
+        ~ SetupController(gameModel : GameModel, consoleView : ConsoleView, randomGenerator : Random)
+        + initializeBoard() : void
+        + initializePlayers() : void
+        + handleTerritoryClaiming() : void
+    }
 
-    ' required
-    +startGame(): void
+    +class TurnController {
+        -model: GameModel
+        -view: ConsoleView
 
-    ' not required
-    +GameController(): void
-    ~gameController(gameModel: GameModel, view: ConsoleView, setupController: SetupController, -turnController: TurnController): void
-  }
-
-  +class SetupController {
-
-    ' required
-    -model: GameModel
-    -view: ConsoleView
-    +SetupController(gameModel: GameModel, view: ConsoleView)
-    +runSetup(): void
-    +initializePlayers(): void
-    +initializeBoard(): void
-    +handleTerritoryClaiming(): void
-    +handleRemainingArmyPlacement(): void
-    +completeSetup(): void
+        +TurnController(gameModel: GameModel, view: ConsoleView)
+        ' below function gets territory, continent and trade in based armies to add
+        +handleArmiesToAdd(): void
+        +runPlayerTurn(): void
+        +handleReinforcement(player: Player): void
+        ' below function will have a local variable to track if territory was captured in this turn
+        +handleAttackPhase(player: Player): void
 
 
-    ' not required
-  }
-
-  +class TurnController {
-    -model: GameModel
-    -view: ConsoleView
-
-    +TurnController(gameModel: GameModel, view: ConsoleView)
-    +runTurnsTillWin(): void
-    +runPlayerTurn(player: Player): void
-    +checkAndHandleWin(): Player
-    +handleReinforcement(player: Player): void
-    +handleCardTradeIn(player: Player): void
-    +handleAttackPhase(player: Player): void
-    +handleFortifyPhase(player: Player): void
-    +executeBattle(attacker: Player, from: Territory, to: Territory, attackerDice: int, defenderDice: int): BattleResult
-  }
+        ' not required
+        +runTurnsTillWin(): void
+        +checkAndHandleWin(): Player
+        +handleFortifyPhase(player: Player): void
+      }
 }
 
-' ─────────────────────────────────────────
-'  HAS-A / HAS-MANY RELATIONSHIPS
-' ─────────────────────────────────────────
-
-RiskGame --> GameController
-
-GameModel --> "*" Player
-GameModel --> GameBoard
-GameModel --> Deck
-
-Player --> "*" Territory
-Player --> "*" RiskCard
-Player --> PlayerColor
-
-GameBoard --> "*" Continent
-GameBoard --> "*" Territory
-
-Continent --> "*" Territory
-
-Territory --> Player
-Territory --> Continent
-Territory --> "*" Territory
-Territory --> "*" ArmyPiece
-
-Deck --> "*" RiskCard
-
-RiskCard --> Territory
-RiskCard --> CardType
-
-ArmyPiece --> ArmyType
-
-Battle --> Player
-Battle --> Territory
-Battle --> BattleResult
-
-GameController --> GameModel
-GameController --> ConsoleView
-GameController --> SetupController
-GameController --> TurnController
-
-SetupController --> GameModel
-SetupController --> ConsoleView
-
-TurnController --> GameModel
-TurnController --> ConsoleView
-
-' ─────────────────────────────────────────
-'  DEPENDENCY RELATIONSHIPS
-' ─────────────────────────────────────────
-
-ConsoleView ..> GameBoard
-ConsoleView ..> Player
-ConsoleView ..> Territory
-ConsoleView ..> PlayerColor
-ConsoleView ..> BattleResult
-ConsoleView ..> RiskCard
-
-TurnController ..> Battle
-TurnController ..> BattleResult
-
-note top of GameModel
-  Model: stores game state and performs
-  classic Risk domain logic (3-6 players).
-  Win condition: one player owns all 42 territories.
-end note
-
-note top of ConsoleView
-  View: command-line interface.
-  Displays text and collects input.
-end note
-
-note top of GameController
-  Controller: starts the app and
-  routes user input through turn phases.
-end note
-
-note top of TurnController
-  Manages the 3-phase turn loop:
-  1. Reinforcement  2. Attack  3. Fortify
-end note
-
-note bottom of Deck
-  Classic deck: 42 territory cards + 2 wilds.
-  globalTradeInCount is shared across all
-  players and drives army escalation:
-  set 1=4, 2=6, 3=8, 4=10, 5=12, 6=15,
-  then +5 per set thereafter.
-end note
-
-note bottom of Battle
-  Attacker rolls 1-3 red dice (must have
-  army count > dice count in from-territory).
-  Defender rolls 1-2 white dice. Ties go
-  to defender. Max 2 attacker losses per roll.
-end note
-
-note right of ArmyPiece
-  Value type owned by Territory.pieces.
-  INFANTRY = 1 army
-  CAVALRY  = 5 armies
-  ARTILLERY = 10 armies
-  Any pieces may be swapped for any
-  other pieces of equal total value.
-end note
-
-note right of Territory
-  pieces: List<ArmyPiece> is the source of truth.
-  getArmyCount() derived by summing piece values.
-  placeArmies: reinforcement/setup
-  moveArmies:  fortify phase free move
-  loseArmy:    combat casualty removal
-  swapPieces:  exchange any pieces for
-    equivalent total value (e.g. 5 Infantry
-    for 1 Cavalry); no net army change.
-end note
-
-
+Player <|-- HumanPlayer
+Player <|-- NullPlayer
+Continent "1" o-- "*" Territory
+Territory "*" --> "1" Continent
+Territory "*" --> "*" Territory
+Territory "*" --> "1" Player
+RiskCard "*" --> "0..1" Territory
+RiskCard "*" --> "1" CardType
+Deck "1" o-- "*" RiskCard
+GameModel "1" o-- "*" Continent
+GameModel "1" o-- "*" Territory
+GameModel "1" o-- "*" Player
+GameModel "1" --> "1" Deck
+SetupController "1" --> "1" GameModel
+SetupController "1" --> "1" ConsoleView
+GameController "1" --> "1" GameModel
+GameController "1" --> "1" ConsoleView
+GameController "1" --> "1" SetupController
+GameController "1" --> "1" TurnController
 
 @enduml
