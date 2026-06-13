@@ -263,7 +263,7 @@
     - **State of the system**: Current player owns the selected territory and has exactly `1` available Infantry
     - **Expected output**: Returns `true`; selected territory gains `1` Infantry; current player's available Infantry becomes `0`
 
-- **TC56: Rejects territory owned by another player** ( :x: )
+- **TC56: Rejects territory owned by another player** ( :white_check_mark: )
     - **State of the system**: Current player selects a territory that exists but is owned by another player; current player has available Infantry
     - **Expected output**: Returns `false`; territory army count is unchanged; current player's available Infantry is unchanged
 
