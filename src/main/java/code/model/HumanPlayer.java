@@ -10,6 +10,12 @@ import java.util.Map;
  */
 public class HumanPlayer extends Player {
 
+    private static final int INFANTRY_VALUE = 1;
+
+    private static final int CAVALRY_VALUE = 5;
+
+    private static final int ARTILLERY_VALUE = 10;
+
     private final List<Territory> territories;
 
     private HashMap<ArmyType, Integer> availableArmies;
@@ -68,17 +74,17 @@ public class HumanPlayer extends Player {
 
     @Override
     public boolean hasAvailableArmies(final HashMap<ArmyType, Integer> requiredArmies) {
-        for (Map.Entry<ArmyType, Integer> entry : requiredArmies.entrySet()) {
-            ArmyType armyType = entry.getKey();
-            int requiredCount = entry.getValue();
-            int availableCount = availableArmies.getOrDefault(armyType, 0);
+        return calculateArmyValue(availableArmies) >= calculateArmyValue(requiredArmies);
+    }
 
-            if (availableCount < requiredCount) {
-                return false;
-            }
-        }
+    private int calculateArmyValue(final HashMap<ArmyType, Integer> armies) {
+        int infantryCount = armies.getOrDefault(ArmyType.INFANTRY, 0);
+        int cavalryCount = armies.getOrDefault(ArmyType.CAVALRY, 0);
+        int artilleryCount = armies.getOrDefault(ArmyType.ARTILLERY, 0);
 
-        return true;
+        return infantryCount * INFANTRY_VALUE
+                + cavalryCount * CAVALRY_VALUE
+                + artilleryCount * ARTILLERY_VALUE;
     }
 
 

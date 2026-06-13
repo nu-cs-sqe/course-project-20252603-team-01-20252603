@@ -25,6 +25,18 @@ public final class HumanPlayerTest {
 
     private static final int TWENTY_INFANTRY = 20;
 
+    private static final int ZERO_ARMIES = 0;
+
+    private static final int ONE_ARMY = 1;
+
+    private static final int TWO_ARMIES = 2;
+
+    private static final int FOUR_ARMIES = 4;
+
+    private static final int FIVE_ARMIES = 5;
+
+    private static final int FIFTEEN_ARMIES = 15;
+
     @Test
     public void constructorMinimumSetupInfantryCreatesPlayer() {
         HumanPlayer player = new HumanPlayer(
@@ -244,6 +256,81 @@ public final class HumanPlayerTest {
 
         assertTrue(availableArmies.contains("INFANTRY"));
         assertTrue(availableArmies.contains("0"));
+    }
+
+    private HashMap<ArmyType, Integer> createArmies(
+            final int infantry,
+            final int cavalry,
+            final int artillery) {
+        HashMap<ArmyType, Integer> armies = new HashMap<>();
+        armies.put(ArmyType.INFANTRY, infantry);
+        armies.put(ArmyType.CAVALRY, cavalry);
+        armies.put(ArmyType.ARTILLERY, artillery);
+        return armies;
+    }
+
+    @Test
+    public void hasAvailableArmiesReturnsTrueWhenExactInfantryCountAvailable() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                ONE_ARMY);
+        HashMap<ArmyType, Integer> requiredArmies =
+                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+
+        assertTrue(player.hasAvailableArmies(requiredArmies));
+    }
+
+    @Test
+    public void hasAvailableArmiesReturnsTrueWhenInfantryCanConvertToCavalryAndArtillery() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                FIFTEEN_ARMIES);
+        HashMap<ArmyType, Integer> requiredArmies =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ONE_ARMY);
+
+        assertTrue(player.hasAvailableArmies(requiredArmies));
+    }
+
+    @Test
+    public void hasAvailableArmiesReturnsTrueWhenArtilleryCanConvertToCavalry() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                ZERO_ARMIES);
+        HashMap<ArmyType, Integer> availableArmies =
+                createArmies(ZERO_ARMIES, ZERO_ARMIES, ONE_ARMY);
+        HashMap<ArmyType, Integer> requiredArmies =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
+
+        player.addArmies(availableArmies);
+
+        assertTrue(player.hasAvailableArmies(requiredArmies));
+    }
+
+    @Test
+    public void hasAvailableArmiesReturnsFalseWhenRequiredValueGreaterThanAvailableValue() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                FOUR_ARMIES);
+        HashMap<ArmyType, Integer> requiredArmies =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
+
+        assertFalse(player.hasAvailableArmies(requiredArmies));
+    }
+
+    @Test
+    public void hasAvailableArmiesReturnsFalseWhenPlayerHasZeroAvailableArmyValue() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                ZERO_ARMIES);
+        HashMap<ArmyType, Integer> requiredArmies =
+                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+
+        assertFalse(player.hasAvailableArmies(requiredArmies));
     }
 
 }
