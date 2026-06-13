@@ -73,28 +73,48 @@
 
 ### Method under test: `removeArmies(HashMap<ArmyType, Integer> armiesToRemove)`
 
-- **TC17: Remove one Infantry from available armies** ( :white_check_mark: )
-    - **State of the system**: Player has available armies containing `INFANTRY -> 20`; `removeArmies()` is called with a map containing `INFANTRY -> 1`
-    - **Expected output**: Player available armies are updated to contain exactly nineteen Infantry
+- **TC17: Remove one Infantry from one available Infantry** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 1`; `armiesToRemove` contains `INFANTRY -> 1`
+    - **Expected output**: Player has zero total available army value remaining
 
-- **TC18: Remove last available Infantry** ( :white_check_mark: )
-    - **State of the system**: Player has available armies containing `INFANTRY -> 1`; `removeArmies()` is called with a map containing `INFANTRY -> 1`
-    - **Expected output**: Player available armies are updated to contain exactly zero Infantry
+- **TC18: Remove one Infantry from multiple available Infantry and normalize remaining value** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 20`; `armiesToRemove` contains `INFANTRY -> 1`
+    - **Expected output**: Player has 19 total army value remaining, normalized into available army pieces
+
+- **TC19: Remove one Cavalry using Infantry value** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 5`; `armiesToRemove` contains `CAVALRY -> 1`
+    - **Expected output**: Player has zero total available army value remaining
+
+- **TC20: Remove one Cavalry from one Artillery and make change** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `ARTILLERY -> 1`; `armiesToRemove` contains `CAVALRY -> 1`
+    - **Expected output**: Player has 5 total army value remaining, normalized as one Cavalry or equivalent available pieces
+
+- **TC21: Remove Infantry from one Cavalry and make change** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `CAVALRY -> 1`; `armiesToRemove` contains `INFANTRY -> 3`
+    - **Expected output**: Player has 2 total army value remaining, normalized as two Infantry
 
 ---
 
 ### Method under test: `hasAvailableArmies(HashMap<ArmyType, Integer> requiredArmies)`
 
-- **TC18: Returns true when required Infantry is available** ( :white_check_mark: )
-    - **State of the system**: Player has available armies containing `INFANTRY -> 20`; `hasAvailableArmies()` is called with `INFANTRY -> 1`
+- **TC22: Returns true when exact Infantry count is available** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 1`; `requiredArmies` contains `INFANTRY -> 1`
     - **Expected output**: Returns `true`
 
-- **TC19: Returns true when required Infantry exactly equals available Infantry** ( :white_check_mark: )
-    - **State of the system**: Player has available armies containing `INFANTRY -> 1`; `hasAvailableArmies()` is called with `INFANTRY -> 1`
-    - **Expected output**: Returns `true`
+- **TC23: Returns true when exact total equivalent value is available through Infantry conversion** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 15`; `requiredArmies` contains `CAVALRY -> 1` and `ARTILLERY -> 1`
+    - **Expected output**: Returns `true` because the player has 15 total army value available
 
-- **TC20: Returns false when required Infantry is greater than available Infantry** ( :white_check_mark: )
-    - **State of the system**: Player has available armies containing `INFANTRY -> 0`; `hasAvailableArmies()` is called with `INFANTRY -> 1`
+- **TC24: Returns true when exact total equivalent value is available through Artillery conversion** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `ARTILLERY -> 1`; `requiredArmies` contains `CAVALRY -> 1`
+    - **Expected output**: Returns `true` because one Artillery has enough value to cover one Cavalry
+
+- **TC25: Returns false when required total value is greater than available total value** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 4`; `requiredArmies` contains `CAVALRY -> 1`
+    - **Expected output**: Returns `false`
+
+- **TC26: Returns false when player has zero total available army value** ( :white_check_mark: )
+    - **State of the system**: Player has available armies containing `INFANTRY -> 0`, `CAVALRY -> 0`, and `ARTILLERY -> 0`; `requiredArmies` contains `INFANTRY -> 1`
     - **Expected output**: Returns `false`
 
 ---
