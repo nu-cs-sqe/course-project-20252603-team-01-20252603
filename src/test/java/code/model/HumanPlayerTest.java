@@ -38,6 +38,8 @@ public final class HumanPlayerTest {
 
     private static final int FIFTEEN_ARMIES = 15;
 
+    private static final int THIRTEEN_ARMIES = 13;
+
     private static final int ONE_ARTILLERY = 10;
 
     private static final Integer ONE_CAVALRY = 5;
@@ -531,6 +533,16 @@ public final class HumanPlayerTest {
         player.addArmiesToAvailableBasedOnTerritories();
 
         assertTrue(player.getAvailableArmies().contains("INFANTRY=" + FOUR_ARMIES));
+    }
+
+    @Test
+    public void addArmiesToAvailableBasedOnTerritoriesWithFortyOneTerritoriesAddsThirteenInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        addTerritoriesToPlayer(player, 41);
+        player.addArmiesToAvailableBasedOnTerritories();
+
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=" + THIRTEEN_ARMIES));
     }
 
 }
