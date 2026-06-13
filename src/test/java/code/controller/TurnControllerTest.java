@@ -6,10 +6,13 @@ import code.model.GameModel;
 import code.view.ConsoleView;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.expectLastCall;
 
 /**
  * Tests turn flow behavior for the TurnController class.
@@ -31,6 +34,36 @@ public final class TurnControllerTest {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
         TurnController controller = new TurnController(model, view);
+
+        expect(model.currentPlayerHasAvailableArmies()).andReturn(false);
+
+        replay(model, view);
+
+        controller.handleReinforcement();
+
+        verify(model, view);
+    }
+    @Test
+    public void handleReinforcementDisplaysCurrentPlayerAndTerritories() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.currentPlayerHasAvailableArmies()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(view.promptReinforcement()).andReturn(List.of());
+
+        view.displayError("Invalid reinforcement input.");
+        expectLastCall().once();
 
         expect(model.currentPlayerHasAvailableArmies()).andReturn(false);
 
