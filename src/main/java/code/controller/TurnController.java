@@ -16,4 +16,10 @@ public class TurnController {
         model = gameModel;
         view = consoleView;
     }
+
+    public void handleReinforcement() {
+        while (model.currentPlayerHasAvailableArmies()) {
+            // Reinforcement loop will be added through TDD.
+        }
+    }
 }
