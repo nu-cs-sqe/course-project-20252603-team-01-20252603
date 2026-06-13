@@ -237,43 +237,43 @@
 
 ### Method under test: `placeArmiesDuringReinforcement(String territoryName, HashMap<ArmyType, Integer> pieces)`
 
-- **TC51: Place one Infantry on territory owned by current player** ( :x: )
+- **TC51: Place one Infantry on territory owned by current player** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; current player has available armies containing `INFANTRY -> 1`; `pieces` contains `INFANTRY -> 1`
     - **Expected output**: Method returns `true`; selected territory army count increases; current player's available army pool decreases to zero
 
-- **TC52: Place multiple Infantry on territory owned by current player** ( :x: )
+- **TC52: Place multiple Infantry on territory owned by current player** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; current player has available armies containing `INFANTRY -> 3`; `pieces` contains `INFANTRY -> 3`
     - **Expected output**: Method returns `true`; selected territory army count increases by three; current player's available army pool decreases to zero
 
-- **TC53: Place mixed army types on territory owned by current player** ( :x: )
+- **TC53: Place mixed army types on territory owned by current player** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; current player has enough equivalent available army value; `pieces` contains Infantry, Cavalry, and Artillery
     - **Expected output**: Method returns `true`; selected territory receives all requested army pieces; current player's available army pool is reduced by equivalent value
 
-- **TC54: Cannot place zero total armies** ( :x: )
+- **TC54: Cannot place zero total armies** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; `pieces` contains `INFANTRY -> 0`, `CAVALRY -> 0`, and `ARTILLERY -> 0`
     - **Expected output**: Method returns `false`; selected territory army count does not change; current player's available army pool remains unchanged
 
-- **TC55: Cannot place negative Infantry count** ( :x: )
+- **TC55: Cannot place negative Infantry count** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; `pieces` contains `INFANTRY -> -1`
     - **Expected output**: Method returns `false`; selected territory army count does not change; current player's available army pool remains unchanged
 
-- **TC56: Cannot place negative Cavalry count** ( :x: )
+- **TC56: Cannot place negative Cavalry count** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; `pieces` contains `CAVALRY -> -1`
     - **Expected output**: Method returns `false`; selected territory army count does not change; current player's available army pool remains unchanged
 
-- **TC57: Cannot place negative Artillery count** ( :x: )
+- **TC57: Cannot place negative Artillery count** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; `pieces` contains `ARTILLERY -> -1`
     - **Expected output**: Method returns `false`; selected territory army count does not change; current player's available army pool remains unchanged
 
-- **TC58: Cannot place more total army value than available** ( :x: )
+- **TC58: Cannot place more total army value than available** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; current player has 10 total army value; `pieces` is worth 15 total army value
     - **Expected output**: Method returns `false`; selected territory army count does not change; current player's available army pool remains unchanged
 
-- **TC59: Cannot place armies on territory owned by another player** ( :x: )
+- **TC59: Cannot place armies on territory owned by another player** ( :white_check_mark: )
     - **State of the system**: Player 1 owns `"Alaska"`; current player is Player 2; Player 2 has enough available armies
     - **Expected output**: Method returns `false`; `"Alaska"` army count does not change; Player 2's available army pool remains unchanged
 
-- **TC60: Cannot place armies on unowned territory** ( :x: )
+- **TC60: Cannot place armies on unowned territory** ( :white_check_mark: )
     - **State of the system**: `"Alaska"` is unclaimed; current player has enough available armies
     - **Expected output**: Method returns `false`; `"Alaska"` army count does not change; current player's available army pool remains unchanged
 
@@ -281,19 +281,19 @@
 
 ### Method under test: `currentPlayerHasAvailableArmies()`
 
-- **TC61: Returns false when current player has zero available army value** ( :x: )
+- **TC61: Returns false when current player has zero available army value** ( :white_check_mark: )
     - **State of the system**: Current player has no available Infantry, Cavalry, or Artillery
     - **Expected output**: Returns `false`
 
-- **TC62: Returns true when current player has exactly one Infantry available** ( :x: )
+- **TC62: Returns true when current player has exactly one Infantry available** ( :white_check_mark: )
     - **State of the system**: Current player has available armies containing `INFANTRY -> 1`
     - **Expected output**: Returns `true`
 
-- **TC63: Returns true when current player has only Cavalry available** ( :x: )
+- **TC63: Returns true when current player has only Cavalry available** ( :white_check_mark: )
     - **State of the system**: Current player has available armies containing `CAVALRY -> 1`
     - **Expected output**: Returns `true`
 
-- **TC64: Returns true when current player has only Artillery available** ( :x: )
+- **TC64: Returns true when current player has only Artillery available** ( :white_check_mark: )
     - **State of the system**: Current player has available armies containing `ARTILLERY -> 1`
     - **Expected output**: Returns `true`
 
