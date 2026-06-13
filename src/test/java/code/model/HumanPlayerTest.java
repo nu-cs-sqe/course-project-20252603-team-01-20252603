@@ -274,6 +274,12 @@ public final class HumanPlayerTest {
         return armies;
     }
 
+    private void addTerritoriesToPlayer(final HumanPlayer player, final int territoryCount) {
+        for (int index = 0; index < territoryCount; index++) {
+            player.addTerritory(createMock(Territory.class));
+        }
+    }
+
     @Test
     public void hasAvailableArmiesReturnsTrueWhenExactInfantryCountAvailable() {
         HumanPlayer player = new HumanPlayer(
@@ -472,6 +478,16 @@ public final class HumanPlayerTest {
 
         player.addTerritory(firstTerritory);
         player.addTerritory(secondTerritory);
+        player.addArmiesToAvailableBasedOnTerritories();
+
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=" + THREE_ARMIES));
+    }
+
+    @Test
+    public void addArmiesToAvailableBasedOnTerritoriesWithEightTerritoriesAddsThreeInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        addTerritoriesToPlayer(player, 8);
         player.addArmiesToAvailableBasedOnTerritories();
 
         assertTrue(player.getAvailableArmies().contains("INFANTRY=" + THREE_ARMIES));

@@ -145,7 +145,7 @@
     - **State of the system**: Human player owns 2 territories and has 0 available Infantry
     - **Expected output**: Player receives 3 Infantry
 
-- **TC30: Eight territories receives minimum reinforcement armies** ( :x: )
+- **TC30: Eight territories receives minimum reinforcement armies** ( :white_check_mark: )
     - **State of the system**: Human player owns 8 territories and has 0 available Infantry
     - **Expected output**: Player receives 3 Infantry
 
