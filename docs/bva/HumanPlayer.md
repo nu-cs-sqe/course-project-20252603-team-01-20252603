@@ -173,6 +173,6 @@
     - **State of the system**: Human player owns 42 territories
     - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 42 territories and play a turn because they should have already won."`; available armies are unchanged
 
-- **TC37: More than forty-two territories is rejected as an invalid game state** ( :x: )
+- **TC37: More than forty-two territories is rejected as an invalid game state** ( :white_check_mark: )
     - **State of the system**: Human player owns 43 territories
     - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 43 territories because there are only 42 territories on the board."`; available armies are unchanged

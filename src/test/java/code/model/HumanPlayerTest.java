@@ -560,4 +560,19 @@ public final class HumanPlayerTest {
         assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
     }
 
+    @Test
+    public void addArmiesToAvailableBasedOnTerritoriesWithFortyThreeTerritoriesRaisesException() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        addTerritoriesToPlayer(player, 43);
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                player::addArmiesToAvailableBasedOnTerritories);
+
+        assertEquals(
+                "Player cannot own 43 territories because there are only 42 territories on the board.",
+                exception.getMessage());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
 }

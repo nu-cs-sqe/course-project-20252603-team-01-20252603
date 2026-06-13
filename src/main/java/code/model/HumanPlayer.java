@@ -121,6 +121,12 @@ public class HumanPlayer extends Player {
                     "Player cannot own 42 territories and play a turn because they should have already won.");
         }
 
+        if (getTerritoryCount() > TOTAL_TERRITORY_COUNT) {
+            throw new IllegalStateException(
+                    "Player cannot own " + getTerritoryCount()
+                            + " territories because there are only 42 territories on the board.");
+        }
+
         int territoryReinforcement = getTerritoryCount() / TERRITORIES_PER_REINFORCEMENT_ARMY;
 
         if (territoryReinforcement < MIN_TERRITORY_REINFORCEMENT) {
