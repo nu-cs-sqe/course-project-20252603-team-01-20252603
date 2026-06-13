@@ -107,7 +107,7 @@
     - **State of the system**: All territories are claimed; current player has available Infantry but selects a territory owned by another player
     - **Expected output**: `addArmiesDuringSetup()` returns `false`; controller displays an error; controller does not advance to the next player; same player is prompted again
 
-- **TC24: Placement loop stops when all players have zero armies remaining** ( :x: )
+- **TC24: Placement loop stops when all players have zero armies remaining** ( :white_check_mark: )
     - **State of the system**: All territories are claimed and every player has `0` available Infantry
     - **Expected output**: Controller exits the remaining-army placement loop and calls `displaySetupPhaseComplete()`
 
