@@ -111,6 +111,6 @@
     - **State of the system**: All territories are claimed and every player has `0` available Infantry
     - **Expected output**: Controller exits the remaining-army placement loop and calls `displaySetupPhaseComplete()`
 
-- **TC25: Last remaining army across all players completes setup** ( :x: )
+- **TC25: Last remaining army across all players completes setup** ( :white_check_mark: )
     - **State of the system**: Exactly one player has exactly `1` available Infantry and all other players have `0`
     - **Expected output**: That player places the Infantry; controller advances or checks completion; setup completion message is displayed
