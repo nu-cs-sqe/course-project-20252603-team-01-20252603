@@ -87,7 +87,7 @@
     - **State of the system**: Territory claiming loop is running and at least one territory is still unclaimed
     - **Expected output**: Controller continues the territory-claiming flow and does not prompt for remaining-army placement yet
 
-- **TC19: Current player with one remaining army places it successfully** ( :x: )
+- **TC19: Current player with one remaining army places it successfully** ( :white_check_mark: )
     - **State of the system**: All 42 territories are claimed; current player has exactly `1` available Infantry and selects one of their owned territories
     - **Expected output**: Controller displays current player's territories, prompts for a territory, calls `addArmiesDuringSetup()` with exactly one Infantry, advances to the next player, and the player's available Infantry becomes `0`
 

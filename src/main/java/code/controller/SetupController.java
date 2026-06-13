@@ -113,6 +113,40 @@ public class SetupController {
                 view.displayError("Invalid territory claim.");
             }
         }
+
+        String cycleStartPlayer = model.getCurrentPlayerName();
+        boolean placedArmyDuringCycle = false;
+
+        while (true) {
+            if (model.hasCurrentPlayerAvailableArmies()) {
+                view.displayCurrentPlayerTerritoriesByContinent(
+                        model.getCurrentPlayerTerritoriesByContinent());
+                String territoryName = view.promptCurrentPlayerTerritoryChoice();
+                boolean added = model.addArmiesDuringSetup(
+                        territoryName,
+                        createOneInfantryPiece());
+
+                if (!added) {
+                    view.displayError("Invalid territory for army placement.");
+                    continue;
+                }
+
+                placedArmyDuringCycle = true;
+                model.advanceCurrentPlayerIndex();
+            } else {
+                model.advanceCurrentPlayerIndex();
+            }
+
+            if (model.getCurrentPlayerName().equals(cycleStartPlayer)) {
+                if (!placedArmyDuringCycle) {
+                    break;
+                }
+
+                placedArmyDuringCycle = false;
+            }
+        }
+
+        view.displaySetupPhaseComplete();
     }
 
     private HashMap<ArmyType, Integer> createOneInfantryPiece() {
