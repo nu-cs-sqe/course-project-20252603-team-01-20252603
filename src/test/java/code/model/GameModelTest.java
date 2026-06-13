@@ -867,4 +867,68 @@ public final class GameModelTest {
 
         assertFalse(placed);
     }
+
+
+    @Test
+    public void currentPlayerHasAvailableArmiesReturnsFalseWhenNoArmiesAvailable() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+
+        assertFalse(gameModel.currentPlayerHasAvailableArmies());
+    }
+
+
+    @Test
+    public void currentPlayerHasAvailableArmiesReturnsTrueWhenOneInfantryAvailable() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+
+        player.addArmies(createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES));
+
+        assertTrue(gameModel.currentPlayerHasAvailableArmies());
+    }
+
+    @Test
+    public void currentPlayerHasAvailableArmiesReturnsTrueWhenOnlyCavalryAvailable() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+
+        player.addArmies(createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES));
+
+        assertTrue(gameModel.currentPlayerHasAvailableArmies());
+    }
+
+    @Test
+    public void currentPlayerHasAvailableArmiesReturnsTrueWhenOnlyArtilleryAvailable() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+
+        player.addArmies(createArmies(ZERO_ARMIES, ZERO_ARMIES, ONE_ARMY));
+
+        assertTrue(gameModel.currentPlayerHasAvailableArmies());
+    }
 }

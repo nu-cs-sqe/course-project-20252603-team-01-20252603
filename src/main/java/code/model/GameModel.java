@@ -472,4 +472,25 @@ public class GameModel {
 
         return hasPositiveCount;
     }
+
+    private HashMap<ArmyType, Integer> createArmyPieces(
+            final int infantry,
+            final int cavalry,
+            final int artillery) {
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, infantry);
+        pieces.put(ArmyType.CAVALRY, cavalry);
+        pieces.put(ArmyType.ARTILLERY, artillery);
+        return pieces;
+    }
+
+    public boolean currentPlayerHasAvailableArmies() {
+        Player player = players.get(currentPlayerIndex);
+        HashMap<ArmyType, Integer> oneInfantry = createArmyPieces(
+                1,
+                0,
+                0);
+
+        return player.hasAvailableArmies(oneInfantry);
+    }
 }
