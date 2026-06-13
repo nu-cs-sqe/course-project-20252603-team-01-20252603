@@ -43,9 +43,13 @@ public class TurnController {
                 HashMap<ArmyType, Integer> pieces =
                         createReinforcementPieces(reinforcementInput);
 
-                model.placeArmiesDuringReinforcement(
+                boolean placed = model.placeArmiesDuringReinforcement(
                         reinforcementInput.get(TERRITORY_INPUT_INDEX),
                         pieces);
+
+                if (!placed) {
+                    view.displayError("Invalid reinforcement placement.");
+                }
             }
         }
     }

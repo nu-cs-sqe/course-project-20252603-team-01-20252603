@@ -127,4 +127,67 @@ public final class TurnControllerTest {
 
         verify(model, view);
     }
+
+    @Test
+    public void handleReinforcementDisplaysErrorWhenPlacementFails() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+        HashMap<ArmyType, Integer> invalidPieces =
+                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+        HashMap<ArmyType, Integer> validPieces =
+                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+
+        expect(model.currentPlayerHasAvailableArmies()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(view.promptReinforcement()).andReturn(List.of(
+                "Fake Territory",
+                "1",
+                "0",
+                "0"));
+
+        expect(model.placeArmiesDuringReinforcement(
+                "Fake Territory",
+                invalidPieces)).andReturn(false);
+
+        view.displayError("Invalid reinforcement placement.");
+        expectLastCall().once();
+
+        expect(model.currentPlayerHasAvailableArmies()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(view.promptReinforcement()).andReturn(List.of(
+                "Alaska",
+                "1",
+                "0",
+                "0"));
+
+        expect(model.placeArmiesDuringReinforcement("Alaska", validPieces))
+                .andReturn(true);
+
+        expect(model.currentPlayerHasAvailableArmies()).andReturn(false);
+
+        replay(model, view);
+
+        controller.handleReinforcement();
+
+        verify(model, view);
+    }
 }
