@@ -172,5 +172,47 @@ public final class ConsoleViewTest {
         assertEquals("0", reinforcementInput.get(3));
     }
 
+    @Test
+    public void promptReinforcementReturnsMixedArmyPlacement() {
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska 15 2 3\n"),
+                new PrintStream(new ByteArrayOutputStream()));
+
+        List<String> reinforcementInput = view.promptReinforcement();
+
+        assertEquals("Alaska", reinforcementInput.get(0));
+        assertEquals("15", reinforcementInput.get(1));
+        assertEquals("2", reinforcementInput.get(2));
+        assertEquals("3", reinforcementInput.get(3));
+    }
+
+    @Test
+    public void promptReinforcementReturnsZeroArmyPlacementForModelValidation() {
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska 0 0 0\n"),
+                new PrintStream(new ByteArrayOutputStream()));
+
+        List<String> reinforcementInput = view.promptReinforcement();
+
+        assertEquals("Alaska", reinforcementInput.get(0));
+        assertEquals("0", reinforcementInput.get(1));
+        assertEquals("0", reinforcementInput.get(2));
+        assertEquals("0", reinforcementInput.get(3));
+    }
+
+    @Test
+    public void promptReinforcementReturnsNegativeArmyPlacementForModelValidation() {
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska -1 0 0\n"),
+                new PrintStream(new ByteArrayOutputStream()));
+
+        List<String> reinforcementInput = view.promptReinforcement();
+
+        assertEquals("Alaska", reinforcementInput.get(0));
+        assertEquals("-1", reinforcementInput.get(1));
+        assertEquals("0", reinforcementInput.get(2));
+        assertEquals("0", reinforcementInput.get(3));
+    }
+
 
 }
