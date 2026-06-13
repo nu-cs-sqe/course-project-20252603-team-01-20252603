@@ -279,6 +279,6 @@
     - **State of the system**: Current player owns the selected territory; `pieces` contains `INFANTRY -> 2`
     - **Expected output**: Returns `false`; selected territory army count is unchanged; current player's available Infantry is unchanged
 
-- **TC60: Rejects placement when current player has no armies remaining** ( :x: )
+- **TC60: Rejects placement when current player has no armies remaining** ( :white_check_mark: )
     - **State of the system**: Current player owns the selected territory but has `0` available Infantry
     - **Expected output**: Returns `false`; selected territory army count is unchanged; current player's available Infantry remains `0`
