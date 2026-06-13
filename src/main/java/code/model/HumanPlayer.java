@@ -20,6 +20,8 @@ public class HumanPlayer extends Player {
 
     private static final int TERRITORIES_PER_REINFORCEMENT_ARMY = 3;
 
+    private static final int TOTAL_TERRITORY_COUNT = 42;
+
     private final List<Territory> territories;
 
     private HashMap<ArmyType, Integer> availableArmies;
@@ -112,6 +114,11 @@ public class HumanPlayer extends Player {
         if (getTerritoryCount() == 0) {
             throw new IllegalStateException(
                     "Player cannot own 0 territories and play a turn because they have been eliminated.");
+        }
+
+        if (getTerritoryCount() == TOTAL_TERRITORY_COUNT) {
+            throw new IllegalStateException(
+                    "Player cannot own 42 territories and play a turn because they should have already won.");
         }
 
         int territoryReinforcement = getTerritoryCount() / TERRITORIES_PER_REINFORCEMENT_ARMY;

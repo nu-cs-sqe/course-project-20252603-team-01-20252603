@@ -169,7 +169,7 @@
     - **State of the system**: Human player owns 41 territories and has 0 available Infantry
     - **Expected output**: Player receives 13 Infantry
 
-- **TC36: Forty-two territories is rejected because the game should already be won** ( :x: )
+- **TC36: Forty-two territories is rejected because the game should already be won** ( :white_check_mark: )
     - **State of the system**: Human player owns 42 territories
     - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 42 territories and play a turn because they should have already won."`; available armies are unchanged
 
