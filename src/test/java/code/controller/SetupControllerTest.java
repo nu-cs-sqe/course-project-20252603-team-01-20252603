@@ -70,6 +70,7 @@ public final class SetupControllerTest {
         ConsoleView view = createMock(ConsoleView.class);
 
 
+        SetupController controller = new SetupController(model, view);
         assertNotNull(controller);
     }
 
@@ -82,7 +83,7 @@ public final class SetupControllerTest {
         expectLastCall().once();
 
         replay(model, view);
-
+        SetupController controller = new SetupController(model, view);
         controller.initializeBoard();
 
         verify(model, view);
@@ -98,6 +99,7 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.initializeBoard();
         controller.initializeBoard();
 
