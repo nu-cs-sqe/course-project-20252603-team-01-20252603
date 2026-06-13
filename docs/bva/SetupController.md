@@ -95,7 +95,7 @@
     - **State of the system**: All territories are claimed; current player has more than `1` available Infantry and selects one of their owned territories
     - **Expected output**: Controller places exactly `1` Infantry, advances to the next player, and leaves the current player with remaining armies for a later turn
 
-- **TC21: Skips current player with zero armies remaining** ( :x: )
+- **TC21: Skips current player with zero armies remaining** ( :white_check_mark: )
     - **State of the system**: All territories are claimed; current player has `0` available Infantry; at least one later player still has available Infantry
     - **Expected output**: Controller does not display placement prompt for the current player; it calls `advanceCurrentPlayerIndex()` and continues with the next eligible player
 
