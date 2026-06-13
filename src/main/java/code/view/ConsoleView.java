@@ -63,10 +63,25 @@ public class ConsoleView {
         output.println(playerClaimingStatus);
     }
 
+    public void displayCurrentPlayerTerritoriesByContinent(
+            final String territoriesByContinent) {
+        output.println(territoriesByContinent);
+    }
+
     public String getTerritoryChoiceDuringSetup() {
         output.print("Enter territory to claim: ");
 
         return scanner.nextLine();
+    }
+
+    public String promptCurrentPlayerTerritoryChoice() {
+        output.print("Enter territory to place army: ");
+
+        return scanner.nextLine();
+    }
+
+    public void displaySetupPhaseComplete() {
+        output.println("Setup is complete. The game is starting now.");
     }
 
     public void displayCurrentPlayerArmies(final String availableArmies) {

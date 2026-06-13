@@ -130,6 +130,32 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void displayCurrentPlayerTerritoriesByContinentOneOwnedTerritoryDisplaysTerritoryString() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        String territoriesByContinent = "North America: Alaska";
+
+        view.displayCurrentPlayerTerritoriesByContinent(territoriesByContinent);
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertEquals(territoriesByContinent + System.lineSeparator(), displayedText);
+    }
+
+    @Test
+    public void displayCurrentPlayerTerritoriesByContinentMultipleOwnedTerritoriesDisplaysTerritoryString() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        String territoriesByContinent = "North America: Alaska, Alberta"
+                + System.lineSeparator()
+                + "Asia: China";
+
+        view.displayCurrentPlayerTerritoriesByContinent(territoriesByContinent);
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertEquals(territoriesByContinent + System.lineSeparator(), displayedText);
+    }
+
+    @Test
     public void getTerritoryChoiceDuringSetupReturnsEnteredTerritory() {
         ConsoleView view = createViewWithInput("Alaska\n");
 
@@ -139,10 +165,39 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptCurrentPlayerTerritoryChoiceOwnedTerritoryEnteredReturnsTerritoryName() {
+        ConsoleView view = createViewWithInput("Alaska\n");
+
+        String territoryChoice = view.promptCurrentPlayerTerritoryChoice();
+
+        assertEquals("Alaska", territoryChoice);
+    }
+
+    @Test
+    public void promptCurrentPlayerTerritoryChoiceUnownedTerritoryEnteredReturnsTerritoryName() {
+        ConsoleView view = createViewWithInput("Alberta\n");
+
+        String territoryChoice = view.promptCurrentPlayerTerritoryChoice();
+
+        assertEquals("Alberta", territoryChoice);
+    }
+
+    @Test
+    public void displaySetupPhaseCompleteAllArmiesPlacedDisplaysSetupCompleteMessage() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        String setupCompleteMessage = "Setup is complete. The game is starting now.";
+
+        view.displaySetupPhaseComplete();
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertEquals(setupCompleteMessage + System.lineSeparator(), displayedText);
+    }
+
+    @Test
     public void displayCurrentPlayerArmiesPrintsAvailableArmies() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(output);
-
         String availableArmies = "{INFANTRY=15, CAVALRY=2, ARTILLERY=3}";
 
         view.displayCurrentPlayerArmies(availableArmies);

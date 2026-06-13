@@ -368,6 +368,37 @@ public class GameModel {
                 && pieces.getOrDefault(ArmyType.INFANTRY, 0) == SETUP_INFANTRY_COUNT;
     }
 
+    public boolean addArmiesDuringSetup(
+            final String territoryName,
+            final HashMap<ArmyType, Integer> pieces) {
+        Player player = players.get(currentPlayerIndex);
+
+        for (Territory territory : territories) {
+            if (!territory.getName().equals(territoryName)) {
+                continue;
+            }
+
+        if (!territory.isOwnedBy(player)) {
+            return false;
+        }
+
+        if (!isExactlyOneInfantry(pieces)) {
+            return false;
+        }
+
+        if (!player.hasAvailableArmies(pieces)) {
+            return false;
+        }
+
+        territory.placeArmies(pieces);
+        player.removeArmies(pieces);
+
+        return true;
+        }
+
+        return false;
+    }
+
     public boolean advanceCurrentPlayerIndex() {
         if (players.isEmpty()) {
             return false;
@@ -389,6 +420,13 @@ public class GameModel {
 
     public String getCurrentPlayerName() {
         return players.get(currentPlayerIndex).getName();
+    }
+
+    public boolean hasCurrentPlayerAvailableArmies() {
+        HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
+        requiredArmies.put(ArmyType.INFANTRY, 1);
+
+        return players.get(currentPlayerIndex).hasAvailableArmies(requiredArmies);
     }
 
     public String getUnclaimedTerritoriesByContinent() {
