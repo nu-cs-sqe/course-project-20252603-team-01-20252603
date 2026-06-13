@@ -391,6 +391,13 @@ public class GameModel {
         return players.get(currentPlayerIndex).getName();
     }
 
+    public boolean hasCurrentPlayerAvailableArmies() {
+        HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
+        requiredArmies.put(ArmyType.INFANTRY, 1);
+
+        return players.get(currentPlayerIndex).hasAvailableArmies(requiredArmies);
+    }
+
     public String getUnclaimedTerritoriesByContinent() {
         StringBuilder territoriesByContinent = new StringBuilder();
 

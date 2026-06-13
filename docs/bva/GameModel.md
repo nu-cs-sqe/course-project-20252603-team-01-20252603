@@ -237,19 +237,19 @@
 
 ---
 
-### Method under test: `getPlayerCurrentArmies()`
+### Method under test: `hasCurrentPlayerAvailableArmies()`
 
-- **TC51: Current player has zero armies remaining** ( :x: )
+- **TC51: Current player has zero armies remaining** ( :white_check_mark: )
     - **State of the system**: Current player has placed all setup Infantry and has `0` available Infantry
-    - **Expected output**: Returns `0`, allowing setup to skip this player during remaining-army placement
+    - **Expected output**: Returns `false`, allowing setup to skip this player during remaining-army placement
 
 - **TC52: Current player has exactly one army remaining** ( :x: )
     - **State of the system**: Current player has exactly `1` available Infantry left after territory claiming
-    - **Expected output**: Returns `1`, allowing setup to prompt this player for one final placement
+    - **Expected output**: Returns `true`, allowing setup to prompt this player for one final placement
 
 - **TC53: Current player has more than one army remaining** ( :x: )
     - **State of the system**: Current player has multiple available Infantry left after territory claiming
-    - **Expected output**: Returns the current player's remaining Infantry count
+    - **Expected output**: Returns `true`, allowing setup to prompt this player for army placement
 
 ---
 

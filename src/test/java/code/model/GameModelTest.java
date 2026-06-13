@@ -602,4 +602,18 @@ public final class GameModelTest {
         assertFalse(ownedTerritories.contains("Alaska"));
     }
 
+    @Test
+    public void hasCurrentPlayerAvailableArmies_CurrentPlayerHasZeroArmiesRemaining_ReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+
+        assertFalse(gameModel.hasCurrentPlayerAvailableArmies());
+    }
+
 }
