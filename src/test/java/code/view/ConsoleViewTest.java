@@ -192,6 +192,8 @@ public final class ConsoleViewTest {
         String displayedText = output.toString(StandardCharsets.UTF_8);
 
         assertEquals(setupCompleteMessage + System.lineSeparator(), displayedText);
+    }
+
     public void displayCurrentPlayerArmiesPrintsAvailableArmies() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(output);
