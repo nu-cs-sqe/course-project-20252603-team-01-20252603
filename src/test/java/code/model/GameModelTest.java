@@ -681,4 +681,141 @@ public final class GameModelTest {
         assertTrue(claimed);
         assertTrue(placed);
     }
+
+    @Test
+    public void placeArmiesDuringReinforcementRejectsZeroArmies() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> setupPiece =
+                createInfantryPieces(ONE_INFANTRY);
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", setupPiece);
+
+        HashMap<ArmyType, Integer> reinforcementPieces =
+                createArmies(ZERO_ARMIES, ZERO_ARMIES, ZERO_ARMIES);
+        player.addArmies(createArmies(THREE_ARMIES, ZERO_ARMIES, ZERO_ARMIES));
+
+        boolean placed = gameModel.placeArmiesDuringReinforcement(
+                "Alaska",
+                reinforcementPieces);
+
+        assertTrue(claimed);
+        assertFalse(placed);
+    }
+
+    @Test
+    public void placeArmiesDuringReinforcementRejectsNegativeInfantry() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> setupPiece =
+                createInfantryPieces(ONE_INFANTRY);
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", setupPiece);
+
+        HashMap<ArmyType, Integer> reinforcementPieces =
+                createArmies(-ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+        player.addArmies(createArmies(THREE_ARMIES, ZERO_ARMIES, ZERO_ARMIES));
+
+        boolean placed = gameModel.placeArmiesDuringReinforcement(
+                "Alaska",
+                reinforcementPieces);
+
+        assertTrue(claimed);
+        assertFalse(placed);
+    }
+
+    @Test
+    public void placeArmiesDuringReinforcementRejectsNegativeCavalry() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> setupPiece =
+                createInfantryPieces(ONE_INFANTRY);
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", setupPiece);
+
+        HashMap<ArmyType, Integer> reinforcementPieces =
+                createArmies(ZERO_ARMIES, -ONE_ARMY, ZERO_ARMIES);
+        player.addArmies(createArmies(THREE_ARMIES, ZERO_ARMIES, ZERO_ARMIES));
+
+        boolean placed = gameModel.placeArmiesDuringReinforcement(
+                "Alaska",
+                reinforcementPieces);
+
+        assertTrue(claimed);
+        assertFalse(placed);
+    }
+
+    @Test
+    public void placeArmiesDuringReinforcementRejectsNegativeArtillery() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> setupPiece =
+                createInfantryPieces(ONE_INFANTRY);
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", setupPiece);
+
+        HashMap<ArmyType, Integer> reinforcementPieces =
+                createArmies(ZERO_ARMIES, ZERO_ARMIES, -ONE_ARMY);
+        player.addArmies(createArmies(THREE_ARMIES, ZERO_ARMIES, ZERO_ARMIES));
+
+        boolean placed = gameModel.placeArmiesDuringReinforcement(
+                "Alaska",
+                reinforcementPieces);
+
+        assertTrue(claimed);
+        assertFalse(placed);
+    }
+
+    @Test
+    public void placeArmiesDuringReinforcementRejectsMoreArmiesThanAvailable() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> setupPiece =
+                createInfantryPieces(ONE_INFANTRY);
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", setupPiece);
+
+        HashMap<ArmyType, Integer> remainingSetupArmies =
+                createInfantryPieces(THIRTY_FOUR_INFANTRY);
+        player.removeArmies(remainingSetupArmies);
+
+        HashMap<ArmyType, Integer> availableArmies =
+                createArmies(TWO_ARMIES, ZERO_ARMIES, ZERO_ARMIES);
+        HashMap<ArmyType, Integer> reinforcementPieces =
+                createArmies(THREE_ARMIES, ZERO_ARMIES, ZERO_ARMIES);
+
+        player.addArmies(availableArmies);
+
+        boolean placed = gameModel.placeArmiesDuringReinforcement(
+                "Alaska",
+                reinforcementPieces);
+
+        assertTrue(claimed);
+        assertFalse(placed);
+    }
 }
