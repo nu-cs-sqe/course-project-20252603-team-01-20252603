@@ -115,6 +115,6 @@
 
 ### Method under test: `displaySetupPhaseComplete()`
 
-- **TC21: Displays setup completion message once placement is complete** ( :x: )
+- **TC21: Displays setup completion message once placement is complete** ( :white_check_mark: )
     - **State of the system**: All territories are claimed and all players have `0` available Infantry
     - **Expected output**: Output displays a message saying setup is complete and the game is starting now

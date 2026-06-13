@@ -174,6 +174,18 @@ public final class ConsoleViewTest {
         assertEquals("Alberta", territoryChoice);
     }
 
+    @Test
+    public void displaySetupPhaseComplete_AllArmiesPlaced_DisplaysSetupCompleteMessage() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        String setupCompleteMessage = "Setup is complete. The game is starting now.";
+
+        view.displaySetupPhaseComplete();
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertEquals(setupCompleteMessage + System.lineSeparator(), displayedText);
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 

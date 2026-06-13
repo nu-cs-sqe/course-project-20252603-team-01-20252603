@@ -71,4 +71,8 @@ public class ConsoleView {
         return scanner.nextLine();
     }
 
+    public void displaySetupPhaseComplete() {
+        output.println("Setup is complete. The game is starting now.");
+    }
+
 }
