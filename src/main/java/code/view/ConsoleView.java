@@ -3,10 +3,19 @@ package code.view;
 import code.model.PlayerColor;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleView {
+
+    private static final int REINFORCEMENT_INPUT_LENGTH = 4;
+
+    private static final int INFANTRY_INDEX_FROM_END = 3;
+
+    private static final int CAVALRY_INDEX_FROM_END = 2;
+
+    private static final int ARTILLERY_INDEX_FROM_END = 1;
 
     private final Scanner scanner;
 
@@ -73,6 +82,48 @@ public class ConsoleView {
 
     public void displaySetupPhaseComplete() {
         output.println("Setup is complete. The game is starting now.");
+    public void displayCurrentPlayerArmies(final String availableArmies) {
+        output.println(availableArmies);
+    }
+
+    public List<String> promptReinforcement() {
+        output.print("Enter territory and armies to place: ");
+        String input = scanner.nextLine().trim();
+
+        String[] tokens = input.split("\\s+");
+
+        if (tokens.length < REINFORCEMENT_INPUT_LENGTH) {
+            return List.of();
+        }
+
+        int infantryIndex = tokens.length - INFANTRY_INDEX_FROM_END;
+        int cavalryIndex = tokens.length - CAVALRY_INDEX_FROM_END;
+        int artilleryIndex = tokens.length - ARTILLERY_INDEX_FROM_END;
+
+        if (!isInteger(tokens[infantryIndex])
+                || !isInteger(tokens[cavalryIndex])
+                || !isInteger(tokens[artilleryIndex])) {
+            return List.of();
+        }
+
+        String territoryName = String.join(
+                " ",
+                Arrays.copyOfRange(tokens, 0, infantryIndex));
+
+        return List.of(
+                territoryName,
+                tokens[infantryIndex],
+                tokens[cavalryIndex],
+                tokens[artilleryIndex]);
+    }
+
+    private boolean isInteger(final String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException exception) {
+            return false;
+        }
     }
 
 }
