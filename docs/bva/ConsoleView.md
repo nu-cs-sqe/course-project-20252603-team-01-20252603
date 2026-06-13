@@ -118,3 +118,29 @@
 - **TC21: Displays setup completion message once placement is complete** ( :white_check_mark: )
     - **State of the system**: All territories are claimed and all players have `0` available Infantry
     - **Expected output**: Output displays a message saying setup is complete and the game is starting now
+### Method under test: `displayCurrentPlayerArmies(String availableArmies)`
+
+- **TC22: Displays current player's available army pool** ( :white_check_mark: )
+    - **State of the system**: Model provides a formatted string containing available Infantry, Cavalry, and Artillery counts
+    - **Expected output**: Output displays the available-armies string
+
+---
+
+### Method under test: `promptReinforcement()`
+
+- **TC23: Returns territory name with one Infantry placement** ( :white_check_mark: )
+    - **State of the system**: Player enters `"Alaska 1 0 0"`
+    - **Expected output**: Returns a list containing `"Alaska"`, `"1"`, `"0"`, and `"0"`
+
+- **TC24: Returns territory name with multiple mixed army types** ( :white_check_mark: )
+    - **State of the system**: Player enters `"Alaska 15 2 3"`
+    - **Expected output**: Returns a list containing `"Alaska"`, `"15"`, `"2"`, and `"3"`
+
+- **TC25: Returns territory name with zero army placement for model validation** ( :white_check_mark: )
+    - **State of the system**: Player enters `"Alaska 0 0 0"`
+    - **Expected output**: Returns a list containing `"Alaska"`, `"0"`, `"0"`, and `"0"`
+
+- **TC26: Returns territory name with negative army count for model validation** ( :white_check_mark: )
+    - **State of the system**: Player enters `"Alaska -1 0 0"`
+    - **Expected output**: Returns a list containing `"Alaska"`, `"-1"`, `"0"`, and `"0"`
+

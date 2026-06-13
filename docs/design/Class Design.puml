@@ -131,7 +131,8 @@ package code.model {
         + handleCardTradeIn(cardIndices : List<Integer>) : boolean
         + getCurrentPlayerCards() : String
         +addArmiesDuringSetup(territoryName: String) : boolean
-        +addArmiesDuringReinforcement(territoryName: String, pieces : HashMap<ArmyType, Integer>) : boolean
+        + placeArmiesDuringReinforcement(territoryName : String, pieces : HashMap<ArmyType, Integer>) : boolean
+        + currentPlayerHasAvailableArmies() : boolean
         + validateTerritoriesForAttackAndReturnDefenderName(attackerTerritoryName : String, defenderTerritoryName : String, currentPlayerName : String) : String
         +validateNumberOfDice(attackerNumDice: int, defenderNumDice: int) : boolean
         ' last element of the battle result list is a bool flag for whether territory was captured or not

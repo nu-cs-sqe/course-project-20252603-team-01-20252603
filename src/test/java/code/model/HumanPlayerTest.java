@@ -25,6 +25,22 @@ public final class HumanPlayerTest {
 
     private static final int TWENTY_INFANTRY = 20;
 
+    private static final int ZERO_ARMIES = 0;
+
+    private static final int ONE_ARMY = 1;
+
+    private static final int THREE_ARMIES = 3;
+
+    private static final int FOUR_ARMIES = 4;
+
+    private static final int FIVE_ARMIES = 5;
+
+    private static final int FIFTEEN_ARMIES = 15;
+
+    private static final int ONE_ARTILLERY = 10;
+
+    private static final Integer ONE_CAVALRY = 5;
+
     @Test
     public void constructorMinimumSetupInfantryCreatesPlayer() {
         HumanPlayer player = new HumanPlayer(
@@ -244,6 +260,182 @@ public final class HumanPlayerTest {
 
         assertTrue(availableArmies.contains("INFANTRY"));
         assertTrue(availableArmies.contains("0"));
+    }
+
+    private HashMap<ArmyType, Integer> createArmies(
+            final int infantry,
+            final int cavalry,
+            final int artillery) {
+        HashMap<ArmyType, Integer> armies = new HashMap<>();
+        armies.put(ArmyType.INFANTRY, infantry);
+        armies.put(ArmyType.CAVALRY, cavalry);
+        armies.put(ArmyType.ARTILLERY, artillery);
+        return armies;
+    }
+
+    @Test
+    public void hasAvailableArmiesReturnsTrueWhenExactInfantryCountAvailable() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                ONE_ARMY);
+        HashMap<ArmyType, Integer> requiredArmies =
+                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+
+        assertTrue(player.hasAvailableArmies(requiredArmies));
+    }
+
+    @Test
+    public void hasAvailableArmiesReturnsTrueWhenInfantryCanConvertToCavalryAndArtillery() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                FIFTEEN_ARMIES);
+        HashMap<ArmyType, Integer> requiredArmies =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ONE_ARMY);
+
+        assertTrue(player.hasAvailableArmies(requiredArmies));
+    }
+
+    @Test
+    public void hasAvailableArmiesReturnsTrueWhenArtilleryCanConvertToCavalry() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                ZERO_ARMIES);
+        HashMap<ArmyType, Integer> availableArmies =
+                createArmies(ZERO_ARMIES, ZERO_ARMIES, ONE_ARMY);
+        HashMap<ArmyType, Integer> requiredArmies =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
+
+        player.addArmies(availableArmies);
+
+        assertTrue(player.hasAvailableArmies(requiredArmies));
+    }
+
+    @Test
+    public void hasAvailableArmiesReturnsFalseWhenRequiredValueGreaterThanAvailableValue() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                FOUR_ARMIES);
+        HashMap<ArmyType, Integer> requiredArmies =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
+
+        assertFalse(player.hasAvailableArmies(requiredArmies));
+    }
+
+    @Test
+    public void hasAvailableArmiesReturnsFalseWhenPlayerHasZeroAvailableArmyValue() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                ZERO_ARMIES);
+        HashMap<ArmyType, Integer> requiredArmies =
+                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+
+        assertFalse(player.hasAvailableArmies(requiredArmies));
+    }
+
+    @Test
+    public void removeArmiesRemovesOneInfantryFromOneAvailableInfantry() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                ONE_ARMY);
+        HashMap<ArmyType, Integer> armiesToRemove =
+                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+
+        player.removeArmies(armiesToRemove);
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(availableArmies.contains("INFANTRY=0"));
+        assertTrue(availableArmies.contains("CAVALRY=0"));
+        assertTrue(availableArmies.contains("ARTILLERY=0"));
+    }
+
+    @Test
+    public void removeArmiesRemovesCavalryUsingInfantryValue() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                FIVE_ARMIES);
+        HashMap<ArmyType, Integer> armiesToRemove =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
+
+        player.removeArmies(armiesToRemove);
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(availableArmies.contains("INFANTRY=0"));
+        assertTrue(availableArmies.contains("CAVALRY=0"));
+        assertTrue(availableArmies.contains("ARTILLERY=0"));
+    }
+
+    @Test
+    public void removeArmiesRemovesCavalryFromArtilleryAndMakesChange() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                ZERO_ARMIES);
+        HashMap<ArmyType, Integer> availableArmies =
+                createArmies(ZERO_ARMIES, ZERO_ARMIES, ONE_ARMY);
+        HashMap<ArmyType, Integer> armiesToRemove =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
+
+        player.addArmies(availableArmies);
+
+        player.removeArmies(armiesToRemove);
+
+        String remainingArmies = player.getAvailableArmies();
+
+        assertTrue(remainingArmies.contains("INFANTRY=0"));
+        assertTrue(remainingArmies.contains("CAVALRY=1"));
+        assertTrue(remainingArmies.contains("ARTILLERY=0"));
+    }
+
+    @Test
+    public void removeArmiesRemovesInfantryFromCavalryAndMakesChange() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                ZERO_ARMIES);
+        HashMap<ArmyType, Integer> availableArmies =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
+        HashMap<ArmyType, Integer> armiesToRemove =
+                createArmies(THREE_ARMIES, ZERO_ARMIES, ZERO_ARMIES);
+
+        player.addArmies(availableArmies);
+
+        player.removeArmies(armiesToRemove);
+
+        String remainingArmies = player.getAvailableArmies();
+
+        assertTrue(remainingArmies.contains("INFANTRY=2"));
+        assertTrue(remainingArmies.contains("CAVALRY=0"));
+        assertTrue(remainingArmies.contains("ARTILLERY=0"));
+    }
+
+    @Test
+    public void removeArmiesBreaksArtilleryWhenRemovingCavalry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        HashMap<ArmyType, Integer> availableArmies = new HashMap<>();
+        availableArmies.put(ArmyType.ARTILLERY, ONE_ARTILLERY);
+        player.addArmies(availableArmies);
+
+        HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
+        armiesToRemove.put(ArmyType.CAVALRY, ONE_CAVALRY);
+
+        player.removeArmies(armiesToRemove);
+
+        String remainingArmies = player.getAvailableArmies();
+
+        assertTrue(remainingArmies.contains("CAVALRY"));
+        assertTrue(remainingArmies.contains("1"));
+        assertTrue(remainingArmies.contains("ARTILLERY"));
+        assertTrue(remainingArmies.contains("0"));
     }
 
 }
