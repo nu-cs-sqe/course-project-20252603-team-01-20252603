@@ -453,4 +453,15 @@ public final class HumanPlayerTest {
         assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
     }
 
+    @Test
+    public void addArmiesToAvailableBasedOnTerritoriesWithOneTerritoryAddsThreeInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+        Territory territory = createMock(Territory.class);
+
+        player.addTerritory(territory);
+        player.addArmiesToAvailableBasedOnTerritories();
+
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=" + THREE_ARMIES));
+    }
+
 }

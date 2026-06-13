@@ -109,6 +109,10 @@ public class HumanPlayer extends Player {
             throw new IllegalStateException(
                     "Player cannot own 0 territories and play a turn because they have been eliminated.");
         }
+
+        HashMap<ArmyType, Integer> reinforcementArmies = new HashMap<>();
+        reinforcementArmies.put(ArmyType.INFANTRY, 3);
+        addArmies(reinforcementArmies);
     }
 
     private int calculateArmyValue(final HashMap<ArmyType, Integer> armies) {

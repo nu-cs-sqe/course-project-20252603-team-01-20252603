@@ -133,11 +133,11 @@
 
 ### Method under test: `addArmiesToAvailableBasedOnTerritories()`
 
-- **TC27: Zero territories is rejected because the player should be eliminated** ( :x: )
+- **TC27: Zero territories is rejected because the player should be eliminated** ( :white_check_mark: )
     - **State of the system**: Human player owns 0 territories
     - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 0 territories and play a turn because they have been eliminated."`; available armies are unchanged
 
-- **TC28: One territory receives minimum reinforcement armies** ( :x: )
+- **TC28: One territory receives minimum reinforcement armies** ( :white_check_mark: )
     - **State of the system**: Human player owns 1 territory and has 0 available Infantry
     - **Expected output**: Player receives 3 Infantry
 
