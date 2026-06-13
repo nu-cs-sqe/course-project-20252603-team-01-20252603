@@ -646,7 +646,7 @@ public final class SetupControllerTest {
     }
 
     @Test
-    public void handleTerritoryClaiming_TerritoryStillUnclaimed_DoesNotPromptForRemainingArmyPlacement() {
+    public void handleTerritoryClaimingTerritoryStillUnclaimedDoesNotPromptForRemainingArmyPlacement() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
         SetupController controller = new SetupController(model, view);
@@ -683,7 +683,7 @@ public final class SetupControllerTest {
     }
 
     @Test
-    public void handleTerritoryClaiming_CurrentPlayerHasOneRemainingArmy_PlacesArmyAndCompletesSetup() {
+    public void handleTerritoryClaimingCurrentPlayerHasOneRemainingArmyPlacesArmyAndCompletesSetup() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
         SetupController controller = new SetupController(model, view);
@@ -715,7 +715,7 @@ public final class SetupControllerTest {
     }
 
     @Test
-    public void handleTerritoryClaiming_CurrentPlayerHasMultipleRemainingArmies_PlacesOneAndContinuesLater() {
+    public void handleTerritoryClaimingCurrentPlayerHasMultipleRemainingArmiesPlacesOneAndContinuesLater() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
         SetupController controller = new SetupController(model, view);
@@ -766,7 +766,7 @@ public final class SetupControllerTest {
     }
 
     @Test
-    public void handleTerritoryClaiming_CurrentPlayerHasZeroArmies_SkipsToNextAvailablePlayer() {
+    public void handleTerritoryClaimingCurrentPlayerHasZeroArmiesSkipsToNextAvailablePlayer() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
         SetupController controller = new SetupController(model, view);
@@ -803,7 +803,7 @@ public final class SetupControllerTest {
     }
 
     @Test
-    public void handleTerritoryClaiming_MultiplePlayersHaveZeroArmies_SkipsToNextAvailablePlayer() {
+    public void handleTerritoryClaimingMultiplePlayersHaveZeroArmiesSkipsToNextAvailablePlayer() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
         SetupController controller = new SetupController(model, view);
@@ -844,7 +844,7 @@ public final class SetupControllerTest {
     }
 
     @Test
-    public void handleTerritoryClaiming_UnownedTerritorySelected_RePromptsSamePlayer() {
+    public void handleTerritoryClaimingUnownedTerritorySelectedRePromptsSamePlayer() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
         SetupController controller = new SetupController(model, view);
@@ -887,7 +887,7 @@ public final class SetupControllerTest {
     }
 
     @Test
-    public void handleTerritoryClaiming_AllPlayersHaveZeroArmies_DisplaysSetupComplete() {
+    public void handleTerritoryClaimingAllPlayersHaveZeroArmiesDisplaysSetupComplete() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
         SetupController controller = new SetupController(model, view);
@@ -918,7 +918,7 @@ public final class SetupControllerTest {
     }
 
     @Test
-    public void handleTerritoryClaiming_OnePlayerHasLastRemainingArmy_DisplaysSetupComplete() {
+    public void handleTerritoryClaimingOnePlayerHasLastRemainingArmyDisplaysSetupComplete() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
         SetupController controller = new SetupController(model, view);
