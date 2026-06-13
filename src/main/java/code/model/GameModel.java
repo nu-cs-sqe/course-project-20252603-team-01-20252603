@@ -432,4 +432,44 @@ public class GameModel {
 
         return territoriesByContinent.toString();
     }
+
+    public boolean placeArmiesDuringReinforcement(
+            final String territoryName,
+            final HashMap<ArmyType, Integer> pieces) {
+        Territory territory = findTerritoryByName(territoryName);
+        Player player = players.get(currentPlayerIndex);
+
+        if (!territory.isOwnedBy(player)) {
+            return false;
+        }
+
+        if (!hasValidArmyCounts(pieces)) {
+            return false;
+        }
+
+        if (!player.hasAvailableArmies(pieces)) {
+            return false;
+        }
+
+        territory.placeArmies(pieces);
+        player.removeArmies(pieces);
+
+        return true;
+    }
+
+    private boolean hasValidArmyCounts(final HashMap<ArmyType, Integer> pieces) {
+        boolean hasPositiveCount = false;
+
+        for (int count : pieces.values()) {
+            if (count < 0) {
+                return false;
+            }
+
+            if (count > 0) {
+                hasPositiveCount = true;
+            }
+        }
+
+        return hasPositiveCount;
+    }
 }

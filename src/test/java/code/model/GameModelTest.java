@@ -47,6 +47,18 @@ public final class GameModelTest {
 
     private static final int TERRITORY_COUNT = 42;
 
+    private static final int ZERO_ARMIES = 0;
+
+    private static final int ONE_ARMY = 1;
+
+    private static final int TWO_ARMIES = 2;
+
+    private static final int THREE_ARMIES = 3;
+
+    private static final int FIVE_ARMIES = 5;
+
+    private static final int FIFTEEN_ARMIES = 15;
+
     @Test
     public void deckHasFortyFourCardsAfterBoardInitialization() {
         GameModel gameModel = new GameModel();
@@ -602,4 +614,71 @@ public final class GameModelTest {
         assertFalse(ownedTerritories.contains("Alaska"));
     }
 
+    private HashMap<ArmyType, Integer> createArmies(
+            final int infantry,
+            final int cavalry,
+            final int artillery) {
+        HashMap<ArmyType, Integer> armies = new HashMap<>();
+        armies.put(ArmyType.INFANTRY, infantry);
+        armies.put(ArmyType.CAVALRY, cavalry);
+        armies.put(ArmyType.ARTILLERY, artillery);
+        return armies;
+    }
+
+    @Test
+    public void placeArmiesDuringReinforcementPlacesOneInfantryOnOwnedTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> setupPiece =
+                createInfantryPieces(ONE_INFANTRY);
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", setupPiece);
+
+        HashMap<ArmyType, Integer> reinforcementPieces =
+                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+        player.addArmies(reinforcementPieces);
+
+        boolean placed = gameModel.placeArmiesDuringReinforcement(
+                "Alaska",
+                reinforcementPieces);
+
+        assertTrue(claimed);
+        assertTrue(placed);
+    }
+
+    @Test
+    public void placeArmiesDuringReinforcementPlacesMixedArmiesOnOwnedTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        HashMap<ArmyType, Integer> setupPiece =
+                createInfantryPieces(ONE_INFANTRY);
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup("Alaska", setupPiece);
+
+        HashMap<ArmyType, Integer> availableArmies =
+                createArmies(FIFTEEN_ARMIES, ZERO_ARMIES, ZERO_ARMIES);
+        HashMap<ArmyType, Integer> reinforcementPieces =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ONE_ARMY);
+
+        player.addArmies(availableArmies);
+
+        boolean placed = gameModel.placeArmiesDuringReinforcement(
+                "Alaska",
+                reinforcementPieces);
+
+        assertTrue(claimed);
+        assertTrue(placed);
+    }
 }
