@@ -275,7 +275,7 @@
     - **State of the system**: Current player owns the selected territory; `pieces` contains `INFANTRY -> 0`
     - **Expected output**: Returns `false`; selected territory army count is unchanged; current player's available Infantry is unchanged
 
-- **TC59: Rejects more than one Infantry placement** ( :x: )
+- **TC59: Rejects more than one Infantry placement** ( :white_check_mark: )
     - **State of the system**: Current player owns the selected territory; `pieces` contains `INFANTRY -> 2`
     - **Expected output**: Returns `false`; selected territory army count is unchanged; current player's available Infantry is unchanged
 

@@ -751,4 +751,26 @@ public final class GameModelTest {
                 String.valueOf(THIRTY_FOUR_INFANTRY)));
     }
 
+    @Test
+    public void addTwoArmiesDuringSetup_OwnedTerritory_ReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup(
+                "Alaska",
+                createInfantryPieces(ONE_INFANTRY));
+
+        boolean added = gameModel.addArmiesDuringSetup(
+                "Alaska",
+                createInfantryPieces(TWO_INFANTRY));
+
+        assertFalse(added);
+        assertTrue(player.getAvailableArmies().contains(
+                String.valueOf(THIRTY_FOUR_INFANTRY)));
+    }
+
 }
