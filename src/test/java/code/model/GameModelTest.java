@@ -614,8 +614,6 @@ public final class GameModelTest {
         assertFalse(ownedTerritories.contains("Alaska"));
     }
 
-    @Test
-    public void hasCurrentPlayerAvailableArmiesCurrentPlayerHasZeroArmiesRemainingReturnsFalse() {
     private HashMap<ArmyType, Integer> createArmies(
             final int infantry,
             final int cavalry,
@@ -625,6 +623,19 @@ public final class GameModelTest {
         armies.put(ArmyType.CAVALRY, cavalry);
         armies.put(ArmyType.ARTILLERY, artillery);
         return armies;
+
+    @Test
+    public void hasCurrentPlayerAvailableArmiesCurrentPlayerHasZeroArmiesRemainingReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+
+        assertFalse(gameModel.hasCurrentPlayerAvailableArmies());
     }
 
     @Test
@@ -1041,8 +1052,6 @@ public final class GameModelTest {
         assertFalse(added);
         assertTrue(player.getAvailableArmies().contains(
                 String.valueOf(ZERO_INFANTRY)));
-    }
-
 
         player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
 
