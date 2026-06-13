@@ -372,7 +372,11 @@ public class GameModel {
             final String territoryName,
             final HashMap<ArmyType, Integer> pieces) {
         Player player = players.get(currentPlayerIndex);
-        Territory territory = findTerritoryByName(territoryName);
+
+        for (Territory territory : territories) {
+            if (!territory.getName().equals(territoryName)) {
+                continue;
+            }
 
         if (!territory.isOwnedBy(player)) {
             return false;
@@ -390,6 +394,9 @@ public class GameModel {
         player.removeArmies(pieces);
 
         return true;
+        }
+
+        return false;
     }
 
     public boolean advanceCurrentPlayerIndex() {

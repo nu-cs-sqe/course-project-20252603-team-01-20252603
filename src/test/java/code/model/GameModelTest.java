@@ -710,4 +710,23 @@ public final class GameModelTest {
                 String.valueOf(THREE_PLAYER_STARTING_INFANTRY)));
     }
 
+    @Test
+    public void addArmiesDuringSetup_UnknownTerritoryName_ReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        boolean added = gameModel.addArmiesDuringSetup(
+                "Unknown Territory",
+                createInfantryPieces(ONE_INFANTRY));
+
+        assertFalse(added);
+        assertTrue(player.getAvailableArmies().contains(
+                String.valueOf(THREE_PLAYER_STARTING_INFANTRY)));
+    }
+
 }

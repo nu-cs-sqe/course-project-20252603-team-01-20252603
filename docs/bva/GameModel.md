@@ -267,7 +267,7 @@
     - **State of the system**: Current player selects a territory that exists but is owned by another player; current player has available Infantry
     - **Expected output**: Returns `false`; territory army count is unchanged; current player's available Infantry is unchanged
 
-- **TC57: Rejects unknown territory name** ( :x: )
+- **TC57: Rejects unknown territory name** ( :white_check_mark: )
     - **State of the system**: Current player enters a territory name that does not match any board territory
     - **Expected output**: Returns `false`; no territory army count changes; current player's available Infantry is unchanged
 
