@@ -16,6 +16,10 @@ public class HumanPlayer extends Player {
 
     private static final int ARTILLERY_VALUE = 10;
 
+    private static final int MIN_TERRITORY_REINFORCEMENT = 3;
+
+    private static final int TERRITORIES_PER_REINFORCEMENT_ARMY = 3;
+
     private final List<Territory> territories;
 
     private HashMap<ArmyType, Integer> availableArmies;
@@ -110,8 +114,14 @@ public class HumanPlayer extends Player {
                     "Player cannot own 0 territories and play a turn because they have been eliminated.");
         }
 
+        int territoryReinforcement = getTerritoryCount() / TERRITORIES_PER_REINFORCEMENT_ARMY;
+
+        if (territoryReinforcement < MIN_TERRITORY_REINFORCEMENT) {
+            territoryReinforcement = MIN_TERRITORY_REINFORCEMENT;
+        }
+
         HashMap<ArmyType, Integer> reinforcementArmies = new HashMap<>();
-        reinforcementArmies.put(ArmyType.INFANTRY, 3);
+        reinforcementArmies.put(ArmyType.INFANTRY, territoryReinforcement);
         addArmies(reinforcementArmies);
     }
 
