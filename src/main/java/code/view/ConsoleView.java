@@ -60,5 +60,9 @@ public class ConsoleView {
         return scanner.nextLine();
     }
 
+    public void displayCurrentPlayerArmies(final String availableArmies) {
+        output.println(availableArmies);
+    }
+
 
 }

@@ -143,4 +143,20 @@ public final class ConsoleViewTest {
                 new Scanner(""),
                 new PrintStream(output, true, StandardCharsets.UTF_8));
     }
+
+    @Test
+    public void displayCurrentPlayerArmiesPrintsAvailableArmies() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner(""),
+                new PrintStream(output));
+
+        String availableArmies = "{INFANTRY=15, CAVALRY=2, ARTILLERY=3}";
+
+        view.displayCurrentPlayerArmies(availableArmies);
+
+        assertTrue(output.toString().contains(availableArmies));
+    }
+
+
 }
