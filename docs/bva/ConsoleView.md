@@ -91,7 +91,7 @@
 
 ### Method under test: `displayCurrentPlayerTerritoriesByContinent(String territoriesByContinent)`
 
-- **TC17: Displays one owned territory grouped by continent** ( :x: )
+- **TC17: Displays one owned territory grouped by continent** ( :white_check_mark: )
     - **State of the system**: Model provides a formatted string where the current player owns exactly one territory
     - **Expected output**: Output displays the provided territory string exactly
 

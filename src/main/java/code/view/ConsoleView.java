@@ -54,6 +54,11 @@ public class ConsoleView {
         output.println(playerClaimingStatus);
     }
 
+    public void displayCurrentPlayerTerritoriesByContinent(
+            final String territoriesByContinent) {
+        output.println(territoriesByContinent);
+    }
+
     public String getTerritoryChoiceDuringSetup() {
         output.print("Enter territory to claim: ");
 
