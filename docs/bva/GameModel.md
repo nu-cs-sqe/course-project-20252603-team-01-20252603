@@ -243,11 +243,11 @@
     - **State of the system**: Current player has placed all setup Infantry and has `0` available Infantry
     - **Expected output**: Returns `false`, allowing setup to skip this player during remaining-army placement
 
-- **TC52: Current player has exactly one army remaining** ( :x: )
+- **TC52: Current player has exactly one army remaining** ( :white_check_mark: )
     - **State of the system**: Current player has exactly `1` available Infantry left after territory claiming
     - **Expected output**: Returns `true`, allowing setup to prompt this player for one final placement
 
-- **TC53: Current player has more than one army remaining** ( :x: )
+- **TC53: Current player has more than one army remaining** ( :white_check_mark: )
     - **State of the system**: Current player has multiple available Infantry left after territory claiming
     - **Expected output**: Returns `true`, allowing setup to prompt this player for army placement
 
@@ -255,7 +255,7 @@
 
 ### Method under test: `addArmiesDuringSetup(String territoryName, HashMap<ArmyType, Integer> pieces)`
 
-- **TC54: Adds exactly one Infantry to current player's owned territory** ( :x: )
+- **TC54: Adds exactly one Infantry to current player's owned territory** ( :white_check_mark: )
     - **State of the system**: All territories are claimed; current player owns `"Alaska"`; current player has at least `1` available Infantry; `pieces` contains exactly `INFANTRY -> 1`
     - **Expected output**: Returns `true`; `"Alaska"` army count increases by `1`; current player's available Infantry decreases by `1`
 

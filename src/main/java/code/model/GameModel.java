@@ -368,6 +368,30 @@ public class GameModel {
                 && pieces.getOrDefault(ArmyType.INFANTRY, 0) == SETUP_INFANTRY_COUNT;
     }
 
+    public boolean addArmiesDuringSetup(
+            final String territoryName,
+            final HashMap<ArmyType, Integer> pieces) {
+        Player player = players.get(currentPlayerIndex);
+        Territory territory = findTerritoryByName(territoryName);
+
+        if (!territory.isOwnedBy(player)) {
+            return false;
+        }
+
+        if (!isExactlyOneInfantry(pieces)) {
+            return false;
+        }
+
+        if (!player.hasAvailableArmies(pieces)) {
+            return false;
+        }
+
+        territory.placeArmies(pieces);
+        player.removeArmies(pieces);
+
+        return true;
+    }
+
     public boolean advanceCurrentPlayerIndex() {
         if (players.isEmpty()) {
             return false;
