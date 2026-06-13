@@ -135,7 +135,7 @@
 
 - **TC27: Zero territories is rejected because the player should be eliminated** ( :x: )
     - **State of the system**: Human player owns 0 territories
-    - **Expected output**: Exception is raised because the player has an invalid territory count for an active turn; available armies are unchanged
+    - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 0 territories and play a turn because they have been eliminated."`; available armies are unchanged
 
 - **TC28: One territory receives minimum reinforcement armies** ( :x: )
     - **State of the system**: Human player owns 1 territory and has 0 available Infantry
@@ -171,8 +171,8 @@
 
 - **TC36: Forty-two territories is rejected because the game should already be won** ( :x: )
     - **State of the system**: Human player owns 42 territories
-    - **Expected output**: Exception is raised because the player has an invalid territory count for an active turn; available armies are unchanged
+    - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 42 territories and play a turn because they should have already won."`; available armies are unchanged
 
 - **TC37: More than forty-two territories is rejected as an invalid game state** ( :x: )
     - **State of the system**: Human player owns 43 territories
-    - **Expected output**: Exception is raised because the player has an invalid territory count for an active turn; available armies are unchanged
+    - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 43 territories because there are only 42 territories on the board."`; available armies are unchanged
