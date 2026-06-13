@@ -214,5 +214,52 @@ public final class ConsoleViewTest {
         assertEquals("0", reinforcementInput.get(3));
     }
 
+    @Test
+    public void promptReinforcementReturnsMultiWordTerritoryPlacement() {
+        ConsoleView view = new ConsoleView(
+                new Scanner("Northwest Territory 15 2 3\n"),
+                new PrintStream(new ByteArrayOutputStream()));
+
+        List<String> reinforcementInput = view.promptReinforcement();
+
+        assertEquals("Northwest Territory", reinforcementInput.get(0));
+        assertEquals("15", reinforcementInput.get(1));
+        assertEquals("2", reinforcementInput.get(2));
+        assertEquals("3", reinforcementInput.get(3));
+    }
+
+    @Test
+    public void promptReinforcementRejectsNonNumericCavalryCount() {
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska 10 two 3\n"),
+                new PrintStream(new ByteArrayOutputStream()));
+
+        List<String> reinforcementInput = view.promptReinforcement();
+
+        assertTrue(reinforcementInput.isEmpty());
+    }
+
+    @Test
+    public void promptReinforcementRejectsNonNumericInfantryCount() {
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska ten 2 3\n"),
+                new PrintStream(new ByteArrayOutputStream()));
+
+        List<String> reinforcementInput = view.promptReinforcement();
+
+        assertTrue(reinforcementInput.isEmpty());
+    }
+
+    @Test
+    public void promptReinforcementRejectsNonNumericArtilleryCount() {
+        ConsoleView view = new ConsoleView(
+                new Scanner("Northwest Territory 10 2 three\n"),
+                new PrintStream(new ByteArrayOutputStream()));
+
+        List<String> reinforcementInput = view.promptReinforcement();
+
+        assertTrue(reinforcementInput.isEmpty());
+    }
+
 
 }
