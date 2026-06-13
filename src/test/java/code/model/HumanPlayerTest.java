@@ -503,4 +503,14 @@ public final class HumanPlayerTest {
         assertTrue(player.getAvailableArmies().contains("INFANTRY=" + THREE_ARMIES));
     }
 
+    @Test
+    public void addArmiesToAvailableBasedOnTerritoriesWithTenTerritoriesAddsThreeInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        addTerritoriesToPlayer(player, 10);
+        player.addArmiesToAvailableBasedOnTerritories();
+
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=" + THREE_ARMIES));
+    }
+
 }

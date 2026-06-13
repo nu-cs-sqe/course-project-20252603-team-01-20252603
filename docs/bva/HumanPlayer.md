@@ -153,7 +153,7 @@
     - **State of the system**: Human player owns 9 territories and has 0 available Infantry
     - **Expected output**: Player receives 3 Infantry
 
-- **TC32: Ten territories rounds down to three reinforcement armies** ( :x: )
+- **TC32: Ten territories rounds down to three reinforcement armies** ( :white_check_mark: )
     - **State of the system**: Human player owns 10 territories and has 0 available Infantry
     - **Expected output**: Player receives 3 Infantry
 
