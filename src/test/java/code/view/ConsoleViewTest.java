@@ -158,5 +158,19 @@ public final class ConsoleViewTest {
         assertTrue(output.toString().contains(availableArmies));
     }
 
+    @Test
+    public void promptReinforcementReturnsOneInfantryPlacement() {
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska 1 0 0\n"),
+                new PrintStream(new ByteArrayOutputStream()));
+
+        List<String> reinforcementInput = view.promptReinforcement();
+
+        assertEquals("Alaska", reinforcementInput.get(0));
+        assertEquals("1", reinforcementInput.get(1));
+        assertEquals("0", reinforcementInput.get(2));
+        assertEquals("0", reinforcementInput.get(3));
+    }
+
 
 }

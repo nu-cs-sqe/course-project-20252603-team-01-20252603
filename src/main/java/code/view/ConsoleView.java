@@ -64,5 +64,14 @@ public class ConsoleView {
         output.println(availableArmies);
     }
 
+    public List<String> promptReinforcement() {
+        output.print("Enter territory and armies to place in the format: [Territory Name] [Number of Infantry] [Number of Cavalry] [Number of Artillery]: ");
+
+        return List.of(
+                scanner.next(),
+                scanner.next(),
+                scanner.next(),
+                scanner.next());
+    }
 
 }
