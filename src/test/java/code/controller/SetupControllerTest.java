@@ -802,4 +802,45 @@ public final class SetupControllerTest {
         verify(model, view);
     }
 
+    @Test
+    public void handleTerritoryClaiming_MultiplePlayersHaveZeroArmies_SkipsToNextAvailablePlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        SetupController controller = new SetupController(model, view);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 2");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 3");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(true);
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Asia: China");
+        view.displayCurrentPlayerTerritoriesByContinent("Asia: China");
+        expectLastCall().once();
+        expect(view.promptCurrentPlayerTerritoryChoice()).andReturn("China");
+        expect(model.addArmiesDuringSetup("China", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displaySetupPhaseComplete();
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
 }

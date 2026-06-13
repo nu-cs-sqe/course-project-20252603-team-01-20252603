@@ -99,7 +99,7 @@
     - **State of the system**: All territories are claimed; current player has `0` available Infantry; at least one later player still has available Infantry
     - **Expected output**: Controller does not display placement prompt for the current player; it calls `advanceCurrentPlayerIndex()` and continues with the next eligible player
 
-- **TC22: Skips multiple players with zero armies remaining** ( :x: )
+- **TC22: Skips multiple players with zero armies remaining** ( :white_check_mark: )
     - **State of the system**: All territories are claimed; two or more consecutive players have `0` available Infantry; a later player has at least `1` available Infantry
     - **Expected output**: Controller advances past each player with `0` armies and prompts the next player who can still place an Infantry
 
