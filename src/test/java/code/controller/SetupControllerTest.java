@@ -69,7 +69,6 @@ public final class SetupControllerTest {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
 
-        SetupController controller = new SetupController(model, view);
 
         assertNotNull(controller);
     }
@@ -84,7 +83,6 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
-        SetupController controller = new SetupController(model, view);
         controller.initializeBoard();
 
         verify(model, view);
@@ -100,7 +98,6 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
-        SetupController controller = new SetupController(model, view);
         controller.initializeBoard();
         controller.initializeBoard();
 
@@ -438,7 +435,6 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingSuccessfulClaimAdvancesToNextPlayer() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
@@ -471,6 +467,7 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -525,9 +522,9 @@ public final class SetupControllerTest {
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
         expectNoRemainingArmyPlacementComplete(model, view, "Player 3");
-        SetupController controller = new SetupController(model, view);
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -596,13 +593,13 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingStopsWhenAllTerritoriesClaimed() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
         expectNoRemainingArmyPlacementComplete(model, view, "Player 1");
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -612,7 +609,6 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingContinuesWhenOneTerritoryRemainsUnclaimed() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
@@ -640,6 +636,7 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -649,7 +646,6 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingTerritoryStillUnclaimedDoesNotPromptForRemainingArmyPlacement() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
@@ -677,6 +673,7 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -686,7 +683,6 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingCurrentPlayerHasOneRemainingArmyPlacesArmyAndCompletesSetup() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
@@ -709,6 +705,7 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -718,7 +715,6 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingCurrentPlayerHasMultipleRemainingArmiesPlacesOneAndContinuesLater() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
@@ -760,6 +756,7 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -769,7 +766,6 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingCurrentPlayerHasZeroArmiesSkipsToNextAvailablePlayer() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
@@ -797,6 +793,7 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -806,7 +803,6 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingMultiplePlayersHaveZeroArmiesSkipsToNextAvailablePlayer() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
@@ -838,6 +834,7 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -847,7 +844,6 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingUnownedTerritorySelectedRePromptsSamePlayer() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
@@ -881,6 +877,7 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -890,7 +887,6 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingAllPlayersHaveZeroArmiesDisplaysSetupComplete() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
         expect(model.getCurrentPlayerName()).andReturn("Player 1");
@@ -912,6 +908,7 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -921,7 +918,6 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingOnePlayerHasLastRemainingArmyDisplaysSetupComplete() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
@@ -954,6 +950,7 @@ public final class SetupControllerTest {
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
