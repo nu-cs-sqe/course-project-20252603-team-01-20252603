@@ -122,7 +122,7 @@ public final class ConsoleViewTest {
     }
 
     @Test
-    public void displayCurrentPlayerTerritoriesByContinent_OneOwnedTerritory_DisplaysTerritoryString() {
+    public void displayCurrentPlayerTerritoriesByContinentOneOwnedTerritoryDisplaysTerritoryString() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(output);
         String territoriesByContinent = "North America: Alaska";
@@ -134,7 +134,7 @@ public final class ConsoleViewTest {
     }
 
     @Test
-    public void displayCurrentPlayerTerritoriesByContinent_MultipleOwnedTerritories_DisplaysTerritoryString() {
+    public void displayCurrentPlayerTerritoriesByContinentMultipleOwnedTerritoriesDisplaysTerritoryString() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(output);
         String territoriesByContinent = "North America: Alaska, Alberta"
@@ -157,7 +157,7 @@ public final class ConsoleViewTest {
     }
 
     @Test
-    public void promptCurrentPlayerTerritoryChoice_OwnedTerritoryEntered_ReturnsTerritoryName() {
+    public void promptCurrentPlayerTerritoryChoiceOwnedTerritoryEnteredReturnsTerritoryName() {
         ConsoleView view = createViewWithInput("Alaska\n");
 
         String territoryChoice = view.promptCurrentPlayerTerritoryChoice();
@@ -166,7 +166,7 @@ public final class ConsoleViewTest {
     }
 
     @Test
-    public void promptCurrentPlayerTerritoryChoice_UnownedTerritoryEntered_ReturnsTerritoryName() {
+    public void promptCurrentPlayerTerritoryChoiceUnownedTerritoryEnteredReturnsTerritoryName() {
         ConsoleView view = createViewWithInput("Alberta\n");
 
         String territoryChoice = view.promptCurrentPlayerTerritoryChoice();
@@ -175,7 +175,7 @@ public final class ConsoleViewTest {
     }
 
     @Test
-    public void displaySetupPhaseComplete_AllArmiesPlaced_DisplaysSetupCompleteMessage() {
+    public void displaySetupPhaseCompleteAllArmiesPlacedDisplaysSetupCompleteMessage() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(output);
         String setupCompleteMessage = "Setup is complete. The game is starting now.";

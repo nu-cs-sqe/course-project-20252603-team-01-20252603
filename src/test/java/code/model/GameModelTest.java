@@ -603,7 +603,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void hasCurrentPlayerAvailableArmies_CurrentPlayerHasZeroArmiesRemaining_ReturnsFalse() {
+    public void hasCurrentPlayerAvailableArmiesCurrentPlayerHasZeroArmiesRemainingReturnsFalse() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -617,7 +617,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void hasCurrentPlayerAvailableArmies_CurrentPlayerHasOneArmyRemaining_ReturnsTrue() {
+    public void hasCurrentPlayerAvailableArmiesCurrentPlayerHasOneArmyRemainingReturnsTrue() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -631,7 +631,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void hasCurrentPlayerAvailableArmies_CurrentPlayerHasMultipleArmiesRemaining_ReturnsTrue() {
+    public void hasCurrentPlayerAvailableArmiesCurrentPlayerHasMultipleArmiesRemainingReturnsTrue() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -643,7 +643,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void addArmiesDuringSetup_OwnedTerritoryWithOneInfantry_ReturnsTrue() {
+    public void addArmiesDuringSetupOwnedTerritoryWithOneInfantryReturnsTrue() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -665,7 +665,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void addArmiesDuringSetup_OwnedTerritoryWithFinalInfantry_ReturnsTrue() {
+    public void addArmiesDuringSetupOwnedTerritoryWithFinalInfantryReturnsTrue() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -688,7 +688,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void addArmiesDuringSetup_TerritoryOwnedByAnotherPlayer_ReturnsFalse() {
+    public void addArmiesDuringSetupTerritoryOwnedByAnotherPlayerReturnsFalse() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -711,7 +711,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void addArmiesDuringSetup_UnknownTerritoryName_ReturnsFalse() {
+    public void addArmiesDuringSetupUnknownTerritoryNameReturnsFalse() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -730,7 +730,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void addArmiesDuringSetup_OwnedTerritoryWithZeroInfantry_ReturnsFalse() {
+    public void addArmiesDuringSetupOwnedTerritoryWithZeroInfantryReturnsFalse() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -752,7 +752,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void addTwoArmiesDuringSetup_OwnedTerritory_ReturnsFalse() {
+    public void addTwoArmiesDuringSetupOwnedTerritoryReturnsFalse() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -774,7 +774,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void addArmiesDuringSetup_OwnedTerritoryWithNoArmiesRemaining_ReturnsFalse() {
+    public void addArmiesDuringSetupOwnedTerritoryWithNoArmiesRemainingReturnsFalse() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
