@@ -66,6 +66,7 @@ public final class TurnControllerTest {
 
         verify(model, view);
     }
+
     @Test
     public void handleReinforcementDisplaysCurrentPlayerAndTerritories() {
         GameModel model = createMock(GameModel.class);
@@ -138,11 +139,10 @@ public final class TurnControllerTest {
     public void handleReinforcementDisplaysErrorWhenPlacementFails() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
+
         HashMap<ArmyType, Integer> invalidPieces =
                 createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
-        HashMap<ArmyType, Integer> validPieces =
-                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+
 
         expect(model.currentPlayerHasAvailableArmies()).andReturn(true);
 
@@ -184,7 +184,8 @@ public final class TurnControllerTest {
                 "1",
                 "0",
                 "0"));
-
+        HashMap<ArmyType, Integer> validPieces =
+                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
         expect(model.placeArmiesDuringReinforcement("Alaska", validPieces))
                 .andReturn(true);
 
@@ -192,6 +193,7 @@ public final class TurnControllerTest {
 
         replay(model, view);
 
+        TurnController controller = new TurnController(model, view);
         controller.handleReinforcement();
 
         verify(model, view);
@@ -201,7 +203,7 @@ public final class TurnControllerTest {
     public void handleReinforcementPassesMixedPlacementToModel() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
+
         HashMap<ArmyType, Integer> pieces =
                 createArmies(FIFTEEN_ARMIES, TWO_ARMIES, THREE_ARMIES);
 
@@ -228,7 +230,7 @@ public final class TurnControllerTest {
         expect(model.currentPlayerHasAvailableArmies()).andReturn(false);
 
         replay(model, view);
-
+        TurnController controller = new TurnController(model, view);
         controller.handleReinforcement();
 
         verify(model, view);
@@ -238,9 +240,8 @@ public final class TurnControllerTest {
     public void handleReinforcementRepromptsAfterMalformedInput() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
-        HashMap<ArmyType, Integer> pieces =
-                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+
+
 
         expect(model.currentPlayerHasAvailableArmies()).andReturn(true);
 
@@ -275,13 +276,16 @@ public final class TurnControllerTest {
                 "0",
                 "0"));
 
+        HashMap<ArmyType, Integer> pieces =
+                createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+
         expect(model.placeArmiesDuringReinforcement("Alaska", pieces))
                 .andReturn(true);
 
         expect(model.currentPlayerHasAvailableArmies()).andReturn(false);
 
         replay(model, view);
-
+        TurnController controller = new TurnController(model, view);
         controller.handleReinforcement();
 
         verify(model, view);

@@ -29,6 +29,8 @@ public final class HumanPlayerTest {
 
     private static final int ONE_ARMY = 1;
 
+    private static final int THREE_ARMIES = 3;
+
     private static final int FOUR_ARMIES = 4;
 
     private static final int FIVE_ARMIES = 5;
@@ -402,7 +404,7 @@ public final class HumanPlayerTest {
         HashMap<ArmyType, Integer> availableArmies =
                 createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
         HashMap<ArmyType, Integer> armiesToRemove =
-                createArmies(3, ZERO_ARMIES, ZERO_ARMIES);
+                createArmies(THREE_ARMIES, ZERO_ARMIES, ZERO_ARMIES);
 
         player.addArmies(availableArmies);
 

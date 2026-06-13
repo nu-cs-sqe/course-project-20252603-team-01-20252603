@@ -3,6 +3,7 @@ package code.controller;
 import code.model.ArmyType;
 import code.model.GameModel;
 import code.view.ConsoleView;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,10 @@ public class TurnController {
 
     private static final int ARTILLERY_INPUT_INDEX = 3;
 
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "TurnController intentionally stores the model and view it controls."
+    )
     public TurnController(final GameModel gameModel, final ConsoleView consoleView) {
         model = gameModel;
         view = consoleView;
