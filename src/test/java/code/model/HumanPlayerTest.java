@@ -4,6 +4,7 @@ import static org.easymock.EasyMock.createMock;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
@@ -436,6 +437,20 @@ public final class HumanPlayerTest {
         assertTrue(remainingArmies.contains("1"));
         assertTrue(remainingArmies.contains("ARTILLERY"));
         assertTrue(remainingArmies.contains("0"));
+    }
+
+    @Test
+    public void addArmiesToAvailableBasedOnTerritoriesWithZeroTerritoriesRaisesException() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                player::addArmiesToAvailableBasedOnTerritories);
+
+        assertEquals(
+                "Player cannot own 0 territories and play a turn because they have been eliminated.",
+                exception.getMessage());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
     }
 
 }

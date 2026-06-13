@@ -103,6 +103,14 @@ public class HumanPlayer extends Player {
         return calculateArmyValue(availableArmies) >= calculateArmyValue(requiredArmies);
     }
 
+    @Override
+    public void addArmiesToAvailableBasedOnTerritories() {
+        if (getTerritoryCount() == 0) {
+            throw new IllegalStateException(
+                    "Player cannot own 0 territories and play a turn because they have been eliminated.");
+        }
+    }
+
     private int calculateArmyValue(final HashMap<ArmyType, Integer> armies) {
         int infantryCount = armies.getOrDefault(ArmyType.INFANTRY, 0);
         int cavalryCount = armies.getOrDefault(ArmyType.CAVALRY, 0);

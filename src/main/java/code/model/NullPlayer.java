@@ -45,4 +45,9 @@ public class NullPlayer extends Player {
     public String getAvailableArmies() {
         throw new UnsupportedOperationException("NullPlayer does not have available armies.");
     }
+
+    @Override
+    public void addArmiesToAvailableBasedOnTerritories() {
+        throw new UnsupportedOperationException("NullPlayer cannot receive armies.");
+    }
 }

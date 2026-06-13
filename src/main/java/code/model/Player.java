@@ -43,6 +43,8 @@ public abstract class Player {
 
     public abstract String getAvailableArmies();
 
+    public abstract void addArmiesToAvailableBasedOnTerritories();
+
     @Override
     public String toString() {
         return name + " - " + color;
