@@ -623,4 +623,40 @@ public final class SetupControllerTest {
         verify(model, view);
     }
 
+    @Test
+    public void handleTerritoryClaiming_TerritoryStillUnclaimed_DoesNotPromptForRemainingArmyPlacement() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        SetupController controller = new SetupController(model, view);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getUnclaimedTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayUnclaimedTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Player 1 territories:");
+        view.displayCurrentPlayerClaimingStatus("Player 1 territories:");
+        expectLastCall().once();
+
+        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Alaska");
+        expect(model.claimTerritoryDuringSetup("Alaska", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+
+        replay(model, view);
+
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
 }

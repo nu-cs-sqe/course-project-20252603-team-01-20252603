@@ -83,7 +83,7 @@
     - **State of the system**: 41 territories are claimed and exactly 1 territory remains unclaimed
     - **Expected output**: Controller continues prompting players; claiming phase does not end yet
 
-- **TC18: Remaining-army placement does not start until all territories are claimed** ( :x: )
+- **TC18: Remaining-army placement does not start until all territories are claimed** ( :white_check_mark: )
     - **State of the system**: Territory claiming loop is running and at least one territory is still unclaimed
     - **Expected output**: Controller continues the territory-claiming flow and does not prompt for remaining-army placement yet
 
