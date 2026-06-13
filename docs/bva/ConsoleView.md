@@ -86,3 +86,35 @@
 - **TC16: Returns entered Infantry count during setup** ( :white_check_mark: )
     - **State of the system**: Player is prompted to enter the number of Infantry to place
     - **Expected output**: Returns the Infantry count entered by the player so the model can validate it
+
+---
+
+### Method under test: `displayCurrentPlayerTerritoriesByContinent(String territoriesByContinent)`
+
+- **TC17: Displays one owned territory grouped by continent** ( :x: )
+    - **State of the system**: Model provides a formatted string where the current player owns exactly one territory
+    - **Expected output**: Output displays the provided territory string exactly
+
+- **TC18: Displays multiple owned territories grouped by continent** ( :x: )
+    - **State of the system**: Model provides a formatted string where the current player owns more than one territory across one or more continents
+    - **Expected output**: Output displays the provided territory string exactly
+
+---
+
+### Method under test: `promptCurrentPlayerTerritoryChoice()`
+
+- **TC19: Returns first owned territory name entered for remaining-army placement** ( :x: )
+    - **State of the system**: Current player is prompted to choose one of their territories and enters the name of a territory they own
+    - **Expected output**: Returns the entered territory name so the model can place one Infantry
+
+- **TC20: Returns unowned territory name for model validation** ( :x: )
+    - **State of the system**: Current player enters the name of a territory owned by another player
+    - **Expected output**: Returns the entered territory name so `addArmiesDuringSetup()` can reject it and setup can re-prompt
+
+---
+
+### Method under test: `displaySetupPhaseComplete()`
+
+- **TC21: Displays setup completion message once placement is complete** ( :x: )
+    - **State of the system**: All territories are claimed and all players have `0` available Infantry
+    - **Expected output**: Output displays a message saying setup is complete and the game is starting now

@@ -82,3 +82,35 @@
 - **TC17: Territory claiming continues when one territory remains unclaimed** ( :white_check_mark: )
     - **State of the system**: 41 territories are claimed and exactly 1 territory remains unclaimed
     - **Expected output**: Controller continues prompting players; claiming phase does not end yet
+
+- **TC18: Remaining-army placement does not start until all territories are claimed** ( :x: )
+    - **State of the system**: Territory claiming loop is running and at least one territory is still unclaimed
+    - **Expected output**: Controller continues the territory-claiming flow and does not prompt for remaining-army placement yet
+
+- **TC19: Current player with one remaining army places it successfully** ( :x: )
+    - **State of the system**: All 42 territories are claimed; current player has exactly `1` available Infantry and selects one of their owned territories
+    - **Expected output**: Controller displays current player's territories, prompts for a territory, calls `addArmiesDuringSetup()` with exactly one Infantry, advances to the next player, and the player's available Infantry becomes `0`
+
+- **TC20: Current player with more than one remaining army places one and continues later** ( :x: )
+    - **State of the system**: All territories are claimed; current player has more than `1` available Infantry and selects one of their owned territories
+    - **Expected output**: Controller places exactly `1` Infantry, advances to the next player, and leaves the current player with remaining armies for a later turn
+
+- **TC21: Skips current player with zero armies remaining** ( :x: )
+    - **State of the system**: All territories are claimed; current player has `0` available Infantry; at least one later player still has available Infantry
+    - **Expected output**: Controller does not display placement prompt for the current player; it calls `advanceCurrentPlayerIndex()` and continues with the next eligible player
+
+- **TC22: Skips multiple players with zero armies remaining** ( :x: )
+    - **State of the system**: All territories are claimed; two or more consecutive players have `0` available Infantry; a later player has at least `1` available Infantry
+    - **Expected output**: Controller advances past each player with `0` armies and prompts the next player who can still place an Infantry
+
+- **TC23: Unowned territory during remaining-army placement re-prompts same player** ( :x: )
+    - **State of the system**: All territories are claimed; current player has available Infantry but selects a territory owned by another player
+    - **Expected output**: `addArmiesDuringSetup()` returns `false`; controller displays an error; controller does not advance to the next player; same player is prompted again
+
+- **TC24: Placement loop stops when all players have zero armies remaining** ( :x: )
+    - **State of the system**: All territories are claimed and every player has `0` available Infantry
+    - **Expected output**: Controller exits the remaining-army placement loop and calls `displaySetupPhaseComplete()`
+
+- **TC25: Last remaining army across all players completes setup** ( :x: )
+    - **State of the system**: Exactly one player has exactly `1` available Infantry and all other players have `0`
+    - **Expected output**: That player places the Infantry; controller advances or checks completion; setup completion message is displayed

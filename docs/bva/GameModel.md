@@ -234,3 +234,51 @@
 - **TC50: Excludes territories owned by other players** ( :white_check_mark:)
     - **State of the system**: Player 1 owns `"Alaska"`; current player is Player 2
     - **Expected output**: Returned string does not contain `"Alaska"`
+
+---
+
+### Method under test: `getPlayerCurrentArmies()`
+
+- **TC51: Current player has zero armies remaining** ( :x: )
+    - **State of the system**: Current player has placed all setup Infantry and has `0` available Infantry
+    - **Expected output**: Returns `0`, allowing setup to skip this player during remaining-army placement
+
+- **TC52: Current player has exactly one army remaining** ( :x: )
+    - **State of the system**: Current player has exactly `1` available Infantry left after territory claiming
+    - **Expected output**: Returns `1`, allowing setup to prompt this player for one final placement
+
+- **TC53: Current player has more than one army remaining** ( :x: )
+    - **State of the system**: Current player has multiple available Infantry left after territory claiming
+    - **Expected output**: Returns the current player's remaining Infantry count
+
+---
+
+### Method under test: `addArmiesDuringSetup(String territoryName, HashMap<ArmyType, Integer> pieces)`
+
+- **TC54: Adds exactly one Infantry to current player's owned territory** ( :x: )
+    - **State of the system**: All territories are claimed; current player owns `"Alaska"`; current player has at least `1` available Infantry; `pieces` contains exactly `INFANTRY -> 1`
+    - **Expected output**: Returns `true`; `"Alaska"` army count increases by `1`; current player's available Infantry decreases by `1`
+
+- **TC55: Adds final remaining Infantry to owned territory** ( :x: )
+    - **State of the system**: Current player owns the selected territory and has exactly `1` available Infantry
+    - **Expected output**: Returns `true`; selected territory gains `1` Infantry; current player's available Infantry becomes `0`
+
+- **TC56: Rejects territory owned by another player** ( :x: )
+    - **State of the system**: Current player selects a territory that exists but is owned by another player; current player has available Infantry
+    - **Expected output**: Returns `false`; territory army count is unchanged; current player's available Infantry is unchanged
+
+- **TC57: Rejects unknown territory name** ( :x: )
+    - **State of the system**: Current player enters a territory name that does not match any board territory
+    - **Expected output**: Returns `false`; no territory army count changes; current player's available Infantry is unchanged
+
+- **TC58: Rejects zero Infantry placement** ( :x: )
+    - **State of the system**: Current player owns the selected territory; `pieces` contains `INFANTRY -> 0`
+    - **Expected output**: Returns `false`; selected territory army count is unchanged; current player's available Infantry is unchanged
+
+- **TC59: Rejects more than one Infantry placement** ( :x: )
+    - **State of the system**: Current player owns the selected territory; `pieces` contains `INFANTRY -> 2`
+    - **Expected output**: Returns `false`; selected territory army count is unchanged; current player's available Infantry is unchanged
+
+- **TC60: Rejects placement when current player has no armies remaining** ( :x: )
+    - **State of the system**: Current player owns the selected territory but has `0` available Infantry
+    - **Expected output**: Returns `false`; selected territory army count is unchanged; current player's available Infantry remains `0`
