@@ -259,7 +259,7 @@
     - **State of the system**: All territories are claimed; current player owns `"Alaska"`; current player has at least `1` available Infantry; `pieces` contains exactly `INFANTRY -> 1`
     - **Expected output**: Returns `true`; `"Alaska"` army count increases by `1`; current player's available Infantry decreases by `1`
 
-- **TC55: Adds final remaining Infantry to owned territory** ( :x: )
+- **TC55: Adds final remaining Infantry to owned territory** ( :white_check_mark: )
     - **State of the system**: Current player owns the selected territory and has exactly `1` available Infantry
     - **Expected output**: Returns `true`; selected territory gains `1` Infantry; current player's available Infantry becomes `0`
 
