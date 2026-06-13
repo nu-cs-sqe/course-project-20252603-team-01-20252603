@@ -65,5 +65,10 @@ public class ConsoleView {
         return scanner.nextLine();
     }
 
+    public String promptCurrentPlayerTerritoryChoice() {
+        output.print("Enter territory to place army: ");
+
+        return scanner.nextLine();
+    }
 
 }

@@ -103,7 +103,7 @@
 
 ### Method under test: `promptCurrentPlayerTerritoryChoice()`
 
-- **TC19: Returns first owned territory name entered for remaining-army placement** ( :x: )
+- **TC19: Returns first owned territory name entered for remaining-army placement** ( :white_check_mark: )
     - **State of the system**: Current player is prompted to choose one of their territories and enters the name of a territory they own
     - **Expected output**: Returns the entered territory name so the model can place one Infantry
 
