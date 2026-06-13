@@ -82,6 +82,8 @@ public class ConsoleView {
 
     public void displaySetupPhaseComplete() {
         output.println("Setup is complete. The game is starting now.");
+    }
+    
     public void displayCurrentPlayerArmies(final String availableArmies) {
         output.println(availableArmies);
     }
