@@ -165,6 +165,15 @@ public final class ConsoleViewTest {
         assertEquals("Alaska", territoryChoice);
     }
 
+    @Test
+    public void promptCurrentPlayerTerritoryChoice_UnownedTerritoryEntered_ReturnsTerritoryName() {
+        ConsoleView view = createViewWithInput("Alberta\n");
+
+        String territoryChoice = view.promptCurrentPlayerTerritoryChoice();
+
+        assertEquals("Alberta", territoryChoice);
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 

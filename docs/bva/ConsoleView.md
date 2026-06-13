@@ -107,7 +107,7 @@
     - **State of the system**: Current player is prompted to choose one of their territories and enters the name of a territory they own
     - **Expected output**: Returns the entered territory name so the model can place one Infantry
 
-- **TC20: Returns unowned territory name for model validation** ( :x: )
+- **TC20: Returns unowned territory name for model validation** ( :white_check_mark: )
     - **State of the system**: Current player enters the name of a territory owned by another player
     - **Expected output**: Returns the entered territory name so `addArmiesDuringSetup()` can reject it and setup can re-prompt
 
