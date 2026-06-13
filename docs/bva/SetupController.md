@@ -91,7 +91,7 @@
     - **State of the system**: All 42 territories are claimed; current player has exactly `1` available Infantry and selects one of their owned territories
     - **Expected output**: Controller displays current player's territories, prompts for a territory, calls `addArmiesDuringSetup()` with exactly one Infantry, advances to the next player, and the player's available Infantry becomes `0`
 
-- **TC20: Current player with more than one remaining army places one and continues later** ( :x: )
+- **TC20: Current player with more than one remaining army places one and continues later** ( :white_check_mark: )
     - **State of the system**: All territories are claimed; current player has more than `1` available Infantry and selects one of their owned territories
     - **Expected output**: Controller places exactly `1` Infantry, advances to the next player, and leaves the current player with remaining armies for a later turn
 
