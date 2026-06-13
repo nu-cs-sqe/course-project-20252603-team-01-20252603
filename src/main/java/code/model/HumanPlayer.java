@@ -58,6 +58,32 @@ public class HumanPlayer extends Player {
 
     @Override
     public void removeArmies(final HashMap<ArmyType, Integer> armiesToRemove) {
+        if (hasExactArmies(armiesToRemove)) {
+            removeExactArmies(armiesToRemove);
+            return;
+        }
+
+        int remainingValue = calculateArmyValue(availableArmies)
+                - calculateArmyValue(armiesToRemove);
+
+        availableArmies = convertValueToArmies(remainingValue);
+    }
+
+    private boolean hasExactArmies(final HashMap<ArmyType, Integer> requiredArmies) {
+        for (Map.Entry<ArmyType, Integer> entry : requiredArmies.entrySet()) {
+            ArmyType armyType = entry.getKey();
+            int requiredCount = entry.getValue();
+            int availableCount = availableArmies.getOrDefault(armyType, 0);
+
+            if (availableCount < requiredCount) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void removeExactArmies(final HashMap<ArmyType, Integer> armiesToRemove) {
         for (Map.Entry<ArmyType, Integer> entry : armiesToRemove.entrySet()) {
             ArmyType armyType = entry.getKey();
             int removedCount = entry.getValue();
@@ -85,6 +111,21 @@ public class HumanPlayer extends Player {
         return infantryCount * INFANTRY_VALUE
                 + cavalryCount * CAVALRY_VALUE
                 + artilleryCount * ARTILLERY_VALUE;
+    }
+
+    private HashMap<ArmyType, Integer> convertValueToArmies(final int armyValue) {
+        HashMap<ArmyType, Integer> convertedArmies = new HashMap<>();
+        int remainingValue = armyValue;
+
+        convertedArmies.put(ArmyType.ARTILLERY, remainingValue / ARTILLERY_VALUE);
+        remainingValue %= ARTILLERY_VALUE;
+
+        convertedArmies.put(ArmyType.CAVALRY, remainingValue / CAVALRY_VALUE);
+        remainingValue %= CAVALRY_VALUE;
+
+        convertedArmies.put(ArmyType.INFANTRY, remainingValue);
+
+        return convertedArmies;
     }
 
 
