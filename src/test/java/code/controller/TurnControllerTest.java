@@ -25,6 +25,12 @@ public final class TurnControllerTest {
 
     private static final int ONE_ARMY = 1;
 
+    private static final int TWO_ARMIES = 2;
+
+    private static final int THREE_ARMIES = 3;
+
+    private static final int FIFTEEN_ARMIES = 15;
+
     private HashMap<ArmyType, Integer> createArmies(
             final int infantry,
             final int cavalry,
@@ -180,6 +186,43 @@ public final class TurnControllerTest {
                 "0"));
 
         expect(model.placeArmiesDuringReinforcement("Alaska", validPieces))
+                .andReturn(true);
+
+        expect(model.currentPlayerHasAvailableArmies()).andReturn(false);
+
+        replay(model, view);
+
+        controller.handleReinforcement();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleReinforcementPassesMixedPlacementToModel() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+        HashMap<ArmyType, Integer> pieces =
+                createArmies(FIFTEEN_ARMIES, TWO_ARMIES, THREE_ARMIES);
+
+        expect(model.currentPlayerHasAvailableArmies()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(view.promptReinforcement()).andReturn(List.of(
+                "Alaska",
+                "15",
+                "2",
+                "3"));
+
+        expect(model.placeArmiesDuringReinforcement("Alaska", pieces))
                 .andReturn(true);
 
         expect(model.currentPlayerHasAvailableArmies()).andReturn(false);
