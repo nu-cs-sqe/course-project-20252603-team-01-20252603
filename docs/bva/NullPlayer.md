@@ -39,6 +39,6 @@
 
 ### Method under test: `addArmiesToAvailableBasedOnTerritories()`
 
-- **TC7: Territory-based reinforcement is rejected for NullPlayer** ( :x: )
+- **TC7: Territory-based reinforcement is rejected for NullPlayer** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `addArmiesToAvailableBasedOnTerritories()` called
     - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot receive armies."` because `NullPlayer` does not represent a real active player

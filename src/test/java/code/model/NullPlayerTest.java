@@ -47,4 +47,15 @@ public final class NullPlayerTest {
         assertFalse(player.hasAvailableArmies(requiredArmies));
     }
 
+    @Test
+    public void addArmiesToAvailableBasedOnTerritoriesUnassignedOwnershipRaisesException() {
+        NullPlayer player = new NullPlayer();
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                player::addArmiesToAvailableBasedOnTerritories);
+
+        assertEquals("NullPlayer cannot receive armies.", exception.getMessage());
+    }
+
 }
