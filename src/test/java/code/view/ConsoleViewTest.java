@@ -134,6 +134,20 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void displayCurrentPlayerTerritoriesByContinent_MultipleOwnedTerritories_DisplaysTerritoryString() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        String territoriesByContinent = "North America: Alaska, Alberta"
+                + System.lineSeparator()
+                + "Asia: China";
+
+        view.displayCurrentPlayerTerritoriesByContinent(territoriesByContinent);
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertEquals(territoriesByContinent + System.lineSeparator(), displayedText);
+    }
+
+    @Test
     public void getTerritoryChoiceDuringSetupReturnsEnteredTerritory() {
         ConsoleView view = createViewWithInput("Alaska\n");
 

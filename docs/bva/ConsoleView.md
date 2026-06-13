@@ -95,7 +95,7 @@
     - **State of the system**: Model provides a formatted string where the current player owns exactly one territory
     - **Expected output**: Output displays the provided territory string exactly
 
-- **TC18: Displays multiple owned territories grouped by continent** ( :x: )
+- **TC18: Displays multiple owned territories grouped by continent** ( :white_check_mark: )
     - **State of the system**: Model provides a formatted string where the current player owns more than one territory across one or more continents
     - **Expected output**: Output displays the provided territory string exactly
 
