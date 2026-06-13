@@ -103,7 +103,7 @@
     - **State of the system**: All territories are claimed; two or more consecutive players have `0` available Infantry; a later player has at least `1` available Infantry
     - **Expected output**: Controller advances past each player with `0` armies and prompts the next player who can still place an Infantry
 
-- **TC23: Unowned territory during remaining-army placement re-prompts same player** ( :x: )
+- **TC23: Unowned territory during remaining-army placement re-prompts same player** ( :white_check_mark: )
     - **State of the system**: All territories are claimed; current player has available Infantry but selects a territory owned by another player
     - **Expected output**: `addArmiesDuringSetup()` returns `false`; controller displays an error; controller does not advance to the next player; same player is prompted again
 

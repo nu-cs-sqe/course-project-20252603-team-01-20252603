@@ -843,4 +843,47 @@ public final class SetupControllerTest {
         verify(model, view);
     }
 
+    @Test
+    public void handleTerritoryClaiming_UnownedTerritorySelected_RePromptsSamePlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        SetupController controller = new SetupController(model, view);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(true);
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+        expect(view.promptCurrentPlayerTerritoryChoice()).andReturn("Alberta");
+        expect(model.addArmiesDuringSetup("Alberta", pieces)).andReturn(false);
+        view.displayError("Invalid territory for army placement.");
+        expectLastCall().once();
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(true);
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+        expect(view.promptCurrentPlayerTerritoryChoice()).andReturn("Alaska");
+        expect(model.addArmiesDuringSetup("Alaska", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displaySetupPhaseComplete();
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
 }
