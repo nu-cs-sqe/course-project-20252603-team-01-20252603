@@ -271,7 +271,7 @@
     - **State of the system**: Current player enters a territory name that does not match any board territory
     - **Expected output**: Returns `false`; no territory army count changes; current player's available Infantry is unchanged
 
-- **TC58: Rejects zero Infantry placement** ( :x: )
+- **TC58: Rejects zero Infantry placement** ( :white_check_mark: )
     - **State of the system**: Current player owns the selected territory; `pieces` contains `INFANTRY -> 0`
     - **Expected output**: Returns `false`; selected territory army count is unchanged; current player's available Infantry is unchanged
 
