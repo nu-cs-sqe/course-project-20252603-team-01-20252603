@@ -128,3 +128,51 @@
 - **TC22: Returns available army map as display string when no Infantry is available** ( :white_check_mark: )
     - **State of the system**: Player available armies contain `INFANTRY -> 0`
     - **Expected output**: Returns a string containing `INFANTRY` and `0`
+
+---
+
+### Method under test: `addArmiesToAvailableBasedOnTerritories()`
+
+- **TC27: Zero territories is rejected because the player should be eliminated** ( :x: )
+    - **State of the system**: Human player owns 0 territories
+    - **Expected output**: Exception is raised because the player has an invalid territory count for an active turn; available armies are unchanged
+
+- **TC28: One territory receives minimum reinforcement armies** ( :x: )
+    - **State of the system**: Human player owns 1 territory and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC29: Two territories receives minimum reinforcement armies** ( :x: )
+    - **State of the system**: Human player owns 2 territories and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC30: Eight territories receives minimum reinforcement armies** ( :x: )
+    - **State of the system**: Human player owns 8 territories and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC31: Nine territories receives three reinforcement armies** ( :x: )
+    - **State of the system**: Human player owns 9 territories and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC32: Ten territories rounds down to three reinforcement armies** ( :x: )
+    - **State of the system**: Human player owns 10 territories and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC33: Eleven territories rounds down to three reinforcement armies** ( :x: )
+    - **State of the system**: Human player owns 11 territories and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC34: Twelve territories receives four reinforcement armies** ( :x: )
+    - **State of the system**: Human player owns 12 territories and has 0 available Infantry
+    - **Expected output**: Player receives 4 Infantry
+
+- **TC35: Forty-one territories receives thirteen reinforcement armies** ( :x: )
+    - **State of the system**: Human player owns 41 territories and has 0 available Infantry
+    - **Expected output**: Player receives 13 Infantry
+
+- **TC36: Forty-two territories is rejected because the game should already be won** ( :x: )
+    - **State of the system**: Human player owns 42 territories
+    - **Expected output**: Exception is raised because the player has an invalid territory count for an active turn; available armies are unchanged
+
+- **TC37: More than forty-two territories is rejected as an invalid game state** ( :x: )
+    - **State of the system**: Human player owns 43 territories
+    - **Expected output**: Exception is raised because the player has an invalid territory count for an active turn; available armies are unchanged
