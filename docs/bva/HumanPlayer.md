@@ -185,7 +185,7 @@
     - **State of the system**: Human player has 3 cards; selected indices contain 2 cards
     - **Expected output**: Returns `false`; available armies and card hand are unchanged
 
-- **TC39: More than three selected cards is rejected** ( :x: )
+- **TC39: More than three selected cards is rejected** ( :white_check_mark: )
     - **State of the system**: Human player has 4 cards; selected indices contain 4 cards
     - **Expected output**: Returns `false`; available armies and card hand are unchanged
 
