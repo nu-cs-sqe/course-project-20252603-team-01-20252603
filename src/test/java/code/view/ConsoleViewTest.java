@@ -797,6 +797,30 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void displayPlayerEliminationPrintsPlayerNameAndEliminationMessage() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayPlayerElimination("Player 2");
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Player 2"));
+        assertTrue(displayedText.contains("eliminated"));
+    }
+
+    @Test
+    public void displayWinnerPrintsPlayerNameAndWinnerMessage() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayWinner("Player 1");
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Player 1"));
+        assertTrue(displayedText.contains("won"));
+    }
+
+    @Test
     public void displayErrorPrintsErrorMessage() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(captured);

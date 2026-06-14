@@ -3637,4 +3637,168 @@ public final class GameModelTest {
 
         assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
     }
+
+    @Test
+    public void currentPlayerIsEliminatedReturnsFalseForActiveCurrentPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertFalse(gameModel.currentPlayerIsEliminated());
+    }
+
+    @Test
+    public void currentPlayerIsEliminatedReturnsTrueForEliminatedCurrentPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+        player.markEliminated();
+
+        assertTrue(gameModel.currentPlayerIsEliminated());
+    }
+
+    @Test
+    public void currentPlayerHasWonReturnsFalseWithFortyOneTerritories() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+        player.addArmies(createInfantryPieces(TERRITORY_COUNT));
+        claimTerritories(gameModel, FORTY_ONE_TERRITORIES);
+
+        assertFalse(gameModel.currentPlayerHasWon());
+    }
+
+    @Test
+    public void currentPlayerHasWonReturnsTrueWithAllTerritories() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+        player.addArmies(createInfantryPieces(TERRITORY_COUNT));
+        claimTerritories(gameModel, TERRITORY_COUNT);
+
+        assertTrue(gameModel.currentPlayerHasWon());
+    }
+
+    @Test
+    public void currentPlayerHasWonReturnsFalseWithZeroTerritories() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+        player.markEliminated();
+
+        assertFalse(gameModel.currentPlayerHasWon());
+    }
+
+    @Test
+    public void advanceToNextActivePlayerAdvancesFromFirstToSecondPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertTrue(gameModel.advanceToNextActivePlayer());
+        assertEquals("Player 2", gameModel.getCurrentPlayerName());
+    }
+
+    @Test
+    public void advanceToNextActivePlayerSkipsOneEliminatedPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer eliminatedPlayer =
+                (HumanPlayer) gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+        eliminatedPlayer.markEliminated();
+
+        assertTrue(gameModel.advanceToNextActivePlayer());
+        assertEquals("Player 3", gameModel.getCurrentPlayerName());
+    }
+
+    @Test
+    public void advanceToNextActivePlayerWrapsFromLastToFirstPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(2);
+
+        assertTrue(gameModel.advanceToNextActivePlayer());
+        assertEquals("Player 1", gameModel.getCurrentPlayerName());
+    }
+
+    @Test
+    public void advanceToNextActivePlayerWrapsAndSkipsEliminatedPlayers() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer eliminatedPlayer =
+                (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(2);
+        eliminatedPlayer.markEliminated();
+
+        assertTrue(gameModel.advanceToNextActivePlayer());
+        assertEquals("Player 2", gameModel.getCurrentPlayerName());
+    }
+
+    @Test
+    public void advanceToNextActivePlayerWithOnlyOneActivePlayerThrowsIllegalStateException() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer eliminatedPlayerTwo =
+                (HumanPlayer) gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        HumanPlayer eliminatedPlayerThree =
+                (HumanPlayer) gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+        eliminatedPlayerTwo.markEliminated();
+        eliminatedPlayerThree.markEliminated();
+
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                gameModel::advanceToNextActivePlayer);
+
+        assertEquals(
+                "Cannot advance turns because only one active player remains.",
+                exception.getMessage());
+        assertEquals("Player 1", gameModel.getCurrentPlayerName());
+    }
+
+    @Test
+    public void advanceToNextActivePlayerWithNoPlayersReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        assertFalse(gameModel.advanceToNextActivePlayer());
+    }
 }
