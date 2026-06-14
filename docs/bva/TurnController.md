@@ -128,7 +128,7 @@
     - **State of the system**: Defending territory is captured; player first enters `"two"` for movement, then enters a valid number
     - **Expected output**: Controller displays `"Invalid capture movement input."`, re-prompts, then captures territory with valid movement
 
-- **TC59: Invalid capture movement from model re-prompts**
+- **TC59: Invalid capture movement from model re-prompts** ( :white_check_mark: )
     - **State of the system**: Defending territory is captured; model rejects first numeric movement with `IllegalArgumentException`, then accepts a later movement
     - **Expected output**: Controller displays the model error message, re-prompts, then captures territory with valid movement
 
