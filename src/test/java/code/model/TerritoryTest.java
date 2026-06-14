@@ -276,8 +276,8 @@ public final class TerritoryTest {
     public void removeArmiesMultipleArmiesWhileArmiesRemainReturnsTrue() {
         Territory territory = createTerritoryWithNoAdjacencies();
         HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
-        final int initialArmies = 3;
-        initialArmies.put(ArmyType.INFANTRY, initialArmies);
+        final int initialArmiesForTest = 3;
+        initialArmies.put(ArmyType.INFANTRY, initialArmiesForTest);
         HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
         armiesToRemove.put(ArmyType.INFANTRY, TWO_INFANTRY);
 
