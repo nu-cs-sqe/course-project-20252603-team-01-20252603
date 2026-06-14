@@ -81,6 +81,30 @@ public final class GameModelTest {
 
     private static final int ASIA_TERRITORY_COUNT = 12;
 
+    private static final class StubTerritory extends Territory {
+        private final String stubName;
+        private final boolean removeArmiesResult;
+
+        StubTerritory(
+                final String territoryName,
+                final Continent continent,
+                final boolean stubRemoveArmiesResult) {
+            super(territoryName, continent, List.of());
+            stubName = territoryName;
+            removeArmiesResult = stubRemoveArmiesResult;
+        }
+
+        @Override
+        String getName() {
+            return stubName;
+        }
+
+        @Override
+        public boolean removeArmies(final HashMap<ArmyType, Integer> armiesToRemove) {
+            return removeArmiesResult;
+        }
+    }
+
     @Test
     public void deckHasFortyFourCardsAfterBoardInitialization() {
         GameModel gameModel = new GameModel();
@@ -316,6 +340,17 @@ public final class GameModelTest {
         }
 
         return signature.toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Territory> getTerritories(final GameModel gameModel) {
+        try {
+            Field territoriesField = GameModel.class.getDeclaredField("territories");
+            territoriesField.setAccessible(true);
+            return (List<Territory>) territoriesField.get(gameModel);
+        } catch (ReflectiveOperationException exception) {
+            throw new AssertionError(exception);
+        }
     }
 
     private boolean hasAnyValidTradeInSet(
@@ -1837,6 +1872,68 @@ public final class GameModelTest {
         gameModel.placeArmiesDuringReinforcement("Alaska", createInfantryPieces(ONE_INFANTRY));
 
         assertFalse(gameModel.fortifyTerritory("Alaska", "Alaska", ONE_ARMY));
+    }
+
+    @Test
+    public void fortifyTerritoryReturnsFalseWhenSourceCannotRemoveArmies() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        Continent continent = new Continent("Test Continent", FIVE_ARMIES);
+        StubTerritory source = new StubTerritory("Source", continent, false);
+        Territory destination = new Territory("Destination", continent, List.of());
+        source.addAdjacentTerritory(destination);
+        destination.addAdjacentTerritory(source);
+        source.setOwner(player);
+        destination.setOwner(player);
+        player.addTerritory(source);
+        player.addTerritory(destination);
+        source.placeArmies(createInfantryPieces(TWO_ARMIES));
+        destination.placeArmies(createInfantryPieces(ONE_ARMY));
+
+        List<Territory> territories = getTerritories(gameModel);
+        territories.clear();
+        territories.add(source);
+        territories.add(destination);
+
+        assertFalse(gameModel.fortifyTerritory("Source", "Destination", ONE_ARMY));
+        assertEquals(TWO_ARMIES, source.getArmyCount());
+        assertEquals(ONE_ARMY, destination.getArmyCount());
+    }
+
+    @Test
+    public void fortifyTerritoryRejectsMovingExactlyAllArmiesEvenIfSourceAllowsRemoval() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        Continent continent = new Continent("Test Continent", FIVE_ARMIES);
+        StubTerritory source = new StubTerritory("Source", continent, true);
+        Territory destination = new Territory("Destination", continent, List.of());
+        source.addAdjacentTerritory(destination);
+        destination.addAdjacentTerritory(source);
+        source.setOwner(player);
+        destination.setOwner(player);
+        player.addTerritory(source);
+        player.addTerritory(destination);
+        source.placeArmies(createInfantryPieces(ONE_ARMY));
+        destination.placeArmies(createInfantryPieces(ONE_ARMY));
+
+        List<Territory> territories = getTerritories(gameModel);
+        territories.clear();
+        territories.add(source);
+        territories.add(destination);
+
+        assertFalse(gameModel.fortifyTerritory("Source", "Destination", ONE_ARMY));
+        assertEquals(ONE_ARMY, source.getArmyCount());
+        assertEquals(ONE_ARMY, destination.getArmyCount());
     }
 
     @Test
