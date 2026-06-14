@@ -813,15 +813,15 @@
 
 ### Method under test: `currentPlayerHasWon()`
 
-- **TC147: Current player with forty-one territories has not won**
+- **TC147: Current player with forty-one territories has not won** ( :white_check_mark: )
     - **State of the system**: Current player owns `41` territories
     - **Expected output**: Returns `false`
 
-- **TC148: Current player with all territories has won**
+- **TC148: Current player with all territories has won** ( :white_check_mark: )
     - **State of the system**: Current player owns all `42` territories
     - **Expected output**: Returns `true`
 
-- **TC149: Current player with zero territories has not won**
+- **TC149: Current player with zero territories has not won** ( :white_check_mark: )
     - **State of the system**: Current player owns `0` territories and is eliminated
     - **Expected output**: Returns `false`
 
