@@ -182,8 +182,18 @@ public class HumanPlayer extends Player {
                 .anyMatch(card -> card.getType() == CardType.INFANTRY)
                 && selectedCards.stream().anyMatch(card -> card.getType() == CardType.CAVALRY)
                 && selectedCards.stream().anyMatch(card -> card.getType() == CardType.ARTILLERY);
+        long wildCardCount = selectedCards.stream()
+                .filter(card -> card.getType() == CardType.WILD)
+                .count();
+        List<RiskCard> nonWildCards = selectedCards.stream()
+                .filter(card -> card.getType() != CardType.WILD)
+                .collect(Collectors.toList());
+        boolean hasOneWildAndTwoMatchingCards = wildCardCount == 1
+                && nonWildCards.get(0).getType() == nonWildCards.get(1).getType();
 
-        if (!hasThreeCardsOfSameType && !hasOneOfEachType) {
+        if (!hasThreeCardsOfSameType
+                && !hasOneOfEachType
+                && !hasOneWildAndTwoMatchingCards) {
             return false;
         }
 
