@@ -172,6 +172,12 @@ public class ConsoleView {
                 tokens[artilleryIndex]);
     }
 
+    public String promptAttackChoice() {
+        output.print("Do you want to attack? (yes/no): ");
+
+        return scanner.nextLine().trim();
+    }
+
     public List<String> promptTerritoriesToAttack() {
         String attackingTerritory = "";
 

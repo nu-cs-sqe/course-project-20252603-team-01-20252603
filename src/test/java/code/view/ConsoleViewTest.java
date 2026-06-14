@@ -661,6 +661,15 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptAttackChoiceYesReturnsYes() {
+        ConsoleView view = createViewWithInput("yes\n");
+
+        String attackChoice = view.promptAttackChoice();
+
+        assertEquals("yes", attackChoice);
+    }
+
+    @Test
     public void displayErrorPrintsErrorMessage() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(captured);
