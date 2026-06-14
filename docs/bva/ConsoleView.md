@@ -168,7 +168,7 @@
     - **State of the system**: Current player is prompted for a source territory and enters `"Alaska"`
     - **Expected output**: Returns `"Alaska"`
 
-- **TC31: Returns multi-word source territory** ( :x: )
+- **TC31: Returns multi-word source territory** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for a source territory and enters `"Northwest Territory"`
     - **Expected output**: Returns `"Northwest Territory"`
 
