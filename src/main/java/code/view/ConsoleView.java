@@ -84,6 +84,30 @@ public class ConsoleView {
         output.println("Setup is complete. The game is starting now.");
     }
 
+    public String promptFortifyChoice() {
+        output.print("Do you want to fortify? (yes/no): ");
+
+        return scanner.nextLine().trim();
+    }
+
+    public String promptFortifySourceTerritory() {
+        output.print("Enter source territory: ");
+
+        return scanner.nextLine();
+    }
+
+    public String promptFortifyDestinationTerritory() {
+        output.print("Enter destination territory: ");
+
+        return scanner.nextLine();
+    }
+
+    public String promptFortifyArmyCount() {
+        output.print("Enter number of armies to move: ");
+
+        return scanner.nextLine();
+    }
+
     public void displayCurrentPlayerArmies(final String availableArmies) {
         output.println(availableArmies);
     }

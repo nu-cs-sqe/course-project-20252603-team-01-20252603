@@ -294,6 +294,114 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptFortifyChoiceYesChoiceReturnsChoice() {
+        ConsoleView view = createViewWithInput("yes\n");
+
+        String fortifyChoice = view.promptFortifyChoice();
+
+        assertEquals("yes", fortifyChoice);
+    }
+
+    @Test
+    public void promptFortifyChoiceNoChoiceReturnsChoice() {
+        ConsoleView view = createViewWithInput("no\n");
+
+        String fortifyChoice = view.promptFortifyChoice();
+
+        assertEquals("no", fortifyChoice);
+    }
+
+    @Test
+    public void promptFortifyChoiceInvalidChoiceReturnsChoice() {
+        ConsoleView view = createViewWithInput("maybe\n");
+
+        String fortifyChoice = view.promptFortifyChoice();
+
+        assertEquals("maybe", fortifyChoice);
+    }
+
+    @Test
+    public void promptFortifySourceTerritorySingleWordTerritoryReturnsTerritory() {
+        ConsoleView view = createViewWithInput("Alaska\n");
+
+        String sourceTerritory = view.promptFortifySourceTerritory();
+
+        assertEquals("Alaska", sourceTerritory);
+    }
+
+    @Test
+    public void promptFortifySourceTerritoryMultiWordTerritoryReturnsTerritory() {
+        ConsoleView view = createViewWithInput("Northwest Territory\n");
+
+        String sourceTerritory = view.promptFortifySourceTerritory();
+
+        assertEquals("Northwest Territory", sourceTerritory);
+    }
+
+    @Test
+    public void promptFortifyDestinationTerritorySingleWordTerritoryReturnsTerritory() {
+        ConsoleView view = createViewWithInput("Alberta\n");
+
+        String destinationTerritory = view.promptFortifyDestinationTerritory();
+
+        assertEquals("Alberta", destinationTerritory);
+    }
+
+    @Test
+    public void promptFortifyDestinationTerritoryMultiWordTerritoryReturnsTerritory() {
+        ConsoleView view = createViewWithInput("Western United States\n");
+
+        String destinationTerritory = view.promptFortifyDestinationTerritory();
+
+        assertEquals("Western United States", destinationTerritory);
+    }
+
+    @Test
+    public void promptFortifyArmyCountZeroArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("0\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("0", armyCount);
+    }
+
+    @Test
+    public void promptFortifyArmyCountOneArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("1\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("1", armyCount);
+    }
+
+    @Test
+    public void promptFortifyArmyCountMultipleArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("3\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("3", armyCount);
+    }
+
+    @Test
+    public void promptFortifyArmyCountNegativeArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("-1\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("-1", armyCount);
+    }
+
+    @Test
+    public void promptFortifyArmyCountNonNumericArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("two\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("two", armyCount);
+    }
+
+    @Test
     public void displayErrorPrintsErrorMessage() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(captured);
