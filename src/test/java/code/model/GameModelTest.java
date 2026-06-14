@@ -1,5 +1,6 @@
 package code.model;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 
@@ -96,6 +97,14 @@ public final class GameModelTest {
         gameModel.initializeContinentsAndTerritories();
 
         assertFalse(gameModel.isDeckEmpty());
+    }
+
+    @Test
+    public void newGameModelsShuffleDeckIntoDifferentOrders() {
+        GameModel firstGameModel = new GameModel();
+        GameModel secondGameModel = new GameModel();
+
+        assertFalse(getDeckSignature(firstGameModel).equals(getDeckSignature(secondGameModel)));
     }
 
     @Test
@@ -275,6 +284,66 @@ public final class GameModelTest {
         player.addCard(createCard(CardType.INFANTRY));
         player.addCard(createCard(CardType.CAVALRY));
         player.addCard(createCard(CardType.ARTILLERY));
+    }
+
+    private Deck getDeck(final GameModel gameModel) {
+        try {
+            Field deckField = GameModel.class.getDeclaredField("deck");
+            deckField.setAccessible(true);
+            return (Deck) deckField.get(gameModel);
+        } catch (ReflectiveOperationException exception) {
+            throw new AssertionError(exception);
+        }
+    }
+
+    private void clearDeck(final GameModel gameModel) {
+        try {
+            Field cardsField = Deck.class.getDeclaredField("cards");
+            cardsField.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            List<RiskCard> cards = (List<RiskCard>) cardsField.get(getDeck(gameModel));
+            cards.clear();
+        } catch (ReflectiveOperationException exception) {
+            throw new AssertionError(exception);
+        }
+    }
+
+    private String getDeckSignature(final GameModel gameModel) {
+        StringBuilder signature = new StringBuilder();
+
+        for (RiskCard card : getDeck(gameModel).getCards()) {
+            signature.append(card.getType()).append("|");
+        }
+
+        return signature.toString();
+    }
+
+    private boolean hasAnyValidTradeInSet(
+            final GameModel gameModel,
+            final List<RiskCard> cards) {
+        try {
+            java.lang.reflect.Method method = GameModel.class.getDeclaredMethod(
+                    "hasAnyValidTradeInSet",
+                    List.class);
+            method.setAccessible(true);
+            return (boolean) method.invoke(gameModel, cards);
+        } catch (ReflectiveOperationException exception) {
+            throw new AssertionError(exception);
+        }
+    }
+
+    private boolean isValidTradeInSet(
+            final GameModel gameModel,
+            final List<RiskCard> cards) {
+        try {
+            java.lang.reflect.Method method = GameModel.class.getDeclaredMethod(
+                    "isValidTradeInSet",
+                    List.class);
+            method.setAccessible(true);
+            return (boolean) method.invoke(gameModel, cards);
+        } catch (ReflectiveOperationException exception) {
+            throw new AssertionError(exception);
+        }
     }
 
     @Test
@@ -1414,6 +1483,15 @@ public final class GameModelTest {
     }
 
     @Test
+    public void isDeckEmptyReturnsTrueWhenDeckIsCleared() {
+        GameModel gameModel = new GameModel();
+
+        clearDeck(gameModel);
+
+        assertTrue(gameModel.isDeckEmpty());
+    }
+
+    @Test
     public void initializeContinentsAndTerritoriesInitializesDeck() {
         GameModel gameModel = new GameModel();
 
@@ -1595,5 +1673,411 @@ public final class GameModelTest {
         assertTrue(availableArmies.contains("INFANTRY=7"));
         assertTrue(availableArmies.contains("CAVALRY=0"));
         assertTrue(availableArmies.contains("ARTILLERY=0"));
+    }
+
+    @Test
+    public void getCurrentPlayerAvailableArmiesReturnsStartingArmiesForCurrentPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        assertTrue(gameModel.getCurrentPlayerAvailableArmies().contains("INFANTRY=35"));
+    }
+
+    @Test
+    public void getCurrentPlayerCardsWithNoCardsReturnsEmptyString() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        assertEquals("", gameModel.getCurrentPlayerCards());
+    }
+
+    @Test
+    public void getCurrentPlayerCardsWithMultipleCardsReturnsIndexedCardTypes() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+        player.addCard(createCard(CardType.WILD));
+
+        assertEquals("1: INFANTRY, 2: CAVALRY, 3: WILD", gameModel.getCurrentPlayerCards());
+    }
+
+    @Test
+    public void fortifyTerritoryConnectedOwnedTerritoriesMovesArmies() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.placeArmiesDuringReinforcement("Alaska", createInfantryPieces(TWO_INFANTRY));
+
+        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", ONE_ARMY);
+
+        Territory alaska = gameModel.findTerritoryByName("Alaska");
+        Territory alberta = gameModel.findTerritoryByName("Alberta");
+
+        assertTrue(fortified);
+        assertEquals(TWO_ARMIES, alaska.getArmyCount());
+        assertEquals(TWO_ARMIES, alberta.getArmyCount());
+    }
+
+    @Test
+    public void fortifyTerritoryRejectsNonAdjacentOwnedPathThroughOtherPlayerTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Northwest Territory", createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Ontario", createInfantryPieces(ONE_INFANTRY));
+        gameModel.placeArmiesDuringReinforcement("Alaska", createInfantryPieces(TWO_INFANTRY));
+
+        boolean fortified = gameModel.fortifyTerritory("Alaska", "Ontario", ONE_ARMY);
+
+        Territory alaska = gameModel.findTerritoryByName("Alaska");
+        Territory ontario = gameModel.findTerritoryByName("Ontario");
+
+        assertFalse(fortified);
+        assertEquals(THREE_ARMIES, alaska.getArmyCount());
+        assertEquals(ONE_ARMY, ontario.getArmyCount());
+    }
+
+    @Test
+    public void fortifyTerritoryRejectsMovingAllArmiesOutOfSource() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+
+        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", ONE_ARMY);
+
+        assertFalse(fortified);
+    }
+
+    @Test
+    public void fortifyTerritoryRejectsZeroArmies() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.placeArmiesDuringReinforcement("Alaska", createInfantryPieces(ONE_INFANTRY));
+
+        assertFalse(gameModel.fortifyTerritory("Alaska", "Alberta", ZERO_ARMIES));
+    }
+
+    @Test
+    public void fortifyTerritoryRejectsDestinationOwnedByAnotherPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.placeArmiesDuringReinforcement("Alaska", createInfantryPieces(ONE_INFANTRY));
+
+        assertFalse(gameModel.fortifyTerritory("Alaska", "Alberta", ONE_ARMY));
+    }
+
+    @Test
+    public void fortifyTerritoryRejectsSameSourceAndDestination() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.placeArmiesDuringReinforcement("Alaska", createInfantryPieces(ONE_INFANTRY));
+
+        assertFalse(gameModel.fortifyTerritory("Alaska", "Alaska", ONE_ARMY));
+    }
+
+    @Test
+    public void handleCardTradeInWithNullIndicesReturnsTrue() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        assertTrue(gameModel.handleCardTradeIn(null));
+    }
+
+    @Test
+    public void handleCardTradeInWithEmptyIndicesReturnsTrue() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        assertTrue(gameModel.handleCardTradeIn(List.of()));
+    }
+
+    @Test
+    public void handleCardTradeInWithInvalidSetReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+
+        boolean tradedIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
+
+        assertFalse(tradedIn);
+        assertEquals(THREE_ARMIES, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=35"));
+    }
+
+    @Test
+    public void handleCardTradeInWithValidSetAddsIncreasingArmiesAcrossTrades() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        addValidTradeInSet(player);
+        addValidTradeInSet(player);
+
+        boolean firstTrade = gameModel.handleCardTradeIn(List.of(1, 2, 3));
+        boolean secondTrade = gameModel.handleCardTradeIn(List.of(1, 2, 3));
+
+        assertTrue(firstTrade);
+        assertTrue(secondTrade);
+        assertEquals(ZERO_INFANTRY, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=45"));
+    }
+
+    @Test
+    public void checkCardTradeInPossibilityWithFewerThanThreeCardsReturnsNotAllowed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+
+        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
+    }
+
+    @Test
+    public void checkCardTradeInPossibilityWithFiveCardsReturnsRequired() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        addValidTradeInSet(player);
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+
+        assertEquals(TradeInPossibility.REQUIRED, gameModel.checkCardTradeInPossibility());
+    }
+
+    @Test
+    public void checkCardTradeInPossibilityWithOneOfEachSetReturnsAllowed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        addValidTradeInSet(player);
+
+        assertEquals(TradeInPossibility.ALLOWED, gameModel.checkCardTradeInPossibility());
+    }
+
+    @Test
+    public void checkCardTradeInPossibilityWithThreeOfSameTypeReturnsAllowed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.addCard(createCard(CardType.ARTILLERY));
+        player.addCard(createCard(CardType.ARTILLERY));
+        player.addCard(createCard(CardType.ARTILLERY));
+
+        assertEquals(TradeInPossibility.ALLOWED, gameModel.checkCardTradeInPossibility());
+    }
+
+    @Test
+    public void checkCardTradeInPossibilityWithWildAndTwoNonWildReturnsAllowed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.addCard(createCard(CardType.WILD));
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+
+        assertEquals(TradeInPossibility.ALLOWED, gameModel.checkCardTradeInPossibility());
+    }
+
+    @Test
+    public void checkCardTradeInPossibilityWithOnlyInfantryAndCavalryReturnsNotAllowed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+        player.addCard(createCard(CardType.CAVALRY));
+
+        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
+    }
+
+    @Test
+    public void checkCardTradeInPossibilityWithOnlyInfantryAndArtilleryReturnsNotAllowed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.ARTILLERY));
+        player.addCard(createCard(CardType.ARTILLERY));
+
+        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
+    }
+
+    @Test
+    public void checkCardTradeInPossibilityWithLaterThreeCardCombinationReturnsAllowed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+        player.addCard(createCard(CardType.ARTILLERY));
+
+        assertEquals(TradeInPossibility.ALLOWED, gameModel.checkCardTradeInPossibility());
+    }
+
+    @Test
+    public void checkCardTradeInPossibilityWithLastPossibleThreeCardCombinationReturnsAllowed() {
+        GameModel gameModel = new GameModel();
+
+        List<RiskCard> cards = List.of(
+                createCard(CardType.INFANTRY),
+                createCard(CardType.INFANTRY),
+                createCard(CardType.ARTILLERY),
+                createCard(CardType.ARTILLERY),
+                createCard(CardType.ARTILLERY));
+
+        assertTrue(hasAnyValidTradeInSet(gameModel, cards));
+    }
+
+    @Test
+    public void hasAnyValidTradeInSetWithFewerThanThreeCardsReturnsFalse() {
+        GameModel gameModel = new GameModel();
+        List<RiskCard> cards = List.of(
+                createCard(CardType.INFANTRY),
+                createCard(CardType.CAVALRY));
+
+        assertFalse(hasAnyValidTradeInSet(gameModel, cards));
+    }
+
+    @Test
+    public void checkCardTradeInPossibilityWithoutInfantryReturnsNotAllowed() {
+        GameModel gameModel = new GameModel();
+
+        List<RiskCard> cards = List.of(
+                createCard(CardType.CAVALRY),
+                createCard(CardType.ARTILLERY),
+                createCard(CardType.ARTILLERY));
+
+        assertFalse(isValidTradeInSet(gameModel, cards));
+    }
+
+    @Test
+    public void checkCardTradeInPossibilityWithThreeInvalidCardsReturnsNotAllowed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+
+        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
     }
 }
