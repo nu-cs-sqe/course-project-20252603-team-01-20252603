@@ -1541,6 +1541,29 @@ public final class GameModelTest {
     }
 
     @Test
+    public void validateTerritoriesForAttackAndReturnDefenderNameOneArmyAttackingTerritoryRaisesException() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> gameModel.validateTerritoriesForAttackAndReturnDefenderName(
+                        "Alaska",
+                        "Alberta"));
+
+        assertEquals("Attacking territory must have at least 2 armies.", exception.getMessage());
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = new GameModel();
 

@@ -577,7 +577,7 @@
     - **State of the system**: Current player owns the attacking territory and another player owns the defending territory, but the territories are not adjacent
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking and defending territories must be adjacent."`
 
-- **TC98: Rejects attacking territory with only one army** ( :x: )
+- **TC98: Rejects attacking territory with only one army** ( :white_check_mark: )
     - **State of the system**: Current player owns the attacking territory, but it has exactly `1` army; defending territory is adjacent and enemy-owned
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking territory must have at least 2 armies."`
 
