@@ -601,7 +601,7 @@
     - **State of the system**: Attacking territory has exactly `2` armies; defending territory has exactly `1` army; `attackerNumDice = 1`; `defenderNumDice = 1`
     - **Expected output**: Returns `true`
 
-- **TC103: Maximum valid dice counts are accepted** ( :x: )
+- **TC103: Maximum valid dice counts are accepted** ( :white_check_mark: )
     - **State of the system**: Attacking territory has at least `4` armies; defending territory has at least `2` armies; `attackerNumDice = 3`; `defenderNumDice = 2`
     - **Expected output**: Returns `true`
 
