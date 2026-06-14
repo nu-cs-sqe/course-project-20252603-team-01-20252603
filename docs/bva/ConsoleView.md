@@ -125,7 +125,7 @@
 
 ### Method under test: `promptChooseCardsToTradeIn()`
 
-- **TC23: Returns three selected card indices** ( :x: )
+- **TC23: Returns three selected card indices** ( :white_check_mark: )
     - **State of the system**: Player enters `"1 2 3"`
     - **Expected output**: Returns a list containing `1`, `2`, and `3`
 
