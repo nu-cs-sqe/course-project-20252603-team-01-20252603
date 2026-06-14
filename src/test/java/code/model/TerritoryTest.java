@@ -200,4 +200,38 @@ public final class TerritoryTest {
         assertTrue(adjacent.contains(kamchatka));
     }
 
+    @Test
+    public void placeArmiesOneInfantryIncreasesInfantryPieceCountByOne() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.placeArmies(pieces);
+
+        assertEquals(ONE_INFANTRY, territory.getArmiesOfType(ArmyType.INFANTRY));
+    }
+
+    @Test
+    public void placeArmiesTwoInfantryIncreasesPieceCountByTwo() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, TWO_INFANTRY);
+
+        territory.placeArmies(pieces);
+
+        assertEquals(TWO_INFANTRY, territory.getArmiesOfType(ArmyType.INFANTRY));
+    }
+
+    @Test
+    public void placeArmiesTwoSequentialPlacementsAccumulatesPieceCount() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.placeArmies(pieces);
+        territory.placeArmies(pieces);
+
+        assertEquals(TWO_INFANTRY, territory.getArmiesOfType(ArmyType.INFANTRY));
+    }
+
 }
