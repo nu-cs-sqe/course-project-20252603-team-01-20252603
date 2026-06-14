@@ -63,6 +63,12 @@ public final class GameModelTest {
 
     private static final int FOUR_CARD_TRADE_IN_ARMIES = 4;
 
+    private static final int FIRST_CARD_INDEX = 1;
+
+    private static final int SECOND_CARD_INDEX = 2;
+
+    private static final int THIRD_CARD_INDEX = 3;
+
     private static final int EIGHT_TERRITORIES = 8;
 
     private static final int TWELVE_TERRITORIES = 12;
@@ -82,7 +88,9 @@ public final class GameModelTest {
     private static final int ASIA_TERRITORY_COUNT = 12;
 
     private static final class StubTerritory extends Territory {
+
         private final String stubName;
+
         private final boolean removeArmiesResult;
 
         StubTerritory(
@@ -1973,7 +1981,10 @@ public final class GameModelTest {
         player.addCard(createCard(CardType.INFANTRY));
         player.addCard(createCard(CardType.CAVALRY));
 
-        boolean tradedIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
+        boolean tradedIn = gameModel.handleCardTradeIn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX));
 
         assertFalse(tradedIn);
         assertEquals(THREE_ARMIES, player.getCardCount());
@@ -1992,8 +2003,14 @@ public final class GameModelTest {
         addValidTradeInSet(player);
         addValidTradeInSet(player);
 
-        boolean firstTrade = gameModel.handleCardTradeIn(List.of(1, 2, 3));
-        boolean secondTrade = gameModel.handleCardTradeIn(List.of(1, 2, 3));
+        boolean firstTrade = gameModel.handleCardTradeIn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX));
+        boolean secondTrade = gameModel.handleCardTradeIn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX));
 
         assertTrue(firstTrade);
         assertTrue(secondTrade);
