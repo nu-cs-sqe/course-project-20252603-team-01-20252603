@@ -248,3 +248,71 @@
 - **TC38: Returns non-numeric army count for controller validation** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for armies to move and enters `"two"`
     - **Expected output**: Returns `"two"` so the controller can reject it without calling the model
+
+---
+
+### Method under test: `promptTerritoriesToAttack()`
+
+- **TC39: Returns single-word attacking and defending territory names** ( :white_check_mark: )
+    - **State of the system**: Player is prompted separately for attacking and defending territories and enters `"Alaska"` and `"Alberta"`
+    - **Expected output**: Returns a list containing `"Alaska"` and `"Alberta"`
+
+- **TC40: Returns multi-word attacking and defending territory names** ( :white_check_mark: )
+    - **State of the system**: Player is prompted separately for attacking and defending territories and enters `"Western United States"` and `"Eastern United States"`
+    - **Expected output**: Returns a list containing `"Western United States"` and `"Eastern United States"`
+
+- **TC41: Re-prompts on blank attacking territory input** ( :white_check_mark: )
+    - **State of the system**: Player is prompted for attacking territory, enters an empty line, and then enters `"Alaska"`; player then enters `"Alberta"` for defending territory
+    - **Expected output**: Re-prompts for the attacking territory and then returns a list containing `"Alaska"` and `"Alberta"`
+
+- **TC42: Re-prompts on blank defending territory input** ( :white_check_mark: )
+    - **State of the system**: Player enters `"Alaska"` for attacking territory, then enters an empty line for defending territory, and then enters `"Alberta"`
+    - **Expected output**: Re-prompts for the defending territory and then returns a list containing `"Alaska"` and `"Alberta"`
+
+---
+
+### Method under test: `promptNumberOfDice(String attackerName, String defenderName)`
+
+- **TC43: Returns minimum valid attacker and defender dice counts** ( :white_check_mark: )
+    - **State of the system**: Player enters `"1"` for attacker dice and `"1"` for defender dice
+    - **Expected output**: Returns a list containing `1` and `1`
+
+- **TC44: Returns intermediate valid attacker and defender dice counts** ( :white_check_mark: )
+    - **State of the system**: Player enters `"2"` for attacker dice and `"1"` for defender dice
+    - **Expected output**: Returns a list containing `2` and `1`
+
+- **TC45: Returns maximum valid attacker and defender dice counts** ( :white_check_mark: )
+    - **State of the system**: Player enters `"3"` for attacker dice and `"2"` for defender dice
+    - **Expected output**: Returns a list containing `3` and `2`
+
+- **TC46: Returns below-minimum attacker dice count for controller and model validation** ( :white_check_mark: )
+    - **State of the system**: Player enters `"0"` for attacker dice and `"1"` for defender dice
+    - **Expected output**: Returns a list containing `0` and `1`
+
+- **TC47: Returns above-maximum attacker dice count for controller and model validation** ( :white_check_mark: )
+    - **State of the system**: Player enters `"4"` for attacker dice and `"1"` for defender dice
+    - **Expected output**: Returns a list containing `4` and `1`
+
+- **TC48: Returns below-minimum defender dice count for controller and model validation** ( :white_check_mark: )
+    - **State of the system**: Player enters `"1"` for attacker dice and `"0"` for defender dice
+    - **Expected output**: Returns a list containing `1` and `0`
+
+- **TC49: Returns above-maximum defender dice count for controller and model validation** ( :white_check_mark: )
+    - **State of the system**: Player enters `"1"` for attacker dice and `"3"` for defender dice
+    - **Expected output**: Returns a list containing `1` and `3`
+
+- **TC50: Returns non-numeric attacker dice input sentinel** ( :white_check_mark: )
+    - **State of the system**: Player enters `"one"` for attacker dice
+    - **Expected output**: Returns `List.of(Integer.MIN_VALUE)` to signal malformed attacker-dice input
+
+- **TC51: Returns non-numeric defender dice input sentinel** ( :white_check_mark: )
+    - **State of the system**: Player enters `"1"` for attacker dice and `"two"` for defender dice
+    - **Expected output**: Returns `List.of(Integer.MIN_VALUE)` to signal malformed defender-dice input
+
+---
+
+### Method under test: `displayBattleResult(List<String> battleResult)`
+
+- **TC52: Displays battle result exactly as provided** ( :white_check_mark: )
+    - **State of the system**: Controller provides a formatted battle-result list containing attacker dice, defender dice, losses, and updated army counts
+    - **Expected output**: Output displays the battle result exactly as provided

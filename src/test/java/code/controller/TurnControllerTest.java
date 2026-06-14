@@ -13,6 +13,7 @@ import code.model.TradeInPossibility;
 import code.view.ConsoleView;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -51,7 +52,7 @@ public final class TurnControllerTest {
 
     @Test
     public void constructorCreatesTurnController() {
-        GameModel model = new GameModel();
+        GameModel model = new GameModel(new Random(0));
         ConsoleView view = new ConsoleView();
 
         TurnController controller = new TurnController(model, view);
@@ -241,6 +242,307 @@ public final class TurnControllerTest {
 
         TurnController controller = new TurnController(model, view);
         controller.handleReinforcement();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleAttackPhaseValidAttackResolvesBattleAndDisplaysResult() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+        List<String> territoryChoices = List.of("Alaska", "Alberta");
+        List<Integer> diceCounts = List.of(ONE_ARMY, ONE_ARMY);
+        List<String> battleResult = List.of(
+                "Attacker dice: [6]",
+                "Defender dice: [3]",
+                "Attacker losses: 0",
+                "Defender losses: 1",
+                "Captured: false");
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(view.promptTerritoriesToAttack()).andReturn(territoryChoices);
+        expect(model.validateTerritoriesForAttackAndReturnDefenderName(
+                "Alaska",
+                "Alberta")).andReturn("Alberta");
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(diceCounts);
+        expect(model.validateNumberOfDice("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(true);
+        expect(model.executeBattleAndReturnWinner("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(battleResult);
+        view.displayBattleResult(battleResult);
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleAttackPhaseInvalidAttackingTerritoryRepromptsForTerritories() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+        List<String> invalidTerritoryChoices = List.of("Alberta", "Alaska");
+        List<String> validTerritoryChoices = List.of("Alaska", "Alberta");
+        List<Integer> diceCounts = List.of(ONE_ARMY, ONE_ARMY);
+        List<String> battleResult = List.of("Battle resolved");
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(view.promptTerritoriesToAttack()).andReturn(invalidTerritoryChoices);
+        expect(model.validateTerritoriesForAttackAndReturnDefenderName(
+                "Alberta",
+                "Alaska")).andThrow(new IllegalArgumentException(
+                        "Current player must own the attacking territory."));
+        view.displayError("Current player must own the attacking territory.");
+        expectLastCall().once();
+
+        expect(view.promptTerritoriesToAttack()).andReturn(validTerritoryChoices);
+        expect(model.validateTerritoriesForAttackAndReturnDefenderName(
+                "Alaska",
+                "Alberta")).andReturn("Alberta");
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(diceCounts);
+        expect(model.validateNumberOfDice("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(true);
+        expect(model.executeBattleAndReturnWinner("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(battleResult);
+        view.displayBattleResult(battleResult);
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleAttackPhaseInvalidDefendingTerritoryRepromptsForTerritories() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+        List<String> invalidTerritoryChoices = List.of("Alaska", "Ontario");
+        List<String> validTerritoryChoices = List.of("Alaska", "Alberta");
+        List<Integer> diceCounts = List.of(ONE_ARMY, ONE_ARMY);
+        List<String> battleResult = List.of("Battle resolved");
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(view.promptTerritoriesToAttack()).andReturn(invalidTerritoryChoices);
+        expect(model.validateTerritoriesForAttackAndReturnDefenderName(
+                "Alaska",
+                "Ontario")).andThrow(new IllegalArgumentException(
+                        "Attacking and defending territories must be adjacent."));
+        view.displayError("Attacking and defending territories must be adjacent.");
+        expectLastCall().once();
+
+        expect(view.promptTerritoriesToAttack()).andReturn(validTerritoryChoices);
+        expect(model.validateTerritoriesForAttackAndReturnDefenderName(
+                "Alaska",
+                "Alberta")).andReturn("Alberta");
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(diceCounts);
+        expect(model.validateNumberOfDice("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(true);
+        expect(model.executeBattleAndReturnWinner("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(battleResult);
+        view.displayBattleResult(battleResult);
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleAttackPhaseMalformedDiceInputRepromptsForDice() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+        List<String> territoryChoices = List.of("Alaska", "Alberta");
+        List<Integer> malformedDiceCounts = List.of(MALFORMED_CARD_INPUT_SENTINEL);
+        List<Integer> validDiceCounts = List.of(ONE_ARMY, ONE_ARMY);
+        List<String> battleResult = List.of("Battle resolved");
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(view.promptTerritoriesToAttack()).andReturn(territoryChoices);
+        expect(model.validateTerritoriesForAttackAndReturnDefenderName(
+                "Alaska",
+                "Alberta")).andReturn("Alberta");
+
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(malformedDiceCounts);
+        view.displayError("Invalid dice input.");
+        expectLastCall().once();
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(validDiceCounts);
+        expect(model.validateNumberOfDice("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(true);
+        expect(model.executeBattleAndReturnWinner("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(battleResult);
+        view.displayBattleResult(battleResult);
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleAttackPhaseIncorrectNumberOfDiceEntriesRepromptsForDice() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+        List<String> territoryChoices = List.of("Alaska", "Alberta");
+        List<Integer> incompleteDiceCounts = List.of(ONE_ARMY);
+        List<Integer> validDiceCounts = List.of(ONE_ARMY, ONE_ARMY);
+        List<String> battleResult = List.of("Battle resolved");
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(view.promptTerritoriesToAttack()).andReturn(territoryChoices);
+        expect(model.validateTerritoriesForAttackAndReturnDefenderName(
+                "Alaska",
+                "Alberta")).andReturn("Alberta");
+
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(incompleteDiceCounts);
+        view.displayError("Invalid dice input.");
+        expectLastCall().once();
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(validDiceCounts);
+        expect(model.validateNumberOfDice("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(true);
+        expect(model.executeBattleAndReturnWinner("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(battleResult);
+        view.displayBattleResult(battleResult);
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleAttackPhaseInvalidDiceCountRepromptsForDice() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+        List<String> territoryChoices = List.of("Alaska", "Alberta");
+        List<Integer> invalidDiceCounts = List.of(TWO_ARMIES, ONE_ARMY);
+        List<Integer> validDiceCounts = List.of(ONE_ARMY, ONE_ARMY);
+        List<String> battleResult = List.of("Battle resolved");
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(view.promptTerritoriesToAttack()).andReturn(territoryChoices);
+        expect(model.validateTerritoriesForAttackAndReturnDefenderName(
+                "Alaska",
+                "Alberta")).andReturn("Alberta");
+
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(invalidDiceCounts);
+        expect(model.validateNumberOfDice("Alaska", "Alberta", TWO_ARMIES, ONE_ARMY))
+                .andThrow(new IllegalArgumentException(
+                        "Attacker cannot roll more dice than attacking territory armies minus one."));
+        view.displayError("Attacker cannot roll more dice than attacking territory armies minus one.");
+        expectLastCall().once();
+
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(validDiceCounts);
+        expect(model.validateNumberOfDice("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(true);
+        expect(model.executeBattleAndReturnWinner("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(battleResult);
+        view.displayBattleResult(battleResult);
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleAttackPhaseDisplaysBattleResultExactlyOnceAfterSuccessfulExecution() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+        List<String> territoryChoices = List.of("Alaska", "Alberta");
+        List<Integer> diceCounts = List.of(ONE_ARMY, ONE_ARMY);
+        List<String> battleResult = List.of("Battle resolved");
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(view.promptTerritoriesToAttack()).andReturn(territoryChoices);
+        expect(model.validateTerritoriesForAttackAndReturnDefenderName(
+                "Alaska",
+                "Alberta")).andReturn("Alberta");
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(diceCounts);
+        expect(model.validateNumberOfDice("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(true);
+        expect(model.executeBattleAndReturnWinner("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(battleResult);
+        view.displayBattleResult(battleResult);
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
 
         verify(model, view);
     }

@@ -16,6 +16,8 @@ public class TurnController {
 
     private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
 
+    private static final int MALFORMED_DICE_INPUT_SENTINEL = Integer.MIN_VALUE;
+
     private final GameModel model;
 
     private final ConsoleView view;
@@ -27,6 +29,14 @@ public class TurnController {
     private static final int CAVALRY_INPUT_INDEX = 2;
 
     private static final int ARTILLERY_INPUT_INDEX = 3;
+
+    private static final int ATTACKING_TERRITORY_INDEX = 0;
+
+    private static final int DEFENDING_TERRITORY_INDEX = 1;
+
+    private static final int ATTACKER_DICE_INDEX = 0;
+
+    private static final int DEFENDER_DICE_INDEX = 1;
 
     @SuppressFBWarnings(
             value = "EI_EXPOSE_REP2",
@@ -144,5 +154,71 @@ public class TurnController {
                 Integer.parseInt(reinforcementInput.get(ARTILLERY_INPUT_INDEX)));
 
         return pieces;
+    }
+
+    public void handleAttackPhase(final Object player) {
+        view.displayCurrentPlayer(model.getCurrentPlayerName());
+        view.displayCurrentPlayerClaimingStatus(model.getCurrentPlayerTerritoriesByContinent());
+
+        boolean validTerritories = false;
+        String attackerTerritoryName = "";
+        String defenderTerritoryName = "";
+
+        while (!validTerritories) {
+            List<String> territoryChoices = view.promptTerritoriesToAttack();
+            attackerTerritoryName = territoryChoices.get(ATTACKING_TERRITORY_INDEX);
+            defenderTerritoryName = territoryChoices.get(DEFENDING_TERRITORY_INDEX);
+
+            try {
+                model.validateTerritoriesForAttackAndReturnDefenderName(
+                        attackerTerritoryName,
+                        defenderTerritoryName);
+                validTerritories = true;
+            } catch (IllegalArgumentException exception) {
+                view.displayError(exception.getMessage());
+            }
+        }
+
+        boolean validDice = false;
+        int attackerDice = 0;
+        int defenderDice = 0;
+
+        while (!validDice) {
+            List<Integer> diceCounts = view.promptNumberOfDice(
+                    attackerTerritoryName,
+                    defenderTerritoryName);
+
+            while (isMalformedDiceInput(diceCounts)) {
+                view.displayError("Invalid dice input.");
+                diceCounts = view.promptNumberOfDice(
+                        attackerTerritoryName,
+                        defenderTerritoryName);
+            }
+
+            attackerDice = diceCounts.get(ATTACKER_DICE_INDEX);
+            defenderDice = diceCounts.get(DEFENDER_DICE_INDEX);
+
+            try {
+                model.validateNumberOfDice(
+                        attackerTerritoryName,
+                        defenderTerritoryName,
+                        attackerDice,
+                        defenderDice);
+                validDice = true;
+            } catch (IllegalArgumentException exception) {
+                view.displayError(exception.getMessage());
+            }
+        }
+
+        List<String> battleResult = model.executeBattleAndReturnWinner(
+                attackerTerritoryName,
+                defenderTerritoryName,
+                attackerDice,
+                defenderDice);
+        view.displayBattleResult(battleResult);
+    }
+
+    private boolean isMalformedDiceInput(final List<Integer> diceCounts) {
+        return diceCounts.size() != 2;
     }
 }

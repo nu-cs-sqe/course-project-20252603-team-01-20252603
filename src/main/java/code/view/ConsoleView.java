@@ -172,6 +172,53 @@ public class ConsoleView {
                 tokens[artilleryIndex]);
     }
 
+    public List<String> promptTerritoriesToAttack() {
+        String attackingTerritory = "";
+
+        while (attackingTerritory.isBlank()) {
+            output.print("Enter attacking territory: ");
+            attackingTerritory = scanner.nextLine();
+        }
+
+        String defendingTerritory = "";
+
+        while (defendingTerritory.isBlank()) {
+            output.print("Enter defending territory: ");
+            defendingTerritory = scanner.nextLine();
+        }
+
+        return List.of(attackingTerritory, defendingTerritory);
+    }
+
+    public List<Integer> promptNumberOfDice(
+            final String attackerName,
+            final String defenderName) {
+        output.print("Enter number of dice for " + attackerName + ": ");
+        String attackerDiceInput = scanner.nextLine();
+
+        if (!isInteger(attackerDiceInput)) {
+            return List.of(MALFORMED_CARD_INPUT_SENTINEL);
+        }
+
+        output.print("Enter number of dice for " + defenderName + ": ");
+        String defenderDiceInput = scanner.nextLine();
+
+        if (!isInteger(defenderDiceInput)) {
+            return List.of(MALFORMED_CARD_INPUT_SENTINEL);
+        }
+
+        int attackerDice = Integer.parseInt(attackerDiceInput);
+        int defenderDice = Integer.parseInt(defenderDiceInput);
+
+        return List.of(attackerDice, defenderDice);
+    }
+
+    public void displayBattleResult(final List<String> battleResult) {
+        for (String battleResultLine : battleResult) {
+            output.println(battleResultLine);
+        }
+    }
+
     private boolean isInteger(final String value) {
         try {
             Integer.parseInt(value);

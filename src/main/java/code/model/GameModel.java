@@ -1,11 +1,14 @@
 package code.model;
 
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -47,6 +50,10 @@ public class GameModel {
 
     private static final int REQUIRED_TRADE_IN_CARD_COUNT = 5;
 
+    private static final int MAX_ATTACKER_DICE = 3;
+
+    private static final int DIE_SIDE_COUNT = 6;
+
     private final List<Continent> continents;
 
     private final List<Player> players;
@@ -63,13 +70,20 @@ public class GameModel {
 
     private final List<Territory> territories;
 
-    public GameModel() {
+    private final Random random;
+
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "GameModel intentionally stores the random generator to enable unit testing."
+    )
+    public GameModel(final Random randomGenerator) {
         continents = new ArrayList<>();
         territories = new ArrayList<>();
         players = new ArrayList<>();
         deck = new Deck();
         deck.shuffle();
         numSetsTradedIn = 0;
+        random = randomGenerator;
     }
 
     public void initializeContinentsAndTerritories() {
@@ -238,6 +252,15 @@ public class GameModel {
                 .filter(territory -> territory.getName().equals(territoryName))
                 .findFirst()
                 .get();
+    }
+
+    private Territory findTerritoryOrThrow(
+            final String territoryName,
+            final String errorMessage) {
+        return territories.stream()
+                .filter(territory -> territory.getName().equals(territoryName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(errorMessage));
     }
 
     private void connect(
@@ -624,6 +647,132 @@ public class GameModel {
                 0);
 
         return player.hasAvailableArmies(oneInfantry);
+    }
+
+    public String validateTerritoriesForAttackAndReturnDefenderName(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName) {
+        Territory attackingTerritory = findTerritoryOrThrow(
+                attackerTerritoryName,
+                "Attacking territory must exist on the board.");
+        Territory defendingTerritory = findTerritoryOrThrow(
+                defenderTerritoryName,
+                "Defending territory must exist on the board.");
+        Player currentPlayer = players.get(currentPlayerIndex);
+
+        if (attackingTerritory.equals(defendingTerritory)) {
+            throw new IllegalArgumentException(
+                    "Attacking and defending territories must be different territories.");
+        }
+
+        if (!attackingTerritory.isOwnedBy(currentPlayer)) {
+            throw new IllegalArgumentException(
+                    "Current player must own the attacking territory.");
+        }
+
+        if (defendingTerritory.isOwnedBy(currentPlayer)) {
+            throw new IllegalArgumentException(
+                    "Defending territory must be owned by another player.");
+        }
+
+        if (!attackingTerritory.getAdjacentTerritories().contains(defendingTerritory)) {
+            throw new IllegalArgumentException(
+                    "Attacking and defending territories must be adjacent.");
+        }
+
+        if (attackingTerritory.getArmyCount() < 2) {
+            throw new IllegalArgumentException(
+                    "Attacking territory must have at least 2 armies.");
+        }
+
+        return defendingTerritory.getName();
+    }
+
+    public boolean validateNumberOfDice(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName,
+            final int attackerNumDice,
+            final int defenderNumDice) {
+        Territory attackingTerritory = findTerritoryOrThrow(
+                attackerTerritoryName,
+                "Attacking territory must exist on the board.");
+        Territory defendingTerritory = findTerritoryOrThrow(
+                defenderTerritoryName,
+                "Defending territory must exist on the board.");
+
+        if (attackerNumDice < 1 || attackerNumDice > MAX_ATTACKER_DICE) {
+            throw new IllegalArgumentException("Attacker must roll between 1 and 3 dice.");
+        }
+
+        if (attackerNumDice > attackingTerritory.getArmyCount() - 1) {
+            throw new IllegalArgumentException(
+                    "Attacker cannot roll more dice than attacking territory armies minus one.");
+        }
+
+        if (defenderNumDice < 1 || defenderNumDice > 2) {
+            throw new IllegalArgumentException("Defender must roll either 1 or 2 dice.");
+        }
+
+        if (defenderNumDice > defendingTerritory.getArmyCount()) {
+            throw new IllegalArgumentException(
+                    "Defender cannot roll more dice than the number of armies on the defending territory.");
+        }
+
+        return true;
+    }
+
+    public List<String> executeBattleAndReturnWinner(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName,
+            final int attackerNumDice,
+            final int defenderNumDice) {
+        Territory attackingTerritory = findTerritoryOrThrow(
+                attackerTerritoryName,
+                "Attacking territory must exist on the board.");
+        Territory defendingTerritory = findTerritoryOrThrow(
+                defenderTerritoryName,
+                "Defending territory must exist on the board.");
+        List<Integer> attackerDice = rollDice(attackerNumDice);
+        List<Integer> defenderDice = rollDice(defenderNumDice);
+        int attackerLosses = 0;
+        int defenderLosses = 0;
+        int comparisonCount = Math.min(attackerDice.size(), defenderDice.size());
+
+        for (int comparisonIndex = 0; comparisonIndex < comparisonCount; comparisonIndex++) {
+            if (attackerDice.get(comparisonIndex) > defenderDice.get(comparisonIndex)) {
+                defenderLosses++;
+            } else {
+                attackerLosses++;
+            }
+        }
+
+        if (attackerLosses > 0) {
+            attackingTerritory.removeArmies(createInfantryPieces(attackerLosses));
+        }
+
+        if (defenderLosses > 0) {
+            defendingTerritory.removeArmies(createInfantryPieces(defenderLosses));
+        }
+
+        return List.of(
+                "Attacker dice: " + attackerDice,
+                "Defender dice: " + defenderDice,
+                "Attacker losses: " + attackerLosses,
+                "Defender losses: " + defenderLosses,
+                "Attacking territory armies: " + attackingTerritory.getArmyCount(),
+                "Defending territory armies: " + defendingTerritory.getArmyCount(),
+                "Captured: " + (defendingTerritory.getArmyCount() == 0));
+    }
+
+    private List<Integer> rollDice(final int numDice) {
+        List<Integer> dice = new ArrayList<>();
+
+        for (int dieIndex = 0; dieIndex < numDice; dieIndex++) {
+            dice.add(random.nextInt(DIE_SIDE_COUNT) + 1);
+        }
+
+        dice.sort(Collections.reverseOrder());
+        return dice;
     }
 
 

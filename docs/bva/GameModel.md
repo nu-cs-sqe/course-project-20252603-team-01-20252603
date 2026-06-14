@@ -1,11 +1,11 @@
 # BVA Analysis — `GameModel`
 
 
-### Method under test: `GameModel()` *(constructor)*
+### Method under test: `GameModel(Random randomGenerator)` *(constructor)*
 
-- **TC1: GameModel constructs without error** ( :white_check_mark: )
-    - **State of the system**: `new GameModel()` called
-    - **Expected output**: Object created; `getContinents()` returns an empty list before initialization
+- **TC1: GameModel constructs with injected random generator** ( :x: )
+    - **State of the system**: `new GameModel(randomGenerator)` called with a supplied `Random`
+    - **Expected output**: Object created successfully; board state remains uninitialized until `initializeContinentsAndTerritories()` is called; subsequent battle-resolution dice rolls use the injected `Random`
 
 ---
 
@@ -552,3 +552,131 @@
 - **TC92: Does not traverse enemy-owned territory** ( :white_check_mark: )
     - **State of the system**: Destination can only be reached by crossing a territory not owned by the current player
     - **Expected output**: Returns `false`
+
+---
+
+### Method under test: `validateTerritoriesForAttackAndReturnDefenderName(String attackerTerritoryName, String defenderTerritoryName)`
+
+- **TC93: Valid minimum attack returns defender name** ( :white_check_mark: )
+    - **State of the system**: Current player owns the attacking territory; the attacking territory has exactly `2` armies; the defending territory is adjacent and owned by another player
+    - **Expected output**: Returns the defending territory name
+
+- **TC94: Valid attack with more than minimum armies returns defender name** ( :white_check_mark: )
+    - **State of the system**: Current player owns the attacking territory; the attacking territory has more than `2` armies; the defending territory is adjacent and owned by another player
+    - **Expected output**: Returns the defending territory name
+
+- **TC95: Rejects attacking territory not owned by current player** ( :white_check_mark: )
+    - **State of the system**: Selected attacking territory is owned by another player
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Current player must own the attacking territory."`
+
+- **TC96: Rejects defending territory owned by current player** ( :white_check_mark: )
+    - **State of the system**: Selected defending territory is owned by the current player
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Defending territory must be owned by another player."`
+
+- **TC97: Rejects non-adjacent territories** ( :white_check_mark: )
+    - **State of the system**: Current player owns the attacking territory and another player owns the defending territory, but the territories are not adjacent
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking and defending territories must be adjacent."`
+
+- **TC98: Rejects attacking territory with only one army** ( :white_check_mark: )
+    - **State of the system**: Current player owns the attacking territory, but it has exactly `1` army; defending territory is adjacent and enemy-owned
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking territory must have at least 2 armies."`
+
+- **TC99: Rejects same attacking and defending territory** ( :white_check_mark: )
+    - **State of the system**: The same territory name is passed as both the attacking and defending territory
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking and defending territories must be different territories."`
+
+- **TC100: Rejects unknown attacking territory name** ( :white_check_mark: )
+    - **State of the system**: `attackerTerritoryName` does not match any territory on the board
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking territory must exist on the board."`
+
+- **TC101: Rejects unknown defending territory name** ( :white_check_mark: )
+    - **State of the system**: `defenderTerritoryName` does not match any territory on the board
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Defending territory must exist on the board."`
+
+---
+
+### Method under test: `validateNumberOfDice(String attackerTerritoryName, String defenderTerritoryName, int attackerNumDice, int defenderNumDice)`
+
+- **TC102: Minimum valid dice counts are accepted** ( :white_check_mark: )
+    - **State of the system**: Attacking territory has exactly `2` armies; defending territory has exactly `1` army; `attackerNumDice = 1`; `defenderNumDice = 1`
+    - **Expected output**: Returns `true`
+
+- **TC103: Maximum valid dice counts are accepted** ( :white_check_mark: )
+    - **State of the system**: Attacking territory has at least `4` armies; defending territory has at least `2` armies; `attackerNumDice = 3`; `defenderNumDice = 2`
+    - **Expected output**: Returns `true`
+
+- **TC104: Attacker may roll two dice when exactly three armies are in the attacking territory** ( :white_check_mark: )
+    - **State of the system**: Attacking territory has exactly `3` armies; defending territory has at least `1` army; `attackerNumDice = 2`; `defenderNumDice = 1`
+    - **Expected output**: Returns `true`
+
+- **TC105: Rejects attacker rolling zero dice** ( :white_check_mark: )
+    - **State of the system**: Attacking territory has at least `2` armies; defending territory has at least `1` army; `attackerNumDice = 0`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must roll between 1 and 3 dice."`
+
+- **TC106: Rejects attacker rolling more than three dice** ( :white_check_mark: )
+    - **State of the system**: Attacking territory has at least `5` armies; defending territory has at least `1` army; `attackerNumDice = 4`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must roll between 1 and 3 dice."`
+
+- **TC107: Rejects attacker rolling more dice than armies minus one allows** ( :white_check_mark: )
+    - **State of the system**: Attacking territory has exactly `2` armies; defending territory has at least `1` army; `attackerNumDice = 2`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker cannot roll more dice than attacking territory armies minus one."`
+
+- **TC108: Rejects defender rolling zero dice** ( :white_check_mark: )
+    - **State of the system**: Attacking territory has at least `2` armies; defending territory has at least `1` army; `defenderNumDice = 0`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Defender must roll either 1 or 2 dice."`
+
+- **TC109: Rejects defender rolling more than two dice** ( :white_check_mark: )
+    - **State of the system**: Attacking territory has at least `2` armies; defending territory has at least `3` armies; `defenderNumDice = 3`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Defender must roll either 1 or 2 dice."`
+
+- **TC110: Rejects defender rolling more dice than defending territory armies allow** ( :white_check_mark: )
+    - **State of the system**: Defending territory has exactly `1` army; `defenderNumDice = 2`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Defender cannot roll more dice than the number of armies on the defending territory."`
+
+---
+
+### Method under test: `executeBattleAndReturnWinner(String attackerTerritoryName, String defenderTerritoryName, int attackerNumDice, int defenderNumDice)`
+
+- **TC111: One-versus-one battle where attacker die beats defender die removes one defending army** ( :white_check_mark: )
+    - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; injected `Random` produces an attacker die greater than the defender die
+    - **Expected output**: Defending territory loses `1` army; attacking territory loses `0` armies; returned battle result reports sorted dice, losses, updated army counts, and no capture when defenders remain
+
+- **TC112: One-versus-one battle where defender die beats attacker die removes one attacking army** ( :white_check_mark: )
+    - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; injected `Random` produces a defender die greater than the attacker die
+    - **Expected output**: Attacking territory loses `1` army; defending territory loses `0` armies; returned battle result reports sorted dice, losses, updated army counts, and no capture
+
+- **TC113: One-versus-one battle tie removes one attacking army** ( :white_check_mark: )
+    - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; injected `Random` produces equal attacker and defender dice
+    - **Expected output**: Attacking territory loses `1` army because defender wins ties; returned battle result reports the tie outcome and updated army counts
+
+- **TC114: Two-versus-one battle compares only highest dice** ( :white_check_mark: )
+    - **State of the system**: Attacker rolls `2` dice; defender rolls `1` die; injected `Random` produces deterministic dice values
+    - **Expected output**: Only the highest attacker die is compared to the defender die; exactly one army total is lost across the two territories
+
+- **TC115: Three-versus-two battle compares top two dice and attacker loses both comparisons** ( :white_check_mark: )
+    - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; injected `Random` produces values such that, after sorting, defender wins both comparisons
+    - **Expected output**: Attacking territory loses `2` armies; defending territory loses `0` armies; returned battle result reports both losses and updated army counts
+
+- **TC116: Three-versus-two battle compares top two dice and defender loses both comparisons** ( :white_check_mark: )
+    - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; injected `Random` produces values such that, after sorting, attacker wins both comparisons
+    - **Expected output**: Defending territory loses `2` armies; attacking territory loses `0` armies; returned battle result reports both losses, updated army counts, and capture flag if the defending territory reaches `0` armies
+
+- **TC117: Three-versus-two battle splits losses one each** ( :white_check_mark: )
+    - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; injected `Random` produces values such that, after sorting, attacker wins one comparison and defender wins one comparison
+    - **Expected output**: Each territory loses `1` army; returned battle result reports both losses and updated army counts
+
+- **TC118: Returned attacker dice are sorted from highest to lowest** ( :white_check_mark: )
+    - **State of the system**: Attacker rolls more than one die and the injected `Random` yields attacker dice in a raw order that is not descending
+    - **Expected output**: The attacker dice reported in the battle result are sorted from highest to lowest
+
+- **TC119: Returned defender dice are sorted from highest to lowest** ( :white_check_mark: )
+    - **State of the system**: Defender rolls two dice and the injected `Random` yields defender dice in a raw order that is not descending
+    - **Expected output**: The defender dice reported in the battle result are sorted from highest to lowest
+
+- **TC120: Capture flag is false when defending territory still has armies remaining** ( :white_check_mark: )
+    - **State of the system**: Battle resolves with deterministic injected dice and the defending territory still has at least `1` army remaining afterward
+    - **Expected output**: Returned battle result indicates that the territory was not captured
+
+- **TC121: Capture flag is true when defending territory loses its last army** ( :white_check_mark: )
+    - **State of the system**: Battle resolves with deterministic injected dice and the defending territory reaches `0` armies
+    - **Expected output**: Returned battle result indicates that the territory was captured

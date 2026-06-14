@@ -113,7 +113,8 @@ package code.model {
         - currentPlayerIndex : int
         - territories : List<Territory>
         - numSetsTradedIn : int
-        + GameModel()
+        - random : Random
+        + GameModel(randomGenerator : Random)
         + initializeContinentsAndTerritories() : void
         + getDeckSize() : int
         + isDeckEmpty() : boolean
@@ -135,11 +136,11 @@ package code.model {
         + addArmiesToCurrentPlayerBasedOnContinents() : void
         + placeArmiesDuringReinforcement(territoryName : String, pieces : HashMap<ArmyType, Integer>) : boolean
         + currentPlayerHasAvailableArmies() : boolean
-        + validateTerritoriesForAttackAndReturnDefenderName(attackerTerritoryName : String, defenderTerritoryName : String, currentPlayerName : String) : String
-        +validateNumberOfDice(attackerNumDice: int, defenderNumDice: int) : boolean
+        + validateTerritoriesForAttackAndReturnDefenderName(attackerTerritoryName : String, defenderTerritoryName : String) : String
+        + validateNumberOfDice(attackerTerritoryName : String, defenderTerritoryName : String, attackerNumDice : int, defenderNumDice : int) : boolean
         ' last element of the battle result list is a bool flag for whether territory was captured or not
-        +executeBattleAndReturnWinner() : List<String>
-        +handlePlayerElimination(): boolean
+        + executeBattleAndReturnWinner(attackerTerritoryName : String, defenderTerritoryName : String, attackerNumDice : int, defenderNumDice : int) : List<String>
+        + handlePlayerElimination() : boolean
     }
 }
 
@@ -161,11 +162,11 @@ package code.view {
         + displayCurrentPlayerCards(cards: String): void
         + promptChooseCardsToTradeIn(): List<Integer>
         + promptReinforcement(): List<String>
-        + promptTerritoriesToAttack(): List<String>
-        + promptNumberOfDice(attackerName: String, defenderName: String): List<int>
-        + displayBattleResult(battleResult: List<String>): void
-        + displayPlayerElimination(playerName: String): void
-        +displaySetupPhaseComplete(): void
+        + promptTerritoriesToAttack() : List<String>
+        + promptNumberOfDice(attackerName : String, defenderName : String) : List<Integer>
+        + displayBattleResult(battleResult : List<String>) : void
+        + displayPlayerElimination(playerName : String) : void
+        + displaySetupPhaseComplete() : void
     }
 }
 
