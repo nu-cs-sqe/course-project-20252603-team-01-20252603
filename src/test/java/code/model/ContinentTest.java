@@ -317,6 +317,18 @@ public final class ContinentTest {
         assertFalse(continent.containsTerritory(china));
     }
 
+    @Test
+    public void addTerritoryIgnoresNullTerritory() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Territory japan = createRealTerritory("Japan", continent);
+
+        continent.addTerritory(null);
+        continent.addTerritory(japan);
+
+        assertFalse(continent.containsTerritory(null));
+        assertTrue(continent.containsTerritory(japan));
+    }
+
     private Territory createRealTerritory(final String name, final Continent continent) {
         return new Territory(name, continent, Collections.emptyList());
     }
