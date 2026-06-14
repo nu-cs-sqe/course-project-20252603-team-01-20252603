@@ -152,7 +152,7 @@
     - **State of the system**: Current player is asked whether to fortify and enters `"yes"`
     - **Expected output**: Returns `"yes"` so the controller can begin fortification
 
-- **TC28: Returns no choice** ( :x: )
+- **TC28: Returns no choice** ( :white_check_mark: )
     - **State of the system**: Current player is asked whether to fortify and enters `"no"`
     - **Expected output**: Returns `"no"` so the controller can skip fortification
 
