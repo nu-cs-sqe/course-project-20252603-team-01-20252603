@@ -154,7 +154,11 @@ public class HumanPlayer extends Player {
             final List<Integer> cardIndices,
             final Deck deck,
             final int numSetsTradedIn) {
-        return cardIndices.size() == 3;
+        if (cardIndices.size() != 3) {
+            return false;
+        }
+
+        return cardIndices.stream().noneMatch(index -> index < 1);
     }
 
     private int calculateArmyValue(final HashMap<ArmyType, Integer> armies) {
