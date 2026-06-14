@@ -1,17 +1,9 @@
 package code.controller;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
+import static org.easymock.EasyMock.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import code.model.ArmyType;
-import code.model.GameModel;
-import code.model.HumanPlayer;
-import code.model.Player;
-import code.model.PlayerColor;
+import code.model.*;
 import code.view.ConsoleView;
 
 import java.util.HashMap;
@@ -55,6 +47,14 @@ public final class SetupControllerTest {
     private static final int TWO_INFANTRY = 2;
 
     private static final int SETUP_INFANTRY_COUNT = 1;
+
+    private static final int ZERO_ARMIES = 0;
+
+    private static final int ONE_PLAYER = 1;
+
+    private static final int TWO_PLAYERS = 2;
+
+    private static final int MIN_PLAYER_COUNT = 3;
 
     private final List<PlayerColor> allPlayableColors = List.of(
             PlayerColor.RED,
@@ -956,6 +956,62 @@ public final class SetupControllerTest {
         controller.handleTerritoryClaiming();
 
         verify(model, view);
+    }
+
+    @Test
+    public void initializePlayersModelRejectsAvailableColorDisplaysError() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        Random random = createMock(Random.class);
+        SetupController controller = new SetupController(model, view, random);
+
+        expect(view.promptNumberOfPlayers()).andReturn(MIN_PLAYER_COUNT);
+        expect(model.setPlayerCount(MIN_PLAYER_COUNT)).andReturn(true);
+
+        expect(view.promptPlayerName(ONE_PLAYER)).andReturn("Alice");
+
+        expect(view.promptPlayerColor(
+                eq("Alice"),
+                anyObject())).andReturn(PlayerColor.RED);
+        expect(model.addPlayer("Alice", PlayerColor.RED))
+                .andReturn(new NullPlayer());
+
+        view.displayError("Color already selected.");
+        expectLastCall().once();
+
+        expect(view.promptPlayerColor(
+                eq("Alice"),
+                anyObject())).andReturn(PlayerColor.BLUE);
+        expect(model.addPlayer("Alice", PlayerColor.BLUE))
+                .andReturn(new HumanPlayer("Alice", PlayerColor.BLUE, ZERO_ARMIES));
+
+        expect(view.promptPlayerName(TWO_PLAYERS)).andReturn("Bob");
+        expect(view.promptPlayerColor(
+                eq("Bob"),
+                anyObject())).andReturn(PlayerColor.GREEN);
+        expect(model.addPlayer("Bob", PlayerColor.GREEN))
+                .andReturn(new HumanPlayer("Bob", PlayerColor.GREEN, ZERO_ARMIES));
+
+        expect(view.promptPlayerName(MIN_PLAYER_COUNT)).andReturn("Carol");
+        expect(view.promptPlayerColor(
+                eq("Carol"),
+                anyObject())).andReturn(PlayerColor.YELLOW);
+        expect(model.addPlayer("Carol", PlayerColor.YELLOW))
+                .andReturn(new HumanPlayer("Carol", PlayerColor.YELLOW, ZERO_ARMIES));
+
+        expect(random.nextInt(MIN_PLAYER_COUNT)).andReturn(ZERO_ARMIES);
+        model.setCurrentPlayerIndex(ZERO_ARMIES);
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerName()).andReturn("Alice");
+        view.displayCurrentPlayer("Alice");
+        expectLastCall().once();
+
+        replay(model, view, random);
+
+        controller.initializePlayers();
+
+        verify(model, view, random);
     }
 
 }

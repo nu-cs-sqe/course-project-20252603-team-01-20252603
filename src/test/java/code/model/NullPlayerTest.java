@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -57,6 +59,46 @@ public final class NullPlayerTest {
         Territory territory = new Territory("Japan", continent, Collections.emptyList());
 
         assertFalse(player.ownsTerritory(territory));
+    }
+
+    @Test
+    public void addTerritoryThrowsUnsupportedOperationException() {
+        NullPlayer nullPlayer = new NullPlayer();
+        Continent continent = new Continent("North America", 5);
+        Territory territory = new Territory("Alaska", continent, List.of());
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> nullPlayer.addTerritory(territory));
+    }
+
+    @Test
+    public void getTerritoryCountReturnsZero() {
+        NullPlayer nullPlayer = new NullPlayer();
+
+        assertEquals(0, nullPlayer.getTerritoryCount());
+    }
+
+    @Test
+    public void addArmiesThrowsUnsupportedOperationException() {
+        NullPlayer nullPlayer = new NullPlayer();
+        HashMap<ArmyType, Integer> armies = new HashMap<>();
+        armies.put(ArmyType.INFANTRY, 1);
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> nullPlayer.addArmies(armies));
+    }
+
+    @Test
+    public void removeArmiesThrowsUnsupportedOperationException() {
+        NullPlayer nullPlayer = new NullPlayer();
+        HashMap<ArmyType, Integer> armies = new HashMap<>();
+        armies.put(ArmyType.INFANTRY, 1);
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> nullPlayer.removeArmies(armies));
     }
 
 }
