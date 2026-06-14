@@ -627,6 +627,27 @@ public final class TurnControllerTest {
     }
 
     @Test
+    public void handleArmiesToAddWithNullTradeInPossibilityDoesNothingAfterAddingArmies() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        model.addArmiesToCurrentPlayerBasedOnTerritories();
+        expectLastCall().once();
+
+        model.addArmiesToCurrentPlayerBasedOnContinents();
+        expectLastCall().once();
+
+        expect(model.checkCardTradeInPossibility()).andReturn(null);
+
+        replay(model, view);
+
+        TurnController controller = new TurnController(model, view);
+        controller.handleArmiesToAdd();
+
+        verify(model, view);
+    }
+
+    @Test
     public void handleArmiesToAddWithOptionalValidTradeInProcessesTradeAndDisplaysAvailableArmies() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
@@ -654,6 +675,38 @@ public final class TurnControllerTest {
         expect(model.getCurrentPlayerAvailableArmies()).andReturn("{INFANTRY=9}");
 
         view.displayCurrentPlayerArmies("{INFANTRY=9}");
+        expectLastCall().once();
+
+        replay(model, view);
+
+        TurnController controller = new TurnController(model, view);
+        controller.handleArmiesToAdd();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleArmiesToAddWithSingleNumericOptionalTradeInProcessesSelection() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        model.addArmiesToCurrentPlayerBasedOnTerritories();
+        expectLastCall().once();
+
+        model.addArmiesToCurrentPlayerBasedOnContinents();
+        expectLastCall().once();
+
+        expect(model.checkCardTradeInPossibility()).andReturn(TradeInPossibility.ALLOWED);
+        expect(model.getCurrentPlayerCards()).andReturn("1: Infantry, 2: Cavalry, 3: Artillery");
+
+        view.displayCurrentPlayerCards("1: Infantry, 2: Cavalry, 3: Artillery");
+        expectLastCall().once();
+
+        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(FIRST_CARD_INDEX));
+        expect(model.handleCardTradeIn(List.of(FIRST_CARD_INDEX))).andReturn(true);
+        expect(model.getCurrentPlayerAvailableArmies()).andReturn("{INFANTRY=5}");
+
+        view.displayCurrentPlayerArmies("{INFANTRY=5}");
         expectLastCall().once();
 
         replay(model, view);

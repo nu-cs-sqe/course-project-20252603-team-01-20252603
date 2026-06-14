@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import code.model.PlayerColor;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -44,6 +46,8 @@ public final class ConsoleViewTest {
     private static final int THREE = 3;
 
     private static final int FOUR = 4;
+
+    private static final int DEFAULT_PLAYER_COUNT = 3;
 
     private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
 
@@ -313,6 +317,15 @@ public final class ConsoleViewTest {
     @Test
     public void promptReinforcementRejectsNonNumericArtilleryCount() {
         ConsoleView view = createViewWithInput("Northwest Territory 10 2 three\n");
+
+        List<String> reinforcementInput = view.promptReinforcement();
+
+        assertTrue(reinforcementInput.isEmpty());
+    }
+
+    @Test
+    public void promptReinforcementRejectsTooFewTokens() {
+        ConsoleView view = createViewWithInput("Alaska 1 0\n");
 
         List<String> reinforcementInput = view.promptReinforcement();
 
@@ -818,6 +831,43 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void defaultConstructorReadsFromStandardInput() {
+        InputStream originalIn = System.in;
+
+        try {
+            System.setIn(new ByteArrayInputStream("3\n".getBytes(StandardCharsets.UTF_8)));
+
+            ConsoleView view = new ConsoleView();
+
+            assertEquals(DEFAULT_PLAYER_COUNT, view.promptNumberOfPlayers());
+        } finally {
+            System.setIn(originalIn);
+        }
+    }
+
+    @Test
+    public void promptNumberOfPlayersLocaleConstructorUsesProvidedLocale() {
+        InputStream originalIn = System.in;
+        PrintStream originalOut = System.out;
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+
+        try {
+            System.setIn(new ByteArrayInputStream("3\n".getBytes(StandardCharsets.UTF_8)));
+            System.setOut(new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+            ConsoleView view = new ConsoleView(new Locale("es"));
+
+            view.promptNumberOfPlayers();
+
+            assertTrue(captured.toString(StandardCharsets.UTF_8)
+                    .contains("Ingrese el numero de jugadores"));
+        } finally {
+            System.setIn(originalIn);
+            System.setOut(originalOut);
+        }
+    }
+
+    @Test
     public void displaySetupPhaseCompleteSpanishLocalePrintsSpanishMessage() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         ConsoleView view = new ConsoleView(
@@ -843,5 +893,15 @@ public final class ConsoleViewTest {
         return new ConsoleView(
                 new Scanner(""),
                 new PrintStream(output, true, StandardCharsets.UTF_8));
+    }
+
+    private ConsoleView createViewWithLocaleAndOutput(
+            final Locale locale,
+            final ByteArrayOutputStream output,
+            final String input) {
+        return new ConsoleView(
+                new Scanner(input),
+                new PrintStream(output, true, StandardCharsets.UTF_8),
+                locale);
     }
 }
