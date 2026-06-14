@@ -977,4 +977,29 @@ public final class GameModelTest {
         assertTrue(availableArmies.contains("CAVALRY=0"));
         assertTrue(availableArmies.contains("ARTILLERY=0"));
     }
+
+    @Test
+    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullSouthAmericaAddsTwoInfantry() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Venezuela", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Peru", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Brazil", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Argentina", createInfantryPieces(ONE_INFANTRY));
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - 4));
+
+        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(availableArmies.contains("INFANTRY=2"));
+        assertTrue(availableArmies.contains("CAVALRY=0"));
+        assertTrue(availableArmies.contains("ARTILLERY=0"));
+    }
 }

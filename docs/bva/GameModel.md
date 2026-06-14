@@ -309,7 +309,7 @@
     - **State of the system**: Current player owns all `4` Australia territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `2`
 
-- **TC67: Adds South America bonus when current player fully owns South America** ( :x: )
+- **TC67: Adds South America bonus when current player fully owns South America** ( :white_check_mark: )
     - **State of the system**: Current player owns all `4` South America territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `2`
 
