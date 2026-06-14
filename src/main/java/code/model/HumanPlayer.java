@@ -174,10 +174,12 @@ public class HumanPlayer extends Player {
                 .map(index -> availableCards.get(index - 1))
                 .collect(Collectors.toList());
 
-        boolean hasThreeInfantryCards = selectedCards.stream()
-                .allMatch(card -> card.getType() == CardType.INFANTRY);
+        CardType firstCardType = selectedCards.get(0).getType();
+        boolean hasThreeCardsOfSameType = firstCardType != CardType.WILD
+                && selectedCards.stream()
+                        .allMatch(card -> card.getType() == firstCardType);
 
-        if (!hasThreeInfantryCards) {
+        if (!hasThreeCardsOfSameType) {
             return false;
         }
 
