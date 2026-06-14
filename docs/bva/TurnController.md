@@ -71,3 +71,35 @@
 - **TC45: Updated available armies are displayed after armies-to-add phase** ( :white_check_mark: )
     - **State of the system**: Territory, continent, and optional card trade-in processing are complete
     - **Expected output**: Controller displays the current player's available armies before reinforcement placement begins
+
+---
+
+### Method under test: `handleAttackPhase(Player player)`
+
+- **TC46: Valid attack resolves one battle and displays result** ( :x: )
+    - **State of the system**: Current player selects valid attacking and defending territories; selected dice counts are valid; model returns a battle result
+    - **Expected output**: Controller validates territories and dice, executes one battle, displays the battle result, and returns from the attack phase
+
+- **TC47: Invalid attacking territory re-prompts for territories** ( :x: )
+    - **State of the system**: Model raises `IllegalArgumentException` with message `"Current player must own the attacking territory."` during territory validation, then the player enters valid territories
+    - **Expected output**: Controller displays the model error message and re-prompts for attacking and defending territories
+
+- **TC48: Invalid defending territory re-prompts for territories** ( :x: )
+    - **State of the system**: Model raises `IllegalArgumentException` with message `"Defending territory must be owned by another player."` or `"Attacking and defending territories must be adjacent."`, then the player enters valid territories
+    - **Expected output**: Controller displays the model error message and re-prompts for attacking and defending territories
+
+- **TC49: Malformed dice input re-prompts for dice** ( :x: )
+    - **State of the system**: View returns `List.of(Integer.MIN_VALUE)` for dice input, then returns valid dice counts
+    - **Expected output**: Controller displays `"Invalid dice input."` and re-prompts for dice
+
+- **TC50: Incorrect number of dice entries re-prompts for dice** ( :x: )
+    - **State of the system**: View returns a dice-count list with fewer or more than two values, then returns valid dice counts
+    - **Expected output**: Controller displays `"Invalid dice input."` and re-prompts for dice
+
+- **TC51: Invalid dice count re-prompts for dice** ( :x: )
+    - **State of the system**: Model raises `IllegalArgumentException` during dice validation, then the player enters valid dice counts
+    - **Expected output**: Controller displays the model error message and re-prompts for dice
+
+- **TC52: Battle result is displayed exactly once after successful execution** ( :x: )
+    - **State of the system**: Territory and dice validation succeed; model returns one battle result
+    - **Expected output**: Controller calls `displayBattleResult(...)` exactly once with the returned battle result
