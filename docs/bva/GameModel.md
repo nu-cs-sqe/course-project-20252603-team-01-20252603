@@ -557,13 +557,13 @@
 
 ### Method under test: `validateTerritoriesForAttackAndReturnDefenderName(String attackerTerritoryName, String defenderTerritoryName)`
 
-- **TC93: Valid minimum attack returns defender name** ( :x: )
+- **TC93: Valid minimum attack returns defender name** ( :white_check_mark: )
     - **State of the system**: Current player owns the attacking territory; the attacking territory has exactly `2` armies; the defending territory is adjacent and owned by another player
-    - **Expected output**: Returns the defending player's name
+    - **Expected output**: Returns the defending territory name
 
 - **TC94: Valid attack with more than minimum armies returns defender name** ( :x: )
     - **State of the system**: Current player owns the attacking territory; the attacking territory has more than `2` armies; the defending territory is adjacent and owned by another player
-    - **Expected output**: Returns the defending player's name
+    - **Expected output**: Returns the defending territory name
 
 - **TC95: Rejects attacking territory not owned by current player** ( :x: )
     - **State of the system**: Selected attacking territory is owned by another player

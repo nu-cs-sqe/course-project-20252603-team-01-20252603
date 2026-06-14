@@ -240,6 +240,15 @@ public class GameModel {
                 .get();
     }
 
+    private Territory findTerritoryOrThrow(
+            final String territoryName,
+            final String errorMessage) {
+        return territories.stream()
+                .filter(territory -> territory.getName().equals(territoryName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(errorMessage));
+    }
+
     private void connect(
             final String firstTerritoryName,
             final String secondTerritoryName) {
@@ -624,6 +633,45 @@ public class GameModel {
                 0);
 
         return player.hasAvailableArmies(oneInfantry);
+    }
+
+    public String validateTerritoriesForAttackAndReturnDefenderName(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName) {
+        Territory attackingTerritory = findTerritoryOrThrow(
+                attackerTerritoryName,
+                "Attacking territory must exist on the board.");
+        Territory defendingTerritory = findTerritoryOrThrow(
+                defenderTerritoryName,
+                "Defending territory must exist on the board.");
+        Player currentPlayer = players.get(currentPlayerIndex);
+
+        if (attackingTerritory.equals(defendingTerritory)) {
+            throw new IllegalArgumentException(
+                    "Attacking and defending territories must be different territories.");
+        }
+
+        if (!attackingTerritory.isOwnedBy(currentPlayer)) {
+            throw new IllegalArgumentException(
+                    "Current player must own the attacking territory.");
+        }
+
+        if (defendingTerritory.isOwnedBy(currentPlayer)) {
+            throw new IllegalArgumentException(
+                    "Defending territory must be owned by another player.");
+        }
+
+        if (!attackingTerritory.getAdjacentTerritories().contains(defendingTerritory)) {
+            throw new IllegalArgumentException(
+                    "Attacking and defending territories must be adjacent.");
+        }
+
+        if (attackingTerritory.getArmyCount() < 2) {
+            throw new IllegalArgumentException(
+                    "Attacking territory must have at least 2 armies.");
+        }
+
+        return defendingTerritory.getName();
     }
 
 
