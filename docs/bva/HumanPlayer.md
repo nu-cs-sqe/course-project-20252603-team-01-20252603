@@ -209,7 +209,7 @@
     - **State of the system**: Selected cards are Cavalry, Cavalry, Cavalry; `numSetsTradedIn = 0`
     - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
 
-- **TC45: Three Artillery cards is accepted** ( :x: )
+- **TC45: Three Artillery cards is accepted** ( :white_check_mark: )
     - **State of the system**: Selected cards are Artillery, Artillery, Artillery; `numSetsTradedIn = 0`
     - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
 
