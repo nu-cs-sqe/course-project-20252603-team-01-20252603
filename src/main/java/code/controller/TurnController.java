@@ -57,7 +57,16 @@ public class TurnController {
                 cardIndices = view.promptChooseCardsToTradeIn();
             }
 
-            model.handleCardTradeIn(cardIndices);
+            while (!model.handleCardTradeIn(cardIndices)) {
+                view.displayError("Invalid card trade-in selection.");
+                cardIndices = view.promptChooseCardsToTradeIn();
+
+                while (isMalformedCardTradeInInput(cardIndices)) {
+                    view.displayError("Invalid card trade-in input.");
+                    cardIndices = view.promptChooseCardsToTradeIn();
+                }
+            }
+
             view.displayCurrentPlayerArmies(model.getCurrentPlayerAvailableArmies());
         }
     }

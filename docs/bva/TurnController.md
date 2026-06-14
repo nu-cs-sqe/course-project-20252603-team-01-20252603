@@ -48,7 +48,7 @@
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.ALLOWED`; player first enters malformed card input and `promptChooseCardsToTradeIn()` returns `List.of(Integer.MIN_VALUE)`
     - **Expected output**: Error message is displayed; controller re-prompts for card trade-in and proceeds only after a valid trade or explicit skip
 
-- **TC40: Numeric-but-invalid optional trade-in re-prompts when trade-in is allowed** ( :x: )
+- **TC40: Numeric-but-invalid optional trade-in re-prompts when trade-in is allowed** ( :white_check_mark: )
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.ALLOWED`; player first enters a numeric card selection that `handleCardTradeIn(...)` rejects
     - **Expected output**: Error message is displayed; controller re-prompts for card trade-in and proceeds only after a valid trade or explicit skip
 
