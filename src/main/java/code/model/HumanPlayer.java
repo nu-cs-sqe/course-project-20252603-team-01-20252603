@@ -171,7 +171,7 @@ public class HumanPlayer extends Player {
             final List<Integer> cardIndices,
             final Deck deck,
             final int numSetsTradedIn) {
-        if (numSetsTradedIn > MAX_CARD_TRADE_IN_COUNT) {
+        if (numSetsTradedIn >= MAX_CARD_TRADE_IN_COUNT) {
             throw new IllegalArgumentException(
                     "Cannot trade cards after " + numSetsTradedIn
                             + " sets because a 44-card deck supports at most 14 traded sets.");

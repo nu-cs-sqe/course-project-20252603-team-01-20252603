@@ -252,6 +252,12 @@ public final class GameModelTest {
         return new RiskCard(territory, cardType, false);
     }
 
+    private void addValidTradeInSet(final HumanPlayer player) {
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+        player.addCard(createCard(CardType.ARTILLERY));
+    }
+
     @Test
     public void claimTerritoryDuringSetupUnclaimedTerritoryWithOneInfantryReturnsTrue() {
         GameModel gameModel = new GameModel();
@@ -1331,5 +1337,32 @@ public final class GameModelTest {
         assertTrue(secondTradeIn);
         assertEquals(0, humanPlayer.getCardCount());
         assertTrue(player.getAvailableArmies().contains("INFANTRY=6"));
+    }
+
+    @Test
+    public void handleCardTradeInWithFourteenthValidTradeAddsFiftyFiveInfantry() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer humanPlayer = (HumanPlayer) player;
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+
+        for (int tradeNumber = 0; tradeNumber < 13; tradeNumber++) {
+            addValidTradeInSet(humanPlayer);
+            assertTrue(gameModel.handleCardTradeIn(List.of(1, 2, 3)));
+        }
+
+        player.removeArmies(createInfantryPieces(300));
+        addValidTradeInSet(humanPlayer);
+
+        boolean fourteenthTradeIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
+
+        assertTrue(fourteenthTradeIn);
+        assertEquals(0, humanPlayer.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=55"));
     }
 }

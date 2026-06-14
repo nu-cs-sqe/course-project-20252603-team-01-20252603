@@ -29,7 +29,7 @@ public final class HumanPlayerTest {
 
     private static final int TWENTY_CARD_TRADE_IN_ARMIES = 20;
 
-    private static final int SIXTY_CARD_TRADE_IN_ARMIES = 60;
+    private static final int FIFTY_FIVE_CARD_TRADE_IN_ARMIES = 55;
 
     private static final int ZERO_ARMIES = 0;
 
@@ -904,22 +904,22 @@ public final class HumanPlayerTest {
     }
 
     @Test
-    public void tradeCardsAndAddArmiesWithFourteenthTradeInAddsSixtyInfantry() {
+    public void tradeCardsAndAddArmiesWithFourteenthTradeInAddsFiftyFiveInfantry() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
 
         player.addCard(createCard(CardType.INFANTRY));
         player.addCard(createCard(CardType.CAVALRY));
         player.addCard(createCard(CardType.ARTILLERY));
 
-        boolean traded = player.tradeCardsAndAddArmies(List.of(1, 2, 3), new Deck(), 14);
+        boolean traded = player.tradeCardsAndAddArmies(List.of(1, 2, 3), new Deck(), 13);
 
         assertTrue(traded);
         assertTrue(player.getAvailableArmies().contains(
-                "INFANTRY=" + SIXTY_CARD_TRADE_IN_ARMIES));
+                "INFANTRY=" + FIFTY_FIVE_CARD_TRADE_IN_ARMIES));
     }
 
     @Test
-    public void tradeCardsAndAddArmiesWithFifteenTradeInsRaisesException() {
+    public void tradeCardsAndAddArmiesWithFifteenthTradeInRaisesException() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
 
         player.addCard(createCard(CardType.INFANTRY));
@@ -928,10 +928,10 @@ public final class HumanPlayerTest {
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> player.tradeCardsAndAddArmies(List.of(1, 2, 3), new Deck(), 15));
+                () -> player.tradeCardsAndAddArmies(List.of(1, 2, 3), new Deck(), 14));
 
         assertEquals(
-                "Cannot trade cards after 15 sets because a 44-card deck supports at most 14 traded sets.",
+                "Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets.",
                 exception.getMessage());
         assertEquals(3, player.getCardCount());
         assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
