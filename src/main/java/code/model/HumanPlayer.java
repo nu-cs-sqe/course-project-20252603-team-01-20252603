@@ -178,8 +178,12 @@ public class HumanPlayer extends Player {
         boolean hasThreeCardsOfSameType = firstCardType != CardType.WILD
                 && selectedCards.stream()
                         .allMatch(card -> card.getType() == firstCardType);
+        boolean hasOneOfEachType = selectedCards.stream()
+                .anyMatch(card -> card.getType() == CardType.INFANTRY)
+                && selectedCards.stream().anyMatch(card -> card.getType() == CardType.CAVALRY)
+                && selectedCards.stream().anyMatch(card -> card.getType() == CardType.ARTILLERY);
 
-        if (!hasThreeCardsOfSameType) {
+        if (!hasThreeCardsOfSameType && !hasOneOfEachType) {
             return false;
         }
 
