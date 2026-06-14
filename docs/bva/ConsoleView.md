@@ -155,4 +155,4 @@
 
 - **TC30: Rejects non-numeric card selection input** ( :white_check_mark: )
     - **State of the system**: Player enters `"1 two 3"`
-    - **Expected output**: Returns `List.of()`
+    - **Expected output**: Returns `List.of(Integer.MIN_VALUE)` to signal malformed card-selection input

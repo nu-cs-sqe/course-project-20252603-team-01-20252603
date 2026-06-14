@@ -18,6 +18,8 @@ public class ConsoleView {
 
     private static final int ARTILLERY_INDEX_FROM_END = 1;
 
+    private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
+
     private final Scanner scanner;
 
     private final PrintStream output;
@@ -91,7 +93,7 @@ public class ConsoleView {
 
         for (String token : tokens) {
             if (!isInteger(token)) {
-                return List.of();
+                return List.of(MALFORMED_CARD_INPUT_SENTINEL);
             }
 
             cardIndices.add(Integer.parseInt(token));

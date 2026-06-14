@@ -40,6 +40,8 @@ public final class ConsoleViewTest {
 
     private static final int THIRD_CARD_INDEX = 3;
 
+    private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
+
     @Test
     public void promptNumberOfPlayersMinimumPlayerCountReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("3\n");
@@ -340,7 +342,7 @@ public final class ConsoleViewTest {
 
         List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
 
-        assertTrue(cardIndices.isEmpty());
+        assertEquals(List.of(MALFORMED_CARD_INPUT_SENTINEL), cardIndices);
     }
 
     private ConsoleView createViewWithInput(final String input) {
