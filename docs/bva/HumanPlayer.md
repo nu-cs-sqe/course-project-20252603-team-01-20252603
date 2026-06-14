@@ -273,15 +273,15 @@
 
 ### Method under test: `removeTerritory(Territory territory)`
 
-- **TC60: Remove the only owned territory**
+- **TC60: Remove the only owned territory** (:x:)
     - **State of the system**: Human player owns exactly `alaska`; `removeTerritory(alaska)` is called
     - **Expected output**: Player territory count becomes `0`; `ownsTerritory(alaska)` returns `false`
 
-- **TC61: Remove one territory while another remains**
+- **TC61: Remove one territory while another remains** (:x:)
     - **State of the system**: Human player owns `alaska` and `alberta`; `removeTerritory(alaska)` is called
     - **Expected output**: Player territory count becomes `1`; `ownsTerritory(alaska)` returns `false`; `ownsTerritory(alberta)` returns `true`
 
-- **TC62: Removing a territory not owned by the player leaves territories unchanged**
+- **TC62: Removing a territory not owned by the player leaves territories unchanged** (:x:)
     - **State of the system**: Human player owns `alaska`; `removeTerritory(alberta)` is called
     - **Expected output**: Player territory count remains `1`; `ownsTerritory(alaska)` returns `true`; `ownsTerritory(alberta)` returns `false`
 
@@ -289,7 +289,7 @@
 
 ### Method under test: `isEliminated()`
 
-- **TC63: New human player is not eliminated**
+- **TC63: New human player is not eliminated** (:x:)
     - **State of the system**: Human player has just been constructed
     - **Expected output**: Returns `false`
 
@@ -301,11 +301,11 @@
 
 ### Method under test: `markEliminated()`
 
-- **TC65: Mark active player as eliminated**
+- **TC65: Mark active player as eliminated** (:x:)
     - **State of the system**: Human player is active and `isEliminated()` returns `false`
     - **Expected output**: `isEliminated()` returns `true`
 
-- **TC66: Mark already eliminated player as eliminated again**
+- **TC66: Mark already eliminated player as eliminated again** (:x:)
     - **State of the system**: `markEliminated()` has already been called once
     - **Expected output**: `isEliminated()` remains `true`; no exception is raised
 
@@ -313,11 +313,11 @@
 
 ### Method under test: `addCard(RiskCard card)`
 
-- **TC67: Add first Risk card to empty hand**
+- **TC67: Add first Risk card to empty hand** (:x:)
     - **State of the system**: Human player has zero cards; `addCard(card)` is called
     - **Expected output**: Player card count becomes `1`; `getAvailableCards()` contains `card`
 
-- **TC68: Add another Risk card to non-empty hand**
+- **TC68: Add another Risk card to non-empty hand** (:x:)
     - **State of the system**: Human player already has one card; `addCard(secondCard)` is called
     - **Expected output**: Player card count becomes `2`; both cards are present in `getAvailableCards()`
 
@@ -325,15 +325,15 @@
 
 ### Method under test: `addCards(List<RiskCard> cardsToAdd)`
 
-- **TC69: Add zero cards to empty hand**
+- **TC69: Add zero cards to empty hand** (:x:)
     - **State of the system**: Human player has zero cards; `addCards(List.of())` is called
     - **Expected output**: Player card count remains `0`
 
-- **TC70: Add one card to empty hand**
+- **TC70: Add one card to empty hand** (:x:)
     - **State of the system**: Human player has zero cards; `addCards(List.of(card))` is called
     - **Expected output**: Player card count becomes `1`; `getAvailableCards()` contains `card`
 
-- **TC71: Add multiple cards to non-empty hand**
+- **TC71: Add multiple cards to non-empty hand** (:x:)
     - **State of the system**: Human player already has one card; `addCards(List.of(secondCard, thirdCard))` is called
     - **Expected output**: Player card count becomes `3`; all three cards are present in `getAvailableCards()`
 
@@ -341,14 +341,14 @@
 
 ### Method under test: `removeAllCards()`
 
-- **TC72: Remove all cards from empty hand**
+- **TC72: Remove all cards from empty hand** (:x:)
     - **State of the system**: Human player has zero cards; `removeAllCards()` is called
     - **Expected output**: Returns an empty list; player card count remains `0`
 
-- **TC73: Remove all cards from one-card hand**
+- **TC73: Remove all cards from one-card hand** (:x:)
     - **State of the system**: Human player has exactly one card; `removeAllCards()` is called
     - **Expected output**: Returns a list containing that card; player card count becomes `0`
 
-- **TC74: Remove all cards from multi-card hand**
+- **TC74: Remove all cards from multi-card hand** (:x:)
     - **State of the system**: Human player has multiple cards; `removeAllCards()` is called
     - **Expected output**: Returns all cards that were in the hand; player card count becomes `0`; returned list size equals the previous card count
