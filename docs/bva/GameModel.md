@@ -613,7 +613,7 @@
     - **State of the system**: Attacking territory has at least `2` armies; defending territory has at least `1` army; `attackerNumDice = 0`
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must roll between 1 and 3 dice."`
 
-- **TC106: Rejects attacker rolling more than three dice** ( :x: )
+- **TC106: Rejects attacker rolling more than three dice** ( :white_check_mark: )
     - **State of the system**: Attacking territory has at least `5` armies; defending territory has at least `1` army; `attackerNumDice = 4`
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must roll between 1 and 3 dice."`
 
