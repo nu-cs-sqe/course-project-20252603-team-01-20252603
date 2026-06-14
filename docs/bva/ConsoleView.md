@@ -153,6 +153,6 @@
     - **State of the system**: Player enters `"1 2 3 4"`
     - **Expected output**: Returns a list containing `1`, `2`, `3`, and `4`
 
-- **TC30: Rejects non-numeric card selection input** ( :x: )
+- **TC30: Rejects non-numeric card selection input** ( :white_check_mark: )
     - **State of the system**: Player enters `"1 two 3"`
     - **Expected output**: Returns `List.of()`

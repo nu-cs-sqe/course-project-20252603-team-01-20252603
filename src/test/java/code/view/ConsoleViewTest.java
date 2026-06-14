@@ -334,6 +334,15 @@ public final class ConsoleViewTest {
         assertEquals(4, cardIndices.get(3));
     }
 
+    @Test
+    public void promptChooseCardsToTradeInRejectsNonNumericInput() {
+        ConsoleView view = createViewWithInput("1 two 3\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertTrue(cardIndices.isEmpty());
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
