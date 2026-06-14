@@ -420,6 +420,6 @@
     - **State of the system**: Current player's owned territories contain a cycle in the adjacency graph
     - **Expected output**: Search terminates and returns whether the destination is reachable without looping forever
 
-- **TC92: Does not traverse enemy-owned territory** ( :x: )
+- **TC92: Does not traverse enemy-owned territory** ( :white_check_mark: )
     - **State of the system**: Destination can only be reached by crossing a territory not owned by the current player
     - **Expected output**: Returns `false`
