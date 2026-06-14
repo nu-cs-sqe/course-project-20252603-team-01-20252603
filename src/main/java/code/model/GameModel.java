@@ -41,6 +41,8 @@ public class GameModel {
 
     private static final int SETUP_INFANTRY_COUNT = 1;
 
+    private static final int ZERO_ARMIES = 0;
+
     private final List<Continent> continents;
 
     private final List<Player> players;
@@ -495,6 +497,15 @@ public class GameModel {
     }
 
     public void addArmiesToCurrentPlayerBasedOnContinents() {
-        // No-op placeholder for initial TDD slice.
+        Player player = players.get(currentPlayerIndex);
+
+        for (Continent continent : continents) {
+            if (continent.isFullyOwnedBy(player)) {
+                player.addArmies(createArmyPieces(
+                        continent.getBonusArmies(),
+                        ZERO_ARMIES,
+                        ZERO_ARMIES));
+            }
+        }
     }
 }

@@ -305,7 +305,7 @@
     - **State of the system**: Current player owns territories in multiple continents but does not fully own any continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry remains `0`
 
-- **TC66: Adds Australia bonus when current player fully owns Australia** ( :x: )
+- **TC66: Adds Australia bonus when current player fully owns Australia** ( :white_check_mark: )
     - **State of the system**: Current player owns all `4` Australia territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `2`
 
