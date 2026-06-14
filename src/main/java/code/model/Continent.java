@@ -45,6 +45,11 @@ public final class Continent {
         return territory != null && territories.contains(territory);
     }
 
+    public boolean isFullyOwnedBy(final Player player) {
+        return !territories.isEmpty()
+                && territories.stream().allMatch(territory -> territory.isOwnedBy(player));
+    }
+
     private void validateName(final String continentName) {
         if (continentName == null || continentName.isEmpty()) {
             throw new IllegalArgumentException("Continent name cannot be empty.");

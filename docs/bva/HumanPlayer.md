@@ -128,3 +128,143 @@
 - **TC22: Returns available army map as display string when no Infantry is available** ( :white_check_mark: )
     - **State of the system**: Player available armies contain `INFANTRY -> 0`
     - **Expected output**: Returns a string containing `INFANTRY` and `0`
+
+---
+
+### Method under test: `addArmiesToAvailableBasedOnTerritories()`
+
+- **TC27: Zero territories is rejected because the player should be eliminated** ( :white_check_mark: )
+    - **State of the system**: Human player owns 0 territories
+    - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 0 territories and play a turn because they have been eliminated."`; available armies are unchanged
+
+- **TC28: One territory receives minimum reinforcement armies** ( :white_check_mark: )
+    - **State of the system**: Human player owns 1 territory and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC29: Two territories receives minimum reinforcement armies** ( :white_check_mark: )
+    - **State of the system**: Human player owns 2 territories and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC30: Eight territories receives minimum reinforcement armies** ( :white_check_mark: )
+    - **State of the system**: Human player owns 8 territories and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC31: Nine territories receives three reinforcement armies** ( :white_check_mark: )
+    - **State of the system**: Human player owns 9 territories and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC32: Ten territories rounds down to three reinforcement armies** ( :white_check_mark: )
+    - **State of the system**: Human player owns 10 territories and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC33: Eleven territories rounds down to three reinforcement armies** ( :white_check_mark: )
+    - **State of the system**: Human player owns 11 territories and has 0 available Infantry
+    - **Expected output**: Player receives 3 Infantry
+
+- **TC34: Twelve territories receives four reinforcement armies** ( :white_check_mark: )
+    - **State of the system**: Human player owns 12 territories and has 0 available Infantry
+    - **Expected output**: Player receives 4 Infantry
+
+- **TC35: Forty-one territories receives thirteen reinforcement armies** ( :white_check_mark: )
+    - **State of the system**: Human player owns 41 territories and has 0 available Infantry
+    - **Expected output**: Player receives 13 Infantry
+
+- **TC36: Forty-two territories is rejected because the game should already be won** ( :white_check_mark: )
+    - **State of the system**: Human player owns 42 territories
+    - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 42 territories and play a turn because they should have already won."`; available armies are unchanged
+
+- **TC37: More than forty-two territories is rejected as an invalid game state** ( :white_check_mark: )
+    - **State of the system**: Human player owns 43 territories
+    - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 43 territories because there are only 42 territories on the board."`; available armies are unchanged
+
+---
+
+### Method under test: `tradeCardsAndAddArmies(List<Integer> cardIndices, Deck deck, int numSetsTradedIn)`
+
+- **TC38: Fewer than three selected cards is rejected** ( :white_check_mark: )
+    - **State of the system**: Human player has 3 cards; selected indices contain 2 cards
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC39: More than three selected cards is rejected** ( :white_check_mark: )
+    - **State of the system**: Human player has 4 cards; selected indices contain 4 cards
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC40: Selected index below one is rejected** ( :white_check_mark: )
+    - **State of the system**: Human player has 3 cards; selected indices include `0`
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC41: Selected index above hand size is rejected** ( :white_check_mark: )
+    - **State of the system**: Human player has 3 cards; selected indices include `4`
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC42: Duplicate selected indices are rejected** ( :white_check_mark: )
+    - **State of the system**: Human player has 3 cards; selected indices are `[1, 1, 2]`
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC43: Three Infantry cards is accepted** ( :white_check_mark: )
+    - **State of the system**: Selected cards are Infantry, Infantry, Infantry; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC44: Three Cavalry cards is accepted** ( :white_check_mark: )
+    - **State of the system**: Selected cards are Cavalry, Cavalry, Cavalry; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC45: Three Artillery cards is accepted** ( :white_check_mark: )
+    - **State of the system**: Selected cards are Artillery, Artillery, Artillery; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC46: One Infantry, one Cavalry, and one Artillery is accepted** ( :white_check_mark: )
+    - **State of the system**: Selected cards are Infantry, Cavalry, Artillery; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC47: Two matching cards and one different non-wild card is rejected** ( :white_check_mark: )
+    - **State of the system**: Selected cards are Infantry, Infantry, Cavalry
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC48: One wild card with two matching non-wild cards is accepted** ( :white_check_mark: )
+    - **State of the system**: Selected cards are Wild, Infantry, Infantry; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC49: One wild card with two different non-wild cards is accepted** ( :white_check_mark: )
+    - **State of the system**: Selected cards are Wild, Infantry, Cavalry; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC50: Two wild cards are rejected** ( :white_check_mark: )
+    - **State of the system**: Selected cards include two Wild cards
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC51: First trade-in gives 4 armies** ( :white_check_mark: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 0`
+    - **Expected output**: Player receives 4 Infantry
+
+- **TC52: Second trade-in gives 6 armies** ( :white_check_mark: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 1`
+    - **Expected output**: Player receives 6 Infantry
+
+- **TC53: Third trade-in gives 8 armies** ( :white_check_mark: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 2`
+    - **Expected output**: Player receives 8 Infantry
+
+- **TC54: Fourth trade-in gives 10 armies** ( :white_check_mark: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 3`
+    - **Expected output**: Player receives 10 Infantry
+
+- **TC55: Fifth trade-in gives 12 armies** ( :white_check_mark: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 4`
+    - **Expected output**: Player receives 12 Infantry
+
+- **TC56: Sixth trade-in gives 15 armies** ( :white_check_mark: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 5`
+    - **Expected output**: Player receives 15 Infantry
+
+- **TC57: Seventh trade-in gives 20 armies** ( :white_check_mark: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 6`
+    - **Expected output**: Player receives 20 Infantry
+
+- **TC58: Fourteenth trade-in gives 55 armies as the maximum legal trade-in** ( :white_check_mark: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 13`
+    - **Expected output**: Returns `true`; player receives 55 Infantry; selected cards are removed from hand
+
+- **TC59: Fifteenth trade-in is rejected as impossible with forty-four cards** ( :white_check_mark: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 14`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets."`; available armies and card hand are unchanged

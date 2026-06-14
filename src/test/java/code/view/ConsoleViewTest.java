@@ -34,6 +34,18 @@ public final class ConsoleViewTest {
 
     private static final int ARTILLERY_INPUT_INDEX = 3;
 
+    private static final int FIRST_CARD_INDEX = 1;
+
+    private static final int SECOND_CARD_INDEX = 2;
+
+    private static final int THIRD_CARD_INDEX = 3;
+
+    private static final int THREE = 3;
+
+    private static final int FOUR = 4;
+
+    private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
+
     @Test
     public void promptNumberOfPlayersMinimumPlayerCountReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("3\n");
@@ -207,6 +219,19 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void displayCurrentPlayerCardsPrintsCards() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+
+        String cards = "1: Infantry, 2: Cavalry, 3: Artillery";
+
+        view.displayCurrentPlayerCards(cards);
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertTrue(displayedText.contains(cards));
+    }
+
+    @Test
     public void promptReinforcementReturnsOneInfantryPlacement() {
         ConsoleView view = createViewWithInput("Alaska 1 0 0\n");
 
@@ -294,6 +319,91 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptChooseCardsToTradeInReturnsThreeSelectedCardIndices() {
+        ConsoleView view = createViewWithInput("1 2 3\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(0));
+        assertEquals(SECOND_CARD_INDEX, cardIndices.get(1));
+        assertEquals(THIRD_CARD_INDEX, cardIndices.get(2));
+    }
+
+    @Test
+    public void promptChooseCardsToTradeInReturnsIndicesInEnteredOrder() {
+        ConsoleView view = createViewWithInput("3 1 2\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertEquals(THIRD_CARD_INDEX, cardIndices.get(0));
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(1));
+        assertEquals(SECOND_CARD_INDEX, cardIndices.get(2));
+    }
+
+    @Test
+    public void promptChooseCardsToTradeInWithEmptyInputReturnsEmptyList() {
+        ConsoleView view = createViewWithInput("\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertTrue(cardIndices.isEmpty());
+    }
+
+    @Test
+    public void promptChooseCardsToTradeInReturnsLowInvalidIndexForValidation() {
+        ConsoleView view = createViewWithInput("0 1 2\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertEquals(0, cardIndices.get(0));
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(1));
+        assertEquals(SECOND_CARD_INDEX, cardIndices.get(2));
+    }
+
+    @Test
+    public void promptChooseCardsToTradeInReturnsDuplicateIndicesForValidation() {
+        ConsoleView view = createViewWithInput("1 1 2\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(0));
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(1));
+        assertEquals(SECOND_CARD_INDEX, cardIndices.get(2));
+    }
+
+    @Test
+    public void promptChooseCardsToTradeInReturnsFewerThanThreeIndicesForValidation() {
+        ConsoleView view = createViewWithInput("1 2\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertEquals(2, cardIndices.size());
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(0));
+        assertEquals(SECOND_CARD_INDEX, cardIndices.get(1));
+    }
+
+    @Test
+    public void promptChooseCardsToTradeInReturnsMoreThanThreeIndicesForValidation() {
+        ConsoleView view = createViewWithInput("1 2 3 4\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertEquals(FOUR, cardIndices.size());
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(0));
+        assertEquals(SECOND_CARD_INDEX, cardIndices.get(1));
+        assertEquals(THIRD_CARD_INDEX, cardIndices.get(2));
+        assertEquals(FOUR, cardIndices.get(THREE));
+    }
+
+    @Test
+    public void promptChooseCardsToTradeInRejectsNonNumericInput() {
+        ConsoleView view = createViewWithInput("1 two 3\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertEquals(List.of(MALFORMED_CARD_INPUT_SENTINEL), cardIndices);
+    }
+
     public void promptFortifyChoiceYesChoiceReturnsChoice() {
         ConsoleView view = createViewWithInput("yes\n");
 

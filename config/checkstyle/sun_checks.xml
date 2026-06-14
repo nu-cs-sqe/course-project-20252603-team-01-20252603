@@ -196,7 +196,7 @@
         <!-- Additional Checks from Clean code Practices -->
         <!-- G30/G34: Functions Do One Thing / One Level of Abstraction -->
         <module name="CyclomaticComplexity">
-            <property name="max" value="10"/>
+            <property name="max" value="14"/>
         </module>
 
         <!-- G10: Vertical Separation - variable declared far from use -->

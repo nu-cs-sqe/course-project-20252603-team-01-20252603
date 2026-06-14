@@ -40,7 +40,6 @@ package code.model {
         {abstract} + hasAvailableArmies(requiredArmies : HashMap<ArmyType, Integer>) : boolean
         {abstract} + getAvailableArmies() : String
         {abstract} + addArmiesToAvailableBasedOnTerritories(): void
-        {abstract} + addArmiesToAvailableBasedOnContinents(): void
         {abstract} + tradeCardsAndAddArmies(cardIndices: List<Integer>, deck: Deck, numSetsTradedIn: int): boolean
     }
 
@@ -67,6 +66,7 @@ package code.model {
         + getBonusArmies() : int
         + addTerritory(territory : Territory) : void
         + containsTerritory(territory : Territory) : boolean
+        + isFullyOwnedBy(player : Player) : boolean
     }
 
     class Territory {
@@ -131,6 +131,8 @@ package code.model {
         + handleCardTradeIn(cardIndices : List<Integer>) : boolean
         + getCurrentPlayerCards() : String
         +addArmiesDuringSetup(territoryName: String) : boolean
+        + addArmiesToCurrentPlayerBasedOnTerritories() : void
+        + addArmiesToCurrentPlayerBasedOnContinents() : void
         + placeArmiesDuringReinforcement(territoryName : String, pieces : HashMap<ArmyType, Integer>) : boolean
         + currentPlayerHasAvailableArmies() : boolean
         + validateTerritoriesForAttackAndReturnDefenderName(attackerTerritoryName : String, defenderTerritoryName : String, currentPlayerName : String) : String

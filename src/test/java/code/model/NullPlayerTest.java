@@ -22,6 +22,8 @@ public final class NullPlayerTest {
 
     private static final int AUSTRALIA_BONUS_ARMIES = 5;
 
+    private static final int THREE = 3;
+
     @Test
     public void constructorUnassignedOwnershipCreatesPlayerPlaceholder() {
         NullPlayer player = new NullPlayer();
@@ -55,6 +57,28 @@ public final class NullPlayerTest {
     }
 
     @Test
+    public void addArmiesToAvailableBasedOnTerritoriesUnassignedOwnershipRaisesException() {
+        NullPlayer player = new NullPlayer();
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                player::addArmiesToAvailableBasedOnTerritories);
+
+        assertEquals("NullPlayer cannot receive armies.", exception.getMessage());
+    }
+
+    @Test
+    public void tradeCardsAndAddArmiesUnassignedOwnershipRaisesException() {
+        NullPlayer player = new NullPlayer();
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                () -> player.tradeCardsAndAddArmies(List.of(1, 2, THREE), new Deck(), 0));
+
+        assertEquals("NullPlayer cannot trade cards.", exception.getMessage());
+
+    }
+
     public void ownsTerritoryUnassignedOwnerReturnsFalse() {
         NullPlayer player = new NullPlayer();
         Continent continent = new Continent("Asia", ASIA_BONUS_ARMIES);
@@ -101,6 +125,7 @@ public final class NullPlayerTest {
         assertThrows(
                 UnsupportedOperationException.class,
                 () -> nullPlayer.removeArmies(armies));
+
     }
 
 }

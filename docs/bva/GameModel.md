@@ -346,6 +346,135 @@
 
 ---
 
+### Method under test: `addArmiesToCurrentPlayerBasedOnTerritories()`
+
+- **TC65: Current player with 1 territory receives minimum 3 Infantry** ( :white_check_mark: )
+    - **State of the system**: Current player owns exactly `1` territory and has `0` available Infantry before turn-start territory armies are added
+    - **Expected output**: Current player's available Infantry increases to `3`
+
+- **TC66: Current player with 8 territories still receives minimum 3 Infantry** ( :white_check_mark: )
+    - **State of the system**: Current player owns exactly `8` territories and has `0` available Infantry before turn-start territory armies are added
+    - **Expected output**: Current player's available Infantry increases to `3`
+
+- **TC67: Current player with 12 territories receives 4 Infantry** ( :white_check_mark: )
+    - **State of the system**: Current player owns exactly `12` territories and has `0` available Infantry before turn-start territory armies are added
+    - **Expected output**: Current player's available Infantry increases to `4`
+
+- **TC68: Current player with 41 territories receives 13 Infantry** ( :white_check_mark: )
+    - **State of the system**: Current player owns exactly `41` territories and has `0` available Infantry before turn-start territory armies are added
+    - **Expected output**: Current player's available Infantry increases to `13`
+
+- **TC69: Current player with 0 territories raises eliminated-player exception** ( :white_check_mark: )
+    - **State of the system**: Current player owns `0` territories and `addArmiesToCurrentPlayerBasedOnTerritories()` is called
+    - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 0 territories and play a turn because they have been eliminated."`; current player's available armies are unchanged
+
+- **TC70: Current player with 42 territories raises already-won exception** ( :white_check_mark: )
+    - **State of the system**: Current player owns `42` territories and `addArmiesToCurrentPlayerBasedOnTerritories()` is called
+    - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 42 territories and play a turn because they should have already won."`; current player's available armies are unchanged
+
+---
+
+### Method under test: `addArmiesToCurrentPlayerBasedOnContinents()`
+
+- **TC71: Adds no bonus when current player owns no full continent** ( :white_check_mark: )
+    - **State of the system**: Current player owns territories in multiple continents but does not fully own any continent; current player has `0` available Infantry before continent bonus is applied
+    - **Expected output**: Current player's available Infantry remains `0`
+
+- **TC72: Adds Australia bonus when current player fully owns Australia** ( :white_check_mark: )
+    - **State of the system**: Current player owns all `4` Australia territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
+    - **Expected output**: Current player's available Infantry increases to `2`
+
+- **TC73: Adds South America bonus when current player fully owns South America** ( :white_check_mark: )
+    - **State of the system**: Current player owns all `4` South America territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
+    - **Expected output**: Current player's available Infantry increases to `2`
+
+- **TC74: Adds Africa bonus when current player fully owns Africa** ( :white_check_mark: )
+    - **State of the system**: Current player owns all `6` Africa territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
+    - **Expected output**: Current player's available Infantry increases to `3`
+
+- **TC75: Adds Europe bonus when current player fully owns Europe** ( :white_check_mark: )
+    - **State of the system**: Current player owns all `7` Europe territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
+    - **Expected output**: Current player's available Infantry increases to `5`
+
+- **TC76: Adds North America bonus when current player fully owns North America** ( :white_check_mark: )
+    - **State of the system**: Current player owns all `9` North America territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
+    - **Expected output**: Current player's available Infantry increases to `5`
+
+- **TC77: Adds Asia bonus when current player fully owns Asia** ( :white_check_mark: )
+    - **State of the system**: Current player owns all `12` Asia territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
+    - **Expected output**: Current player's available Infantry increases to `7`
+
+- **TC78: Adds bonuses for multiple fully controlled continents** ( :white_check_mark: )
+    - **State of the system**: Current player owns all Australia territories and all South America territories; current player has `0` available Infantry before continent bonus is applied
+    - **Expected output**: Current player's available Infantry increases to `4`
+
+- **TC79: Adds bonus only for fully controlled continent when another continent is only partially owned** ( :white_check_mark: )
+    - **State of the system**: Current player owns all Australia territories and `3` of South America's `4` territories; current player has `0` available Infantry before continent bonus is applied
+    - **Expected output**: Current player's available Infantry increases to `2`
+
+---
+
+### Method under test: `handleCardTradeIn(List<Integer> cardIndices)`
+
+- **TC74: Empty card selection skips card trade-in** ( :white_check_mark: )
+    - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes an empty card index list
+    - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand is unchanged; `numSetsTradedIn` remains `0`
+
+- **TC75: `null` card selection skips card trade-in** ( :white_check_mark: )
+    - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes `null` for card indices
+    - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand is unchanged; `numSetsTradedIn` remains `0`
+
+- **TC76: Invalid card trade-in returns false and does not increment traded-set count** ( :white_check_mark: )
+    - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes an invalid card selection
+    - **Expected output**: Returns `false`; no trade-in armies are added; selected cards remain in hand; `numSetsTradedIn` remains `0`
+
+- **TC77: First valid card trade-in adds first trade-in armies and increments traded-set count** ( :white_check_mark: )
+    - **State of the system**: Current player holds a valid trade-in set and `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; current player receives `4` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `1`
+
+- **TC78: Second valid card trade-in uses incremented trade-in count** ( :white_check_mark: )
+    - **State of the system**: Current player holds a valid trade-in set and `numSetsTradedIn = 1`
+    - **Expected output**: Returns `true`; current player receives `6` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `2`
+
+- **TC79: Fourteenth valid card trade-in awards the maximum legal bonus** ( :white_check_mark: )
+    - **State of the system**: Current player holds a valid trade-in set and `13` sets have already been traded (`numSetsTradedIn = 13`)
+    - **Expected output**: Returns `true`; current player receives `55` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `14`
+
+- **TC80: Fifteenth trade-in is rejected because a 44-card deck supports at most 14 traded sets** ( :white_check_mark: )
+    - **State of the system**: Current player holds a valid trade-in set and `14` sets have already been traded (`numSetsTradedIn = 14`)
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets."`; current player's available armies and hand are unchanged; `numSetsTradedIn` remains `14`
+
+---
+
+### Method under test: `checkCardTradeInPossibility()`
+
+- **TC81: Fewer than three cards does not allow a trade-in** ( :white_check_mark: )
+    - **State of the system**: Current player has `0`, `1`, or `2` cards in hand
+    - **Expected output**: Returns `TradeInPossibility.NOT_ALLOWED`
+
+- **TC82: Three cards with no valid set does not allow a trade-in** ( :white_check_mark: )
+    - **State of the system**: Current player has exactly `3` cards in hand, but those cards do not form a valid Risk set
+    - **Expected output**: Returns `TradeInPossibility.NOT_ALLOWED`
+
+- **TC83: Three cards with a valid set allows an optional trade-in** ( :white_check_mark: )
+    - **State of the system**: Current player has exactly `3` cards in hand, and those cards form a valid Risk set
+    - **Expected output**: Returns `TradeInPossibility.ALLOWED`
+
+- **TC84: Four cards with no valid set does not allow a trade-in** ( :white_check_mark: )
+    - **State of the system**: Current player has exactly `4` cards in hand, but no three-card subset forms a valid Risk set
+    - **Expected output**: Returns `TradeInPossibility.NOT_ALLOWED`
+
+- **TC85: Four cards with at least one valid set allows an optional trade-in** ( :white_check_mark: )
+    - **State of the system**: Current player has exactly `4` cards in hand, and at least one three-card subset forms a valid Risk set
+    - **Expected output**: Returns `TradeInPossibility.ALLOWED`
+
+- **TC86: Five cards requires a trade-in** ( :white_check_mark: )
+    - **State of the system**: Current player has exactly `5` cards in hand
+    - **Expected output**: Returns `TradeInPossibility.REQUIRED`
+
+- **TC87: More than five cards also requires a trade-in** ( :white_check_mark: )
+    - **State of the system**: Current player has `6` or more cards in hand
+    - **Expected output**: Returns `TradeInPossibility.REQUIRED`
 ### Method under test: `fortifyTerritory(String sourceName, String destinationName, int armyCount)`
 
 - **TC75: Moves one army between adjacent owned territories** ( :white_check_mark: )

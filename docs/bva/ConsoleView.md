@@ -146,6 +146,47 @@
 
 ---
 
+### Method under test: `displayCurrentPlayerCards(String cards)`
+
+- **TC22: Displays current player's cards** ( :white_check_mark: )
+    - **State of the system**: Model provides a formatted string containing the current player's cards
+    - **Expected output**: Output displays the cards string exactly as provided by the model
+
+---
+
+### Method under test: `promptChooseCardsToTradeIn()`
+
+- **TC23: Returns three selected card indices** ( :white_check_mark: )
+    - **State of the system**: Player enters `"1 2 3"`
+    - **Expected output**: Returns a list containing `1`, `2`, and `3`
+
+- **TC24: Returns one-based indices in entered order** ( :white_check_mark: )
+    - **State of the system**: Player enters `"3 1 2"`
+    - **Expected output**: Returns a list containing `3`, `1`, and `2`
+
+- **TC25: Returns empty list when player skips trade-in** ( :white_check_mark: )
+    - **State of the system**: Player presses Enter on empty trade-in input
+    - **Expected output**: Returns `List.of()`
+
+- **TC26: Returns invalid low index for controller and model validation** ( :white_check_mark: )
+    - **State of the system**: Player enters `"0 1 2"`
+    - **Expected output**: Returns a list containing `0`, `1`, and `2`
+
+- **TC27: Returns duplicate indices for controller and model validation** ( :white_check_mark: )
+    - **State of the system**: Player enters `"1 1 2"`
+    - **Expected output**: Returns a list containing `1`, `1`, and `2`
+
+- **TC28: Returns fewer than three indices for controller and model validation** ( :white_check_mark: )
+    - **State of the system**: Player enters `"1 2"`
+    - **Expected output**: Returns a list containing `1` and `2`
+
+- **TC29: Returns more than three indices for controller and model validation** ( :white_check_mark: )
+    - **State of the system**: Player enters `"1 2 3 4"`
+    - **Expected output**: Returns a list containing `1`, `2`, `3`, and `4`
+
+- **TC30: Rejects non-numeric card selection input** ( :white_check_mark: )
+    - **State of the system**: Player enters `"1 two 3"`
+    - **Expected output**: Returns `List.of(Integer.MIN_VALUE)` to signal malformed card-selection input
 ### Method under test: `promptFortifyChoice()`
 
 - **TC27: Returns yes choice** ( :white_check_mark: )

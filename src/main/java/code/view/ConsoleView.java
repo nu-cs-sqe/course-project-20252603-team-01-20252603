@@ -3,6 +3,7 @@ package code.view;
 import code.model.PlayerColor;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -16,6 +17,8 @@ public class ConsoleView {
     private static final int CAVALRY_INDEX_FROM_END = 2;
 
     private static final int ARTILLERY_INDEX_FROM_END = 1;
+
+    private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
 
     private final Scanner scanner;
 
@@ -110,6 +113,32 @@ public class ConsoleView {
 
     public void displayCurrentPlayerArmies(final String availableArmies) {
         output.println(availableArmies);
+    }
+
+    public void displayCurrentPlayerCards(final String cards) {
+        output.println(cards);
+    }
+
+    public List<Integer> promptChooseCardsToTradeIn() {
+        output.print("Enter card indices to trade in: ");
+        String input = scanner.nextLine().trim();
+
+        if (input.isEmpty()) {
+            return List.of();
+        }
+
+        String[] tokens = input.split("\\s+");
+        List<Integer> cardIndices = new ArrayList<>();
+
+        for (String token : tokens) {
+            if (!isInteger(token)) {
+                return List.of(MALFORMED_CARD_INPUT_SENTINEL);
+            }
+
+            cardIndices.add(Integer.parseInt(token));
+        }
+
+        return cardIndices;
     }
 
     public List<String> promptReinforcement() {

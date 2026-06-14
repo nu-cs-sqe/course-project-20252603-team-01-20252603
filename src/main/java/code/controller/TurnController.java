@@ -2,6 +2,7 @@ package code.controller;
 
 import code.model.ArmyType;
 import code.model.GameModel;
+import code.model.TradeInPossibility;
 import code.view.ConsoleView;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -12,6 +13,8 @@ import java.util.List;
  * Coordinates the phases of a player's turn.
  */
 public class TurnController {
+
+    private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
 
     private final GameModel model;
 
@@ -32,6 +35,73 @@ public class TurnController {
     public TurnController(final GameModel gameModel, final ConsoleView consoleView) {
         model = gameModel;
         view = consoleView;
+    }
+
+    public void handleArmiesToAdd() {
+        model.addArmiesToCurrentPlayerBasedOnTerritories();
+        model.addArmiesToCurrentPlayerBasedOnContinents();
+
+        TradeInPossibility tradeInPossibility = model.checkCardTradeInPossibility();
+
+        if (tradeInPossibility == TradeInPossibility.NOT_ALLOWED) {
+            view.displayCurrentPlayerArmies(model.getCurrentPlayerAvailableArmies());
+            return;
+        }
+
+        if (tradeInPossibility == TradeInPossibility.ALLOWED) {
+            view.displayCurrentPlayerCards(model.getCurrentPlayerCards());
+            List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+            while (isMalformedCardTradeInInput(cardIndices)) {
+                view.displayError("Invalid card trade-in input.");
+                cardIndices = view.promptChooseCardsToTradeIn();
+            }
+
+            while (!model.handleCardTradeIn(cardIndices)) {
+                view.displayError("Invalid card trade-in selection.");
+                cardIndices = view.promptChooseCardsToTradeIn();
+
+                while (isMalformedCardTradeInInput(cardIndices)) {
+                    view.displayError("Invalid card trade-in input.");
+                    cardIndices = view.promptChooseCardsToTradeIn();
+                }
+            }
+
+            view.displayCurrentPlayerArmies(model.getCurrentPlayerAvailableArmies());
+            return;
+        }
+
+        if (tradeInPossibility == TradeInPossibility.REQUIRED) {
+            view.displayCurrentPlayerCards(model.getCurrentPlayerCards());
+            List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+            while (isMalformedCardTradeInInput(cardIndices)) {
+                view.displayError("Invalid card trade-in input.");
+                cardIndices = view.promptChooseCardsToTradeIn();
+            }
+
+            while (cardIndices.isEmpty() || !model.handleCardTradeIn(cardIndices)) {
+                if (cardIndices.isEmpty()) {
+                    view.displayError("Card trade-in is required.");
+                } else {
+                    view.displayError("Invalid card trade-in selection.");
+                }
+
+                cardIndices = view.promptChooseCardsToTradeIn();
+
+                while (isMalformedCardTradeInInput(cardIndices)) {
+                    view.displayError("Invalid card trade-in input.");
+                    cardIndices = view.promptChooseCardsToTradeIn();
+                }
+            }
+
+            view.displayCurrentPlayerArmies(model.getCurrentPlayerAvailableArmies());
+        }
+    }
+
+    private boolean isMalformedCardTradeInInput(final List<Integer> cardIndices) {
+        return cardIndices.size() == 1
+                && cardIndices.get(0) == MALFORMED_CARD_INPUT_SENTINEL;
     }
 
     public void handleReinforcement() {

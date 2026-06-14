@@ -1,6 +1,7 @@
 package code.model;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Represents an unassigned player placeholder.
@@ -44,5 +45,18 @@ public class NullPlayer extends Player {
     @Override
     public String getAvailableArmies() {
         throw new UnsupportedOperationException("NullPlayer does not have available armies.");
+    }
+
+    @Override
+    public void addArmiesToAvailableBasedOnTerritories() {
+        throw new UnsupportedOperationException("NullPlayer cannot receive armies.");
+    }
+
+    @Override
+    public boolean tradeCardsAndAddArmies(
+            final List<Integer> cardIndices,
+            final Deck deck,
+            final int numSetsTradedIn) {
+        throw new UnsupportedOperationException("NullPlayer cannot trade cards.");
     }
 }

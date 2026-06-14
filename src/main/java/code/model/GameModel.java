@@ -43,6 +43,10 @@ public class GameModel {
 
     private static final int SETUP_INFANTRY_COUNT = 1;
 
+    private static final int ZERO_ARMIES = 0;
+
+    private static final int REQUIRED_TRADE_IN_CARD_COUNT = 5;
+
     private final List<Continent> continents;
 
     private final List<Player> players;
@@ -55,6 +59,8 @@ public class GameModel {
 
     private int currentPlayerIndex;
 
+    private int numSetsTradedIn;
+
     private final List<Territory> territories;
 
     public GameModel() {
@@ -63,6 +69,7 @@ public class GameModel {
         players = new ArrayList<>();
         deck = new Deck();
         deck.shuffle();
+        numSetsTradedIn = 0;
     }
 
     public void initializeContinentsAndTerritories() {
@@ -468,6 +475,28 @@ public class GameModel {
         return territoriesByContinent.toString();
     }
 
+    public String getCurrentPlayerAvailableArmies() {
+        return players.get(currentPlayerIndex).getAvailableArmies();
+    }
+
+    public String getCurrentPlayerCards() {
+        HumanPlayer player = (HumanPlayer) players.get(currentPlayerIndex);
+        StringBuilder cards = new StringBuilder();
+        List<RiskCard> availableCards = player.getAvailableCards();
+
+        for (int index = 0; index < availableCards.size(); index++) {
+            if (index > 0) {
+                cards.append(", ");
+            }
+
+            cards.append(index + 1)
+                    .append(": ")
+                    .append(availableCards.get(index).getType());
+        }
+
+        return cards.toString();
+    }
+
     public boolean placeArmiesDuringReinforcement(
             final String territoryName,
             final HashMap<ArmyType, Integer> pieces) {
@@ -595,6 +624,96 @@ public class GameModel {
                 0);
 
         return player.hasAvailableArmies(oneInfantry);
+    }
+
+
+    public void addArmiesToCurrentPlayerBasedOnContinents() {
+        Player player = players.get(currentPlayerIndex);
+
+        for (Continent continent : continents) {
+            if (continent.isFullyOwnedBy(player)) {
+                player.addArmies(createArmyPieces(
+                        continent.getBonusArmies(),
+                        ZERO_ARMIES,
+                        ZERO_ARMIES));
+            }
+        }
+    }
+
+    public void addArmiesToCurrentPlayerBasedOnTerritories() {
+        Player player = players.get(currentPlayerIndex);
+        player.addArmiesToAvailableBasedOnTerritories();
+    }
+
+    public boolean handleCardTradeIn(final List<Integer> cardIndices) {
+        if (cardIndices == null || cardIndices.isEmpty()) {
+            return true;
+        }
+
+        Player player = players.get(currentPlayerIndex);
+        boolean tradedIn = player.tradeCardsAndAddArmies(cardIndices, deck, numSetsTradedIn);
+
+        if (tradedIn) {
+            numSetsTradedIn++;
+        }
+
+        return tradedIn;
+    }
+
+    public TradeInPossibility checkCardTradeInPossibility() {
+        HumanPlayer player = (HumanPlayer) players.get(currentPlayerIndex);
+        int cardCount = player.getCardCount();
+
+        if (cardCount < MIN_PLAYER_COUNT) {
+            return TradeInPossibility.NOT_ALLOWED;
+        }
+
+        if (cardCount >= REQUIRED_TRADE_IN_CARD_COUNT) {
+            return TradeInPossibility.REQUIRED;
+        }
+
+        if (hasAnyValidTradeInSet(player.getAvailableCards())) {
+            return TradeInPossibility.ALLOWED;
+        }
+
+        return TradeInPossibility.NOT_ALLOWED;
+    }
+
+    private boolean hasAnyValidTradeInSet(final List<RiskCard> cards) {
+        for (int firstIndex = 0; firstIndex < cards.size() - 2; firstIndex++) {
+            for (int secondIndex = firstIndex + 1; secondIndex < cards.size() - 1; secondIndex++) {
+                for (int thirdIndex = secondIndex + 1; thirdIndex < cards.size(); thirdIndex++) {
+                    if (isValidTradeInSet(List.of(
+                            cards.get(firstIndex),
+                            cards.get(secondIndex),
+                            cards.get(thirdIndex)))) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isValidTradeInSet(final List<RiskCard> selectedCards) {
+        CardType firstCardType = selectedCards.get(0).getType();
+        boolean hasThreeCardsOfSameType = firstCardType != CardType.WILD
+                && selectedCards.stream().allMatch(card -> card.getType() == firstCardType);
+        boolean hasOneOfEachType = selectedCards.stream()
+                .anyMatch(card -> card.getType() == CardType.INFANTRY)
+                && selectedCards.stream().anyMatch(card -> card.getType() == CardType.CAVALRY)
+                && selectedCards.stream().anyMatch(card -> card.getType() == CardType.ARTILLERY);
+        long wildCardCount = selectedCards.stream()
+                .filter(card -> card.getType() == CardType.WILD)
+                .count();
+        long nonWildCardCount = selectedCards.stream()
+                .filter(card -> card.getType() != CardType.WILD)
+                .count();
+
+        return hasThreeCardsOfSameType
+                || hasOneOfEachType
+                || (wildCardCount == 1 && nonWildCardCount == 2);
     }
 
     public boolean areTerritoriesAdjacent(
