@@ -599,4 +599,20 @@ public final class HumanPlayerTest {
         assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
     }
 
+    @Test
+    public void tradeCardsAndAddArmiesWithMoreThanThreeSelectedCardsReturnsFalse() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+        player.addCard(createCard(CardType.ARTILLERY));
+        player.addCard(createCard(CardType.INFANTRY));
+
+        boolean traded = player.tradeCardsAndAddArmies(List.of(1, 2, 3, 4), new Deck(), 0);
+
+        assertFalse(traded);
+        assertEquals(4, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
 }
