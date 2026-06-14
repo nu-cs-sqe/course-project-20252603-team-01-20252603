@@ -1397,4 +1397,23 @@ public final class GameModelTest {
         assertEquals(3, humanPlayer.getCardCount());
         assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
     }
+
+    @Test
+    public void checkCardTradeInPossibilityWithFewerThanThreeCardsReturnsNotAllowed() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer humanPlayer = (HumanPlayer) player;
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
+
+        humanPlayer.addCard(createCard(CardType.INFANTRY));
+        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
+
+        humanPlayer.addCard(createCard(CardType.CAVALRY));
+        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
+    }
 }

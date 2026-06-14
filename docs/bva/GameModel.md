@@ -373,7 +373,7 @@
 
 ### Method under test: `checkCardTradeInPossibility()`
 
-- **TC81: Fewer than three cards does not allow a trade-in** ( :x: )
+- **TC81: Fewer than three cards does not allow a trade-in** ( :white_check_mark: )
     - **State of the system**: Current player has `0`, `1`, or `2` cards in hand
     - **Expected output**: Returns `TradeInPossibility.NOT_ALLOWED`
 

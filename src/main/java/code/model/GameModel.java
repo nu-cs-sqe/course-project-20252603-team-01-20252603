@@ -526,4 +526,14 @@ public class GameModel {
 
         return tradedIn;
     }
+
+    public TradeInPossibility checkCardTradeInPossibility() {
+        HumanPlayer player = (HumanPlayer) players.get(currentPlayerIndex);
+
+        if (player.getCardCount() < MIN_PLAYER_COUNT) {
+            return TradeInPossibility.NOT_ALLOWED;
+        }
+
+        return TradeInPossibility.NOT_ALLOWED;
+    }
 }
