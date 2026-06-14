@@ -110,6 +110,22 @@
 
 ---
 
+### Method under test: `runPlayerTurn()`
+
+- **TC72: Runs full player turn phases in order**
+    - **State of the system**: Current player is active and can complete each phase
+    - **Expected output**: Controller runs armies-to-add, reinforcement, attack, and fortify phases in that order
+
+- **TC73: Full player turn does not advance current player**
+    - **State of the system**: Current player completes all turn phases
+    - **Expected output**: Controller does not call `advanceToNextActivePlayer()`; turn advancement remains owned by the game loop
+
+- **TC74: Full player turn with skipped attack and skipped fortify still completes**
+    - **State of the system**: Current player receives armies, places reinforcements, skips attack, and skips fortification
+    - **Expected output**: Controller completes the turn without requiring an attack or fortify move
+
+---
+
 ### Method under test: `handleAttackPhase(Player player)`
 
 - **TC46: Valid attack resolves one battle and displays result** ( :white_check_mark: )
