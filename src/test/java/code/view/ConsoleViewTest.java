@@ -670,6 +670,24 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptAttackChoiceNoReturnsNo() {
+        ConsoleView view = createViewWithInput("no\n");
+
+        String attackChoice = view.promptAttackChoice();
+
+        assertEquals("no", attackChoice);
+    }
+
+    @Test
+    public void promptAttackChoiceInvalidChoiceReturnsEnteredChoice() {
+        ConsoleView view = createViewWithInput("maybe\n");
+
+        String attackChoice = view.promptAttackChoice();
+
+        assertEquals("maybe", attackChoice);
+    }
+
+    @Test
     public void displayErrorPrintsErrorMessage() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(captured);

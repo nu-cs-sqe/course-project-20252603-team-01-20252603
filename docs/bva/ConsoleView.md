@@ -325,11 +325,11 @@
     - **State of the system**: Player is prompted whether to attack and enters `"yes"`
     - **Expected output**: Returns `"yes"`
 
-- **TC54: Returns no attack choice**
+- **TC54: Returns no attack choice** ( :white_check_mark: )
     - **State of the system**: Player is prompted whether to attack and enters `"no"`
     - **Expected output**: Returns `"no"`
 
-- **TC55: Returns invalid attack choice for controller validation**
+- **TC55: Returns invalid attack choice for controller validation** ( :white_check_mark: )
     - **State of the system**: Player is prompted whether to attack and enters `"maybe"`
     - **Expected output**: Returns `"maybe"` so the controller can reject it and re-prompt
 
