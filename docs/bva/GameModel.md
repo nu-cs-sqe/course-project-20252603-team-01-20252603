@@ -589,7 +589,7 @@
     - **State of the system**: `attackerTerritoryName` does not match any territory on the board
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking territory must exist on the board."`
 
-- **TC101: Rejects unknown defending territory name** ( :x: )
+- **TC101: Rejects unknown defending territory name** ( :white_check_mark: )
     - **State of the system**: `defenderTerritoryName` does not match any territory on the board
     - **Expected output**: `IllegalArgumentException` is raised with message `"Defending territory must exist on the board."`
 
