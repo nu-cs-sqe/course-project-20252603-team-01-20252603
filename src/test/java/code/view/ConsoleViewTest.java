@@ -311,6 +311,15 @@ public final class ConsoleViewTest {
         assertEquals("no", fortifyChoice);
     }
 
+    @Test
+    public void promptFortifyChoiceInvalidChoiceReturnsChoice() {
+        ConsoleView view = createViewWithInput("maybe\n");
+
+        String fortifyChoice = view.promptFortifyChoice();
+
+        assertEquals("maybe", fortifyChoice);
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 

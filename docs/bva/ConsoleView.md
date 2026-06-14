@@ -156,7 +156,7 @@
     - **State of the system**: Current player is asked whether to fortify and enters `"no"`
     - **Expected output**: Returns `"no"` so the controller can skip fortification
 
-- **TC29: Returns invalid choice for controller validation** ( :x: )
+- **TC29: Returns invalid choice for controller validation** ( :white_check_mark: )
     - **State of the system**: Current player is asked whether to fortify and enters a value other than yes/y/no/n
     - **Expected output**: Returns the entered string so the controller can reject it and re-prompt
 
