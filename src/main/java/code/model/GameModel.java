@@ -241,7 +241,15 @@ public class GameModel {
         territories.add(territory);
     }
 
-    Optional<Territory> findTerritoryByName(final String territoryName) {
+    // purely for backwards compatibility of older game model tests
+    Territory findTerritoryByName(final String territoryName) {
+        return findTerritoryByNameOptional(territoryName)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Territory not found: " + territoryName));
+    }
+
+    // use this for game model internal logic
+    Optional<Territory> findTerritoryByNameOptional(final String territoryName) {
         return territories.stream()
                 .filter(territory -> territory.getName().equalsIgnoreCase(territoryName.trim()))
                 .findFirst();
@@ -259,9 +267,9 @@ public class GameModel {
     private void connect(
             final String firstTerritoryName,
             final String secondTerritoryName) {
-        Territory firstTerritory = findTerritoryByName(firstTerritoryName)
+        Territory firstTerritory = findTerritoryByNameOptional(firstTerritoryName)
                 .orElseThrow(() -> new IllegalStateException("Territory not found: " + firstTerritoryName));
-        Territory secondTerritory = findTerritoryByName(secondTerritoryName)
+        Territory secondTerritory = findTerritoryByNameOptional(secondTerritoryName)
                 .orElseThrow(() -> new IllegalStateException("Territory not found: " + secondTerritoryName));
 
         firstTerritory.addAdjacentTerritory(secondTerritory);
@@ -363,7 +371,7 @@ public class GameModel {
             final String territoryName,
             final HashMap<ArmyType, Integer> pieces) {
         Player player = players.get(currentPlayerIndex);
-        Optional<Territory> territoryOptional = findTerritoryByName(territoryName);
+        Optional<Territory> territoryOptional = findTerritoryByNameOptional(territoryName);
 
         if (territoryOptional.isEmpty()) {
             return false;
@@ -522,7 +530,7 @@ public class GameModel {
     public boolean placeArmiesDuringReinforcement(
             final String territoryName,
             final HashMap<ArmyType, Integer> pieces) {
-        Optional<Territory> territoryOptional = findTerritoryByName(territoryName);
+        Optional<Territory> territoryOptional = findTerritoryByNameOptional(territoryName);
         if (territoryOptional.isEmpty()) {
             return false;
         }
@@ -553,8 +561,8 @@ public class GameModel {
             final String sourceName,
             final String destinationName,
             final int armyCount) {
-        Optional<Territory> sourceOptional = findTerritoryByName(sourceName);
-        Optional<Territory> destinationOptional = findTerritoryByName(destinationName);
+        Optional<Territory> sourceOptional = findTerritoryByNameOptional(sourceName);
+        Optional<Territory> destinationOptional = findTerritoryByNameOptional(destinationName);
         if (sourceOptional.isEmpty() || destinationOptional.isEmpty()) {
             return false;
         }
@@ -878,8 +886,8 @@ public class GameModel {
     public boolean areTerritoriesAdjacent(
             final String territory1Name,
             final String territory2Name) {
-        Optional<Territory> t1Optional = findTerritoryByName(territory1Name);
-        Optional<Territory> t2Optional = findTerritoryByName(territory2Name);
+        Optional<Territory> t1Optional = findTerritoryByNameOptional(territory1Name);
+        Optional<Territory> t2Optional = findTerritoryByNameOptional(territory2Name);
 
         if (t1Optional.isEmpty() || t2Optional.isEmpty()) {
             return false;
