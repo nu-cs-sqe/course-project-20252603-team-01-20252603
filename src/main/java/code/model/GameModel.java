@@ -764,6 +764,14 @@ public class GameModel {
                 "Captured: " + (defendingTerritory.getArmyCount() == 0));
     }
 
+    public boolean isTerritoryCaptured(final String defenderTerritoryName) {
+        Territory defendingTerritory = findTerritoryOrThrow(
+                defenderTerritoryName,
+                "Defending territory must exist on the board.");
+
+        return defendingTerritory.getArmyCount() == 0;
+    }
+
     private List<Integer> rollDice(final int numDice) {
         List<Integer> dice = new ArrayList<>();
 
