@@ -161,4 +161,77 @@ public final class TerritoryTest {
         assertTrue(placed);
     }
 
+    @Test
+    public void placeArmiesOneInfantryIncreasesArmyCountByOne() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.placeArmies(pieces);
+
+        assertEquals(ONE_INFANTRY, territory.getArmyCount());
+    }
+
+    @Test
+    public void placeArmiesTwoSequentialPlacementsAccumulatesArmyCount() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.placeArmies(pieces);
+        territory.placeArmies(pieces);
+
+        assertEquals(TWO_INFANTRY, territory.getArmyCount());
+    }
+
+    @Test
+    public void getAdjacentTerritoriesReturnsAllConstructorAdjacentTerritories() {
+        Continent northAmerica = new Continent("North America", NORTH_AMERICA_BONUS_ARMIES);
+        Continent asia = new Continent("Asia", NORTH_AMERICA_BONUS_ARMIES);
+        Territory alberta = new Territory("Alberta", northAmerica, Collections.emptyList());
+        Territory kamchatka = new Territory("Kamchatka", asia, Collections.emptyList());
+        List<Territory> neighbours = Arrays.asList(alberta, kamchatka);
+
+        Territory alaska = new Territory("Alaska", northAmerica, neighbours);
+        List<Territory> adjacent = alaska.getAdjacentTerritories();
+
+        assertEquals(2, adjacent.size());
+        assertTrue(adjacent.contains(alberta));
+        assertTrue(adjacent.contains(kamchatka));
+    }
+
+    @Test
+    public void placeArmiesOneInfantryIncreasesInfantryPieceCountByOne() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.placeArmies(pieces);
+
+        assertEquals(ONE_INFANTRY, territory.getArmiesOfType(ArmyType.INFANTRY));
+    }
+
+    @Test
+    public void placeArmiesTwoInfantryIncreasesPieceCountByTwo() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, TWO_INFANTRY);
+
+        territory.placeArmies(pieces);
+
+        assertEquals(TWO_INFANTRY, territory.getArmiesOfType(ArmyType.INFANTRY));
+    }
+
+    @Test
+    public void placeArmiesTwoSequentialPlacementsAccumulatesPieceCount() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.placeArmies(pieces);
+        territory.placeArmies(pieces);
+
+        assertEquals(TWO_INFANTRY, territory.getArmiesOfType(ArmyType.INFANTRY));
+    }
+
 }

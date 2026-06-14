@@ -74,7 +74,6 @@ public class GameModel {
         createAsia();
         createAustralia();
         initializeAdjacencies();
-        initializeDeck();
     }
 
     public int getDeckSize() {
@@ -332,10 +331,6 @@ public class GameModel {
         connect("Western Australia", "Eastern Australia");
     }
 
-    private void initializeDeck() {
-        deck = new Deck();
-        deck.shuffle();
-    }
 
     public boolean claimTerritoryDuringSetup(
             final String territoryName,
@@ -530,5 +525,13 @@ public class GameModel {
                 0);
 
         return player.hasAvailableArmies(oneInfantry);
+    }
+
+    public boolean areTerritoriesAdjacent(
+            final String territory1Name,
+            final String territory2Name) {
+        Territory t1 = findTerritoryByName(territory1Name);
+        Territory t2 = findTerritoryByName(territory2Name);
+        return t1.getAdjacentTerritories().contains(t2);
     }
 }

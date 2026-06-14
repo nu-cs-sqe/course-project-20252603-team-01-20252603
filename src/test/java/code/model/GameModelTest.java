@@ -1109,4 +1109,135 @@ public final class GameModelTest {
 
         assertTrue(gameModel.currentPlayerHasAvailableArmies());
     }
+
+    @Test
+    public void setPlayerCountMinimumValidCountReturnsTrue() {
+        GameModel gameModel = new GameModel();
+
+        assertTrue(gameModel.setPlayerCount(MIN_PLAYER_COUNT));
+    }
+
+    @Test
+    public void setPlayerCountMaximumValidCountReturnsTrue() {
+        GameModel gameModel = new GameModel();
+
+        assertTrue(gameModel.setPlayerCount(MAX_PLAYER_COUNT));
+    }
+
+    @Test
+    public void setCurrentPlayerIndexZeroAfterNonZeroIndexSetsFirstPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(2);
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertEquals("Player 1", gameModel.getCurrentPlayerName());
+    }
+
+    @Test
+    public void getUnclaimedTerritoriesByContinentShowsAlaskaUnderNorthAmericaSection() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        String output = gameModel.getUnclaimedTerritoriesByContinent();
+        int northAmericaIndex = output.indexOf("North America");
+        int southAmericaIndex = output.indexOf("South America");
+        int alaskaIndex = output.indexOf("Alaska");
+
+        assertTrue(alaskaIndex > northAmericaIndex);
+        assertTrue(alaskaIndex < southAmericaIndex);
+    }
+
+    @Test
+    public void getCurrentPlayerTerritoriesByContinentShowsClaimedAlaskaUnderNorthAmerica() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+
+        String output = gameModel.getCurrentPlayerTerritoriesByContinent();
+        int northAmericaIndex = output.indexOf("North America");
+        int southAmericaIndex = output.indexOf("South America");
+        int alaskaIndex = output.indexOf("Alaska");
+
+        assertTrue(alaskaIndex > northAmericaIndex);
+        assertTrue(alaskaIndex < southAmericaIndex);
+    }
+
+    @Test
+    public void placeArmiesDuringReinforcementDepletesPlayerAvailableArmies() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+
+        HashMap<ArmyType, Integer> allRemaining =
+                createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - ONE_INFANTRY);
+        gameModel.placeArmiesDuringReinforcement("Alaska", allRemaining);
+
+        assertFalse(gameModel.currentPlayerHasAvailableArmies());
+    }
+
+    @Test
+    public void initializeContinentsAndTerritoriesCalledTwiceDoesNotDuplicateTerritoriesInUnclaimedList() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        String output = gameModel.getUnclaimedTerritoriesByContinent();
+
+        assertFalse(output.contains("Alaska"));
+    }
+
+    @Test
+    public void initializeContinentsAndTerritoriesCalledTwiceDoesNotDuplicateContinentSections() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.initializeContinentsAndTerritories();
+
+        String output = gameModel.getUnclaimedTerritoriesByContinent();
+        int firstOccurrence = output.indexOf("North America");
+        int secondOccurrence = output.indexOf("North America", firstOccurrence + 1);
+
+        assertEquals(-1, secondOccurrence);
+    }
+
+    @Test
+    public void isDeckEmptyReturnsFalseWhenDeckHasCards() {
+        GameModel gameModel = new GameModel();
+        assertFalse(gameModel.isDeckEmpty());
+    }
+
+    @Test
+    public void initializeContinentsAndTerritoriesInitializesDeck() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        assertEquals(DECK_CARD_COUNT, gameModel.getDeckSize());
+        assertFalse(gameModel.isDeckEmpty());
+    }
+
+
 }
