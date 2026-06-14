@@ -129,7 +129,7 @@
     - **State of the system**: Player enters `"1 2 3"`
     - **Expected output**: Returns a list containing `1`, `2`, and `3`
 
-- **TC24: Returns one-based indices in entered order** ( :x: )
+- **TC24: Returns one-based indices in entered order** ( :white_check_mark: )
     - **State of the system**: Player enters `"3 1 2"`
     - **Expected output**: Returns a list containing `3`, `1`, and `2`
 
