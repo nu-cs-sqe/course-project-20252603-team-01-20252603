@@ -201,7 +201,7 @@
     - **State of the system**: Human player has 3 cards; selected indices are `[1, 1, 2]`
     - **Expected output**: Returns `false`; available armies and card hand are unchanged
 
-- **TC43: Three Infantry cards is accepted** ( :x: )
+- **TC43: Three Infantry cards is accepted** ( :white_check_mark: )
     - **State of the system**: Selected cards are Infantry, Infantry, Infantry; `numSetsTradedIn = 0`
     - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
 

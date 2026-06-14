@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Represents a human player in the Risk game.
@@ -21,6 +22,8 @@ public class HumanPlayer extends Player {
     private static final int TERRITORIES_PER_REINFORCEMENT_ARMY = 3;
 
     private static final int TOTAL_TERRITORY_COUNT = 42;
+
+    private static final int FIRST_CARD_TRADE_IN_BONUS = 4;
 
     private final List<Territory> territories;
 
@@ -166,6 +169,25 @@ public class HumanPlayer extends Player {
         if (cardIndices.stream().distinct().count() != cardIndices.size()) {
             return false;
         }
+
+        List<RiskCard> selectedCards = cardIndices.stream()
+                .map(index -> availableCards.get(index - 1))
+                .collect(Collectors.toList());
+
+        boolean hasThreeInfantryCards = selectedCards.stream()
+                .allMatch(card -> card.getType() == CardType.INFANTRY);
+
+        if (!hasThreeInfantryCards) {
+            return false;
+        }
+
+        HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
+        armiesToAdd.put(ArmyType.INFANTRY, FIRST_CARD_TRADE_IN_BONUS);
+        addArmies(armiesToAdd);
+
+        cardIndices.stream()
+                .sorted((firstIndex, secondIndex) -> secondIndex - firstIndex)
+                .forEach(index -> availableCards.remove(index - 1));
 
         return true;
     }

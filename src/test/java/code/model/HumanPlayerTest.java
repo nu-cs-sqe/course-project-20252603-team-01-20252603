@@ -35,6 +35,8 @@ public final class HumanPlayerTest {
 
     private static final int FOUR_ARMIES = 4;
 
+    private static final int FOUR_CARD_TRADE_IN_ARMIES = 4;
+
     private static final int FIVE_ARMIES = 5;
 
     private static final int FIFTEEN_ARMIES = 15;
@@ -658,6 +660,22 @@ public final class HumanPlayerTest {
         assertFalse(traded);
         assertEquals(3, player.getCardCount());
         assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
+    @Test
+    public void tradeCardsAndAddArmiesWithThreeInfantryCardsAddsFourInfantry() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.INFANTRY));
+
+        boolean traded = player.tradeCardsAndAddArmies(List.of(1, 2, 3), new Deck(), 0);
+
+        assertTrue(traded);
+        assertEquals(0, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains(
+                "INFANTRY=" + FOUR_CARD_TRADE_IN_ARMIES));
     }
 
 }
