@@ -369,11 +369,11 @@
 
 ### Method under test: `displayTerritoryCaptured(String attackerName, String defenderName, int movedArmies)`
 
-- **TC62: Displays territory capture with one moved army**
+- **TC62: Displays territory capture with one moved army** ( :white_check_mark: )
     - **State of the system**: `"Alaska"` captures `"Alberta"` and `1` army is moved
     - **Expected output**: Output contains attacking territory, defending territory, and moved army count
 
-- **TC63: Displays territory capture with multiple moved armies**
+- **TC63: Displays territory capture with multiple moved armies** ( :white_check_mark: )
     - **State of the system**: `"Alaska"` captures `"Alberta"` and `3` armies are moved
     - **Expected output**: Output contains attacking territory, defending territory, and moved army count
 
@@ -381,7 +381,7 @@
 
 ### Method under test: `displayRiskCardAwarded(String playerName)`
 
-- **TC64: Displays Risk card awarded message**
+- **TC64: Displays Risk card awarded message** ( :white_check_mark: )
     - **State of the system**: Current player captured at least one territory and receives a card
     - **Expected output**: Output contains player name and states that a Risk card was awarded
 
@@ -389,7 +389,7 @@
 
 ### Method under test: `displayPlayerElimination(String playerName)`
 
-- **TC65: Displays eliminated player message**
+- **TC65: Displays eliminated player message** ( :white_check_mark: )
     - **State of the system**: A player has been eliminated during attack effects
     - **Expected output**: Output contains player name and states that the player has been eliminated
 
