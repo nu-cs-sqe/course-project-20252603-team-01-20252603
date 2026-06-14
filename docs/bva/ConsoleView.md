@@ -113,3 +113,46 @@
     - **State of the system**: Player enters `"Alaska -1 0 0"`
     - **Expected output**: Returns a list containing `"Alaska"`, `"-1"`, `"0"`, and `"0"`
 
+---
+
+### Method under test: `displayCurrentPlayerCards(String cards)`
+
+- **TC22: Displays current player's cards** ( :x: )
+    - **State of the system**: Model provides a formatted string containing the current player's cards
+    - **Expected output**: Output displays the cards string exactly as provided by the model
+
+---
+
+### Method under test: `promptChooseCardsToTradeIn()`
+
+- **TC23: Returns three selected card indices** ( :x: )
+    - **State of the system**: Player enters `"1 2 3"`
+    - **Expected output**: Returns a list containing `1`, `2`, and `3`
+
+- **TC24: Returns one-based indices in entered order** ( :x: )
+    - **State of the system**: Player enters `"3 1 2"`
+    - **Expected output**: Returns a list containing `3`, `1`, and `2`
+
+- **TC25: Returns empty list when player skips trade-in** ( :x: )
+    - **State of the system**: Player presses Enter on empty trade-in input
+    - **Expected output**: Returns `List.of()`
+
+- **TC26: Returns invalid low index for controller and model validation** ( :x: )
+    - **State of the system**: Player enters `"0 1 2"`
+    - **Expected output**: Returns a list containing `0`, `1`, and `2`
+
+- **TC27: Returns duplicate indices for controller and model validation** ( :x: )
+    - **State of the system**: Player enters `"1 1 2"`
+    - **Expected output**: Returns a list containing `1`, `1`, and `2`
+
+- **TC28: Returns fewer than three indices for controller and model validation** ( :x: )
+    - **State of the system**: Player enters `"1 2"`
+    - **Expected output**: Returns a list containing `1` and `2`
+
+- **TC29: Returns more than three indices for controller and model validation** ( :x: )
+    - **State of the system**: Player enters `"1 2 3 4"`
+    - **Expected output**: Returns a list containing `1`, `2`, `3`, and `4`
+
+- **TC30: Rejects non-numeric card selection input** ( :x: )
+    - **State of the system**: Player enters `"1 two 3"`
+    - **Expected output**: Returns `List.of()`
