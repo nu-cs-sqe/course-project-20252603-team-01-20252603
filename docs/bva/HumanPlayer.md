@@ -289,7 +289,7 @@
 
 ### Method under test: `isEliminated()`
 
-- **TC63: New human player is not eliminated** (:x:)
+- **TC63: New human player is not eliminated** (:white_check_mark:)
     - **State of the system**: Human player has just been constructed
     - **Expected output**: Returns `false`
 
