@@ -293,7 +293,7 @@
     - **State of the system**: Player enters `"4"` for attacker dice and `"1"` for defender dice
     - **Expected output**: Returns a list containing `4` and `1`
 
-- **TC48: Returns below-minimum defender dice count for controller and model validation** ( :x: )
+- **TC48: Returns below-minimum defender dice count for controller and model validation** ( :white_check_mark: )
     - **State of the system**: Player enters `"1"` for attacker dice and `"0"` for defender dice
     - **Expected output**: Returns a list containing `1` and `0`
 
