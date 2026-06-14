@@ -70,7 +70,7 @@
     - **State of the system**: `Deck` has exactly one card remaining in the draw pile and discard pile is empty
     - **Expected output**: Returns a non-null `RiskCard`; `size()` becomes `0`; `isEmpty()` returns `true`
 
-- **TC14: Draw from empty draw pile with one discarded card available**
+- **TC14: Draw from empty draw pile with one discarded card available** ( :white_check_mark: )
     - **State of the system**: Draw pile is empty; discard pile contains exactly one `RiskCard`
     - **Expected output**: Discard pile is moved into the draw pile, discard pile becomes empty, draw pile is shuffled, one card is drawn, `size()` returns `0`, and `getDiscardPileSize()` returns `0`
 

@@ -42,7 +42,26 @@ public class Deck {
     }
 
     public RiskCard drawCard() {
+        if (cards.isEmpty()) {
+            reinitializeDrawPileFromDiscardPile();
+        }
+
+        if (cards.isEmpty()) {
+            throw new IllegalStateException(
+                    "Cannot draw a card because both the draw pile and discard pile are empty.");
+        }
+
         return cards.remove(0);
+    }
+
+    public void discardCards(final List<RiskCard> cardsToDiscard) {
+        discardPile.addAll(cardsToDiscard);
+    }
+
+    public void reinitializeDrawPileFromDiscardPile() {
+        cards.addAll(discardPile);
+        discardPile.clear();
+        shuffle();
     }
 
     private void initializeTerritoryCards() {
