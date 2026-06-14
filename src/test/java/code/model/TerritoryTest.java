@@ -173,6 +173,19 @@ public final class TerritoryTest {
     }
 
     @Test
+    public void placeArmiesNegativeArmyCountReturnsFalse() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, -ONE_INFANTRY);
+
+        boolean placed = territory.placeArmies(pieces);
+
+        assertFalse(placed);
+        assertEquals(0, territory.getArmyCount());
+        assertEquals(0, territory.getArmiesOfType(ArmyType.INFANTRY));
+    }
+
+    @Test
     public void addArmiesZeroArmiesReturnsTrue() {
         Territory territory = createTerritoryWithNoAdjacencies();
         HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
@@ -210,6 +223,19 @@ public final class TerritoryTest {
         assertTrue(added);
         final int expectedResult = 3;
         assertEquals(expectedResult, territory.getArmyCount());
+    }
+
+    @Test
+    public void addArmiesNegativeArmyCountReturnsFalse() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
+        armiesToAdd.put(ArmyType.INFANTRY, -ONE_INFANTRY);
+
+        boolean added = territory.addArmies(armiesToAdd);
+
+        assertFalse(added);
+        assertEquals(0, territory.getArmyCount());
+        assertEquals(0, territory.getArmiesOfType(ArmyType.INFANTRY));
     }
 
     @Test
@@ -270,6 +296,22 @@ public final class TerritoryTest {
 
         assertTrue(removed);
         assertEquals(ONE_INFANTRY, territory.getArmyCount());
+    }
+
+    @Test
+    public void removeArmiesOneInfantryDecreasesInfantryPieceCount() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
+        initialArmies.put(ArmyType.INFANTRY, TWO_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
+        armiesToRemove.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.addArmies(initialArmies);
+        boolean removed = territory.removeArmies(armiesToRemove);
+
+        assertTrue(removed);
+        assertEquals(ONE_INFANTRY, territory.getArmyCount());
+        assertEquals(ONE_INFANTRY, territory.getArmiesOfType(ArmyType.INFANTRY));
     }
 
     @Test
