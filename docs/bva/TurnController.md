@@ -60,7 +60,7 @@
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.REQUIRED`; player attempts to skip card trade-in and `promptChooseCardsToTradeIn()` returns `List.of()`
     - **Expected output**: Error message is displayed; controller re-prompts and does not proceed until a valid trade is completed
 
-- **TC43: Required trade-in rejects malformed input and re-prompts** ( :x: )
+- **TC43: Required trade-in rejects malformed input and re-prompts** ( :white_check_mark: )
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.REQUIRED`; player enters malformed card input and `promptChooseCardsToTradeIn()` returns `List.of(Integer.MIN_VALUE)`
     - **Expected output**: Error message is displayed; controller re-prompts and does not proceed until a valid trade is completed
 
