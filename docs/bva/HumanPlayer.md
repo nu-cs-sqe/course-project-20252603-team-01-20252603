@@ -268,3 +268,87 @@
 - **TC59: Fifteenth trade-in is rejected as impossible with forty-four cards** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 14`
     - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets."`; available armies, card hand, and deck discard pile are unchanged
+
+---
+
+### Method under test: `removeTerritory(Territory territory)`
+
+- **TC60: Remove the only owned territory**
+    - **State of the system**: Human player owns exactly `alaska`; `removeTerritory(alaska)` is called
+    - **Expected output**: Player territory count becomes `0`; `ownsTerritory(alaska)` returns `false`
+
+- **TC61: Remove one territory while another remains**
+    - **State of the system**: Human player owns `alaska` and `alberta`; `removeTerritory(alaska)` is called
+    - **Expected output**: Player territory count becomes `1`; `ownsTerritory(alaska)` returns `false`; `ownsTerritory(alberta)` returns `true`
+
+- **TC62: Removing a territory not owned by the player leaves territories unchanged**
+    - **State of the system**: Human player owns `alaska`; `removeTerritory(alberta)` is called
+    - **Expected output**: Player territory count remains `1`; `ownsTerritory(alaska)` returns `true`; `ownsTerritory(alberta)` returns `false`
+
+---
+
+### Method under test: `isEliminated()`
+
+- **TC63: New human player is not eliminated**
+    - **State of the system**: Human player has just been constructed
+    - **Expected output**: Returns `false`
+
+- **TC64: Human player is eliminated after markEliminated is called** ( implemented in TC65 )
+    - **State of the system**: `markEliminated()` has been called
+    - **Expected output**: Returns `true`
+
+---
+
+### Method under test: `markEliminated()`
+
+- **TC65: Mark active player as eliminated**
+    - **State of the system**: Human player is active and `isEliminated()` returns `false`
+    - **Expected output**: `isEliminated()` returns `true`
+
+- **TC66: Mark already eliminated player as eliminated again**
+    - **State of the system**: `markEliminated()` has already been called once
+    - **Expected output**: `isEliminated()` remains `true`; no exception is raised
+
+---
+
+### Method under test: `addCard(RiskCard card)`
+
+- **TC67: Add first Risk card to empty hand**
+    - **State of the system**: Human player has zero cards; `addCard(card)` is called
+    - **Expected output**: Player card count becomes `1`; `getAvailableCards()` contains `card`
+
+- **TC68: Add another Risk card to non-empty hand**
+    - **State of the system**: Human player already has one card; `addCard(secondCard)` is called
+    - **Expected output**: Player card count becomes `2`; both cards are present in `getAvailableCards()`
+
+---
+
+### Method under test: `addCards(List<RiskCard> cardsToAdd)`
+
+- **TC69: Add zero cards to empty hand**
+    - **State of the system**: Human player has zero cards; `addCards(List.of())` is called
+    - **Expected output**: Player card count remains `0`
+
+- **TC70: Add one card to empty hand**
+    - **State of the system**: Human player has zero cards; `addCards(List.of(card))` is called
+    - **Expected output**: Player card count becomes `1`; `getAvailableCards()` contains `card`
+
+- **TC71: Add multiple cards to non-empty hand**
+    - **State of the system**: Human player already has one card; `addCards(List.of(secondCard, thirdCard))` is called
+    - **Expected output**: Player card count becomes `3`; all three cards are present in `getAvailableCards()`
+
+---
+
+### Method under test: `removeAllCards()`
+
+- **TC72: Remove all cards from empty hand**
+    - **State of the system**: Human player has zero cards; `removeAllCards()` is called
+    - **Expected output**: Returns an empty list; player card count remains `0`
+
+- **TC73: Remove all cards from one-card hand**
+    - **State of the system**: Human player has exactly one card; `removeAllCards()` is called
+    - **Expected output**: Returns a list containing that card; player card count becomes `0`
+
+- **TC74: Remove all cards from multi-card hand**
+    - **State of the system**: Human player has multiple cards; `removeAllCards()` is called
+    - **Expected output**: Returns all cards that were in the hand; player card count becomes `0`; returned list size equals the previous card count
