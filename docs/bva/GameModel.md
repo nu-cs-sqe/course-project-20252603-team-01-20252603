@@ -317,7 +317,7 @@
     - **State of the system**: Current player owns all `6` Africa territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `3`
 
-- **TC69: Adds Europe bonus when current player fully owns Europe** ( :x: )
+- **TC69: Adds Europe bonus when current player fully owns Europe** ( :white_check_mark: )
     - **State of the system**: Current player owns all `7` Europe territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `5`
 
