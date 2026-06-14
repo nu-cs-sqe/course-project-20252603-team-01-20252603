@@ -156,6 +156,18 @@ public final class TerritoryTest {
     }
 
     @Test
+    public void getOwnerReturnsUpdatedHumanPlayerAfterOwnerChanges() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        Player playerOne = createMock(Player.class);
+        Player playerTwo = createMock(Player.class);
+
+        territory.setOwner(playerOne);
+        territory.setOwner(playerTwo);
+
+        assertEquals(playerTwo, territory.getOwner());
+    }
+
+    @Test
     public void placeArmiesAddsOneInfantryToEmptyTerritory() {
         Territory territory = createTerritoryWithNoAdjacencies();
         HashMap<ArmyType, Integer> pieces = new HashMap<>();

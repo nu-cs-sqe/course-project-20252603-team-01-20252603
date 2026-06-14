@@ -93,7 +93,7 @@
     - **State of the system**: `setOwner(playerOne)` has been called
     - **Expected output**: Returns `playerOne`
 
-- **TC17: Returns updated HumanPlayer after owner changes**
+- **TC17: Returns updated HumanPlayer after owner changes** ( :white_check_mark: )
     - **State of the system**: `setOwner(playerOne)` has been called, then `setOwner(playerTwo)` has been called
     - **Expected output**: Returns `playerTwo`
 
