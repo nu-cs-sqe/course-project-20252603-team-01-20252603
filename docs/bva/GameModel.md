@@ -669,7 +669,7 @@
     - **State of the system**: Attacker rolls more than one die and the injected `Random` yields attacker dice in a raw order that is not descending
     - **Expected output**: The attacker dice reported in the battle result are sorted from highest to lowest
 
-- **TC119: Returned defender dice are sorted from highest to lowest** ( :x: )
+- **TC119: Returned defender dice are sorted from highest to lowest** ( :white_check_mark: )
     - **State of the system**: Defender rolls two dice and the injected `Random` yields defender dice in a raw order that is not descending
     - **Expected output**: The defender dice reported in the battle result are sorted from highest to lowest
 
