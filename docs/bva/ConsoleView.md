@@ -204,6 +204,6 @@
     - **State of the system**: Current player is prompted for armies to move and enters `"-1"`
     - **Expected output**: Returns `"-1"` so the fortify flow can reject moving a negative number of armies
 
-- **TC38: Returns non-numeric army count for controller validation** ( :x: )
+- **TC38: Returns non-numeric army count for controller validation** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for armies to move and enters `"two"`
     - **Expected output**: Returns `"two"` so the controller can reject it without calling the model

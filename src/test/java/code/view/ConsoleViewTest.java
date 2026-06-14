@@ -392,6 +392,15 @@ public final class ConsoleViewTest {
         assertEquals("-1", armyCount);
     }
 
+    @Test
+    public void promptFortifyArmyCountNonNumericArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("two\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("two", armyCount);
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
