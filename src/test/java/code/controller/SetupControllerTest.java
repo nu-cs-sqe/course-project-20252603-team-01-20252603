@@ -1,6 +1,8 @@
 package code.controller;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
@@ -10,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import code.model.ArmyType;
 import code.model.GameModel;
 import code.model.HumanPlayer;
+import code.model.NullPlayer;
 import code.model.Player;
 import code.model.PlayerColor;
 import code.view.ConsoleView;
@@ -69,8 +72,8 @@ public final class SetupControllerTest {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
 
-        SetupController controller = new SetupController(model, view);
 
+        SetupController controller = new SetupController(model, view);
         assertNotNull(controller);
     }
 
@@ -83,7 +86,6 @@ public final class SetupControllerTest {
         expectLastCall().once();
 
         replay(model, view);
-
         SetupController controller = new SetupController(model, view);
         controller.initializeBoard();
 
@@ -422,11 +424,22 @@ public final class SetupControllerTest {
         return pieces;
     }
 
+    private void expectNoRemainingArmyPlacementComplete(
+            final GameModel model,
+            final ConsoleView view,
+            final String currentPlayerName) {
+        expect(model.getCurrentPlayerName()).andReturn(currentPlayerName);
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn(currentPlayerName);
+        view.displaySetupPhaseComplete();
+        expectLastCall().once();
+    }
+
     @Test
     public void handleTerritoryClaimingSuccessfulClaimAdvancesToNextPlayer() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
@@ -450,9 +463,16 @@ public final class SetupControllerTest {
         expect(model.advanceCurrentPlayerIndex()).andReturn(true);
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 2");
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 2");
+        view.displaySetupPhaseComplete();
+        expectLastCall().once();
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -506,9 +526,10 @@ public final class SetupControllerTest {
         expect(model.advanceCurrentPlayerIndex()).andReturn(true);
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
-        SetupController controller = new SetupController(model, view);
+        expectNoRemainingArmyPlacementComplete(model, view, "Player 3");
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -564,6 +585,7 @@ public final class SetupControllerTest {
         expect(model.advanceCurrentPlayerIndex()).andReturn(true);
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expectNoRemainingArmyPlacementComplete(model, view, "Player 2");
 
         replay(model, view);
         SetupController controller = new SetupController(model, view);
@@ -576,12 +598,13 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingStopsWhenAllTerritoriesClaimed() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expectNoRemainingArmyPlacementComplete(model, view, "Player 1");
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
 
         verify(model, view);
@@ -591,7 +614,6 @@ public final class SetupControllerTest {
     public void handleTerritoryClaimingContinuesWhenOneTerritoryRemainsUnclaimed() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        SetupController controller = new SetupController(model, view);
         HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
 
         expect(model.areAllTerritoriesClaimed()).andReturn(false);
@@ -615,10 +637,616 @@ public final class SetupControllerTest {
         expect(model.advanceCurrentPlayerIndex()).andReturn(true);
 
         expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expectNoRemainingArmyPlacementComplete(model, view, "Player 2");
 
         replay(model, view);
 
+        SetupController controller = new SetupController(model, view);
         controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingTerritoryStillUnclaimedDoesNotPromptForRemainingArmyPlacement() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getUnclaimedTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayUnclaimedTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Player 1 territories:");
+        view.displayCurrentPlayerClaimingStatus("Player 1 territories:");
+        expectLastCall().once();
+
+        expect(view.getTerritoryChoiceDuringSetup()).andReturn("Alaska");
+        expect(model.claimTerritoryDuringSetup("Alaska", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expectNoRemainingArmyPlacementComplete(model, view, "Player 2");
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingCurrentPlayerHasOneRemainingArmyPlacesArmyAndCompletesSetup() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(true);
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+        expect(view.promptCurrentPlayerTerritoryChoice()).andReturn("Alaska");
+        expect(model.addArmiesDuringSetup("Alaska", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displaySetupPhaseComplete();
+        expectLastCall().once();
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingCurrentPlayerHasMultipleRemainingArmiesPlacesOneAndContinuesLater() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(true);
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+        expect(view.promptCurrentPlayerTerritoryChoice()).andReturn("Alaska");
+        expect(model.addArmiesDuringSetup("Alaska", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 2");
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(true);
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+        expect(view.promptCurrentPlayerTerritoryChoice()).andReturn("Alaska");
+        expect(model.addArmiesDuringSetup("Alaska", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 2");
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displaySetupPhaseComplete();
+        expectLastCall().once();
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingCurrentPlayerHasZeroArmiesSkipsToNextAvailablePlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 2");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(true);
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent("North America: Alberta");
+        expectLastCall().once();
+        expect(view.promptCurrentPlayerTerritoryChoice()).andReturn("Alberta");
+        expect(model.addArmiesDuringSetup("Alberta", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displaySetupPhaseComplete();
+        expectLastCall().once();
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingMultiplePlayersHaveZeroArmiesSkipsToNextAvailablePlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 2");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 3");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(true);
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Asia: China");
+        view.displayCurrentPlayerTerritoriesByContinent("Asia: China");
+        expectLastCall().once();
+        expect(view.promptCurrentPlayerTerritoryChoice()).andReturn("China");
+        expect(model.addArmiesDuringSetup("China", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displaySetupPhaseComplete();
+        expectLastCall().once();
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingUnownedTerritorySelectedRePromptsSamePlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(true);
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+        expect(view.promptCurrentPlayerTerritoryChoice()).andReturn("Alberta");
+        expect(model.addArmiesDuringSetup("Alberta", pieces)).andReturn(false);
+        view.displayError("Invalid territory for army placement.");
+        expectLastCall().once();
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(true);
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerTerritoriesByContinent("North America: Alaska");
+        expectLastCall().once();
+        expect(view.promptCurrentPlayerTerritoryChoice()).andReturn("Alaska");
+        expect(model.addArmiesDuringSetup("Alaska", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displaySetupPhaseComplete();
+        expectLastCall().once();
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingAllPlayersHaveZeroArmiesDisplaysSetupComplete() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 2");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 3");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        view.displaySetupPhaseComplete();
+        expectLastCall().once();
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleTerritoryClaimingOnePlayerHasLastRemainingArmyDisplaysSetupComplete() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        HashMap<ArmyType, Integer> pieces = createOneInfantryPiece();
+
+        expect(model.areAllTerritoriesClaimed()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 2");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(true);
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("Europe: Iceland");
+        view.displayCurrentPlayerTerritoriesByContinent("Europe: Iceland");
+        expectLastCall().once();
+        expect(view.promptCurrentPlayerTerritoryChoice()).andReturn("Iceland");
+        expect(model.addArmiesDuringSetup("Iceland", pieces)).andReturn(true);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 3");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        expect(model.hasCurrentPlayerAvailableArmies()).andReturn(false);
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+
+        view.displaySetupPhaseComplete();
+        expectLastCall().once();
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleTerritoryClaiming();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void initializePlayersModelRejectsAvailableColorDisplaysError() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        Random random = createMock(Random.class);
+
+        expect(view.promptNumberOfPlayers()).andReturn(MINIMUM_PLAYER_COUNT);
+        expect(model.setPlayerCount(MINIMUM_PLAYER_COUNT)).andReturn(true);
+
+        expect(view.promptPlayerName(FIRST_PLAYER_INDEX + 1)).andReturn("Alice");
+        expect(view.promptPlayerColor(
+                eq("Alice"),
+                anyObject())).andReturn(PlayerColor.RED);
+        expect(model.addPlayer("Alice", PlayerColor.RED))
+                .andReturn(new NullPlayer());
+        view.displayError("Color already selected.");
+        expectLastCall().once();
+
+        expect(view.promptPlayerColor(
+                eq("Alice"),
+                anyObject())).andReturn(PlayerColor.BLUE);
+        expect(model.addPlayer("Alice", PlayerColor.BLUE))
+                .andReturn(new HumanPlayer("Alice", PlayerColor.BLUE, ZERO_INFANTRY));
+
+        expect(view.promptPlayerName(SECOND_PLAYER_INDEX + 1)).andReturn("Bob");
+        expect(view.promptPlayerColor(
+                eq("Bob"),
+                anyObject())).andReturn(PlayerColor.GREEN);
+        expect(model.addPlayer("Bob", PlayerColor.GREEN))
+                .andReturn(new HumanPlayer("Bob", PlayerColor.GREEN, ZERO_INFANTRY));
+
+        expect(view.promptPlayerName(THIRD_PLAYER_INDEX + 1)).andReturn("Carol");
+        expect(view.promptPlayerColor(
+                eq("Carol"),
+                anyObject())).andReturn(PlayerColor.YELLOW);
+        expect(model.addPlayer("Carol", PlayerColor.YELLOW))
+                .andReturn(new HumanPlayer("Carol", PlayerColor.YELLOW, ZERO_INFANTRY));
+
+        expect(random.nextInt(MINIMUM_PLAYER_COUNT)).andReturn(ZERO_INFANTRY);
+        model.setCurrentPlayerIndex(ZERO_INFANTRY);
+        expectLastCall().once();
+        expect(model.getCurrentPlayerName()).andReturn("Alice");
+        view.displayCurrentPlayer("Alice");
+        expectLastCall().once();
+
+        replay(model, view, random);
+
+        SetupController controller = new SetupController(model, view, random);
+        controller.initializePlayers();
+
+        verify(model, view, random);
+    }
+
+    @Test
+    public void handleFortifyPhasePlayerSkipsFortificationAdvancesCurrentPlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("no");
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhasePlayerChoosesToFortifyAdvancesCurrentPlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("yes");
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("2");
+
+        expect(model.fortifyTerritory("Alaska", "Alberta", 2)).andReturn(true);
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhaseInvalidFortifyChoiceRepromptsPlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("maybe");
+        view.displayError("Invalid fortify choice.");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("no");
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhaseNonNumericArmyCountRepromptsMoveInput() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("yes");
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("two");
+        view.displayError("Invalid army count.");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("2");
+
+        expect(model.fortifyTerritory("Alaska", "Alberta", 2)).andReturn(true);
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhaseModelRejectsInvalidFortifyMoveRepromptsMoveInput() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("yes");
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("2");
+        expect(model.fortifyTerritory("Alaska", "Alberta", 2)).andReturn(false);
+        view.displayError("Invalid fortify move.");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("1");
+        expect(model.fortifyTerritory("Alaska", "Alberta", 1)).andReturn(true);
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhaseValidMoveAfterInvalidMoveEndsFortifyPhase() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("yes");
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("4");
+        final int armiesToFortify = 4;
+        expect(model.fortifyTerritory("Alaska", "Alberta", armiesToFortify)).andReturn(false);
+        view.displayError("Invalid fortify move.");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("1");
+        expect(model.fortifyTerritory("Alaska", "Alberta", 1)).andReturn(true);
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleFortifyPhase();
 
         verify(model, view);
     }

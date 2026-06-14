@@ -138,6 +138,32 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void displayCurrentPlayerTerritoriesByContinentOneOwnedTerritoryDisplaysTerritoryString() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        String territoriesByContinent = "North America: Alaska";
+
+        view.displayCurrentPlayerTerritoriesByContinent(territoriesByContinent);
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertEquals(territoriesByContinent + System.lineSeparator(), displayedText);
+    }
+
+    @Test
+    public void displayCurrentPlayerTerritoriesByContinentMultipleOwnedTerritoriesDisplaysTerritoryString() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        String territoriesByContinent = "North America: Alaska, Alberta"
+                + System.lineSeparator()
+                + "Asia: China";
+
+        view.displayCurrentPlayerTerritoriesByContinent(territoriesByContinent);
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertEquals(territoriesByContinent + System.lineSeparator(), displayedText);
+    }
+
+    @Test
     public void getTerritoryChoiceDuringSetupReturnsEnteredTerritory() {
         ConsoleView view = createViewWithInput("Alaska\n");
 
@@ -147,10 +173,39 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptCurrentPlayerTerritoryChoiceOwnedTerritoryEnteredReturnsTerritoryName() {
+        ConsoleView view = createViewWithInput("Alaska\n");
+
+        String territoryChoice = view.promptCurrentPlayerTerritoryChoice();
+
+        assertEquals("Alaska", territoryChoice);
+    }
+
+    @Test
+    public void promptCurrentPlayerTerritoryChoiceUnownedTerritoryEnteredReturnsTerritoryName() {
+        ConsoleView view = createViewWithInput("Alberta\n");
+
+        String territoryChoice = view.promptCurrentPlayerTerritoryChoice();
+
+        assertEquals("Alberta", territoryChoice);
+    }
+
+    @Test
+    public void displaySetupPhaseCompleteAllArmiesPlacedDisplaysSetupCompleteMessage() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        String setupCompleteMessage = "Setup is complete. The game is starting now.";
+
+        view.displaySetupPhaseComplete();
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertEquals(setupCompleteMessage + System.lineSeparator(), displayedText);
+    }
+
+    @Test
     public void displayCurrentPlayerArmiesPrintsAvailableArmies() {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(output);
-
         String availableArmies = "{INFANTRY=15, CAVALRY=2, ARTILLERY=3}";
 
         view.displayCurrentPlayerArmies(availableArmies);
@@ -343,6 +398,193 @@ public final class ConsoleViewTest {
         List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
 
         assertEquals(List.of(MALFORMED_CARD_INPUT_SENTINEL), cardIndices);
+    public void promptFortifyChoiceYesChoiceReturnsChoice() {
+        ConsoleView view = createViewWithInput("yes\n");
+
+        String fortifyChoice = view.promptFortifyChoice();
+
+        assertEquals("yes", fortifyChoice);
+    }
+
+    @Test
+    public void promptFortifyChoiceNoChoiceReturnsChoice() {
+        ConsoleView view = createViewWithInput("no\n");
+
+        String fortifyChoice = view.promptFortifyChoice();
+
+        assertEquals("no", fortifyChoice);
+    }
+
+    @Test
+    public void promptFortifyChoiceInvalidChoiceReturnsChoice() {
+        ConsoleView view = createViewWithInput("maybe\n");
+
+        String fortifyChoice = view.promptFortifyChoice();
+
+        assertEquals("maybe", fortifyChoice);
+    }
+
+    @Test
+    public void promptFortifySourceTerritorySingleWordTerritoryReturnsTerritory() {
+        ConsoleView view = createViewWithInput("Alaska\n");
+
+        String sourceTerritory = view.promptFortifySourceTerritory();
+
+        assertEquals("Alaska", sourceTerritory);
+    }
+
+    @Test
+    public void promptFortifySourceTerritoryMultiWordTerritoryReturnsTerritory() {
+        ConsoleView view = createViewWithInput("Northwest Territory\n");
+
+        String sourceTerritory = view.promptFortifySourceTerritory();
+
+        assertEquals("Northwest Territory", sourceTerritory);
+    }
+
+    @Test
+    public void promptFortifyDestinationTerritorySingleWordTerritoryReturnsTerritory() {
+        ConsoleView view = createViewWithInput("Alberta\n");
+
+        String destinationTerritory = view.promptFortifyDestinationTerritory();
+
+        assertEquals("Alberta", destinationTerritory);
+    }
+
+    @Test
+    public void promptFortifyDestinationTerritoryMultiWordTerritoryReturnsTerritory() {
+        ConsoleView view = createViewWithInput("Western United States\n");
+
+        String destinationTerritory = view.promptFortifyDestinationTerritory();
+
+        assertEquals("Western United States", destinationTerritory);
+    }
+
+    @Test
+    public void promptFortifyArmyCountZeroArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("0\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("0", armyCount);
+    }
+
+    @Test
+    public void promptFortifyArmyCountOneArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("1\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("1", armyCount);
+    }
+
+    @Test
+    public void promptFortifyArmyCountMultipleArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("3\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("3", armyCount);
+    }
+
+    @Test
+    public void promptFortifyArmyCountNegativeArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("-1\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("-1", armyCount);
+    }
+
+    @Test
+    public void promptFortifyArmyCountNonNumericArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("two\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("two", armyCount);
+    }
+
+    @Test
+    public void displayErrorPrintsErrorMessage() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayError("Invalid selection.");
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("Invalid selection."));
+    }
+
+    @Test
+    public void promptNumberOfPlayersPrintsPromptTextBeforeReadingInput() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("3\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptNumberOfPlayers();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("number of players"));
+    }
+
+    @Test
+    public void promptPlayerNamePrintsPromptTextContainingPlayerNumber() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alice\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptPlayerName(1);
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("player 1"));
+    }
+
+    @Test
+    public void promptPlayerColorPrintsPromptTextContainingPlayerName() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("RED\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptPlayerColor("Alice", List.of(PlayerColor.values()));
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("Alice"));
+    }
+
+    @Test
+    public void getTerritoryChoiceDuringSetupPrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.getTerritoryChoiceDuringSetup();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("territory"));
+    }
+
+    @Test
+    public void promptCurrentPlayerTerritoryChoicePrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptCurrentPlayerTerritoryChoice();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("territory"));
+    }
+
+    @Test
+    public void promptReinforcementPrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska 1 0 0\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptReinforcement();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("armies"));
     }
 
     private ConsoleView createViewWithInput(final String input) {

@@ -161,4 +161,240 @@ public final class TerritoryTest {
         assertTrue(placed);
     }
 
+    @Test
+    public void placeArmiesOneInfantryIncreasesArmyCountByOne() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.placeArmies(pieces);
+
+        assertEquals(ONE_INFANTRY, territory.getArmyCount());
+    }
+
+    @Test
+    public void addArmiesZeroArmiesReturnsTrue() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
+        armiesToAdd.put(ArmyType.INFANTRY, 0);
+
+        boolean added = territory.addArmies(armiesToAdd);
+
+        assertTrue(added);
+        assertEquals(0, territory.getArmyCount());
+    }
+
+    @Test
+    public void addArmiesOneArmyToEmptyTerritoryReturnsTrue() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
+        armiesToAdd.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        boolean added = territory.addArmies(armiesToAdd);
+
+        assertTrue(added);
+        assertEquals(ONE_INFANTRY, territory.getArmyCount());
+    }
+
+    @Test
+    public void addArmiesMultipleArmiesToOccupiedTerritoryReturnsTrue() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
+        initialArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
+        armiesToAdd.put(ArmyType.INFANTRY, TWO_INFANTRY);
+
+        territory.addArmies(initialArmies);
+        boolean added = territory.addArmies(armiesToAdd);
+
+        assertTrue(added);
+        final int expectedResult = 3;
+        assertEquals(expectedResult, territory.getArmyCount());
+    }
+
+    @Test
+    public void removeArmiesZeroArmiesReturnsFalse() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
+        initialArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
+        armiesToRemove.put(ArmyType.INFANTRY, 0);
+
+        territory.addArmies(initialArmies);
+        boolean removed = territory.removeArmies(armiesToRemove);
+
+        assertFalse(removed);
+        assertEquals(ONE_INFANTRY, territory.getArmyCount());
+    }
+
+    @Test
+    public void removeArmiesNegativeArmyCountReturnsFalse() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
+        initialArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
+        armiesToRemove.put(ArmyType.INFANTRY, -ONE_INFANTRY);
+
+        territory.addArmies(initialArmies);
+        boolean removed = territory.removeArmies(armiesToRemove);
+
+        assertFalse(removed);
+        assertEquals(ONE_INFANTRY, territory.getArmyCount());
+    }
+
+    @Test
+    public void removeArmiesOneArmyFromOneArmyTerritoryReturnsTrue() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
+        initialArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
+        armiesToRemove.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.addArmies(initialArmies);
+        boolean removed = territory.removeArmies(armiesToRemove);
+
+        assertTrue(removed);
+        assertEquals(0, territory.getArmyCount());
+    }
+
+    @Test
+    public void removeArmiesOneArmyWhileArmiesRemainReturnsTrue() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
+        initialArmies.put(ArmyType.INFANTRY, TWO_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
+        armiesToRemove.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.addArmies(initialArmies);
+        boolean removed = territory.removeArmies(armiesToRemove);
+
+        assertTrue(removed);
+        assertEquals(ONE_INFANTRY, territory.getArmyCount());
+    }
+
+    @Test
+    public void removeArmiesMultipleArmiesWhileArmiesRemainReturnsTrue() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
+        final int initialArmiesForTest = 3;
+        initialArmies.put(ArmyType.INFANTRY, initialArmiesForTest);
+        HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
+        armiesToRemove.put(ArmyType.INFANTRY, TWO_INFANTRY);
+
+        territory.addArmies(initialArmies);
+        boolean removed = territory.removeArmies(armiesToRemove);
+
+        assertTrue(removed);
+        assertEquals(ONE_INFANTRY, territory.getArmyCount());
+    }
+
+    @Test
+    public void removeArmiesExactlyAllArmiesReturnsTrue() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
+        initialArmies.put(ArmyType.INFANTRY, TWO_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
+        armiesToRemove.put(ArmyType.INFANTRY, TWO_INFANTRY);
+
+        territory.addArmies(initialArmies);
+        boolean removed = territory.removeArmies(armiesToRemove);
+
+        assertTrue(removed);
+        assertEquals(0, territory.getArmyCount());
+    }
+
+    @Test
+    public void removeArmiesMoreArmiesThanPresentReturnsFalse() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
+        initialArmies.put(ArmyType.INFANTRY, TWO_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
+        final int armiesToRemoveForTest = 3;
+        armiesToRemove.put(ArmyType.INFANTRY, armiesToRemoveForTest);
+
+        territory.addArmies(initialArmies);
+        boolean removed = territory.removeArmies(armiesToRemove);
+
+        assertFalse(removed);
+        assertEquals(TWO_INFANTRY, territory.getArmyCount());
+    }
+
+    @Test
+    public void placeArmiesTwoSequentialPlacementsAccumulatesArmyCount() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.placeArmies(pieces);
+        territory.placeArmies(pieces);
+
+        assertEquals(TWO_INFANTRY, territory.getArmyCount());
+    }
+
+    @Test
+    public void getAdjacentTerritoriesReturnsAllConstructorAdjacentTerritories() {
+        Continent northAmerica = new Continent(
+                "North America",
+                NORTH_AMERICA_BONUS_ARMIES);
+        Continent asia = new Continent(
+                "Asia",
+                NORTH_AMERICA_BONUS_ARMIES);
+        Territory alberta = new Territory(
+                "Alberta",
+                northAmerica,
+                Collections.emptyList());
+        Territory kamchatka = new Territory(
+                "Kamchatka",
+                asia,
+                Collections.emptyList());
+        List<Territory> neighbours = Arrays.asList(alberta, kamchatka);
+
+        Territory alaska = new Territory("Alaska", northAmerica, neighbours);
+        List<Territory> adjacent = alaska.getAdjacentTerritories();
+
+        assertEquals(2, adjacent.size());
+        assertTrue(adjacent.contains(alberta));
+        assertTrue(adjacent.contains(kamchatka));
+    }
+
+    @Test
+    public void placeArmiesOneInfantryIncreasesInfantryPieceCountByOne() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.placeArmies(pieces);
+
+        assertEquals(
+                ONE_INFANTRY,
+                territory.getArmiesOfType(ArmyType.INFANTRY));
+    }
+
+    @Test
+    public void placeArmiesTwoInfantryIncreasesPieceCountByTwo() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, TWO_INFANTRY);
+
+        territory.placeArmies(pieces);
+
+        assertEquals(
+                TWO_INFANTRY,
+                territory.getArmiesOfType(ArmyType.INFANTRY));
+    }
+
+    @Test
+    public void placeArmiesTwoSequentialPlacementsAccumulatesPieceCount() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        territory.placeArmies(pieces);
+        territory.placeArmies(pieces);
+
+        assertEquals(
+                TWO_INFANTRY,
+                territory.getArmiesOfType(ArmyType.INFANTRY));
+    }
+
 }

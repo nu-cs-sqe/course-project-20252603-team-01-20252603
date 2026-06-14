@@ -2,9 +2,11 @@ package code.model;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents the main model for the Risk game.
@@ -81,7 +83,6 @@ public class GameModel {
         createAsia();
         createAustralia();
         initializeAdjacencies();
-        initializeDeck();
     }
 
     public int getDeckSize() {
@@ -232,7 +233,7 @@ public class GameModel {
         territories.add(territory);
     }
 
-    private Territory findTerritoryByName(final String territoryName) {
+    Territory findTerritoryByName(final String territoryName) {
         return territories.stream()
                 .filter(territory -> territory.getName().equals(territoryName))
                 .findFirst()
@@ -339,10 +340,6 @@ public class GameModel {
         connect("Western Australia", "Eastern Australia");
     }
 
-    private void initializeDeck() {
-        deck = new Deck();
-        deck.shuffle();
-    }
 
     public boolean claimTerritoryDuringSetup(
             final String territoryName,
@@ -375,6 +372,37 @@ public class GameModel {
                 && pieces.getOrDefault(ArmyType.INFANTRY, 0) == SETUP_INFANTRY_COUNT;
     }
 
+    public boolean addArmiesDuringSetup(
+            final String territoryName,
+            final HashMap<ArmyType, Integer> pieces) {
+        Player player = players.get(currentPlayerIndex);
+
+        for (Territory territory : territories) {
+            if (!territory.getName().equals(territoryName)) {
+                continue;
+            }
+
+        if (!territory.isOwnedBy(player)) {
+            return false;
+        }
+
+        if (!isExactlyOneInfantry(pieces)) {
+            return false;
+        }
+
+        if (!player.hasAvailableArmies(pieces)) {
+            return false;
+        }
+
+        territory.placeArmies(pieces);
+        player.removeArmies(pieces);
+
+        return true;
+        }
+
+        return false;
+    }
+
     public boolean advanceCurrentPlayerIndex() {
         if (players.isEmpty()) {
             return false;
@@ -396,6 +424,13 @@ public class GameModel {
 
     public String getCurrentPlayerName() {
         return players.get(currentPlayerIndex).getName();
+    }
+
+    public boolean hasCurrentPlayerAvailableArmies() {
+        HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
+        requiredArmies.put(ArmyType.INFANTRY, 1);
+
+        return players.get(currentPlayerIndex).hasAvailableArmies(requiredArmies);
     }
 
     public String getUnclaimedTerritoriesByContinent() {
@@ -486,6 +521,68 @@ public class GameModel {
         return true;
     }
 
+    public boolean fortifyTerritory(
+            final String sourceName,
+            final String destinationName,
+            final int armyCount) {
+        Territory sourceTerritory = findTerritoryByName(sourceName);
+        Territory destinationTerritory = findTerritoryByName(destinationName);
+        Player currentPlayer = players.get(currentPlayerIndex);
+        HashMap<ArmyType, Integer> piecesToMove = createInfantryPieces(armyCount);
+
+        if (!sourceTerritory.isOwnedBy(currentPlayer)
+                || !destinationTerritory.isOwnedBy(currentPlayer)) {
+            return false;
+        }
+
+        if (sourceTerritory.equals(destinationTerritory)) {
+            return false;
+        }
+
+        if (armyCount <= 0 || sourceTerritory.getArmyCount() <= armyCount) {
+            return false;
+        }
+
+        if (!hasOwnedPath(sourceTerritory, destinationTerritory, currentPlayer)) {
+            return false;
+        }
+
+        if (!sourceTerritory.removeArmies(piecesToMove)) {
+            return false;
+        }
+
+        destinationTerritory.addArmies(piecesToMove);
+        return true;
+    }
+
+    boolean hasOwnedPath(
+            final Territory sourceTerritory,
+            final Territory destinationTerritory,
+            final Player currentPlayer) {
+        List<Territory> territoriesToVisit = new ArrayList<>();
+        Set<Territory> visitedTerritories = new HashSet<>();
+        territoriesToVisit.add(sourceTerritory);
+
+        while (!territoriesToVisit.isEmpty()) {
+            Territory currentTerritory = territoriesToVisit.remove(0);
+            if (currentTerritory.equals(destinationTerritory)) {
+                return true;
+            }
+
+            if (!visitedTerritories.add(currentTerritory)) {
+                continue;
+            }
+
+            for (Territory adjacentTerritory : currentTerritory.getAdjacentTerritories()) {
+                if (adjacentTerritory.isOwnedBy(currentPlayer)) {
+                    territoriesToVisit.add(adjacentTerritory);
+                }
+            }
+        }
+
+        return false;
+    }
+
     private boolean hasValidArmyCounts(final HashMap<ArmyType, Integer> pieces) {
         boolean hasPositiveCount = false;
 
@@ -513,6 +610,12 @@ public class GameModel {
         return pieces;
     }
 
+    private HashMap<ArmyType, Integer> createInfantryPieces(final int infantryCount) {
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, infantryCount);
+        return pieces;
+    }
+
     public boolean currentPlayerHasAvailableArmies() {
         Player player = players.get(currentPlayerIndex);
         HashMap<ArmyType, Integer> oneInfantry = createArmyPieces(
@@ -522,6 +625,7 @@ public class GameModel {
 
         return player.hasAvailableArmies(oneInfantry);
     }
+
 
     public void addArmiesToCurrentPlayerBasedOnContinents() {
         Player player = players.get(currentPlayerIndex);
@@ -610,5 +714,12 @@ public class GameModel {
         return hasThreeCardsOfSameType
                 || hasOneOfEachType
                 || (wildCardCount == 1 && nonWildCardCount == 2);
+
+    public boolean areTerritoriesAdjacent(
+            final String territory1Name,
+            final String territory2Name) {
+        Territory t1 = findTerritoryByName(territory1Name);
+        Territory t2 = findTerritoryByName(territory2Name);
+        return t1.getAdjacentTerritories().contains(t2);
     }
 }

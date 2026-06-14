@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -472,6 +473,7 @@ public final class HumanPlayerTest {
         assertTrue(remainingArmies.contains("0"));
     }
 
+
     @Test
     public void addArmiesToAvailableBasedOnTerritoriesWithZeroTerritoriesRaisesException() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
@@ -935,6 +937,61 @@ public final class HumanPlayerTest {
                 exception.getMessage());
         assertEquals(3, player.getCardCount());
         assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+      
+    private Territory createRealTerritory() {
+        Continent continent = new Continent("Asia", FIVE_ARMIES);
+        return new Territory("Japan", continent, Collections.emptyList());
+    }
+
+    @Test
+    public void ownsTerritoryReturnsTrueForAddedRealTerritory() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        Territory territory = createRealTerritory();
+
+        player.addTerritory(territory);
+
+        assertTrue(player.ownsTerritory(territory));
+    }
+
+    @Test
+    public void ownsTerritoryReturnsFalseForNonAddedRealTerritory() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        Continent continent = new Continent("Asia", FIVE_ARMIES);
+        Territory owned = new Territory("Japan", continent, Collections.emptyList());
+        Territory unowned = new Territory("China", continent, Collections.emptyList());
+
+        player.addTerritory(owned);
+
+        assertFalse(player.ownsTerritory(unowned));
+    }
+
+    @Test
+    public void toStringContainsPlayerNameAndColor() {
+        HumanPlayer player = new HumanPlayer("Alice", PlayerColor.RED, ONE_INFANTRY);
+
+        String result = player.toString();
+
+        assertTrue(result.contains("Alice"));
+        assertTrue(result.contains("RED"));
+    }
+
+    @Test
+    public void removeArmiesExactCavalryMatchPreservesRemainingInfantry() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                FIVE_ARMIES);
+        HashMap<ArmyType, Integer> cavalryToAdd =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
+        player.addArmies(cavalryToAdd);
+
+        HashMap<ArmyType, Integer> cavalryToRemove =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
+        player.removeArmies(cavalryToRemove);
+
+        String remainingArmies = player.getAvailableArmies();
+        assertTrue(remainingArmies.contains("INFANTRY=5"));
+        assertTrue(remainingArmies.contains("CAVALRY=0"));
     }
 
 }

@@ -235,45 +235,92 @@
     - **State of the system**: Player 1 owns `"Alaska"`; current player is Player 2
     - **Expected output**: Returned string does not contain `"Alaska"`
 
+---
+
+### Method under test: `hasCurrentPlayerAvailableArmies()`
+
+- **TC51: Current player has zero armies remaining** ( :white_check_mark: )
+    - **State of the system**: Current player has placed all setup Infantry and has `0` available Infantry
+    - **Expected output**: Returns `false`, allowing setup to skip this player during remaining-army placement
+
+- **TC52: Current player has exactly one army remaining** ( :white_check_mark: )
+    - **State of the system**: Current player has exactly `1` available Infantry left after territory claiming
+    - **Expected output**: Returns `true`, allowing setup to prompt this player for one final placement
+
+- **TC53: Current player has more than one army remaining** ( :white_check_mark: )
+    - **State of the system**: Current player has multiple available Infantry left after territory claiming
+    - **Expected output**: Returns `true`, allowing setup to prompt this player for army placement
+
+---
+
+### Method under test: `addArmiesDuringSetup(String territoryName, HashMap<ArmyType, Integer> pieces)`
+
+- **TC54: Adds exactly one Infantry to current player's owned territory** ( :white_check_mark: )
+    - **State of the system**: All territories are claimed; current player owns `"Alaska"`; current player has at least `1` available Infantry; `pieces` contains exactly `INFANTRY -> 1`
+    - **Expected output**: Returns `true`; `"Alaska"` army count increases by `1`; current player's available Infantry decreases by `1`
+
+- **TC55: Adds final remaining Infantry to owned territory** ( :white_check_mark: )
+    - **State of the system**: Current player owns the selected territory and has exactly `1` available Infantry
+    - **Expected output**: Returns `true`; selected territory gains `1` Infantry; current player's available Infantry becomes `0`
+
+- **TC56: Rejects territory owned by another player** ( :white_check_mark: )
+    - **State of the system**: Current player selects a territory that exists but is owned by another player; current player has available Infantry
+    - **Expected output**: Returns `false`; territory army count is unchanged; current player's available Infantry is unchanged
+
+- **TC57: Rejects unknown territory name** ( :white_check_mark: )
+    - **State of the system**: Current player enters a territory name that does not match any board territory
+    - **Expected output**: Returns `false`; no territory army count changes; current player's available Infantry is unchanged
+
+- **TC58: Rejects zero Infantry placement** ( :white_check_mark: )
+    - **State of the system**: Current player owns the selected territory; `pieces` contains `INFANTRY -> 0`
+    - **Expected output**: Returns `false`; selected territory army count is unchanged; current player's available Infantry is unchanged
+
+- **TC59: Rejects more than one Infantry placement** ( :white_check_mark: )
+    - **State of the system**: Current player owns the selected territory; `pieces` contains `INFANTRY -> 2`
+    - **Expected output**: Returns `false`; selected territory army count is unchanged; current player's available Infantry is unchanged
+
+- **TC60: Rejects placement when current player has no armies remaining** ( :white_check_mark: )
+    - **State of the system**: Current player owns the selected territory but has `0` available Infantry
+    - **Expected output**: Returns `false`; selected territory army count is unchanged; current player's available Infantry remains `0`
 ### Method under test: `placeArmiesDuringReinforcement(String territoryName, HashMap<ArmyType, Integer> pieces)`
 
-- **TC51: Place one Infantry on territory owned by current player** ( :white_check_mark: )
+- **TC61: Place one Infantry on territory owned by current player** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; current player has available armies containing `INFANTRY -> 1`; `pieces` contains `INFANTRY -> 1`
     - **Expected output**: Method returns `true`; selected territory army count increases; current player's available army pool decreases to zero
 
-- **TC52: Place multiple Infantry on territory owned by current player** ( :white_check_mark: )
+- **TC62: Place multiple Infantry on territory owned by current player** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; current player has available armies containing `INFANTRY -> 3`; `pieces` contains `INFANTRY -> 3`
     - **Expected output**: Method returns `true`; selected territory army count increases by three; current player's available army pool decreases to zero
 
-- **TC53: Place mixed army types on territory owned by current player** ( :white_check_mark: )
+- **TC63: Place mixed army types on territory owned by current player** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; current player has enough equivalent available army value; `pieces` contains Infantry, Cavalry, and Artillery
     - **Expected output**: Method returns `true`; selected territory receives all requested army pieces; current player's available army pool is reduced by equivalent value
 
-- **TC54: Cannot place zero total armies** ( :white_check_mark: )
+- **TC64: Cannot place zero total armies** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; `pieces` contains `INFANTRY -> 0`, `CAVALRY -> 0`, and `ARTILLERY -> 0`
     - **Expected output**: Method returns `false`; selected territory army count does not change; current player's available army pool remains unchanged
 
-- **TC55: Cannot place negative Infantry count** ( :white_check_mark: )
+- **TC65: Cannot place negative Infantry count** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; `pieces` contains `INFANTRY -> -1`
     - **Expected output**: Method returns `false`; selected territory army count does not change; current player's available army pool remains unchanged
 
-- **TC56: Cannot place negative Cavalry count** ( :white_check_mark: )
+- **TC66: Cannot place negative Cavalry count** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; `pieces` contains `CAVALRY -> -1`
     - **Expected output**: Method returns `false`; selected territory army count does not change; current player's available army pool remains unchanged
 
-- **TC57: Cannot place negative Artillery count** ( :white_check_mark: )
+- **TC67: Cannot place negative Artillery count** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; `pieces` contains `ARTILLERY -> -1`
     - **Expected output**: Method returns `false`; selected territory army count does not change; current player's available army pool remains unchanged
 
-- **TC58: Cannot place more total army value than available** ( :white_check_mark: )
+- **TC68: Cannot place more total army value than available** ( :white_check_mark: )
     - **State of the system**: Current player owns `"Alaska"`; current player has 10 total army value; `pieces` is worth 15 total army value
     - **Expected output**: Method returns `false`; selected territory army count does not change; current player's available army pool remains unchanged
 
-- **TC59: Cannot place armies on territory owned by another player** ( :white_check_mark: )
+- **TC69: Cannot place armies on territory owned by another player** ( :white_check_mark: )
     - **State of the system**: Player 1 owns `"Alaska"`; current player is Player 2; Player 2 has enough available armies
     - **Expected output**: Method returns `false`; `"Alaska"` army count does not change; Player 2's available army pool remains unchanged
 
-- **TC60: Cannot place armies on unowned territory** ( :white_check_mark: )
+- **TC70: Cannot place armies on unowned territory** ( :white_check_mark: )
     - **State of the system**: `"Alaska"` is unclaimed; current player has enough available armies
     - **Expected output**: Method returns `false`; `"Alaska"` army count does not change; current player's available army pool remains unchanged
 
@@ -281,19 +328,19 @@
 
 ### Method under test: `currentPlayerHasAvailableArmies()`
 
-- **TC61: Returns false when current player has zero available army value** ( :white_check_mark: )
+- **TC71: Returns false when current player has zero available army value** ( :white_check_mark: )
     - **State of the system**: Current player has no available Infantry, Cavalry, or Artillery
     - **Expected output**: Returns `false`
 
-- **TC62: Returns true when current player has exactly one Infantry available** ( :white_check_mark: )
+- **TC72: Returns true when current player has exactly one Infantry available** ( :white_check_mark: )
     - **State of the system**: Current player has available armies containing `INFANTRY -> 1`
     - **Expected output**: Returns `true`
 
-- **TC63: Returns true when current player has only Cavalry available** ( :white_check_mark: )
+- **TC73: Returns true when current player has only Cavalry available** ( :white_check_mark: )
     - **State of the system**: Current player has available armies containing `CAVALRY -> 1`
     - **Expected output**: Returns `true`
 
-- **TC64: Returns true when current player has only Artillery available** ( :white_check_mark: )
+- **TC74: Returns true when current player has only Artillery available** ( :white_check_mark: )
     - **State of the system**: Current player has available armies containing `ARTILLERY -> 1`
     - **Expected output**: Returns `true`
 
@@ -428,3 +475,80 @@
 - **TC87: More than five cards also requires a trade-in** ( :white_check_mark: )
     - **State of the system**: Current player has `6` or more cards in hand
     - **Expected output**: Returns `TradeInPossibility.REQUIRED`
+### Method under test: `fortifyTerritory(String sourceName, String destinationName, int armyCount)`
+
+- **TC75: Moves one army between adjacent owned territories** ( :white_check_mark: )
+    - **State of the system**: Current player owns adjacent source and destination territories; source has exactly `2` armies; `armyCount` is `1`
+    - **Expected output**: Returns `true`; source army count decreases to `1`; destination army count increases by `1`
+
+- **TC76: Moves multiple armies while leaving one behind** ( :white_check_mark: )
+    - **State of the system**: Current player owns connected source and destination territories; source has `4` armies; `armyCount` is `3`
+    - **Expected output**: Returns `true`; source keeps exactly `1` army; destination gains `3` armies
+
+- **TC77: Rejects zero armies moved** ( :white_check_mark: )
+    - **State of the system**: Current player owns connected source and destination territories; source has more than one army; `armyCount` is `0`
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC78: Rejects negative armies moved** ( :white_check_mark: )
+    - **State of the system**: Current player owns connected source and destination territories; source has more than one army; `armyCount` is `-1`
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC79: Rejects moving all armies from source** ( :white_check_mark: )
+    - **State of the system**: Current player owns connected source and destination territories; source has `3` armies; `armyCount` is `3`
+    - **Expected output**: Returns `false`; source and destination army counts do not change because at least one army must remain
+
+- **TC80: Rejects moving more armies than source can allow** ( :white_check_mark: )
+    - **State of the system**: Current player owns connected source and destination territories; source has `3` armies; `armyCount` is `4`
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC81: Rejects source with only one army** ( :white_check_mark: )
+    - **State of the system**: Current player owns connected source and destination territories; source has exactly `1` army; `armyCount` is `1`
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC82: Rejects source not owned by current player** ( :white_check_mark: )
+    - **State of the system**: Source territory is owned by another player; destination is owned by current player; `armyCount` is positive
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC83: Rejects destination not owned by current player** ( :white_check_mark: )
+    - **State of the system**: Source territory is owned by current player and has more than one army; destination is owned by another player
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC84: Rejects same source and destination territory** ( :white_check_mark: )
+    - **State of the system**: Current player owns the selected territory with more than one army; the same territory name is passed as source and destination
+    - **Expected output**: Returns `false`; territory army count does not change
+
+- **TC85: Allows path through exactly one owned territory** ( :white_check_mark: )
+    - **State of the system**: Current player owns source, one intermediate adjacent territory, and destination; source and destination are not directly adjacent
+    - **Expected output**: Returns `true`; armies move from source to destination through the owned path
+
+- **TC86: Allows path through more than one owned territory** ( :white_check_mark: )
+    - **State of the system**: Current player owns source, multiple intermediate connected territories, and destination
+    - **Expected output**: Returns `true`; armies move from source to destination through the owned path
+
+- **TC87: Rejects path blocked by another player's territory** ( :white_check_mark: )
+    - **State of the system**: Source and destination are connected on the board only through at least one territory owned by another player
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC88: Rejects disconnected owned territories** ( :white_check_mark: )
+    - **State of the system**: Current player owns source and destination, but there is no connected path of current-player-owned territories between them
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+---
+
+### Method under test: `hasOwnedPath(Territory source, Territory destination, Player player)`
+
+- **TC89: Finds destination immediately adjacent to source** ( :white_check_mark: )
+    - **State of the system**: Source and destination are adjacent and both owned by the current player
+    - **Expected output**: Returns `true`
+
+- **TC90: Finds destination at the end of a longer owned path** ( :white_check_mark: )
+    - **State of the system**: Source and destination are connected through more than one intermediate territory owned by the current player
+    - **Expected output**: Returns `true`
+
+- **TC91: Handles circular owned territory structure** ( :white_check_mark: )
+    - **State of the system**: Current player's owned territories contain a cycle in the adjacency graph
+    - **Expected output**: Search terminates and returns whether the destination is reachable without looping forever
+
+- **TC92: Does not traverse enemy-owned territory** ( :white_check_mark: )
+    - **State of the system**: Destination can only be reached by crossing a territory not owned by the current player
+    - **Expected output**: Returns `false`

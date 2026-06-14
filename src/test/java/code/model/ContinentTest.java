@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 
@@ -160,6 +161,7 @@ public final class ContinentTest {
         assertEquals(expectedBonusArmies, continent.getBonusArmies());
     }
 
+
     @Test
     public void isFullyOwnedByReturnsFalseWhenContinentHasNoTerritories() {
         Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
@@ -270,5 +272,53 @@ public final class ContinentTest {
         continent.addTerritory(territory);
 
         assertFalse(continent.isFullyOwnedBy(nullPlayer));
+
+    private Territory createRealTerritory(final String name, final Continent continent) {
+        return new Territory(name, continent, Collections.emptyList());
+    }
+
+    @Test
+    public void addTerritoryNonNullTerritoryIsFoundByContainsTerritory() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Territory territory = createRealTerritory("Japan", continent);
+
+        continent.addTerritory(territory);
+
+        assertTrue(continent.containsTerritory(territory));
+    }
+
+    @Test
+    public void addTerritoryFirstOfTwoRealTerritoriesIsFound() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Territory japan = createRealTerritory("Japan", continent);
+        Territory china = createRealTerritory("China", continent);
+
+        continent.addTerritory(japan);
+        continent.addTerritory(china);
+
+        assertTrue(continent.containsTerritory(japan));
+    }
+
+    @Test
+    public void containsTerritoryReturnsTrueForRealAddedTerritory() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Territory japan = createRealTerritory("Japan", continent);
+        Territory china = createRealTerritory("China", continent);
+
+        continent.addTerritory(japan);
+        continent.addTerritory(china);
+
+        assertTrue(continent.containsTerritory(china));
+    }
+
+    @Test
+    public void containsTerritoryReturnsFalseForRealTerritoryNotAdded() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Territory japan = createRealTerritory("Japan", continent);
+        Territory china = createRealTerritory("China", continent);
+
+        continent.addTerritory(japan);
+
+        assertFalse(continent.containsTerritory(china));
     }
 }

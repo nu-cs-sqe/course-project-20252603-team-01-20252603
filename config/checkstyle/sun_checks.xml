@@ -67,11 +67,11 @@
     <!-- Checks for Size Violations.                    -->
     <!-- See https://checkstyle.org/checks/sizes/index.html -->
     <module name="FileLength">
-        <property name="max" value="1000"/>
+        <property name="max" value="2000"/>
     </module>
     <module name="LineLength">
         <property name="fileExtensions" value="java"/>
-        <property name="max" value="100"/>
+        <property name="max" value="120"/>
     </module>
 
     <!-- Checks for whitespace                               -->

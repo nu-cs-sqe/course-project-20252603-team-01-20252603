@@ -96,7 +96,36 @@ public class Territory {
         return true;
     }
 
+    public boolean addArmies(final HashMap<ArmyType, Integer> armiesToAdd) {
+        return placeArmies(armiesToAdd);
+    }
+
+    public boolean removeArmies(final HashMap<ArmyType, Integer> armiesToRemove) {
+        int removedArmyCount = armiesToRemove.values()
+                .stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+
+        if (removedArmyCount <= 0 || removedArmyCount > armyCount) {
+            return false;
+        }
+
+        for (Map.Entry<ArmyType, Integer> entry : armiesToRemove.entrySet()) {
+            ArmyType armyType = entry.getKey();
+            int removedCount = entry.getValue();
+            int currentCount = pieces.getOrDefault(armyType, 0);
+            pieces.put(armyType, currentCount - removedCount);
+        }
+
+        armyCount -= removedArmyCount;
+        return true;
+    }
+
     public Object getContinentName() {
         return continent.getName();
+    }
+
+    public int getArmiesOfType(final ArmyType armyType) {
+        return pieces.getOrDefault(armyType, 0);
     }
 }

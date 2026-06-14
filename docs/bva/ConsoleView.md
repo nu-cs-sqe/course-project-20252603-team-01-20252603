@@ -87,9 +87,40 @@
     - **State of the system**: Player is prompted to enter the number of Infantry to place
     - **Expected output**: Returns the Infantry count entered by the player so the model can validate it
 
+---
+
+### Method under test: `displayCurrentPlayerTerritoriesByContinent(String territoriesByContinent)`
+
+- **TC17: Displays one owned territory grouped by continent** ( :white_check_mark: )
+    - **State of the system**: Model provides a formatted string where the current player owns exactly one territory
+    - **Expected output**: Output displays the provided territory string exactly
+
+- **TC18: Displays multiple owned territories grouped by continent** ( :white_check_mark: )
+    - **State of the system**: Model provides a formatted string where the current player owns more than one territory across one or more continents
+    - **Expected output**: Output displays the provided territory string exactly
+
+---
+
+### Method under test: `promptCurrentPlayerTerritoryChoice()`
+
+- **TC19: Returns first owned territory name entered for remaining-army placement** ( :white_check_mark: )
+    - **State of the system**: Current player is prompted to choose one of their territories and enters the name of a territory they own
+    - **Expected output**: Returns the entered territory name so the model can place one Infantry
+
+- **TC20: Returns unowned territory name for model validation** ( :white_check_mark: )
+    - **State of the system**: Current player enters the name of a territory owned by another player
+    - **Expected output**: Returns the entered territory name so `addArmiesDuringSetup()` can reject it and setup can re-prompt
+
+---
+
+### Method under test: `displaySetupPhaseComplete()`
+
+- **TC21: Displays setup completion message once placement is complete** ( :white_check_mark: )
+    - **State of the system**: All territories are claimed and all players have `0` available Infantry
+    - **Expected output**: Output displays a message saying setup is complete and the game is starting now
 ### Method under test: `displayCurrentPlayerArmies(String availableArmies)`
 
-- **TC17: Displays current player's available army pool** ( :white_check_mark: )
+- **TC22: Displays current player's available army pool** ( :white_check_mark: )
     - **State of the system**: Model provides a formatted string containing available Infantry, Cavalry, and Artillery counts
     - **Expected output**: Output displays the available-armies string
 
@@ -97,19 +128,19 @@
 
 ### Method under test: `promptReinforcement()`
 
-- **TC18: Returns territory name with one Infantry placement** ( :white_check_mark: )
+- **TC23: Returns territory name with one Infantry placement** ( :white_check_mark: )
     - **State of the system**: Player enters `"Alaska 1 0 0"`
     - **Expected output**: Returns a list containing `"Alaska"`, `"1"`, `"0"`, and `"0"`
 
-- **TC19: Returns territory name with multiple mixed army types** ( :white_check_mark: )
+- **TC24: Returns territory name with multiple mixed army types** ( :white_check_mark: )
     - **State of the system**: Player enters `"Alaska 15 2 3"`
     - **Expected output**: Returns a list containing `"Alaska"`, `"15"`, `"2"`, and `"3"`
 
-- **TC20: Returns territory name with zero army placement for model validation** ( :white_check_mark: )
+- **TC25: Returns territory name with zero army placement for model validation** ( :white_check_mark: )
     - **State of the system**: Player enters `"Alaska 0 0 0"`
     - **Expected output**: Returns a list containing `"Alaska"`, `"0"`, `"0"`, and `"0"`
 
-- **TC21: Returns territory name with negative army count for model validation** ( :white_check_mark: )
+- **TC26: Returns territory name with negative army count for model validation** ( :white_check_mark: )
     - **State of the system**: Player enters `"Alaska -1 0 0"`
     - **Expected output**: Returns a list containing `"Alaska"`, `"-1"`, `"0"`, and `"0"`
 
@@ -156,3 +187,64 @@
 - **TC30: Rejects non-numeric card selection input** ( :white_check_mark: )
     - **State of the system**: Player enters `"1 two 3"`
     - **Expected output**: Returns `List.of(Integer.MIN_VALUE)` to signal malformed card-selection input
+### Method under test: `promptFortifyChoice()`
+
+- **TC27: Returns yes choice** ( :white_check_mark: )
+    - **State of the system**: Current player is asked whether to fortify and enters `"yes"`
+    - **Expected output**: Returns `"yes"` so the controller can begin fortification
+
+- **TC28: Returns no choice** ( :white_check_mark: )
+    - **State of the system**: Current player is asked whether to fortify and enters `"no"`
+    - **Expected output**: Returns `"no"` so the controller can skip fortification
+
+- **TC29: Returns invalid choice for controller validation** ( :white_check_mark: )
+    - **State of the system**: Current player is asked whether to fortify and enters a value other than yes/y/no/n
+    - **Expected output**: Returns the entered string so the controller can reject it and re-prompt
+
+---
+
+### Method under test: `promptFortifySourceTerritory()`
+
+- **TC30: Returns single-word source territory** ( :white_check_mark: )
+    - **State of the system**: Current player is prompted for a source territory and enters `"Alaska"`
+    - **Expected output**: Returns `"Alaska"`
+
+- **TC31: Returns multi-word source territory** ( :white_check_mark: )
+    - **State of the system**: Current player is prompted for a source territory and enters `"Northwest Territory"`
+    - **Expected output**: Returns `"Northwest Territory"`
+
+---
+
+### Method under test: `promptFortifyDestinationTerritory()`
+
+- **TC32: Returns single-word destination territory** ( :white_check_mark: )
+    - **State of the system**: Current player is prompted for a destination territory and enters `"Alberta"`
+    - **Expected output**: Returns `"Alberta"`
+
+- **TC33: Returns multi-word destination territory** ( :white_check_mark: )
+    - **State of the system**: Current player is prompted for a destination territory and enters `"Western United States"`
+    - **Expected output**: Returns `"Western United States"`
+
+---
+
+### Method under test: `promptFortifyArmyCount()`
+
+- **TC34: Returns zero army count for controller/model validation** ( :white_check_mark: )
+    - **State of the system**: Current player is prompted for armies to move and enters `"0"`
+    - **Expected output**: Returns `"0"` so the fortify flow can reject moving zero armies
+
+- **TC35: Returns one army count** ( :white_check_mark: )
+    - **State of the system**: Current player is prompted for armies to move and enters `"1"`
+    - **Expected output**: Returns `"1"`
+
+- **TC36: Returns multiple army count** ( :white_check_mark: )
+    - **State of the system**: Current player is prompted for armies to move and enters `"3"`
+    - **Expected output**: Returns `"3"`
+
+- **TC37: Returns negative army count for controller/model validation** ( :white_check_mark: )
+    - **State of the system**: Current player is prompted for armies to move and enters `"-1"`
+    - **Expected output**: Returns `"-1"` so the fortify flow can reject moving a negative number of armies
+
+- **TC38: Returns non-numeric army count for controller validation** ( :white_check_mark: )
+    - **State of the system**: Current player is prompted for armies to move and enters `"two"`
+    - **Expected output**: Returns `"two"` so the controller can reject it without calling the model

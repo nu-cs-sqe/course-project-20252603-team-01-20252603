@@ -165,6 +165,7 @@ package code.view {
         + promptNumberOfDice(attackerName: String, defenderName: String): List<int>
         + displayBattleResult(battleResult: List<String>): void
         + displayPlayerElimination(playerName: String): void
+        +displaySetupPhaseComplete(): void
     }
 }
 

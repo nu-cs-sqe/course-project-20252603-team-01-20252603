@@ -125,4 +125,38 @@ public final class DeckTest {
 
         assertNotEquals(originalCards, deck.getCards());
     }
+
+    @Test
+    public void firstTerritoryCardIsNamedTerritoryOne() {
+        Deck deck = new Deck();
+
+        RiskCard firstCard = deck.getCards().stream()
+                .filter(card -> !card.isWild())
+                .findFirst()
+                .get();
+
+        assertEquals("Territory 1", firstCard.getTerritory().getName());
+    }
+
+    @Test
+    public void secondTerritoryCardHasCavalryType() {
+        Deck deck = new Deck();
+
+        List<RiskCard> territoryCards = deck.getCards().stream()
+                .filter(card -> !card.isWild())
+                .collect(java.util.stream.Collectors.toList());
+
+        assertEquals(CardType.CAVALRY, territoryCards.get(1).getType());
+    }
+
+    @Test
+    public void thirdTerritoryCardHasArtilleryType() {
+        Deck deck = new Deck();
+
+        List<RiskCard> territoryCards = deck.getCards().stream()
+                .filter(card -> !card.isWild())
+                .collect(java.util.stream.Collectors.toList());
+
+        assertEquals(CardType.ARTILLERY, territoryCards.get(2).getType());
+    }
 }
