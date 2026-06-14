@@ -277,7 +277,7 @@
     - **State of the system**: Player enters `"1"` for attacker dice and `"1"` for defender dice
     - **Expected output**: Returns a list containing `1` and `1`
 
-- **TC44: Returns intermediate valid attacker and defender dice counts** ( :x: )
+- **TC44: Returns intermediate valid attacker and defender dice counts** ( :white_check_mark: )
     - **State of the system**: Player enters `"2"` for attacker dice and `"1"` for defender dice
     - **Expected output**: Returns a list containing `2` and `1`
 
