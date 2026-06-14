@@ -2,9 +2,11 @@ package code.model;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents the main model for the Risk game.
@@ -509,11 +511,15 @@ public class GameModel {
             return false;
         }
 
+        if (sourceTerritory.equals(destinationTerritory)) {
+            return false;
+        }
+
         if (armyCount <= 0 || sourceTerritory.getArmyCount() <= armyCount) {
             return false;
         }
 
-        if (!sourceTerritory.getAdjacentTerritories().contains(destinationTerritory)) {
+        if (!hasOwnedPath(sourceTerritory, destinationTerritory, currentPlayer)) {
             return false;
         }
 
@@ -523,6 +529,34 @@ public class GameModel {
 
         destinationTerritory.addArmies(piecesToMove);
         return true;
+    }
+
+    private boolean hasOwnedPath(
+            final Territory sourceTerritory,
+            final Territory destinationTerritory,
+            final Player currentPlayer) {
+        List<Territory> territoriesToVisit = new ArrayList<>();
+        Set<Territory> visitedTerritories = new HashSet<>();
+        territoriesToVisit.add(sourceTerritory);
+
+        while (!territoriesToVisit.isEmpty()) {
+            Territory currentTerritory = territoriesToVisit.remove(0);
+            if (currentTerritory.equals(destinationTerritory)) {
+                return true;
+            }
+
+            if (!visitedTerritories.add(currentTerritory)) {
+                continue;
+            }
+
+            for (Territory adjacentTerritory : currentTerritory.getAdjacentTerritories()) {
+                if (adjacentTerritory.isOwnedBy(currentPlayer)) {
+                    territoriesToVisit.add(adjacentTerritory);
+                }
+            }
+        }
+
+        return false;
     }
 
     private boolean hasValidArmyCounts(final HashMap<ArmyType, Integer> pieces) {

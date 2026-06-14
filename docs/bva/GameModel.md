@@ -388,7 +388,7 @@
     - **State of the system**: Current player owns the selected territory with more than one army; the same territory name is passed as source and destination
     - **Expected output**: Returns `false`; territory army count does not change
 
-- **TC85: Allows path through exactly one owned territory** ( :x: )
+- **TC85: Allows path through exactly one owned territory** ( :white_check_mark: )
     - **State of the system**: Current player owns source, one intermediate adjacent territory, and destination; source and destination are not directly adjacent
     - **Expected output**: Returns `true`; armies move from source to destination through the owned path
 
