@@ -1730,6 +1730,34 @@ public final class GameModelTest {
     }
 
     @Test
+    public void validateNumberOfDiceAttackerRollingMoreThanArmiesMinusOneRaisesException() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> gameModel.validateNumberOfDice(
+                        "Alaska",
+                        "Alberta",
+                        TWO_ARMIES,
+                        ONE_ARMY));
+
+        assertEquals(
+                "Attacker cannot roll more dice than attacking territory armies minus one.",
+                exception.getMessage());
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = new GameModel();
 
