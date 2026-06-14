@@ -317,7 +317,7 @@
     - **State of the system**: Current player owns exactly `41` territories and has `0` available Infantry before turn-start territory armies are added
     - **Expected output**: Current player's available Infantry increases to `13`
 
-- **TC69: Current player with 0 territories raises eliminated-player exception** ( :x: )
+- **TC69: Current player with 0 territories raises eliminated-player exception** ( :white_check_mark: )
     - **State of the system**: Current player owns `0` territories and `addArmiesToCurrentPlayerBasedOnTerritories()` is called
     - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 0 territories and play a turn because they have been eliminated."`; current player's available armies are unchanged
 

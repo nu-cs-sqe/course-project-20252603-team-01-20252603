@@ -1049,6 +1049,25 @@ public final class GameModelTest {
     }
 
     @Test
+    public void addArmiesToCurrentPlayerBasedOnTerritoriesWithZeroTerritoriesRaisesException() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                gameModel::addArmiesToCurrentPlayerBasedOnTerritories);
+
+        assertEquals(
+                "Player cannot own 0 territories and play a turn because they have been eliminated.",
+                exception.getMessage());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=35"));
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = new GameModel();
 
