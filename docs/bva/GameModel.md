@@ -637,7 +637,7 @@
 
 ### Method under test: `executeBattleAndReturnWinner(String attackerTerritoryName, String defenderTerritoryName, int attackerNumDice, int defenderNumDice)`
 
-- **TC111: One-versus-one battle where attacker die beats defender die removes one defending army** ( :x: )
+- **TC111: One-versus-one battle where attacker die beats defender die removes one defending army** ( :white_check_mark: )
     - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; injected `Random` produces an attacker die greater than the defender die
     - **Expected output**: Defending territory loses `1` army; attacking territory loses `0` armies; returned battle result reports sorted dice, losses, updated army counts, and no capture when defenders remain
 

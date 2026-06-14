@@ -711,6 +711,51 @@ public class GameModel {
         return true;
     }
 
+    public List<String> executeBattleAndReturnWinner(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName,
+            final int attackerNumDice,
+            final int defenderNumDice) {
+        Territory attackingTerritory = findTerritoryOrThrow(
+                attackerTerritoryName,
+                "Attacking territory must exist on the board.");
+        Territory defendingTerritory = findTerritoryOrThrow(
+                defenderTerritoryName,
+                "Defending territory must exist on the board.");
+        List<Integer> attackerDice = rollDice(attackerNumDice);
+        List<Integer> defenderDice = rollDice(defenderNumDice);
+        int attackerLosses = 0;
+        int defenderLosses = 0;
+
+        if (attackerDice.get(0) > defenderDice.get(0)) {
+            defenderLosses++;
+            defendingTerritory.removeArmies(createInfantryPieces(1));
+        } else {
+            attackerLosses++;
+            attackingTerritory.removeArmies(createInfantryPieces(1));
+        }
+
+        return List.of(
+                "Attacker dice: " + attackerDice,
+                "Defender dice: " + defenderDice,
+                "Attacker losses: " + attackerLosses,
+                "Defender losses: " + defenderLosses,
+                "Attacking territory armies: " + attackingTerritory.getArmyCount(),
+                "Defending territory armies: " + defendingTerritory.getArmyCount(),
+                "Captured: " + (defendingTerritory.getArmyCount() == 0));
+    }
+
+    private List<Integer> rollDice(final int numDice) {
+        List<Integer> dice = new ArrayList<>();
+
+        for (int dieIndex = 0; dieIndex < numDice; dieIndex++) {
+            dice.add(random.nextInt(6) + 1);
+        }
+
+        dice.sort(Collections.reverseOrder());
+        return dice;
+    }
+
 
     public void addArmiesToCurrentPlayerBasedOnContinents() {
         Player player = players.get(currentPlayerIndex);
