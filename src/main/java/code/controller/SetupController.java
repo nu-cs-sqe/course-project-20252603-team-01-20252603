@@ -184,10 +184,16 @@ public class SetupController {
 
         try {
             int armyCount = Integer.parseInt(armyCountInput);
-            return model.fortifyTerritory(
+            boolean fortified = model.fortifyTerritory(
                     sourceTerritory,
                     destinationTerritory,
                     armyCount);
+
+            if (!fortified) {
+                view.displayError("Invalid fortify move.");
+            }
+
+            return fortified;
         } catch (NumberFormatException exception) {
             view.displayError("Invalid army count.");
             return false;

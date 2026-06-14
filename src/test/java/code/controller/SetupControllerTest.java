@@ -1092,4 +1092,55 @@ public final class SetupControllerTest {
         verify(model, view);
     }
 
+    @Test
+    public void handleFortifyPhaseModelRejectsInvalidFortifyMoveRepromptsMoveInput() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("yes");
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("2");
+        expect(model.fortifyTerritory("Alaska", "Alberta", 2)).andReturn(false);
+        view.displayError("Invalid fortify move.");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("1");
+        expect(model.fortifyTerritory("Alaska", "Alberta", 1)).andReturn(true);
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
 }

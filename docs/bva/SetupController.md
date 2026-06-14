@@ -135,7 +135,7 @@
     - **State of the system**: Current player chooses to fortify, enters valid source and destination names, then enters a non-numeric army count
     - **Expected output**: Controller displays `"Invalid army count."`; `GameModel.fortifyTerritory(...)` is not called; source, destination, and army count are requested again
 
-- **TC30: Model rejects invalid fortify move** ( :x: )
+- **TC30: Model rejects invalid fortify move** ( :white_check_mark: )
     - **State of the system**: Current player chooses to fortify and enters numeric move input, but `GameModel.fortifyTerritory(...)` returns `false`
     - **Expected output**: Controller displays `"Invalid fortify move."`; current player is not advanced; source, destination, and army count are requested again
 
