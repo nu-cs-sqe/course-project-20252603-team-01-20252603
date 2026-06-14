@@ -261,7 +261,7 @@
     - **State of the system**: Valid set selected; `numSetsTradedIn = 6`
     - **Expected output**: Player receives 20 Infantry
 
-- **TC58: Fourteenth trade-in is accepted as the maximum possible completed trade-in count** ( :x: )
+- **TC58: Fourteenth trade-in is accepted as the maximum possible completed trade-in count** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 14`
     - **Expected output**: Returns `true`; player receives the trade-in bonus for the maximum possible completed trade-in count; selected cards are removed from hand
 
