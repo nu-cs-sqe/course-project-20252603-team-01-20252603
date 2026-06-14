@@ -192,7 +192,7 @@
     - **State of the system**: Current player is prompted for armies to move and enters `"0"`
     - **Expected output**: Returns `"0"` so the fortify flow can reject moving zero armies
 
-- **TC35: Returns one army count** ( :x: )
+- **TC35: Returns one army count** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for armies to move and enters `"1"`
     - **Expected output**: Returns `"1"`
 

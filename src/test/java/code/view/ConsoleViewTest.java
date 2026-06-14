@@ -365,6 +365,15 @@ public final class ConsoleViewTest {
         assertEquals("0", armyCount);
     }
 
+    @Test
+    public void promptFortifyArmyCountOneArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("1\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("1", armyCount);
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
