@@ -63,7 +63,8 @@ public class ConsoleView {
     }
 
     public void displayCurrentPlayer(final String currentPlayerName) {
-        output.println(currentPlayerName);
+        output.println("Current player: " + currentPlayerName);
+        output.println();
     }
 
     public void displayUnclaimedTerritoriesByContinent(final String unclaimedTerritories) {
@@ -82,7 +83,7 @@ public class ConsoleView {
     public String getTerritoryChoiceDuringSetup() {
         output.print("Enter territory to claim: ");
 
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     public String promptCurrentPlayerTerritoryChoice() {

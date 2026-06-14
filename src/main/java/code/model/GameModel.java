@@ -3,13 +3,7 @@ package code.model;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Represents the main model for the Risk game.
@@ -247,11 +241,10 @@ public class GameModel {
         territories.add(territory);
     }
 
-    Territory findTerritoryByName(final String territoryName) {
+    Optional<Territory> findTerritoryByName(final String territoryName) {
         return territories.stream()
-                .filter(territory -> territory.getName().equals(territoryName))
-                .findFirst()
-                .get();
+                .filter(territory -> territory.getName().equalsIgnoreCase(territoryName.trim()))
+                .findFirst();
     }
 
     private Territory findTerritoryOrThrow(
@@ -266,8 +259,10 @@ public class GameModel {
     private void connect(
             final String firstTerritoryName,
             final String secondTerritoryName) {
-        Territory firstTerritory = findTerritoryByName(firstTerritoryName);
-        Territory secondTerritory = findTerritoryByName(secondTerritoryName);
+        Territory firstTerritory = findTerritoryByName(firstTerritoryName)
+                .orElseThrow(() -> new IllegalStateException("Territory not found: " + firstTerritoryName));
+        Territory secondTerritory = findTerritoryByName(secondTerritoryName)
+                .orElseThrow(() -> new IllegalStateException("Territory not found: " + secondTerritoryName));
 
         firstTerritory.addAdjacentTerritory(secondTerritory);
         secondTerritory.addAdjacentTerritory(firstTerritory);
@@ -368,8 +363,12 @@ public class GameModel {
             final String territoryName,
             final HashMap<ArmyType, Integer> pieces) {
         Player player = players.get(currentPlayerIndex);
-        Territory territory = findTerritoryByName(territoryName);
+        Optional<Territory> territoryOptional = findTerritoryByName(territoryName);
 
+        if (territoryOptional.isEmpty()) {
+            return false;
+        }
+        Territory territory = territoryOptional.get();
         if (!territory.isUnclaimed()) {
             return false;
         }
@@ -523,7 +522,13 @@ public class GameModel {
     public boolean placeArmiesDuringReinforcement(
             final String territoryName,
             final HashMap<ArmyType, Integer> pieces) {
-        Territory territory = findTerritoryByName(territoryName);
+        Optional<Territory> territoryOptional = findTerritoryByName(territoryName);
+        if (territoryOptional.isEmpty()) {
+            return false;
+        }
+
+        Territory territory = territoryOptional.get();
+
         Player player = players.get(currentPlayerIndex);
 
         if (!territory.isOwnedBy(player)) {
@@ -548,9 +553,14 @@ public class GameModel {
             final String sourceName,
             final String destinationName,
             final int armyCount) {
-        Territory sourceTerritory = findTerritoryByName(sourceName);
-        Territory destinationTerritory = findTerritoryByName(destinationName);
-        Player currentPlayer = players.get(currentPlayerIndex);
+        Optional<Territory> sourceOptional = findTerritoryByName(sourceName);
+        Optional<Territory> destinationOptional = findTerritoryByName(destinationName);
+        if (sourceOptional.isEmpty() || destinationOptional.isEmpty()) {
+            return false;
+        }
+
+        Territory sourceTerritory = sourceOptional.get();
+        Territory destinationTerritory = destinationOptional.get();        Player currentPlayer = players.get(currentPlayerIndex);
         HashMap<ArmyType, Integer> piecesToMove = createInfantryPieces(armyCount);
 
         if (!sourceTerritory.isOwnedBy(currentPlayer)
@@ -868,8 +878,15 @@ public class GameModel {
     public boolean areTerritoriesAdjacent(
             final String territory1Name,
             final String territory2Name) {
-        Territory t1 = findTerritoryByName(territory1Name);
-        Territory t2 = findTerritoryByName(territory2Name);
+        Optional<Territory> t1Optional = findTerritoryByName(territory1Name);
+        Optional<Territory> t2Optional = findTerritoryByName(territory2Name);
+
+        if (t1Optional.isEmpty() || t2Optional.isEmpty()) {
+            return false;
+        }
+
+        Territory t1 = t1Optional.get();
+        Territory t2 = t2Optional.get();
         return t1.getAdjacentTerritories().contains(t2);
     }
 }
