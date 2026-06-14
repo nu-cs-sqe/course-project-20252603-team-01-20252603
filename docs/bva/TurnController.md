@@ -88,7 +88,7 @@
     - **State of the system**: Model raises `IllegalArgumentException` with message `"Defending territory must be owned by another player."` or `"Attacking and defending territories must be adjacent."`, then the player enters valid territories
     - **Expected output**: Controller displays the model error message and re-prompts for attacking and defending territories
 
-- **TC49: Malformed dice input re-prompts for dice** ( :x: )
+- **TC49: Malformed dice input re-prompts for dice** ( :white_check_mark: )
     - **State of the system**: View returns `List.of(Integer.MIN_VALUE)` for dice input, then returns valid dice counts
     - **Expected output**: Controller displays `"Invalid dice input."` and re-prompts for dice
 

@@ -182,6 +182,14 @@ public class TurnController {
         List<Integer> diceCounts = view.promptNumberOfDice(
                 attackerTerritoryName,
                 defenderTerritoryName);
+
+        while (isMalformedDiceInput(diceCounts)) {
+            view.displayError("Invalid dice input.");
+            diceCounts = view.promptNumberOfDice(
+                    attackerTerritoryName,
+                    defenderTerritoryName);
+        }
+
         int attackerDice = diceCounts.get(ATTACKER_DICE_INDEX);
         int defenderDice = diceCounts.get(DEFENDER_DICE_INDEX);
         model.validateNumberOfDice(
@@ -196,5 +204,10 @@ public class TurnController {
                 attackerDice,
                 defenderDice);
         view.displayBattleResult(battleResult);
+    }
+
+    private boolean isMalformedDiceInput(final List<Integer> diceCounts) {
+        return diceCounts.size() == 1
+                && diceCounts.get(0) == MALFORMED_DICE_INPUT_SENTINEL;
     }
 }
