@@ -286,6 +286,10 @@ public class ConsoleView {
         output.println(playerName + " has been eliminated.");
     }
 
+    public void displayWinner(final String playerName) {
+        output.println(playerName + " won the game.");
+    }
+
     private boolean isInteger(final String value) {
         try {
             Integer.parseInt(value);

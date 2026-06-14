@@ -474,6 +474,39 @@ public class GameModel {
         return true;
     }
 
+    public boolean advanceToNextActivePlayer() {
+        if (players.isEmpty()) {
+            return false;
+        }
+
+        if (getActivePlayerCount() <= 1) {
+            throw new IllegalStateException(
+                    "Cannot advance turns because only one active player remains.");
+        }
+
+        for (int checkedPlayers = 0; checkedPlayers < players.size(); checkedPlayers++) {
+            advanceCurrentPlayerIndex();
+
+            if (!players.get(currentPlayerIndex).isEliminated()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private int getActivePlayerCount() {
+        int activePlayerCount = 0;
+
+        for (Player player : players) {
+            if (!player.isEliminated()) {
+                activePlayerCount++;
+            }
+        }
+
+        return activePlayerCount;
+    }
+
     public boolean areAllTerritoriesClaimed() {
         return territories.size() == TOTAL_TERRITORY_COUNT
                 && territories.stream().allMatch(territory -> !territory.isUnclaimed());
@@ -481,6 +514,14 @@ public class GameModel {
 
     public String getCurrentPlayerName() {
         return players.get(currentPlayerIndex).getName();
+    }
+
+    public boolean currentPlayerIsEliminated() {
+        return players.get(currentPlayerIndex).isEliminated();
+    }
+
+    public boolean currentPlayerHasWon() {
+        return players.get(currentPlayerIndex).getTerritoryCount() == TOTAL_TERRITORY_COUNT;
     }
 
     public boolean hasCurrentPlayerAvailableArmies() {

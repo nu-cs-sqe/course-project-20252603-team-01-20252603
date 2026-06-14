@@ -796,3 +796,59 @@
 - **TC144: Award card reinitializes draw pile from discard pile when draw pile is empty** ( :white_check_mark: )
     - **State of the system**: `capturedTerritoryThisTurn = true`; draw pile is empty; discard pile contains cards
     - **Expected output**: Returns `true`; deck reinitializes from discard pile, awards one card, and discard pile becomes empty
+
+---
+
+### Method under test: `currentPlayerIsEliminated()`
+
+- **TC145: Current active player is not eliminated** ( :white_check_mark: )
+    - **State of the system**: Current player is a `HumanPlayer` with `isEliminated()` returning `false`
+    - **Expected output**: Returns `false`
+
+- **TC146: Current eliminated player is eliminated** ( :white_check_mark: )
+    - **State of the system**: Current player has been marked eliminated
+    - **Expected output**: Returns `true`
+
+---
+
+### Method under test: `currentPlayerHasWon()`
+
+- **TC147: Current player with forty-one territories has not won** ( :white_check_mark: )
+    - **State of the system**: Current player owns `41` territories
+    - **Expected output**: Returns `false`
+
+- **TC148: Current player with all territories has won** ( :white_check_mark: )
+    - **State of the system**: Current player owns all `42` territories
+    - **Expected output**: Returns `true`
+
+- **TC149: Current player with zero territories has not won** ( :white_check_mark: )
+    - **State of the system**: Current player owns `0` territories and is eliminated
+    - **Expected output**: Returns `false`
+
+---
+
+### Method under test: `advanceToNextActivePlayer()`
+
+- **TC150: Advances from first active player to next active player** ( :white_check_mark: )
+    - **State of the system**: Current player index is `0`; player at index `1` is active
+    - **Expected output**: Returns `true`; current player becomes player at index `1`
+
+- **TC151: Skips one eliminated player** ( :white_check_mark: )
+    - **State of the system**: Current player index is `0`; player at index `1` is eliminated; player at index `2` is active
+    - **Expected output**: Returns `true`; current player becomes player at index `2`
+
+- **TC152: Wraps from last player to first active player** ( :white_check_mark: )
+    - **State of the system**: Current player is the last player; first player is active
+    - **Expected output**: Returns `true`; current player becomes the first player
+
+- **TC153: Wraps and skips eliminated players** ( :white_check_mark: )
+    - **State of the system**: Current player is the last player; first player is eliminated; second player is active
+    - **Expected output**: Returns `true`; current player becomes the second player
+
+- **TC154: Advancing with only one active player is rejected** ( :white_check_mark: )
+    - **State of the system**: Current player is active and every other player is eliminated
+    - **Expected output**: `IllegalStateException` is raised with message `"Cannot advance turns because only one active player remains."`; current player index is unchanged
+
+- **TC155: Advancing with no players registered is rejected** ( :white_check_mark: )
+    - **State of the system**: Player list is empty
+    - **Expected output**: Returns `false`; current player index is unchanged
