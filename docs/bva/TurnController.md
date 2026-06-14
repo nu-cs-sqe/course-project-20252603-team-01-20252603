@@ -40,7 +40,7 @@
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.ALLOWED`; player enters a valid card selection
     - **Expected output**: Controller processes territory and continent armies, prompts for card trade-in, calls `handleCardTradeIn(...)`, and proceeds after the valid trade succeeds
 
-- **TC38: Optional trade-in may be skipped when trade-in is allowed** ( :x: )
+- **TC38: Optional trade-in may be skipped when trade-in is allowed** ( :white_check_mark: )
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.ALLOWED`; player skips card trade-in and `promptChooseCardsToTradeIn()` returns `List.of()`
     - **Expected output**: Controller processes territory and continent armies, prompts for card trade-in once, does not add trade-in armies, and proceeds to reinforcement
 

@@ -348,4 +348,36 @@ public final class TurnControllerTest {
 
         verify(model, view);
     }
+
+    @Test
+    public void handleArmiesToAddWithOptionalTradeInSkipDisplaysAvailableArmies() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        model.addArmiesToCurrentPlayerBasedOnTerritories();
+        expectLastCall().once();
+
+        model.addArmiesToCurrentPlayerBasedOnContinents();
+        expectLastCall().once();
+
+        expect(model.checkCardTradeInPossibility()).andReturn(TradeInPossibility.ALLOWED);
+        expect(model.getCurrentPlayerCards()).andReturn("1: Infantry, 2: Cavalry, 3: Artillery");
+
+        view.displayCurrentPlayerCards("1: Infantry, 2: Cavalry, 3: Artillery");
+        expectLastCall().once();
+
+        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of());
+        expect(model.handleCardTradeIn(List.of())).andReturn(true);
+        expect(model.getCurrentPlayerAvailableArmies()).andReturn("{INFANTRY=5}");
+
+        view.displayCurrentPlayerArmies("{INFANTRY=5}");
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleArmiesToAdd();
+
+        verify(model, view);
+    }
 }
