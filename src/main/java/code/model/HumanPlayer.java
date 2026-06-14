@@ -33,6 +33,8 @@ public class HumanPlayer extends Player {
 
     private static final int FIFTH_CARD_TRADE_IN_BONUS = 12;
 
+    private static final int SIXTH_CARD_TRADE_IN_BONUS = 15;
+
     private final List<Territory> territories;
 
     private final List<RiskCard> availableCards;
@@ -231,6 +233,10 @@ public class HumanPlayer extends Player {
 
         if (numSetsTradedIn == 4) {
             return FIFTH_CARD_TRADE_IN_BONUS;
+        }
+
+        if (numSetsTradedIn == 5) {
+            return SIXTH_CARD_TRADE_IN_BONUS;
         }
 
         return FIRST_CARD_TRADE_IN_BONUS;
