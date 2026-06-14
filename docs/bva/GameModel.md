@@ -573,7 +573,7 @@
     - **State of the system**: Selected defending territory is owned by the current player
     - **Expected output**: `IllegalArgumentException` is raised with message `"Defending territory must be owned by another player."`
 
-- **TC97: Rejects non-adjacent territories** ( :x: )
+- **TC97: Rejects non-adjacent territories** ( :white_check_mark: )
     - **State of the system**: Current player owns the attacking territory and another player owns the defending territory, but the territories are not adjacent
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking and defending territories must be adjacent."`
 
