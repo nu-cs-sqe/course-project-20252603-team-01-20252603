@@ -27,7 +27,18 @@ public class GameController {
         setupController = new SetupController(model, view);
     }
 
+    GameController(
+            final GameModel gameModel,
+            final ConsoleView consoleView,
+            final SetupController setup) {
+        model = gameModel;
+        view = consoleView;
+        setupController = setup;
+    }
+
     public void startGame() {
         setupController.initializeBoard();
+        setupController.initializePlayers();
+        setupController.handleTerritoryClaiming();
     }
 }
