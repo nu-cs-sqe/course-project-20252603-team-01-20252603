@@ -393,7 +393,7 @@
     - **State of the system**: Current player has exactly `4` cards in hand, and at least one three-card subset forms a valid Risk set
     - **Expected output**: Returns `TradeInPossibility.ALLOWED`
 
-- **TC86: Five cards requires a trade-in** ( :x: )
+- **TC86: Five cards requires a trade-in** ( :white_check_mark: )
     - **State of the system**: Current player has exactly `5` cards in hand
     - **Expected output**: Returns `TradeInPossibility.REQUIRED`
 
