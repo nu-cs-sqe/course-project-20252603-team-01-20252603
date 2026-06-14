@@ -119,15 +119,15 @@
     - **State of the system**: Continent contains more than 1 territory; every territory is owned by the queried player
     - **Expected output**: Returns `true`
 
-- **TC27: Multi-territory continent with first territory owned by another player returns false** ( :x: )
+- **TC27: Multi-territory continent with first territory owned by another player returns false** ( :white_check_mark: )
     - **State of the system**: Continent contains more than 1 territory; the first territory is owned by another player
     - **Expected output**: Returns `false`
 
-- **TC28: Multi-territory continent with last territory owned by another player returns false** ( :x: )
+- **TC28: Multi-territory continent with last territory owned by another player returns false** ( :white_check_mark: )
     - **State of the system**: Continent contains more than 1 territory; the last territory is owned by another player
     - **Expected output**: Returns `false`
 
-- **TC29: Multi-territory continent with middle territory owned by another player returns false** ( :x: )
+- **TC29: Multi-territory continent with middle territory owned by another player returns false** ( :white_check_mark: )
     - **State of the system**: Continent contains more than 2 territories; a middle territory is owned by another player
     - **Expected output**: Returns `false`
 
