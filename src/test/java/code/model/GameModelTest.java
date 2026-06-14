@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Tests board initialization behavior for the GameModel class.
@@ -124,6 +125,29 @@ public final class GameModelTest {
         }
     }
 
+    private static final class TrackingTerritory extends Territory {
+
+        private int removeArmiesCallCount;
+
+        private int lastRemovedArmyCount;
+
+        TrackingTerritory(
+                final String territoryName,
+                final Continent continent) {
+            super(territoryName, continent, List.of());
+        }
+
+        @Override
+        public boolean removeArmies(final HashMap<ArmyType, Integer> armiesToRemove) {
+            removeArmiesCallCount++;
+            lastRemovedArmyCount = armiesToRemove.values()
+                    .stream()
+                    .mapToInt(Integer::intValue)
+                    .sum();
+            return super.removeArmies(armiesToRemove);
+        }
+    }
+
     private static final int DIE_ROLL_ONE = 1;
 
     private static final int DIE_ROLL_TWO = 2;
@@ -194,6 +218,19 @@ public final class GameModelTest {
         GameModel secondGameModel = new GameModel();
 
         assertFalse(getDeckSignature(firstGameModel).equals(getDeckSignature(secondGameModel)));
+    }
+
+    @Test
+    public void gameModelWithProvidedRandomShufflesDeckAwayFromFreshDeckOrder() {
+        GameModel gameModel = createGameModel();
+        Deck freshDeck = new Deck();
+        StringBuilder freshDeckSignature = new StringBuilder();
+
+        for (RiskCard card : freshDeck.getCards()) {
+            freshDeckSignature.append(card.getType()).append("|");
+        }
+
+        assertNotEquals(freshDeckSignature.toString(), getDeckSignature(gameModel));
     }
 
     @Test
@@ -2331,6 +2368,68 @@ public final class GameModelTest {
     }
 
     @Test
+    public void executeBattleAndReturnWinnerZeroAttackerLossesDoesNotCallAttackerRemoval() {
+        GameModel gameModel = createGameModelWithDiceRolls(DIE_ROLL_SIX, DIE_ROLL_THREE);
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player attackerOwner = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player defenderOwner = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        Continent continent = new Continent("Test Continent", FIVE_ARMIES);
+        TrackingTerritory attackingTerritory = new TrackingTerritory("Source", continent);
+        TrackingTerritory defendingTerritory = new TrackingTerritory("Destination", continent);
+        attackingTerritory.addAdjacentTerritory(defendingTerritory);
+        defendingTerritory.addAdjacentTerritory(attackingTerritory);
+        attackingTerritory.setOwner(attackerOwner);
+        defendingTerritory.setOwner(defenderOwner);
+        attackingTerritory.placeArmies(createInfantryPieces(TWO_ARMIES));
+        defendingTerritory.placeArmies(createInfantryPieces(ONE_ARMY));
+
+        List<Territory> territories = getTerritories(gameModel);
+        territories.clear();
+        territories.add(attackingTerritory);
+        territories.add(defendingTerritory);
+
+        gameModel.executeBattleAndReturnWinner("Source", "Destination", ONE_ARMY, ONE_ARMY);
+
+        assertEquals(ZERO_ARMIES, attackingTerritory.removeArmiesCallCount);
+        assertEquals(ONE_ARMY, defendingTerritory.removeArmiesCallCount);
+        assertEquals(ONE_ARMY, defendingTerritory.lastRemovedArmyCount);
+    }
+
+    @Test
+    public void executeBattleAndReturnWinnerZeroDefenderLossesDoesNotCallDefenderRemoval() {
+        GameModel gameModel = createGameModelWithDiceRolls(DIE_ROLL_ONE, DIE_ROLL_SIX);
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player attackerOwner = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player defenderOwner = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        Continent continent = new Continent("Test Continent", FIVE_ARMIES);
+        TrackingTerritory attackingTerritory = new TrackingTerritory("Source", continent);
+        TrackingTerritory defendingTerritory = new TrackingTerritory("Destination", continent);
+        attackingTerritory.addAdjacentTerritory(defendingTerritory);
+        defendingTerritory.addAdjacentTerritory(attackingTerritory);
+        attackingTerritory.setOwner(attackerOwner);
+        defendingTerritory.setOwner(defenderOwner);
+        attackingTerritory.placeArmies(createInfantryPieces(TWO_ARMIES));
+        defendingTerritory.placeArmies(createInfantryPieces(ONE_ARMY));
+
+        List<Territory> territories = getTerritories(gameModel);
+        territories.clear();
+        territories.add(attackingTerritory);
+        territories.add(defendingTerritory);
+
+        gameModel.executeBattleAndReturnWinner("Source", "Destination", ONE_ARMY, ONE_ARMY);
+
+        assertEquals(ONE_ARMY, attackingTerritory.removeArmiesCallCount);
+        assertEquals(ONE_ARMY, attackingTerritory.lastRemovedArmyCount);
+        assertEquals(ZERO_ARMIES, defendingTerritory.removeArmiesCallCount);
+    }
+
+    @Test
     public void executeBattleAndReturnWinnerReportsAttackerDiceSortedDescending() {
         GameModel gameModel = createGameModelWithDiceRolls(
                 DIE_ROLL_TWO,
@@ -3459,6 +3558,25 @@ public final class GameModelTest {
         assertTrue(secondTrade);
         assertEquals(ZERO_INFANTRY, player.getCardCount());
         assertTrue(player.getAvailableArmies().contains("INFANTRY=45"));
+    }
+
+    @Test
+    public void handleCardTradeInWithValidSetAddsCardsToDiscardPile() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        addValidTradeInSet(player);
+
+        boolean tradedIn = gameModel.handleCardTradeIn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX));
+
+        assertTrue(tradedIn);
+        assertEquals(THREE_ARMIES, gameModel.getDeckDiscardPileSize());
     }
 
     @Test

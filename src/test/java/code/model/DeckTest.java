@@ -29,6 +29,10 @@ public final class DeckTest {
 
     private static final int FOUR_CARDS = 4;
 
+    private static final int FIVE_CARDS = 5;
+
+    private static final int SHUFFLE_RETRY_COUNT = 12;
+
     @Test
     public void freshDeckContainsFortyFourCards() {
         Deck deck = new Deck();
@@ -128,6 +132,21 @@ public final class DeckTest {
         assertNotNull(drawnCard);
         assertEquals(TOTAL_CARD_COUNT - 1, deck.size());
         assertEquals(0, deck.getDiscardPileSize());
+    }
+
+    @Test
+    public void drawCardFromNonEmptyDeckLeavesDiscardPileUntouched() {
+        Deck deck = new Deck();
+        RiskCard discardedCard = deck.drawCard();
+
+        deck.discardCards(List.of(discardedCard));
+        int drawPileSizeBeforeDraw = deck.size();
+
+        RiskCard drawnCard = deck.drawCard();
+
+        assertNotNull(drawnCard);
+        assertEquals(drawPileSizeBeforeDraw - 1, deck.size());
+        assertEquals(1, deck.getDiscardPileSize());
     }
 
     @Test
@@ -285,6 +304,34 @@ public final class DeckTest {
 
         assertEquals(THREE_CARDS, deck.size());
         assertEquals(0, deck.getDiscardPileSize());
+    }
+
+    @Test
+    public void reinitializeDrawPileFromDiscardPileEventuallyChangesDiscardOrder() {
+        boolean observedDifferentOrder = false;
+
+        for (int attempt = 0; attempt < SHUFFLE_RETRY_COUNT; attempt++) {
+            Deck deck = new Deck();
+            List<RiskCard> discardedCards = List.of(
+                    deck.drawCard(),
+                    deck.drawCard(),
+                    deck.drawCard(),
+                    deck.drawCard(),
+                    deck.drawCard());
+
+            deck.discardCards(discardedCards);
+            for (int cardIndex = 0; cardIndex < TOTAL_CARD_COUNT - FIVE_CARDS; cardIndex++) {
+                deck.drawCard();
+            }
+
+            deck.reinitializeDrawPileFromDiscardPile();
+            if (!discardedCards.equals(deck.getCards())) {
+                observedDifferentOrder = true;
+                break;
+            }
+        }
+
+        assertTrue(observedDifferentOrder);
     }
 
     @Test

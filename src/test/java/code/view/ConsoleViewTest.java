@@ -429,6 +429,20 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptTerritoriesToAttackPrintsBothPrompts() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska\nAlberta\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptTerritoriesToAttack();
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("attacking territory"));
+        assertTrue(displayedText.contains("defending territory"));
+    }
+
+    @Test
     public void promptTerritoriesToAttackReturnsMultiWordTerritoryNames() {
         ConsoleView view = createViewWithInput(
                 "Western United States\nEastern United States\n");
@@ -467,6 +481,20 @@ public final class ConsoleViewTest {
 
         assertEquals(FIRST_CARD_INDEX, diceCounts.get(0));
         assertEquals(FIRST_CARD_INDEX, diceCounts.get(1));
+    }
+
+    @Test
+    public void promptNumberOfDicePrintsBothPrompts() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("1\n1\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptNumberOfDice("Attacker", "Defender");
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Attacker"));
+        assertTrue(displayedText.contains("Defender"));
     }
 
     @Test
@@ -685,6 +713,18 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptAttackChoicePrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("yes\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptAttackChoice();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("attack? (yes/no)"));
+    }
+
+    @Test
     public void promptAttackChoiceNoReturnsNo() {
         ConsoleView view = createViewWithInput("no\n");
 
@@ -709,6 +749,20 @@ public final class ConsoleViewTest {
         String armyCount = view.promptCaptureArmyCount("Alaska", "Alberta");
 
         assertEquals("0", armyCount);
+    }
+
+    @Test
+    public void promptCaptureArmyCountPrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("1\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptCaptureArmyCount("Alaska", "Alberta");
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Alaska"));
+        assertTrue(displayedText.contains("Alberta"));
     }
 
     @Test
