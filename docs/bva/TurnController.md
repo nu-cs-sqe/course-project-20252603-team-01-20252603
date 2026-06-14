@@ -116,11 +116,11 @@
     - **State of the system**: `promptAttackChoice()` returns `"maybe"`, then `"no"`
     - **Expected output**: Controller displays `"Invalid attack choice."`, re-prompts, then ends attack phase without executing battle
 
-- **TC56: Valid attack without capture asks whether to attack again and awards no card**
+- **TC56: Valid attack without capture asks whether to attack again and awards no card** ( :white_check_mark: )
     - **State of the system**: Player chooses to attack; battle resolves; `isTerritoryCaptured(defender)` returns `false`; player then chooses not to attack again
     - **Expected output**: Controller displays battle result, does not prompt for capture movement, and calls `awardRiskCardIfCaptured(false)`
 
-- **TC57: Captured territory prompts for movement and captures territory**
+- **TC57: Captured territory prompts for movement and captures territory** ( :white_check_mark: )
     - **State of the system**: Battle resolves with captured defending territory; player enters valid capture movement count
     - **Expected output**: Controller validates and executes capture movement, displays captured-territory message, and tracks that a territory was captured this phase
 
