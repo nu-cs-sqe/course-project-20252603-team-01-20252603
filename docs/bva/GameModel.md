@@ -585,7 +585,7 @@
     - **State of the system**: The same territory name is passed as both the attacking and defending territory
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking and defending territories must be different territories."`
 
-- **TC100: Rejects unknown attacking territory name** ( :x: )
+- **TC100: Rejects unknown attacking territory name** ( :white_check_mark: )
     - **State of the system**: `attackerTerritoryName` does not match any territory on the board
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking territory must exist on the board."`
 
