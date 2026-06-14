@@ -231,6 +231,7 @@ public class HumanPlayer extends Player {
         HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
         armiesToAdd.put(ArmyType.INFANTRY, calculateCardTradeInBonus(numSetsTradedIn));
         addArmies(armiesToAdd);
+        deck.discardCards(selectedCards);
 
         cardIndices.stream()
                 .sorted((firstIndex, secondIndex) -> secondIndex - firstIndex)
