@@ -79,6 +79,10 @@ public class Territory {
         return owner.equals(player);
     }
 
+    Player getOwner() {
+        return owner;
+    }
+
     public boolean placeArmies(final HashMap<ArmyType, Integer> newPieces) {
         for (Map.Entry<ArmyType, Integer> entry : newPieces.entrySet()) {
             ArmyType armyType = entry.getKey();

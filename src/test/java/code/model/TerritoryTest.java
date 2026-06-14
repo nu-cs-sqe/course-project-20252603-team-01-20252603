@@ -139,6 +139,13 @@ public final class TerritoryTest {
     }
 
     @Test
+    public void getOwnerReturnsNullPlayerWhenTerritoryIsUnclaimed() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+
+        assertTrue(territory.getOwner() instanceof NullPlayer);
+    }
+
+    @Test
     public void placeArmiesAddsOneInfantryToEmptyTerritory() {
         Territory territory = createTerritoryWithNoAdjacencies();
         HashMap<ArmyType, Integer> pieces = new HashMap<>();

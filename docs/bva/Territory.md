@@ -85,7 +85,7 @@
 
 ### Method under test: `getOwner()`
 
-- **TC15: Returns NullPlayer when territory is unclaimed**
+- **TC15: Returns NullPlayer when territory is unclaimed** ( :white_check_mark: )
     - **State of the system**: Territory owner has not been set after construction
     - **Expected output**: Returns an instance of `NullPlayer`
 
