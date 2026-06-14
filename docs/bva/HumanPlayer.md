@@ -333,7 +333,7 @@
     - **State of the system**: Human player has zero cards; `addCards(List.of(card))` is called
     - **Expected output**: Player card count becomes `1`; `getAvailableCards()` contains `card`
 
-- **TC71: Add multiple cards to non-empty hand** (:x:)
+- **TC71: Add multiple cards to non-empty hand** (:white_check_mark:)
     - **State of the system**: Human player already has one card; `addCards(List.of(secondCard, thirdCard))` is called
     - **Expected output**: Player card count becomes `3`; all three cards are present in `getAvailableCards()`
 
