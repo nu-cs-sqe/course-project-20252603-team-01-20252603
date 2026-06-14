@@ -377,7 +377,7 @@
     - **State of the system**: Current player has `0`, `1`, or `2` cards in hand
     - **Expected output**: Returns `TradeInPossibility.NOT_ALLOWED`
 
-- **TC82: Three cards with no valid set does not allow a trade-in** ( :x: )
+- **TC82: Three cards with no valid set does not allow a trade-in** ( :white_check_mark: )
     - **State of the system**: Current player has exactly `3` cards in hand, but those cards do not form a valid Risk set
     - **Expected output**: Returns `TradeInPossibility.NOT_ALLOWED`
 
