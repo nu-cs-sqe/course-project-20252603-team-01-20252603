@@ -126,6 +126,21 @@ public final class DeckTest {
     }
 
     @Test
+    public void drawLastCardFromDeckReturnsCardAndLeavesDrawPileEmpty() {
+        Deck deck = new Deck();
+
+        for (int cardIndex = 0; cardIndex < TOTAL_CARD_COUNT - 1; cardIndex++) {
+            deck.drawCard();
+        }
+
+        RiskCard drawnCard = deck.drawCard();
+
+        assertNotNull(drawnCard);
+        assertEquals(0, deck.size());
+        assertTrue(deck.isEmpty());
+    }
+
+    @Test
     public void shuffleKeepsDeckSizeSame() {
         Deck deck = new Deck();
 
