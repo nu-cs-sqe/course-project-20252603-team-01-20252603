@@ -127,7 +127,7 @@
     - **State of the system**: Current player is prompted for fortification and enters `"yes"`; source, destination, and army count form a valid fortify move
     - **Expected output**: Controller displays current player's territories, passes the move to `GameModel.fortifyTerritory(...)`, displays the updated territories, and advances to the next player
 
-- **TC28: Invalid fortify choice re-prompts** ( :x: )
+- **TC28: Invalid fortify choice re-prompts** ( :white_check_mark: )
     - **State of the system**: Current player enters a value other than yes/y/no/n at the fortify choice prompt
     - **Expected output**: Controller displays `"Invalid fortify choice."`; no army movement is attempted; the fortify choice is requested again
 
