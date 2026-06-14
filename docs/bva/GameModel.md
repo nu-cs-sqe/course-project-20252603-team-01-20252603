@@ -705,19 +705,19 @@
     - **State of the system**: Attacking territory has enough armies to move `attackerDiceUsed` while leaving one behind; `armiesToMove = attackerDiceUsed`
     - **Expected output**: Returns `true`
 
-- **TC126: Minimum valid movement uses maximum possible when attacker dice used cannot be fully moved** ( :x: )
+- **TC126: Minimum valid movement uses maximum possible when attacker dice used cannot be fully moved** ( :white_check_mark: )
     - **State of the system**: Attacking territory does not have enough armies to move `attackerDiceUsed` while leaving one behind; `armiesToMove = attacking territory armies - 1`
     - **Expected output**: Returns `true`
 
-- **TC127: Moving zero armies is rejected** ( :x: )
+- **TC127: Moving zero armies is rejected** ( :white_check_mark: )
     - **State of the system**: Captured territory has zero armies; `armiesToMove = 0`
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must move at least one army into a captured territory."`
 
-- **TC128: Moving fewer than required minimum armies is rejected** ( :x: )
+- **TC128: Moving fewer than required minimum armies is rejected** ( :white_check_mark: )
     - **State of the system**: Attacking territory can move at least `attackerDiceUsed`; `armiesToMove < attackerDiceUsed`
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must move at least the number of dice used in the final attack when possible."`
 
-- **TC129: Moving too many armies and leaving attacking territory empty is rejected** ( :x: )
+- **TC129: Moving too many armies and leaving attacking territory empty is rejected** ( :white_check_mark: )
     - **State of the system**: `armiesToMove >= attacking territory army count`
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must leave at least one army behind."`
 
