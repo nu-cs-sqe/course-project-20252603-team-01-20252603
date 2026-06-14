@@ -761,19 +761,19 @@
 
 ### Method under test: `currentPlayerHasValidAttack()`
 
-- **TC137: Returns false when current player has no territories** ( :x: )
+- **TC137: Returns false when current player has no territories** ( :white_check_mark: )
     - **State of the system**: Current player owns zero territories
     - **Expected output**: Returns `false`
 
-- **TC138: Returns false when current player territories all have one army** ( :x: )
+- **TC138: Returns false when current player territories all have one army** ( :white_check_mark: )
     - **State of the system**: Current player owns territories, but none has at least `2` armies
     - **Expected output**: Returns `false`
 
-- **TC139: Returns false when current player has no adjacent enemy territory** ( :x: )
+- **TC139: Returns false when current player has no adjacent enemy territory** ( :white_check_mark: )
     - **State of the system**: Current player owns territories with at least `2` armies, but adjacent territories are also owned by current player or no enemy adjacency exists
     - **Expected output**: Returns `false`
 
-- **TC140: Returns true when current player has an owned territory with at least two armies adjacent to enemy territory** ( :x: )
+- **TC140: Returns true when current player has an owned territory with at least two armies adjacent to enemy territory** ( :white_check_mark: )
     - **State of the system**: Current player owns a territory with at least `2` armies; that territory is adjacent to another player's territory
     - **Expected output**: Returns `true`
 

@@ -858,6 +858,33 @@ public class GameModel {
         return true;
     }
 
+    public boolean currentPlayerHasValidAttack() {
+        Player currentPlayer = players.get(currentPlayerIndex);
+
+        for (Territory territory : territories) {
+            if (territory.isOwnedBy(currentPlayer)
+                    && territory.getArmyCount() >= 2
+                    && hasAdjacentEnemyTerritory(territory, currentPlayer)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasAdjacentEnemyTerritory(
+            final Territory territory,
+            final Player currentPlayer) {
+        for (Territory adjacentTerritory : territory.getAdjacentTerritories()) {
+            if (!adjacentTerritory.isUnclaimed()
+                    && !adjacentTerritory.isOwnedBy(currentPlayer)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private List<Integer> rollDice(final int numDice) {
         List<Integer> dice = new ArrayList<>();
 
