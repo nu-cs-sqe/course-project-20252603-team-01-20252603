@@ -1222,4 +1222,22 @@ public final class GameModelTest {
 
         assertEquals(-1, secondOccurrence);
     }
+
+    @Test
+    public void isDeckEmptyReturnsFalseWhenDeckHasCards() {
+        GameModel gameModel = new GameModel();
+        assertFalse(gameModel.isDeckEmpty());
+    }
+
+    @Test
+    public void initializeContinentsAndTerritoriesInitializesDeck() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        assertEquals(DECK_CARD_COUNT, gameModel.getDeckSize());
+        assertFalse(gameModel.isDeckEmpty());
+    }
+
+
 }
