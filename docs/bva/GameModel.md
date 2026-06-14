@@ -416,7 +416,7 @@
     - **State of the system**: Source and destination are connected through more than one intermediate territory owned by the current player
     - **Expected output**: Returns `true`
 
-- **TC91: Handles circular owned territory structure** ( :x: )
+- **TC91: Handles circular owned territory structure** ( :white_check_mark: )
     - **State of the system**: Current player's owned territories contain a cycle in the adjacency graph
     - **Expected output**: Search terminates and returns whether the destination is reachable without looping forever
 
