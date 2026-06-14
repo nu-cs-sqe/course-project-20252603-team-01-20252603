@@ -1,6 +1,8 @@
 package code.model;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -162,6 +164,32 @@ public final class ContinentTest {
     public void isFullyOwnedByReturnsFalseWhenContinentHasNoTerritories() {
         Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
         Player player = createMock(Player.class);
+
+        assertFalse(continent.isFullyOwnedBy(player));
+    }
+
+    @Test
+    public void isFullyOwnedByReturnsTrueForSingleOwnedTerritory() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Player player = createMock(Player.class);
+        Territory territory = createMock(Territory.class);
+
+        expect(territory.isOwnedBy(player)).andReturn(true);
+        replay(territory);
+        continent.addTerritory(territory);
+
+        assertTrue(continent.isFullyOwnedBy(player));
+    }
+
+    @Test
+    public void isFullyOwnedByReturnsFalseForSingleTerritoryOwnedByAnotherPlayer() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Player player = createMock(Player.class);
+        Territory territory = createMock(Territory.class);
+
+        expect(territory.isOwnedBy(player)).andReturn(false);
+        replay(territory);
+        continent.addTerritory(territory);
 
         assertFalse(continent.isFullyOwnedBy(player));
     }

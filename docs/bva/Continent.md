@@ -103,15 +103,15 @@
 
 ### Method under test: `isFullyOwnedBy(Player player)`
 
-- **TC23: Empty continent is not fully owned by player** ( :x: )
+- **TC23: Empty continent is not fully owned by player** ( :white_check_mark: )
     - **State of the system**: Continent has no territories added yet; queried with a real player
     - **Expected output**: Returns `false`
 
-- **TC24: Single-territory continent owned by player is fully owned** ( :x: )
+- **TC24: Single-territory continent owned by player is fully owned** ( :white_check_mark: )
     - **State of the system**: Continent contains exactly 1 territory; that territory is owned by the queried player
     - **Expected output**: Returns `true`
 
-- **TC25: Single-territory continent owned by another player is not fully owned** ( :x: )
+- **TC25: Single-territory continent owned by another player is not fully owned** ( :white_check_mark: )
     - **State of the system**: Continent contains exactly 1 territory; that territory is owned by a different player
     - **Expected output**: Returns `false`
 

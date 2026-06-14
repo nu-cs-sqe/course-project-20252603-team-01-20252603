@@ -46,7 +46,8 @@ public final class Continent {
     }
 
     public boolean isFullyOwnedBy(final Player player) {
-        return !territories.isEmpty();
+        return !territories.isEmpty()
+                && territories.stream().allMatch(territory -> territory.isOwnedBy(player));
     }
 
     private void validateName(final String continentName) {
