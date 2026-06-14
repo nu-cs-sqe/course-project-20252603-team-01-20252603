@@ -726,4 +726,19 @@ public final class HumanPlayerTest {
                 "INFANTRY=" + FOUR_CARD_TRADE_IN_ARMIES));
     }
 
+    @Test
+    public void tradeCardsAndAddArmiesWithTwoMatchingAndOneDifferentCardReturnsFalse() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+
+        boolean traded = player.tradeCardsAndAddArmies(List.of(1, 2, 3), new Deck(), 0);
+
+        assertFalse(traded);
+        assertEquals(3, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
 }
