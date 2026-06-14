@@ -68,6 +68,6 @@
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.REQUIRED`; player enters a numeric card selection that `handleCardTradeIn(...)` rejects
     - **Expected output**: Error message is displayed; controller re-prompts and does not proceed until a valid trade is completed
 
-- **TC45: Updated available armies are displayed after armies-to-add phase** ( :x: )
+- **TC45: Updated available armies are displayed after armies-to-add phase** ( :white_check_mark: )
     - **State of the system**: Territory, continent, and optional card trade-in processing are complete
     - **Expected output**: Controller displays the current player's available armies before reinforcement placement begins

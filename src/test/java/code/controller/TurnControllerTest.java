@@ -596,4 +596,29 @@ public final class TurnControllerTest {
 
         verify(model, view);
     }
+
+    @Test
+    public void handleArmiesToAddDisplaysUpdatedAvailableArmiesAfterProcessing() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        model.addArmiesToCurrentPlayerBasedOnTerritories();
+        expectLastCall().once();
+
+        model.addArmiesToCurrentPlayerBasedOnContinents();
+        expectLastCall().once();
+
+        expect(model.checkCardTradeInPossibility()).andReturn(TradeInPossibility.NOT_ALLOWED);
+        expect(model.getCurrentPlayerAvailableArmies()).andReturn("{INFANTRY=5}");
+
+        view.displayCurrentPlayerArmies("{INFANTRY=5}");
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleArmiesToAdd();
+
+        verify(model, view);
+    }
 }
