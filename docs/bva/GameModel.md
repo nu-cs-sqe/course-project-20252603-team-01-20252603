@@ -581,7 +581,7 @@
     - **State of the system**: Current player owns the attacking territory, but it has exactly `1` army; defending territory is adjacent and enemy-owned
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking territory must have at least 2 armies."`
 
-- **TC99: Rejects same attacking and defending territory** ( :x: )
+- **TC99: Rejects same attacking and defending territory** ( :white_check_mark: )
     - **State of the system**: The same territory name is passed as both the attacking and defending territory
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacking and defending territories must be different territories."`
 
