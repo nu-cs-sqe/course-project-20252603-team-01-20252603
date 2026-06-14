@@ -113,6 +113,47 @@ public final class TurnControllerTest {
     }
 
     @Test
+    public void runPlayerTurnDoesNotAdvanceCurrentPlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        model.addArmiesToCurrentPlayerBasedOnTerritories();
+        expectLastCall().once();
+        model.addArmiesToCurrentPlayerBasedOnContinents();
+        expectLastCall().once();
+        expect(model.checkCardTradeInPossibility()).andReturn(TradeInPossibility.NOT_ALLOWED);
+        expect(model.getCurrentPlayerAvailableArmies()).andReturn("0 Infantry");
+        view.displayCurrentPlayerArmies("0 Infantry");
+        expectLastCall().once();
+
+        expect(model.currentPlayerHasAvailableArmies()).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+        expect(model.currentPlayerHasValidAttack()).andReturn(false);
+        view.displayNoValidAttacks();
+        expectLastCall().once();
+        expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+        expect(view.promptFortifyChoice()).andReturn("no");
+
+        replay(model, view);
+
+        controller.runPlayerTurn();
+
+        verify(model, view);
+    }
+
+    @Test
     public void handleReinforcementStopsWhenNoArmiesAvailable() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
