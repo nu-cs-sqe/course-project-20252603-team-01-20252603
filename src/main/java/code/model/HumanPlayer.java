@@ -25,6 +25,8 @@ public class HumanPlayer extends Player {
 
     private static final int FIRST_CARD_TRADE_IN_BONUS = 4;
 
+    private static final int SECOND_CARD_TRADE_IN_BONUS = 6;
+
     private final List<Territory> territories;
 
     private final List<RiskCard> availableCards;
@@ -198,7 +200,7 @@ public class HumanPlayer extends Player {
         }
 
         HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
-        armiesToAdd.put(ArmyType.INFANTRY, FIRST_CARD_TRADE_IN_BONUS);
+        armiesToAdd.put(ArmyType.INFANTRY, calculateCardTradeInBonus(numSetsTradedIn));
         addArmies(armiesToAdd);
 
         cardIndices.stream()
@@ -206,6 +208,14 @@ public class HumanPlayer extends Player {
                 .forEach(index -> availableCards.remove(index - 1));
 
         return true;
+    }
+
+    private int calculateCardTradeInBonus(final int numSetsTradedIn) {
+        if (numSetsTradedIn == 1) {
+            return SECOND_CARD_TRADE_IN_BONUS;
+        }
+
+        return FIRST_CARD_TRADE_IN_BONUS;
     }
 
     private int calculateArmyValue(final HashMap<ArmyType, Integer> armies) {
