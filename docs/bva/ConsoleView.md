@@ -180,7 +180,7 @@
     - **State of the system**: Current player is prompted for a destination territory and enters `"Alberta"`
     - **Expected output**: Returns `"Alberta"`
 
-- **TC33: Returns multi-word destination territory** ( :x: )
+- **TC33: Returns multi-word destination territory** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for a destination territory and enters `"Western United States"`
     - **Expected output**: Returns `"Western United States"`
 
