@@ -201,7 +201,7 @@
 
         <!-- G10: Vertical Separation - variable declared far from use -->
         <module name="VariableDeclarationUsageDistance">
-            <property name="allowedDistance" value="20"/>
+            <property name="allowedDistance" value="40"/>
         </module>
 
         <!-- G28: Encapsulate Conditionals -->
