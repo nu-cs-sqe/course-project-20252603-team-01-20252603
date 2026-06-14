@@ -261,6 +261,43 @@ public final class GameControllerTest {
         }
     }
 
+    private static final class WinnerAfterThirdTurnGameModel extends GameModel {
+
+        private final List<String> calls;
+
+        private int winnerChecks;
+
+        WinnerAfterThirdTurnGameModel(final List<String> recordedCalls) {
+            super(new Random(0));
+            calls = recordedCalls;
+            winnerChecks = 0;
+        }
+
+        @Override
+        public boolean currentPlayerIsEliminated() {
+            calls.add("check eliminated");
+            return false;
+        }
+
+        @Override
+        public boolean currentPlayerHasWon() {
+            calls.add("check winner");
+            winnerChecks++;
+            return winnerChecks == 3;
+        }
+
+        @Override
+        public boolean advanceToNextActivePlayer() {
+            calls.add("advance");
+            return true;
+        }
+
+        @Override
+        public String getCurrentPlayerName() {
+            return "Player 3";
+        }
+    }
+
     private static final class RecordingConsoleView extends ConsoleView {
 
         private final List<String> calls;
@@ -504,6 +541,39 @@ public final class GameControllerTest {
                         "turn",
                         "check winner",
                         "wrap advance",
+                        "check eliminated",
+                        "turn",
+                        "check winner",
+                        "display winner"),
+                calls);
+    }
+
+    @Test
+    public void startGameContinuesAcrossMultipleNonWinningTurns() {
+        List<String> calls = new ArrayList<>();
+        GameModel model = new WinnerAfterThirdTurnGameModel(calls);
+        ConsoleView view = new RecordingConsoleView(calls);
+        SetupController setupController = new RecordingSetupController(calls);
+        TurnController turnController = new RecordingTurnController(calls);
+        GameController controller = new GameController(
+                model,
+                view,
+                setupController,
+                turnController);
+
+        controller.startGame();
+
+        assertEquals(
+                List.of(
+                        "setup",
+                        "check eliminated",
+                        "turn",
+                        "check winner",
+                        "advance",
+                        "check eliminated",
+                        "turn",
+                        "check winner",
+                        "advance",
                         "check eliminated",
                         "turn",
                         "check winner",

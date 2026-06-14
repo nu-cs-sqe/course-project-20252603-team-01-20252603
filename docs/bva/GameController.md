@@ -35,7 +35,7 @@
     - **State of the system**: Last active player completes a turn without winning; `model.advanceToNextActivePlayer()` wraps to the first active player
     - **Expected output**: Controller delegates advancement to the model and then runs the next active player's turn
 
-- **TC9: Game continues across multiple non-winning turns**
+- **TC9: Game continues across multiple non-winning turns** ( :white_check_mark: )
     - **State of the system**: Two active players complete turns; `model.currentPlayerHasWon()` returns `false` after the first turn and `true` after the second turn
     - **Expected output**: Controller runs two turns, advances once between turns, displays the winner after the second turn, and stops
 
