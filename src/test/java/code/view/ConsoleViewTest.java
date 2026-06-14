@@ -288,6 +288,17 @@ public final class ConsoleViewTest {
         assertTrue(cardIndices.isEmpty());
     }
 
+    @Test
+    public void promptChooseCardsToTradeInReturnsLowInvalidIndexForValidation() {
+        ConsoleView view = createViewWithInput("0 1 2\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertEquals(0, cardIndices.get(0));
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(1));
+        assertEquals(SECOND_CARD_INDEX, cardIndices.get(2));
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 

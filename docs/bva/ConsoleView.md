@@ -137,7 +137,7 @@
     - **State of the system**: Player presses Enter on empty trade-in input
     - **Expected output**: Returns `List.of()`
 
-- **TC26: Returns invalid low index for controller and model validation** ( :x: )
+- **TC26: Returns invalid low index for controller and model validation** ( :white_check_mark: )
     - **State of the system**: Player enters `"0 1 2"`
     - **Expected output**: Returns a list containing `0`, `1`, and `2`
 
