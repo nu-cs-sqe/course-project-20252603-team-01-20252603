@@ -405,6 +405,155 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptTerritoriesToAttackReturnsSingleWordTerritoryNames() {
+        ConsoleView view = createViewWithInput("Alaska\nAlberta\n");
+
+        List<String> territoryChoices = view.promptTerritoriesToAttack();
+
+        assertEquals("Alaska", territoryChoices.get(0));
+        assertEquals("Alberta", territoryChoices.get(1));
+    }
+
+    @Test
+    public void promptTerritoriesToAttackReturnsMultiWordTerritoryNames() {
+        ConsoleView view = createViewWithInput(
+                "Western United States\nEastern United States\n");
+
+        List<String> territoryChoices = view.promptTerritoriesToAttack();
+
+        assertEquals("Western United States", territoryChoices.get(0));
+        assertEquals("Eastern United States", territoryChoices.get(1));
+    }
+
+    @Test
+    public void promptTerritoriesToAttackBlankAttackingTerritoryReprompts() {
+        ConsoleView view = createViewWithInput("\nAlaska\nAlberta\n");
+
+        List<String> territoryChoices = view.promptTerritoriesToAttack();
+
+        assertEquals("Alaska", territoryChoices.get(0));
+        assertEquals("Alberta", territoryChoices.get(1));
+    }
+
+    @Test
+    public void promptTerritoriesToAttackBlankDefendingTerritoryReprompts() {
+        ConsoleView view = createViewWithInput("Alaska\n\nAlberta\n");
+
+        List<String> territoryChoices = view.promptTerritoriesToAttack();
+
+        assertEquals("Alaska", territoryChoices.get(0));
+        assertEquals("Alberta", territoryChoices.get(1));
+    }
+
+    @Test
+    public void promptNumberOfDiceReturnsMinimumValidAttackerAndDefenderDiceCounts() {
+        ConsoleView view = createViewWithInput("1\n1\n");
+
+        List<Integer> diceCounts = view.promptNumberOfDice("Attacker", "Defender");
+
+        assertEquals(FIRST_CARD_INDEX, diceCounts.get(0));
+        assertEquals(FIRST_CARD_INDEX, diceCounts.get(1));
+    }
+
+    @Test
+    public void promptNumberOfDiceReturnsIntermediateValidAttackerAndDefenderDiceCounts() {
+        ConsoleView view = createViewWithInput("2\n1\n");
+
+        List<Integer> diceCounts = view.promptNumberOfDice("Attacker", "Defender");
+
+        assertEquals(SECOND_CARD_INDEX, diceCounts.get(0));
+        assertEquals(FIRST_CARD_INDEX, diceCounts.get(1));
+    }
+
+    @Test
+    public void promptNumberOfDiceReturnsMaximumValidAttackerAndDefenderDiceCounts() {
+        ConsoleView view = createViewWithInput("3\n2\n");
+
+        List<Integer> diceCounts = view.promptNumberOfDice("Attacker", "Defender");
+
+        assertEquals(THREE, diceCounts.get(0));
+        assertEquals(SECOND_CARD_INDEX, diceCounts.get(1));
+    }
+
+    @Test
+    public void promptNumberOfDiceReturnsBelowMinimumAttackerDiceCountForValidation() {
+        ConsoleView view = createViewWithInput("0\n1\n");
+
+        List<Integer> diceCounts = view.promptNumberOfDice("Attacker", "Defender");
+
+        assertEquals(0, diceCounts.get(0));
+        assertEquals(FIRST_CARD_INDEX, diceCounts.get(1));
+    }
+
+    @Test
+    public void promptNumberOfDiceReturnsAboveMaximumAttackerDiceCountForValidation() {
+        ConsoleView view = createViewWithInput("4\n1\n");
+
+        List<Integer> diceCounts = view.promptNumberOfDice("Attacker", "Defender");
+
+        assertEquals(FOUR, diceCounts.get(0));
+        assertEquals(FIRST_CARD_INDEX, diceCounts.get(1));
+    }
+
+    @Test
+    public void promptNumberOfDiceReturnsBelowMinimumDefenderDiceCountForValidation() {
+        ConsoleView view = createViewWithInput("1\n0\n");
+
+        List<Integer> diceCounts = view.promptNumberOfDice("Attacker", "Defender");
+
+        assertEquals(FIRST_CARD_INDEX, diceCounts.get(0));
+        assertEquals(0, diceCounts.get(1));
+    }
+
+    @Test
+    public void promptNumberOfDiceReturnsAboveMaximumDefenderDiceCountForValidation() {
+        ConsoleView view = createViewWithInput("1\n3\n");
+
+        List<Integer> diceCounts = view.promptNumberOfDice("Attacker", "Defender");
+
+        assertEquals(FIRST_CARD_INDEX, diceCounts.get(0));
+        assertEquals(THREE, diceCounts.get(1));
+    }
+
+    @Test
+    public void promptNumberOfDiceReturnsMalformedSentinelForNonNumericAttackerInput() {
+        ConsoleView view = createViewWithInput("one\n");
+
+        List<Integer> diceCounts = view.promptNumberOfDice("Attacker", "Defender");
+
+        assertEquals(List.of(MALFORMED_CARD_INPUT_SENTINEL), diceCounts);
+    }
+
+    @Test
+    public void promptNumberOfDiceReturnsMalformedSentinelForNonNumericDefenderInput() {
+        ConsoleView view = createViewWithInput("1\ntwo\n");
+
+        List<Integer> diceCounts = view.promptNumberOfDice("Attacker", "Defender");
+
+        assertEquals(List.of(MALFORMED_CARD_INPUT_SENTINEL), diceCounts);
+    }
+
+    @Test
+    public void displayBattleResultPrintsBattleResult() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        List<String> battleResult = List.of(
+                "Attacker dice: [6, 5, 2]",
+                "Defender dice: [6, 3]",
+                "Attacker loses 1 army",
+                "Defender loses 1 army",
+                "Attacking territory armies: 4",
+                "Defending territory armies: 2");
+
+        view.displayBattleResult(battleResult);
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        for (String battleResultLine : battleResult) {
+            assertTrue(displayedText.contains(battleResultLine));
+        }
+    }
+
+    @Test
     public void promptFortifyChoiceYesChoiceReturnsChoice() {
         ConsoleView view = createViewWithInput("yes\n");
 

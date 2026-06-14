@@ -11,6 +11,7 @@ import code.model.GameModel;
 import code.view.ConsoleView;
 
 import org.junit.jupiter.api.Test;
+import java.util.Random;
 
 /**
  * Tests game startup behavior for the GameController class.
@@ -32,7 +33,7 @@ public final class GameControllerTest {
 
     @Test
     public void gameControllerConstructsWithInjectedModelAndView() {
-        GameModel model = new GameModel();
+        GameModel model = new GameModel(new Random(0));
         ConsoleView view = createMock(ConsoleView.class);
 
         GameController controller = new GameController(model, view);
@@ -69,7 +70,7 @@ public final class GameControllerTest {
     @Test
     public void startGameInitializesDeck() {
 
-        GameModel model = new GameModel();
+        GameModel model = new GameModel(new Random(0));
 
         ConsoleView view = createMock(ConsoleView.class);
 
@@ -101,7 +102,7 @@ public final class GameControllerTest {
 
     @Test
     public void startGameInitializesBoard() {
-        GameModel model = new GameModel();
+        GameModel model = new GameModel(new Random(0));
         ConsoleView view = new ConsoleView();
         GameController controller = new GameController(model, view);
 
