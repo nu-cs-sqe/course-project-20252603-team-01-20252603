@@ -133,7 +133,7 @@
     - **State of the system**: Territory has at least `1` army; `removeArmies()` is called with `INFANTRY -> -1`
     - **Expected output**: Method returns `false`; territory army count does not change
 
-- **TC24: Remove one army from territory with one army** ( :x: )
+- **TC24: Remove one army from territory with one army** ( :white_check_mark: )
     - **State of the system**: Territory has exactly `1` army; `removeArmies()` is called with `INFANTRY -> 1`
     - **Expected output**: Method returns `true`; territory army count becomes `0`
 
