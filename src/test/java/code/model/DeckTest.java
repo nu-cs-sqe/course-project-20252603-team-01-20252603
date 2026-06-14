@@ -115,6 +115,17 @@ public final class DeckTest {
     }
 
     @Test
+    public void drawCardFromFullDeckReturnsCardAndDecreasesDrawPileSize() {
+        Deck deck = new Deck();
+
+        RiskCard drawnCard = deck.drawCard();
+
+        assertNotNull(drawnCard);
+        assertEquals(TOTAL_CARD_COUNT - 1, deck.size());
+        assertEquals(0, deck.getDiscardPileSize());
+    }
+
+    @Test
     public void shuffleKeepsDeckSizeSame() {
         Deck deck = new Deck();
 

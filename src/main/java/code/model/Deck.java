@@ -41,6 +41,10 @@ public class Deck {
         return discardPile.size();
     }
 
+    public RiskCard drawCard() {
+        return cards.remove(0);
+    }
+
     private void initializeTerritoryCards() {
         Continent continent = new Continent(
                 "Deck Continent",
