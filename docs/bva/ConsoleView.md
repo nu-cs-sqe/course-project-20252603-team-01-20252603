@@ -337,15 +337,15 @@
 
 ### Method under test: `promptCaptureArmyCount(String attackerName, String defenderName)`
 
-- **TC56: Returns zero capture movement count for controller/model validation**
+- **TC56: Returns zero capture movement count for controller/model validation** ( :white_check_mark: )
     - **State of the system**: Player is prompted for capture movement and enters `"0"`
     - **Expected output**: Returns `"0"` so the capture flow can reject moving zero armies
 
-- **TC57: Returns one capture movement count**
+- **TC57: Returns one capture movement count** ( :white_check_mark: )
     - **State of the system**: Player is prompted for capture movement and enters `"1"`
     - **Expected output**: Returns `"1"`
 
-- **TC58: Returns multiple capture movement count**
+- **TC58: Returns multiple capture movement count** ( :white_check_mark: )
     - **State of the system**: Player is prompted for capture movement and enters `"3"`
     - **Expected output**: Returns `"3"`
 

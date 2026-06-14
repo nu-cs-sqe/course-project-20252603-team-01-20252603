@@ -219,6 +219,14 @@ public class ConsoleView {
         return List.of(attackerDice, defenderDice);
     }
 
+    public String promptCaptureArmyCount(
+            final String attackerName,
+            final String defenderName) {
+        output.print("Enter armies to move from " + attackerName + " to " + defenderName + ": ");
+
+        return scanner.nextLine().trim();
+    }
+
     public void displayBattleResult(final List<String> battleResult) {
         for (String battleResultLine : battleResult) {
             output.println(battleResultLine);

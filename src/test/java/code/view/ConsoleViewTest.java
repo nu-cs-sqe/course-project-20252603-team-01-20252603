@@ -688,6 +688,33 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptCaptureArmyCountZeroReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("0\n");
+
+        String armyCount = view.promptCaptureArmyCount("Alaska", "Alberta");
+
+        assertEquals("0", armyCount);
+    }
+
+    @Test
+    public void promptCaptureArmyCountOneReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("1\n");
+
+        String armyCount = view.promptCaptureArmyCount("Alaska", "Alberta");
+
+        assertEquals("1", armyCount);
+    }
+
+    @Test
+    public void promptCaptureArmyCountMultipleReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("3\n");
+
+        String armyCount = view.promptCaptureArmyCount("Alaska", "Alberta");
+
+        assertEquals("3", armyCount);
+    }
+
+    @Test
     public void displayErrorPrintsErrorMessage() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(captured);
