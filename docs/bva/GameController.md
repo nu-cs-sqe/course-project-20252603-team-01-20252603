@@ -19,11 +19,11 @@
     - **State of the system**: First current player already controls all `42` territories before the loop starts
     - **Expected output**: Controller still calls `turnController.runPlayerTurn()` once before calling `model.currentPlayerHasWon()`
 
-- **TC5: Winner after completed turn is displayed and loop stops**
+- **TC5: Winner after completed turn is displayed and loop stops** ( :white_check_mark: )
     - **State of the system**: Active current player completes a turn; `model.currentPlayerHasWon()` returns `true`
     - **Expected output**: Controller calls `view.displayWinner(model.getCurrentPlayerName())` exactly once and does not advance to the next player
 
-- **TC6: No winner after completed turn advances to next active player**
+- **TC6: No winner after completed turn advances to next active player** 
     - **State of the system**: Active current player completes a turn; `model.currentPlayerHasWon()` returns `false`
     - **Expected output**: Controller calls `model.advanceToNextActivePlayer()` and continues the game loop
 

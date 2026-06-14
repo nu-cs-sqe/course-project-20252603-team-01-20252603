@@ -116,6 +116,40 @@ public final class GameControllerTest {
         }
     }
 
+    private static final class WinnerAfterTurnNoAdvanceGameModel extends GameModel {
+
+        private final List<String> calls;
+
+        WinnerAfterTurnNoAdvanceGameModel(final List<String> recordedCalls) {
+            super(new Random(0));
+            calls = recordedCalls;
+        }
+
+        @Override
+        public boolean currentPlayerIsEliminated() {
+            calls.add("check eliminated");
+            return false;
+        }
+
+        @Override
+        public boolean currentPlayerHasWon() {
+            calls.add("check winner");
+            return true;
+        }
+
+        @Override
+        public String getCurrentPlayerName() {
+            calls.add("get winner name");
+            return "Player 1";
+        }
+
+        @Override
+        public boolean advanceToNextActivePlayer() {
+            calls.add("advance");
+            return true;
+        }
+    }
+
     private static final class RecordingConsoleView extends ConsoleView {
 
         private final List<String> calls;
@@ -252,6 +286,32 @@ public final class GameControllerTest {
 
         assertEquals(
                 List.of("setup", "check eliminated", "turn", "check winner", "display winner"),
+                calls);
+    }
+
+    @Test
+    public void startGameDisplaysWinnerAndStopsWithoutAdvancing() {
+        List<String> calls = new ArrayList<>();
+        GameModel model = new WinnerAfterTurnNoAdvanceGameModel(calls);
+        ConsoleView view = new RecordingConsoleView(calls);
+        SetupController setupController = new RecordingSetupController(calls);
+        TurnController turnController = new RecordingTurnController(calls);
+        GameController controller = new GameController(
+                model,
+                view,
+                setupController,
+                turnController);
+
+        controller.startGame();
+
+        assertEquals(
+                List.of(
+                        "setup",
+                        "check eliminated",
+                        "turn",
+                        "check winner",
+                        "get winner name",
+                        "display winner"),
                 calls);
     }
 }
