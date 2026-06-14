@@ -384,7 +384,7 @@
     - **State of the system**: Source territory is owned by current player and has more than one army; destination is owned by another player
     - **Expected output**: Returns `false`; source and destination army counts do not change
 
-- **TC84: Rejects same source and destination territory** ( :x: )
+- **TC84: Rejects same source and destination territory** ( :white_check_mark: )
     - **State of the system**: Current player owns the selected territory with more than one army; the same territory name is passed as source and destination
     - **Expected output**: Returns `false`; territory army count does not change
 
