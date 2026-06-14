@@ -133,7 +133,7 @@
     - **State of the system**: Player enters `"3 1 2"`
     - **Expected output**: Returns a list containing `3`, `1`, and `2`
 
-- **TC25: Returns empty list when player skips trade-in** ( :x: )
+- **TC25: Returns empty list when player skips trade-in** ( :white_check_mark: )
     - **State of the system**: Player presses Enter on empty trade-in input
     - **Expected output**: Returns `List.of()`
 

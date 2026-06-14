@@ -279,6 +279,15 @@ public final class ConsoleViewTest {
         assertEquals(SECOND_CARD_INDEX, cardIndices.get(2));
     }
 
+    @Test
+    public void promptChooseCardsToTradeInWithEmptyInputReturnsEmptyList() {
+        ConsoleView view = createViewWithInput("\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertTrue(cardIndices.isEmpty());
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
