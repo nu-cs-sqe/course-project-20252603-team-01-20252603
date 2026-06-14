@@ -3710,4 +3710,48 @@ public final class GameModelTest {
 
         assertFalse(gameModel.currentPlayerHasWon());
     }
+
+    @Test
+    public void advanceToNextActivePlayerAdvancesFromFirstToSecondPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertTrue(gameModel.advanceToNextActivePlayer());
+        assertEquals("Player 2", gameModel.getCurrentPlayerName());
+    }
+
+    @Test
+    public void advanceToNextActivePlayerSkipsOneEliminatedPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer eliminatedPlayer =
+                (HumanPlayer) gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+        eliminatedPlayer.markEliminated();
+
+        assertTrue(gameModel.advanceToNextActivePlayer());
+        assertEquals("Player 3", gameModel.getCurrentPlayerName());
+    }
+
+    @Test
+    public void advanceToNextActivePlayerWrapsFromLastToFirstPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(2);
+
+        assertTrue(gameModel.advanceToNextActivePlayer());
+        assertEquals("Player 1", gameModel.getCurrentPlayerName());
+    }
 }

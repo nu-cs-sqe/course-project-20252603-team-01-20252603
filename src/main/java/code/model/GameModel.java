@@ -461,6 +461,23 @@ public class GameModel {
         return true;
     }
 
+    public boolean advanceToNextActivePlayer() {
+        if (players.isEmpty()) {
+            return false;
+        }
+
+        for (int checkedPlayers = 0; checkedPlayers < players.size(); checkedPlayers++) {
+            advanceCurrentPlayerIndex();
+
+            if (!players.get(currentPlayerIndex).isEliminated()) {
+                return true;
+            }
+        }
+
+        throw new IllegalStateException(
+                "Cannot advance turns because only one active player remains.");
+    }
+
     public boolean areAllTerritoriesClaimed() {
         return territories.size() == TOTAL_TERRITORY_COUNT
                 && territories.stream().allMatch(territory -> !territory.isUnclaimed());

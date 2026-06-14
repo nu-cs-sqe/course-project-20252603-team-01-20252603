@@ -829,15 +829,15 @@
 
 ### Method under test: `advanceToNextActivePlayer()`
 
-- **TC150: Advances from first active player to next active player**
+- **TC150: Advances from first active player to next active player** ( :white_check_mark: )
     - **State of the system**: Current player index is `0`; player at index `1` is active
     - **Expected output**: Returns `true`; current player becomes player at index `1`
 
-- **TC151: Skips one eliminated player**
+- **TC151: Skips one eliminated player** ( :white_check_mark: )
     - **State of the system**: Current player index is `0`; player at index `1` is eliminated; player at index `2` is active
     - **Expected output**: Returns `true`; current player becomes player at index `2`
 
-- **TC152: Wraps from last player to first active player**
+- **TC152: Wraps from last player to first active player** ( :white_check_mark: )
     - **State of the system**: Current player is the last player; first player is active
     - **Expected output**: Returns `true`; current player becomes the first player
 
