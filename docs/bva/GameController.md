@@ -27,7 +27,7 @@
     - **State of the system**: Active current player completes a turn; `model.currentPlayerHasWon()` returns `false`
     - **Expected output**: Controller calls `model.advanceToNextActivePlayer()` and continues the game loop
 
-- **TC7: Eliminated current player is skipped before running a turn**
+- **TC7: Eliminated current player is skipped before running a turn** ( :white_check_mark: )
     - **State of the system**: `model.currentPlayerIsEliminated()` returns `true` for the current player
     - **Expected output**: Controller calls `model.advanceToNextActivePlayer()` and does not call `turnController.runPlayerTurn()` for that player
 
