@@ -144,6 +144,6 @@
     - **State of the system**: At least one attack captures a territory; player later stops attacking; `awardRiskCardIfCaptured(true)` returns `true`
     - **Expected output**: Controller awards a Risk card at the end of attack phase and displays Risk-card-awarded message
 
-- **TC63: Multiple attacks can occur in one attack phase**
+- **TC63: Multiple attacks can occur in one attack phase** ( :white_check_mark: )
     - **State of the system**: Player chooses to attack, resolves one battle, chooses to attack again, resolves another battle, then stops
     - **Expected output**: Controller executes both battles in sequence and awards at most one Risk card at phase end if at least one territory was captured
