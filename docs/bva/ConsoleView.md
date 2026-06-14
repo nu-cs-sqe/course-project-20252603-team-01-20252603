@@ -257,7 +257,7 @@
     - **State of the system**: Player is prompted separately for attacking and defending territories and enters `"Alaska"` and `"Alberta"`
     - **Expected output**: Returns a list containing `"Alaska"` and `"Alberta"`
 
-- **TC40: Returns multi-word attacking and defending territory names** ( :x: )
+- **TC40: Returns multi-word attacking and defending territory names** ( :white_check_mark: )
     - **State of the system**: Player is prompted separately for attacking and defending territories and enters `"Western United States"` and `"Eastern United States"`
     - **Expected output**: Returns a list containing `"Western United States"` and `"Eastern United States"`
 

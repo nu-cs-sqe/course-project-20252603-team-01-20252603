@@ -414,6 +414,17 @@ public final class ConsoleViewTest {
         assertEquals("Alberta", territoryChoices.get(1));
     }
 
+    @Test
+    public void promptTerritoriesToAttackReturnsMultiWordTerritoryNames() {
+        ConsoleView view = createViewWithInput(
+                "Western United States\nEastern United States\n");
+
+        List<String> territoryChoices = view.promptTerritoriesToAttack();
+
+        assertEquals("Western United States", territoryChoices.get(0));
+        assertEquals("Eastern United States", territoryChoices.get(1));
+    }
+
     public void promptFortifyChoiceYesChoiceReturnsChoice() {
         ConsoleView view = createViewWithInput("yes\n");
 
