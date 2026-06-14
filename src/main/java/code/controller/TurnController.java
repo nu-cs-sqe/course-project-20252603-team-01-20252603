@@ -179,24 +179,36 @@ public class TurnController {
             }
         }
 
-        List<Integer> diceCounts = view.promptNumberOfDice(
-                attackerTerritoryName,
-                defenderTerritoryName);
+        boolean validDice = false;
+        int attackerDice = 0;
+        int defenderDice = 0;
 
-        while (isMalformedDiceInput(diceCounts)) {
-            view.displayError("Invalid dice input.");
-            diceCounts = view.promptNumberOfDice(
+        while (!validDice) {
+            List<Integer> diceCounts = view.promptNumberOfDice(
                     attackerTerritoryName,
                     defenderTerritoryName);
-        }
 
-        int attackerDice = diceCounts.get(ATTACKER_DICE_INDEX);
-        int defenderDice = diceCounts.get(DEFENDER_DICE_INDEX);
-        model.validateNumberOfDice(
-                attackerTerritoryName,
-                defenderTerritoryName,
-                attackerDice,
-                defenderDice);
+            while (isMalformedDiceInput(diceCounts)) {
+                view.displayError("Invalid dice input.");
+                diceCounts = view.promptNumberOfDice(
+                        attackerTerritoryName,
+                        defenderTerritoryName);
+            }
+
+            attackerDice = diceCounts.get(ATTACKER_DICE_INDEX);
+            defenderDice = diceCounts.get(DEFENDER_DICE_INDEX);
+
+            try {
+                model.validateNumberOfDice(
+                        attackerTerritoryName,
+                        defenderTerritoryName,
+                        attackerDice,
+                        defenderDice);
+                validDice = true;
+            } catch (IllegalArgumentException exception) {
+                view.displayError(exception.getMessage());
+            }
+        }
 
         List<String> battleResult = model.executeBattleAndReturnWinner(
                 attackerTerritoryName,
@@ -207,8 +219,6 @@ public class TurnController {
     }
 
     private boolean isMalformedDiceInput(final List<Integer> diceCounts) {
-        return diceCounts.size() != 2
-                || diceCounts.size() == 1
-                && diceCounts.get(0) == MALFORMED_DICE_INPUT_SENTINEL;
+        return diceCounts.size() != 2;
     }
 }

@@ -96,7 +96,7 @@
     - **State of the system**: View returns a dice-count list with fewer or more than two values, then returns valid dice counts
     - **Expected output**: Controller displays `"Invalid dice input."` and re-prompts for dice
 
-- **TC51: Invalid dice count re-prompts for dice** ( :x: )
+- **TC51: Invalid dice count re-prompts for dice** ( :white_check_mark: )
     - **State of the system**: Model raises `IllegalArgumentException` during dice validation, then the player enters valid dice counts
     - **Expected output**: Controller displays the model error message and re-prompts for dice
 
