@@ -89,7 +89,7 @@
     - **State of the system**: Territory owner has not been set after construction
     - **Expected output**: Returns an instance of `NullPlayer`
 
-- **TC16: Returns HumanPlayer after owner is set**
+- **TC16: Returns HumanPlayer after owner is set** ( :white_check_mark: )
     - **State of the system**: `setOwner(playerOne)` has been called
     - **Expected output**: Returns `playerOne`
 
