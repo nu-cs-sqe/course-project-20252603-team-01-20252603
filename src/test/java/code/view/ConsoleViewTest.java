@@ -404,6 +404,7 @@ public final class ConsoleViewTest {
         assertEquals(List.of(MALFORMED_CARD_INPUT_SENTINEL), cardIndices);
     }
 
+    @Test
     public void promptFortifyChoiceYesChoiceReturnsChoice() {
         ConsoleView view = createViewWithInput("yes\n");
 
@@ -591,6 +592,66 @@ public final class ConsoleViewTest {
         view.promptReinforcement();
 
         assertTrue(captured.toString(StandardCharsets.UTF_8).contains("armies"));
+    }
+
+    @Test
+    public void promptFortifyChoicePrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("yes\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptFortifyChoice();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("fortify"));
+    }
+
+    @Test
+    public void promptFortifySourceTerritoryPrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptFortifySourceTerritory();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("source territory"));
+    }
+
+    @Test
+    public void promptFortifyDestinationTerritoryPrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alberta\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptFortifyDestinationTerritory();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("destination territory"));
+    }
+
+    @Test
+    public void promptFortifyArmyCountPrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("1\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptFortifyArmyCount();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("armies to move"));
+    }
+
+    @Test
+    public void promptChooseCardsToTradeInPrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("1 2 3\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptChooseCardsToTradeIn();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("card indices"));
     }
 
     private ConsoleView createViewWithInput(final String input) {
