@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.text.MessageFormat;
+import java.util.stream.Collectors;
 
 public class ConsoleView {
 
@@ -49,9 +50,14 @@ public class ConsoleView {
         output = outputStream;
         messages = ResourceBundle.getBundle("messages", locale);
     }
-
+    private String displayColors(final List<PlayerColor> availableColors) {
+        return availableColors.stream()
+                .filter(color -> color != PlayerColor.UNASSIGNED)
+                .map(color -> message("color." + color.name()))
+                .collect(Collectors.joining(", "));
+    }
     public int promptNumberOfPlayers() {
-        output.println("Enter number of players: ");
+        output.print(message("prompt.numberOfPlayers"));
         return Integer.parseInt(scanner.nextLine().trim());
     }
 
@@ -63,8 +69,16 @@ public class ConsoleView {
     public PlayerColor promptPlayerColor(
             final String playerName,
             final List<PlayerColor> availableColors) {
+        output.println(message("prompt.availableColors", displayColors(availableColors)));
         output.print(message("prompt.playerColor", playerName));
-        return PlayerColor.valueOf(scanner.nextLine().trim().toUpperCase());
+
+        String colorInput = scanner.nextLine().trim().toUpperCase();
+
+        try {
+            return PlayerColor.valueOf(colorInput);
+        } catch (IllegalArgumentException exception) {
+            return PlayerColor.UNASSIGNED;
+        }
     }
 
     public void displayError(final String message) {
