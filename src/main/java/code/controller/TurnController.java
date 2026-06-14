@@ -68,6 +68,34 @@ public class TurnController {
             }
 
             view.displayCurrentPlayerArmies(model.getCurrentPlayerAvailableArmies());
+            return;
+        }
+
+        if (tradeInPossibility == TradeInPossibility.REQUIRED) {
+            view.displayCurrentPlayerCards(model.getCurrentPlayerCards());
+            List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+            while (isMalformedCardTradeInInput(cardIndices)) {
+                view.displayError("Invalid card trade-in input.");
+                cardIndices = view.promptChooseCardsToTradeIn();
+            }
+
+            while (cardIndices.isEmpty() || !model.handleCardTradeIn(cardIndices)) {
+                if (cardIndices.isEmpty()) {
+                    view.displayError("Card trade-in is required.");
+                } else {
+                    view.displayError("Invalid card trade-in selection.");
+                }
+
+                cardIndices = view.promptChooseCardsToTradeIn();
+
+                while (isMalformedCardTradeInInput(cardIndices)) {
+                    view.displayError("Invalid card trade-in input.");
+                    cardIndices = view.promptChooseCardsToTradeIn();
+                }
+            }
+
+            view.displayCurrentPlayerArmies(model.getCurrentPlayerAvailableArmies());
         }
     }
 

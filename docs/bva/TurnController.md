@@ -52,7 +52,7 @@
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.ALLOWED`; player first enters a numeric card selection that `handleCardTradeIn(...)` rejects
     - **Expected output**: Error message is displayed; controller re-prompts for card trade-in and proceeds only after a valid trade or explicit skip
 
-- **TC41: Required trade-in accepts valid card selection** ( :x: )
+- **TC41: Required trade-in accepts valid card selection** ( :white_check_mark: )
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.REQUIRED`; player enters a valid card selection
     - **Expected output**: Controller processes territory and continent armies, requires card trade-in, and proceeds only after a valid trade succeeds
 
