@@ -360,7 +360,7 @@
     - **State of the system**: Current player owns connected source and destination territories; source has more than one army; `armyCount` is `0`
     - **Expected output**: Returns `false`; source and destination army counts do not change
 
-- **TC78: Rejects negative armies moved** ( :x: )
+- **TC78: Rejects negative armies moved** ( :white_check_mark: )
     - **State of the system**: Current player owns connected source and destination territories; source has more than one army; `armyCount` is `-1`
     - **Expected output**: Returns `false`; source and destination army counts do not change
 
