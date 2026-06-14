@@ -233,7 +233,7 @@
     - **State of the system**: Selected cards include two Wild cards
     - **Expected output**: Returns `false`; available armies and card hand are unchanged
 
-- **TC51: First trade-in gives 4 armies** ( :x: )
+- **TC51: First trade-in gives 4 armies** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 0`
     - **Expected output**: Player receives 4 Infantry
 
