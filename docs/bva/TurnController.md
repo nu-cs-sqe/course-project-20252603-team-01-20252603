@@ -136,7 +136,7 @@
     - **State of the system**: Capture succeeds and `handlePlayerElimination(defenderName)` returns `true`
     - **Expected output**: Controller displays player elimination for the defender
 
-- **TC61: Defender not eliminated after capture is not displayed as eliminated**
+- **TC61: Defender not eliminated after capture is not displayed as eliminated** ( :white_check_mark: )
     - **State of the system**: Capture succeeds and `handlePlayerElimination(defenderName)` returns `false`
     - **Expected output**: Controller does not display player elimination
 
