@@ -160,12 +160,24 @@ public class TurnController {
         view.displayCurrentPlayer(model.getCurrentPlayerName());
         view.displayCurrentPlayerClaimingStatus(model.getCurrentPlayerTerritoriesByContinent());
 
-        List<String> territoryChoices = view.promptTerritoriesToAttack();
-        String attackerTerritoryName = territoryChoices.get(ATTACKING_TERRITORY_INDEX);
-        String defenderTerritoryName = territoryChoices.get(DEFENDING_TERRITORY_INDEX);
-        model.validateTerritoriesForAttackAndReturnDefenderName(
-                attackerTerritoryName,
-                defenderTerritoryName);
+        boolean validTerritories = false;
+        String attackerTerritoryName = "";
+        String defenderTerritoryName = "";
+
+        while (!validTerritories) {
+            List<String> territoryChoices = view.promptTerritoriesToAttack();
+            attackerTerritoryName = territoryChoices.get(ATTACKING_TERRITORY_INDEX);
+            defenderTerritoryName = territoryChoices.get(DEFENDING_TERRITORY_INDEX);
+
+            try {
+                model.validateTerritoriesForAttackAndReturnDefenderName(
+                        attackerTerritoryName,
+                        defenderTerritoryName);
+                validTerritories = true;
+            } catch (IllegalArgumentException exception) {
+                view.displayError(exception.getMessage());
+            }
+        }
 
         List<Integer> diceCounts = view.promptNumberOfDice(
                 attackerTerritoryName,

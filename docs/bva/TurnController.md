@@ -80,7 +80,7 @@
     - **State of the system**: Current player selects valid attacking and defending territories; selected dice counts are valid; model returns a battle result
     - **Expected output**: Controller validates territories and dice, executes one battle, displays the battle result, and returns from the attack phase
 
-- **TC47: Invalid attacking territory re-prompts for territories** ( :x: )
+- **TC47: Invalid attacking territory re-prompts for territories** ( :white_check_mark: )
     - **State of the system**: Model raises `IllegalArgumentException` with message `"Current player must own the attacking territory."` during territory validation, then the player enters valid territories
     - **Expected output**: Controller displays the model error message and re-prompts for attacking and defending territories
 
