@@ -397,6 +397,6 @@
 
 ### Method under test: `displayWinner(String playerName)`
 
-- **TC66: Displays winner message**
+- **TC66: Displays winner message** ( :white_check_mark: )
     - **State of the system**: Current player controls all `42` territories after a completed turn
     - **Expected output**: Output contains player name and states that the player won the game
