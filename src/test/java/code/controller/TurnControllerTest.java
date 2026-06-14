@@ -640,6 +640,37 @@ public final class TurnControllerTest {
     }
 
     @Test
+    public void handleAttackPhaseInvalidAttackChoiceReprompts() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(view.promptAttackChoice()).andReturn("maybe");
+        view.displayError("Invalid attack choice.");
+        expectLastCall().once();
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(view.promptAttackChoice()).andReturn("no");
+        expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
     public void handleReinforcementRepromptsAfterMalformedInput() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
