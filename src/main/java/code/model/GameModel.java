@@ -466,6 +466,11 @@ public class GameModel {
             return false;
         }
 
+        if (getActivePlayerCount() <= 1) {
+            throw new IllegalStateException(
+                    "Cannot advance turns because only one active player remains.");
+        }
+
         for (int checkedPlayers = 0; checkedPlayers < players.size(); checkedPlayers++) {
             advanceCurrentPlayerIndex();
 
@@ -474,8 +479,19 @@ public class GameModel {
             }
         }
 
-        throw new IllegalStateException(
-                "Cannot advance turns because only one active player remains.");
+        return false;
+    }
+
+    private int getActivePlayerCount() {
+        int activePlayerCount = 0;
+
+        for (Player player : players) {
+            if (!player.isEliminated()) {
+                activePlayerCount++;
+            }
+        }
+
+        return activePlayerCount;
     }
 
     public boolean areAllTerritoriesClaimed() {

@@ -841,14 +841,14 @@
     - **State of the system**: Current player is the last player; first player is active
     - **Expected output**: Returns `true`; current player becomes the first player
 
-- **TC153: Wraps and skips eliminated players**
+- **TC153: Wraps and skips eliminated players** ( :white_check_mark: )
     - **State of the system**: Current player is the last player; first player is eliminated; second player is active
     - **Expected output**: Returns `true`; current player becomes the second player
 
-- **TC154: Advancing with only one active player is rejected**
+- **TC154: Advancing with only one active player is rejected** ( :white_check_mark: )
     - **State of the system**: Current player is active and every other player is eliminated
     - **Expected output**: `IllegalStateException` is raised with message `"Cannot advance turns because only one active player remains."`; current player index is unchanged
 
-- **TC155: Advancing with no players registered is rejected**
+- **TC155: Advancing with no players registered is rejected** ( :white_check_mark: )
     - **State of the system**: Player list is empty
     - **Expected output**: Returns `false`; current player index is unchanged
