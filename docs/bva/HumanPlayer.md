@@ -229,7 +229,7 @@
     - **State of the system**: Selected cards are Wild, Infantry, Cavalry; `numSetsTradedIn = 0`
     - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
 
-- **TC50: Two wild cards are rejected** ( :x: )
+- **TC50: Two wild cards are rejected** ( :white_check_mark: )
     - **State of the system**: Selected cards include two Wild cards
     - **Expected output**: Returns `false`; available armies and card hand are unchanged
 
