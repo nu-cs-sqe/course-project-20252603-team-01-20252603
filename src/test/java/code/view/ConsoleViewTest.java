@@ -34,6 +34,12 @@ public final class ConsoleViewTest {
 
     private static final int ARTILLERY_INPUT_INDEX = 3;
 
+    private static final int FIRST_CARD_INDEX = 1;
+
+    private static final int SECOND_CARD_INDEX = 2;
+
+    private static final int THIRD_CARD_INDEX = 3;
+
     @Test
     public void promptNumberOfPlayersMinimumPlayerCountReturnsPlayerCount() {
         ConsoleView view = createViewWithInput("3\n");
@@ -249,6 +255,17 @@ public final class ConsoleViewTest {
         List<String> reinforcementInput = view.promptReinforcement();
 
         assertTrue(reinforcementInput.isEmpty());
+    }
+
+    @Test
+    public void promptChooseCardsToTradeInReturnsThreeSelectedCardIndices() {
+        ConsoleView view = createViewWithInput("1 2 3\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(0));
+        assertEquals(SECOND_CARD_INDEX, cardIndices.get(1));
+        assertEquals(THIRD_CARD_INDEX, cardIndices.get(2));
     }
 
     private ConsoleView createViewWithInput(final String input) {
