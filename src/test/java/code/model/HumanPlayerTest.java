@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Collections;
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
@@ -436,6 +437,33 @@ public final class HumanPlayerTest {
         assertTrue(remainingArmies.contains("1"));
         assertTrue(remainingArmies.contains("ARTILLERY"));
         assertTrue(remainingArmies.contains("0"));
+    }
+
+    private Territory createRealTerritory() {
+        Continent continent = new Continent("Asia", FIVE_ARMIES);
+        return new Territory("Japan", continent, Collections.emptyList());
+    }
+
+    @Test
+    public void ownsTerritoryReturnsTrueForAddedRealTerritory() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        Territory territory = createRealTerritory();
+
+        player.addTerritory(territory);
+
+        assertTrue(player.ownsTerritory(territory));
+    }
+
+    @Test
+    public void ownsTerritoryReturnsFalseForNonAddedRealTerritory() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        Continent continent = new Continent("Asia", FIVE_ARMIES);
+        Territory owned = new Territory("Japan", continent, Collections.emptyList());
+        Territory unowned = new Territory("China", continent, Collections.emptyList());
+
+        player.addTerritory(owned);
+
+        assertFalse(player.ownsTerritory(unowned));
     }
 
     @Test
