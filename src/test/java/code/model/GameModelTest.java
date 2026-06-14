@@ -2079,6 +2079,30 @@ public final class GameModelTest {
     }
 
     @Test
+    public void executeBattleAndReturnWinnerReportsAttackerDiceSortedDescending() {
+        GameModel gameModel = createGameModelWithDiceRolls(2, 6, 4, 1);
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        List<String> battleResult = gameModel.executeBattleAndReturnWinner(
+                "Alaska",
+                "Alberta",
+                THREE_ARMIES,
+                ONE_ARMY);
+
+        assertTrue(battleResult.contains("Attacker dice: [6, 4, 2]"));
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = createGameModel();
 

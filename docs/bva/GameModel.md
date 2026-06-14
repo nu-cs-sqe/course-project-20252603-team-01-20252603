@@ -665,7 +665,7 @@
     - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; injected `Random` produces values such that, after sorting, attacker wins one comparison and defender wins one comparison
     - **Expected output**: Each territory loses `1` army; returned battle result reports both losses and updated army counts
 
-- **TC118: Returned attacker dice are sorted from highest to lowest** ( :x: )
+- **TC118: Returned attacker dice are sorted from highest to lowest** ( :white_check_mark: )
     - **State of the system**: Attacker rolls more than one die and the injected `Random` yields attacker dice in a raw order that is not descending
     - **Expected output**: The attacker dice reported in the battle result are sorted from highest to lowest
 
