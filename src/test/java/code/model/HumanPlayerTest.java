@@ -305,6 +305,20 @@ public final class HumanPlayerTest {
     }
 
     @Test
+    public void addCardToNonEmptyHandAddsAnotherRiskCard() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        RiskCard firstCard = createCard(CardType.INFANTRY);
+        RiskCard secondCard = createCard(CardType.CAVALRY);
+
+        player.addCard(firstCard);
+        player.addCard(secondCard);
+
+        assertEquals(SECOND_CARD_INDEX, player.getCardCount());
+        assertTrue(player.getAvailableCards().contains(firstCard));
+        assertTrue(player.getAvailableCards().contains(secondCard));
+    }
+
+    @Test
     public void hasAvailableArmiesReturnsTrueWhenRequiredInfantryIsAvailable() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
         HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();

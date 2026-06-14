@@ -317,7 +317,7 @@
     - **State of the system**: Human player has zero cards; `addCard(card)` is called
     - **Expected output**: Player card count becomes `1`; `getAvailableCards()` contains `card`
 
-- **TC68: Add another Risk card to non-empty hand** (:x:)
+- **TC68: Add another Risk card to non-empty hand** (:white_check_mark:)
     - **State of the system**: Human player already has one card; `addCard(secondCard)` is called
     - **Expected output**: Player card count becomes `2`; both cards are present in `getAvailableCards()`
 
