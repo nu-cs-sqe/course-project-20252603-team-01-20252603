@@ -781,6 +781,51 @@ public final class HumanPlayerTest {
     }
 
     @Test
+    public void tradeCardsAndAddArmiesWithoutCavalryCardReturnsFalse() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.ARTILLERY));
+        player.addCard(createCard(CardType.ARTILLERY));
+
+        boolean traded = tradeFirstThreeCards(player, ZERO_TRADE_SETS);
+
+        assertFalse(traded);
+        assertEquals(THREE_CARDS, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
+    @Test
+    public void tradeCardsAndAddArmiesWithoutArtilleryCardReturnsFalse() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+        player.addCard(createCard(CardType.CAVALRY));
+
+        boolean traded = tradeFirstThreeCards(player, ZERO_TRADE_SETS);
+
+        assertFalse(traded);
+        assertEquals(THREE_CARDS, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
+    @Test
+    public void tradeCardsAndAddArmiesWithoutInfantryCardReturnsFalse() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.CAVALRY));
+        player.addCard(createCard(CardType.ARTILLERY));
+        player.addCard(createCard(CardType.ARTILLERY));
+
+        boolean traded = tradeFirstThreeCards(player, ZERO_TRADE_SETS);
+
+        assertFalse(traded);
+        assertEquals(THREE_CARDS, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
+    @Test
     public void tradeCardsAndAddArmiesWithOneWildAndTwoMatchingCardsAddsFourInfantry() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
 

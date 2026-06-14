@@ -80,6 +80,10 @@ public class Territory {
     }
 
     public boolean placeArmies(final HashMap<ArmyType, Integer> newPieces) {
+        if (newPieces.values().stream().anyMatch(count -> count < 0)) {
+            return false;
+        }
+
         for (Map.Entry<ArmyType, Integer> entry : newPieces.entrySet()) {
             ArmyType armyType = entry.getKey();
             int currentCount = pieces.getOrDefault(armyType, 0);
