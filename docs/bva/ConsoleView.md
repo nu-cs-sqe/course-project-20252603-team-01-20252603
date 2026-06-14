@@ -305,7 +305,7 @@
     - **State of the system**: Player enters `"one"` for attacker dice
     - **Expected output**: Returns `List.of(Integer.MIN_VALUE)` to signal malformed attacker-dice input
 
-- **TC51: Returns non-numeric defender dice input sentinel** ( :x: )
+- **TC51: Returns non-numeric defender dice input sentinel** ( :white_check_mark: )
     - **State of the system**: Player enters `"1"` for attacker dice and `"two"` for defender dice
     - **Expected output**: Returns `List.of(Integer.MIN_VALUE)` to signal malformed defender-dice input
 
