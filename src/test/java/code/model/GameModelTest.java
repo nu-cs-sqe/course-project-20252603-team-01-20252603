@@ -82,6 +82,18 @@ public final class GameModelTest {
 
     private static final int ASIA_TERRITORY_COUNT = 12;
 
+    private static final int DIE_ROLL_ONE = 1;
+
+    private static final int DIE_ROLL_TWO = 2;
+
+    private static final int DIE_ROLL_THREE = 3;
+
+    private static final int DIE_ROLL_FOUR = 4;
+
+    private static final int DIE_ROLL_FIVE = 5;
+
+    private static final int DIE_ROLL_SIX = 6;
+
     private GameModel createGameModel() {
         return new GameModel(new Random(0));
     }
@@ -1531,7 +1543,7 @@ public final class GameModelTest {
     }
 
     @Test
-    public void validateTerritoriesForAttackAndReturnDefenderNameDefendingTerritoryOwnedByCurrentPlayerRaisesException() {
+    public void validateTerritoriesForAttackDefendingTerritoryOwnedByCurrentPlayerRaisesException() {
         GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
@@ -1849,7 +1861,7 @@ public final class GameModelTest {
 
     @Test
     public void executeBattleAndReturnWinnerOneVersusOneAttackerWinRemovesDefendingArmy() {
-        GameModel gameModel = createGameModelWithDiceRolls(6, 3);
+        GameModel gameModel = createGameModelWithDiceRolls(DIE_ROLL_SIX, DIE_ROLL_THREE);
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1882,7 +1894,7 @@ public final class GameModelTest {
 
     @Test
     public void executeBattleAndReturnWinnerOneVersusOneDefenderWinRemovesAttackingArmy() {
-        GameModel gameModel = createGameModelWithDiceRolls(2, 5);
+        GameModel gameModel = createGameModelWithDiceRolls(DIE_ROLL_TWO, DIE_ROLL_FIVE);
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1915,7 +1927,7 @@ public final class GameModelTest {
 
     @Test
     public void executeBattleAndReturnWinnerOneVersusOneTieRemovesAttackingArmy() {
-        GameModel gameModel = createGameModelWithDiceRolls(4, 4);
+        GameModel gameModel = createGameModelWithDiceRolls(DIE_ROLL_FOUR, DIE_ROLL_FOUR);
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1948,7 +1960,10 @@ public final class GameModelTest {
 
     @Test
     public void executeBattleAndReturnWinnerTwoVersusOneComparesOnlyHighestDice() {
-        GameModel gameModel = createGameModelWithDiceRolls(1, 6, 5);
+        GameModel gameModel = createGameModelWithDiceRolls(
+                DIE_ROLL_ONE,
+                DIE_ROLL_SIX,
+                DIE_ROLL_FIVE);
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1981,7 +1996,12 @@ public final class GameModelTest {
 
     @Test
     public void executeBattleAndReturnWinnerThreeVersusTwoDefenderWinsBothRemovesTwoAttackingArmies() {
-        GameModel gameModel = createGameModelWithDiceRolls(5, 3, 1, 6, 4);
+        GameModel gameModel = createGameModelWithDiceRolls(
+                DIE_ROLL_FIVE,
+                DIE_ROLL_THREE,
+                DIE_ROLL_ONE,
+                DIE_ROLL_SIX,
+                DIE_ROLL_FOUR);
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -2014,7 +2034,12 @@ public final class GameModelTest {
 
     @Test
     public void executeBattleAndReturnWinnerThreeVersusTwoAttackerWinsBothRemovesTwoDefendingArmies() {
-        GameModel gameModel = createGameModelWithDiceRolls(6, 5, 1, 4, 3);
+        GameModel gameModel = createGameModelWithDiceRolls(
+                DIE_ROLL_SIX,
+                DIE_ROLL_FIVE,
+                DIE_ROLL_ONE,
+                DIE_ROLL_FOUR,
+                DIE_ROLL_THREE);
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -2047,7 +2072,12 @@ public final class GameModelTest {
 
     @Test
     public void executeBattleAndReturnWinnerThreeVersusTwoSplitLossesRemovesOneArmyFromEachTerritory() {
-        GameModel gameModel = createGameModelWithDiceRolls(6, 2, 1, 5, 4);
+        GameModel gameModel = createGameModelWithDiceRolls(
+                DIE_ROLL_SIX,
+                DIE_ROLL_TWO,
+                DIE_ROLL_ONE,
+                DIE_ROLL_FIVE,
+                DIE_ROLL_FOUR);
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -2080,7 +2110,11 @@ public final class GameModelTest {
 
     @Test
     public void executeBattleAndReturnWinnerReportsAttackerDiceSortedDescending() {
-        GameModel gameModel = createGameModelWithDiceRolls(2, 6, 4, 1);
+        GameModel gameModel = createGameModelWithDiceRolls(
+                DIE_ROLL_TWO,
+                DIE_ROLL_SIX,
+                DIE_ROLL_FOUR,
+                DIE_ROLL_ONE);
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -2104,7 +2138,10 @@ public final class GameModelTest {
 
     @Test
     public void executeBattleAndReturnWinnerReportsDefenderDiceSortedDescending() {
-        GameModel gameModel = createGameModelWithDiceRolls(6, 1, 5);
+        GameModel gameModel = createGameModelWithDiceRolls(
+                DIE_ROLL_SIX,
+                DIE_ROLL_ONE,
+                DIE_ROLL_FIVE);
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -2129,7 +2166,7 @@ public final class GameModelTest {
 
     @Test
     public void executeBattleAndReturnWinnerCaptureFlagFalseWhenDefenderArmiesRemain() {
-        GameModel gameModel = createGameModelWithDiceRolls(6, 3);
+        GameModel gameModel = createGameModelWithDiceRolls(DIE_ROLL_SIX, DIE_ROLL_THREE);
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -2154,7 +2191,7 @@ public final class GameModelTest {
 
     @Test
     public void executeBattleAndReturnWinnerCaptureFlagTrueWhenDefenderLosesLastArmy() {
-        GameModel gameModel = createGameModelWithDiceRolls(6, 3);
+        GameModel gameModel = createGameModelWithDiceRolls(DIE_ROLL_SIX, DIE_ROLL_THREE);
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);

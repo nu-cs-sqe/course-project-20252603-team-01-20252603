@@ -1,6 +1,8 @@
 package code.model;
 
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Collections;
@@ -48,6 +50,10 @@ public class GameModel {
 
     private static final int REQUIRED_TRADE_IN_CARD_COUNT = 5;
 
+    private static final int MAX_ATTACKER_DICE = 3;
+
+    private static final int DIE_SIDE_COUNT = 6;
+
     private final List<Continent> continents;
 
     private final List<Player> players;
@@ -66,6 +72,10 @@ public class GameModel {
 
     private final Random random;
 
+    @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2",
+            justification = "GameModel intentionally stores the random generator to enable unit testing."
+    )
     public GameModel(final Random randomGenerator) {
         continents = new ArrayList<>();
         territories = new ArrayList<>();
@@ -690,7 +700,7 @@ public class GameModel {
                 defenderTerritoryName,
                 "Defending territory must exist on the board.");
 
-        if (attackerNumDice < 1 || attackerNumDice > 3) {
+        if (attackerNumDice < 1 || attackerNumDice > MAX_ATTACKER_DICE) {
             throw new IllegalArgumentException("Attacker must roll between 1 and 3 dice.");
         }
 
@@ -758,7 +768,7 @@ public class GameModel {
         List<Integer> dice = new ArrayList<>();
 
         for (int dieIndex = 0; dieIndex < numDice; dieIndex++) {
-            dice.add(random.nextInt(6) + 1);
+            dice.add(random.nextInt(DIE_SIDE_COUNT) + 1);
         }
 
         dice.sort(Collections.reverseOrder());
