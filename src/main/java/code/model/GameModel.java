@@ -514,6 +514,11 @@ public class GameModel {
         }
     }
 
+    public void addArmiesToCurrentPlayerBasedOnTerritories() {
+        Player player = players.get(currentPlayerIndex);
+        player.addArmiesToAvailableBasedOnTerritories();
+    }
+
     public boolean handleCardTradeIn(final List<Integer> cardIndices) {
         if (cardIndices == null || cardIndices.isEmpty()) {
             return true;
