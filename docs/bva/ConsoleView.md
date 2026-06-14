@@ -200,7 +200,7 @@
     - **State of the system**: Current player is prompted for armies to move and enters `"3"`
     - **Expected output**: Returns `"3"`
 
-- **TC37: Returns negative army count for controller/model validation** ( :x: )
+- **TC37: Returns negative army count for controller/model validation** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for armies to move and enters `"-1"`
     - **Expected output**: Returns `"-1"` so the fortify flow can reject moving a negative number of armies
 
