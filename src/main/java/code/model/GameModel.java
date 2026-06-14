@@ -531,4 +531,12 @@ public class GameModel {
 
         return player.hasAvailableArmies(oneInfantry);
     }
+
+    public boolean areTerritoriesAdjacent(
+            final String territory1Name,
+            final String territory2Name) {
+        Territory t1 = findTerritoryByName(territory1Name);
+        Territory t2 = findTerritoryByName(territory2Name);
+        return t1.getAdjacentTerritories().contains(t2);
+    }
 }

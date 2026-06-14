@@ -99,4 +99,8 @@ public class Territory {
     public Object getContinentName() {
         return continent.getName();
     }
+
+    public int getArmiesOfType(final ArmyType armyType) {
+        return pieces.getOrDefault(armyType, 0);
+    }
 }
