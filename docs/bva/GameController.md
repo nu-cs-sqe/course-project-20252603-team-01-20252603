@@ -31,7 +31,7 @@
     - **State of the system**: `model.currentPlayerIsEliminated()` returns `true` for the current player
     - **Expected output**: Controller calls `model.advanceToNextActivePlayer()` and does not call `turnController.runPlayerTurn()` for that player
 
-- **TC8: Turn order wraps through model advancement**
+- **TC8: Turn order wraps through model advancement** ( :white_check_mark: )
     - **State of the system**: Last active player completes a turn without winning; `model.advanceToNextActivePlayer()` wraps to the first active player
     - **Expected output**: Controller delegates advancement to the model and then runs the next active player's turn
 
