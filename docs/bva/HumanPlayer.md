@@ -325,7 +325,7 @@
 
 ### Method under test: `addCards(List<RiskCard> cardsToAdd)`
 
-- **TC69: Add zero cards to empty hand** (:x:)
+- **TC69: Add zero cards to empty hand** (:white_check_mark:)
     - **State of the system**: Human player has zero cards; `addCards(List.of())` is called
     - **Expected output**: Player card count remains `0`
 
