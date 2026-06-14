@@ -744,6 +744,44 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void displayTerritoryCapturedWithOneMovedArmyPrintsCaptureDetails() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayTerritoryCaptured("Alaska", "Alberta", 1);
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Alaska"));
+        assertTrue(displayedText.contains("Alberta"));
+        assertTrue(displayedText.contains("1"));
+    }
+
+    @Test
+    public void displayTerritoryCapturedWithMultipleMovedArmiesPrintsCaptureDetails() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayTerritoryCaptured("Alaska", "Alberta", THREE);
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Alaska"));
+        assertTrue(displayedText.contains("Alberta"));
+        assertTrue(displayedText.contains(String.valueOf(THREE)));
+    }
+
+    @Test
+    public void displayRiskCardAwardedPrintsPlayerNameAndAwardMessage() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayRiskCardAwarded("Player 1");
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Player 1"));
+        assertTrue(displayedText.contains("Risk card"));
+    }
+
+    @Test
     public void displayErrorPrintsErrorMessage() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(captured);

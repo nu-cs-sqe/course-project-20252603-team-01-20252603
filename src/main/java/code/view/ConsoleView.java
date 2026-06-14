@@ -237,6 +237,18 @@ public class ConsoleView {
         output.println("No valid attacks available.");
     }
 
+    public void displayTerritoryCaptured(
+            final String attackerName,
+            final String defenderName,
+            final int movedArmies) {
+        output.println(attackerName + " captured " + defenderName
+                + " and moved " + movedArmies + " armies.");
+    }
+
+    public void displayRiskCardAwarded(final String playerName) {
+        output.println(playerName + " received a Risk card.");
+    }
+
     private boolean isInteger(final String value) {
         try {
             Integer.parseInt(value);
