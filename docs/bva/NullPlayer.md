@@ -79,7 +79,7 @@
 
 ### Method under test: `removeAllCards()`
 
-- **TC12: Removing all cards is rejected for NullPlayer**
+- **TC12: Removing all cards is rejected for NullPlayer** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `removeAllCards()` called
     - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot transfer cards."`
 

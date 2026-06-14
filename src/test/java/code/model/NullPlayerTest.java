@@ -103,6 +103,17 @@ public final class NullPlayerTest {
         assertEquals("NullPlayer cannot receive cards.", exception.getMessage());
     }
 
+    @Test
+    public void removeAllCardsThrowsUnsupportedOperationException() {
+        NullPlayer player = new NullPlayer();
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                player::removeAllCards);
+
+        assertEquals("NullPlayer cannot transfer cards.", exception.getMessage());
+    }
+
     public void ownsTerritoryUnassignedOwnerReturnsFalse() {
         NullPlayer player = new NullPlayer();
         Continent continent = new Continent("Asia", ASIA_BONUS_ARMIES);

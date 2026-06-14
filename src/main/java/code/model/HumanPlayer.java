@@ -180,6 +180,13 @@ public class HumanPlayer extends Player {
         availableCards.addAll(cardsToAdd);
     }
 
+    @Override
+    public List<RiskCard> removeAllCards() {
+        List<RiskCard> removedCards = new ArrayList<>(availableCards);
+        availableCards.clear();
+        return removedCards;
+    }
+
     int getCardCount() {
         return availableCards.size();
     }

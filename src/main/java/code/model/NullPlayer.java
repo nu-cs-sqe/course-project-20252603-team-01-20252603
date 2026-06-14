@@ -74,4 +74,9 @@ public class NullPlayer extends Player {
     public void addCards(final List<RiskCard> cardsToAdd) {
         throw new UnsupportedOperationException("NullPlayer cannot receive cards.");
     }
+
+    @Override
+    public List<RiskCard> removeAllCards() {
+        throw new UnsupportedOperationException("NullPlayer cannot transfer cards.");
+    }
 }
