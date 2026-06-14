@@ -609,7 +609,7 @@
     - **State of the system**: Attacking territory has exactly `3` armies; defending territory has at least `1` army; `attackerNumDice = 2`; `defenderNumDice = 1`
     - **Expected output**: Returns `true`
 
-- **TC105: Rejects attacker rolling zero dice** ( :x: )
+- **TC105: Rejects attacker rolling zero dice** ( :white_check_mark: )
     - **State of the system**: Attacking territory has at least `2` armies; defending territory has at least `1` army; `attackerNumDice = 0`
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must roll between 1 and 3 dice."`
 
