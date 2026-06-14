@@ -605,7 +605,7 @@
     - **State of the system**: Attacking territory has at least `4` armies; defending territory has at least `2` armies; `attackerNumDice = 3`; `defenderNumDice = 2`
     - **Expected output**: Returns `true`
 
-- **TC104: Attacker may roll two dice when exactly three armies are in the attacking territory** ( :x: )
+- **TC104: Attacker may roll two dice when exactly three armies are in the attacking territory** ( :white_check_mark: )
     - **State of the system**: Attacking territory has exactly `3` armies; defending territory has at least `1` army; `attackerNumDice = 2`; `defenderNumDice = 1`
     - **Expected output**: Returns `true`
 
