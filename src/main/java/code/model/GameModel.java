@@ -499,6 +499,29 @@ public class GameModel {
             final String sourceName,
             final String destinationName,
             final int armyCount) {
+        Territory sourceTerritory = findTerritoryByName(sourceName);
+        Territory destinationTerritory = findTerritoryByName(destinationName);
+        Player currentPlayer = players.get(currentPlayerIndex);
+        HashMap<ArmyType, Integer> piecesToMove = createInfantryPieces(armyCount);
+
+        if (!sourceTerritory.isOwnedBy(currentPlayer)
+                || !destinationTerritory.isOwnedBy(currentPlayer)) {
+            return false;
+        }
+
+        if (armyCount <= 0 || sourceTerritory.getArmyCount() <= armyCount) {
+            return false;
+        }
+
+        if (!sourceTerritory.getAdjacentTerritories().contains(destinationTerritory)) {
+            return false;
+        }
+
+        if (!sourceTerritory.removeArmies(piecesToMove)) {
+            return false;
+        }
+
+        destinationTerritory.addArmies(piecesToMove);
         return true;
     }
 
@@ -526,6 +549,12 @@ public class GameModel {
         pieces.put(ArmyType.INFANTRY, infantry);
         pieces.put(ArmyType.CAVALRY, cavalry);
         pieces.put(ArmyType.ARTILLERY, artillery);
+        return pieces;
+    }
+
+    private HashMap<ArmyType, Integer> createInfantryPieces(final int infantryCount) {
+        HashMap<ArmyType, Integer> pieces = new HashMap<>();
+        pieces.put(ArmyType.INFANTRY, infantryCount);
         return pieces;
     }
 
