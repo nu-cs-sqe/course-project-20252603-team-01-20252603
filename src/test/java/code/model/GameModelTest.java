@@ -59,6 +59,8 @@ public final class GameModelTest {
 
     private static final int FIFTEEN_ARMIES = 15;
 
+    private static final int FOUR_CARD_TRADE_IN_ARMIES = 4;
+
     @Test
     public void deckHasFortyFourCardsAfterBoardInitialization() {
         GameModel gameModel = new GameModel();
@@ -235,6 +237,19 @@ public final class GameModelTest {
         pieces.put(ArmyType.INFANTRY, infantryCount);
 
         return pieces;
+    }
+
+    private RiskCard createCard(final CardType cardType) {
+        if (cardType == CardType.WILD) {
+            return new RiskCard(null, CardType.WILD, true);
+        }
+
+        Territory territory = new Territory(
+                "Test Territory",
+                new Continent("Test Continent", FIVE_ARMIES),
+                List.of());
+
+        return new RiskCard(territory, cardType, false);
     }
 
     @Test
@@ -1176,5 +1191,28 @@ public final class GameModelTest {
         assertTrue(availableArmies.contains("INFANTRY=2"));
         assertTrue(availableArmies.contains("CAVALRY=0"));
         assertTrue(availableArmies.contains("ARTILLERY=0"));
+    }
+
+    @Test
+    public void handleCardTradeInWithEmptyCardSelectionSkipsTradeIn() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer humanPlayer = (HumanPlayer) player;
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+        humanPlayer.addCard(createCard(CardType.INFANTRY));
+        humanPlayer.addCard(createCard(CardType.CAVALRY));
+        humanPlayer.addCard(createCard(CardType.ARTILLERY));
+
+        boolean tradedIn = gameModel.handleCardTradeIn(List.of());
+
+        assertTrue(tradedIn);
+        assertEquals(3, humanPlayer.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+        assertFalse(player.getAvailableArmies().contains(String.valueOf(FOUR_CARD_TRADE_IN_ARMIES)));
     }
 }

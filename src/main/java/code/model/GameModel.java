@@ -55,6 +55,8 @@ public class GameModel {
 
     private int currentPlayerIndex;
 
+    private int numSetsTradedIn;
+
     private final List<Territory> territories;
 
     public GameModel() {
@@ -63,6 +65,7 @@ public class GameModel {
         players = new ArrayList<>();
         deck = new Deck();
         deck.shuffle();
+        numSetsTradedIn = 0;
     }
 
     public void initializeContinentsAndTerritories() {
@@ -507,5 +510,13 @@ public class GameModel {
                         ZERO_ARMIES));
             }
         }
+    }
+
+    public boolean handleCardTradeIn(final List<Integer> cardIndices) {
+        if (cardIndices == null || cardIndices.isEmpty()) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -341,7 +341,7 @@
 
 ### Method under test: `handleCardTradeIn(List<Integer> cardIndices)`
 
-- **TC74: Empty card selection skips card trade-in** ( :x: )
+- **TC74: Empty card selection skips card trade-in** ( :white_check_mark: )
     - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes an empty card index list
     - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand is unchanged; `numSetsTradedIn` remains `0`
 
