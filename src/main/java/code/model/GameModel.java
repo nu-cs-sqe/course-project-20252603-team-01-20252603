@@ -517,6 +517,13 @@ public class GameModel {
             return true;
         }
 
-        return false;
+        Player player = players.get(currentPlayerIndex);
+        boolean tradedIn = player.tradeCardsAndAddArmies(cardIndices, deck, numSetsTradedIn);
+
+        if (tradedIn) {
+            numSetsTradedIn++;
+        }
+
+        return tradedIn;
     }
 }

@@ -1238,4 +1238,34 @@ public final class GameModelTest {
         assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
         assertFalse(player.getAvailableArmies().contains(String.valueOf(FOUR_CARD_TRADE_IN_ARMIES)));
     }
+
+    @Test
+    public void handleCardTradeInWithInvalidCardSelectionReturnsFalseAndDoesNotIncrementTradeCount() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer humanPlayer = (HumanPlayer) player;
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+        humanPlayer.addCard(createCard(CardType.INFANTRY));
+        humanPlayer.addCard(createCard(CardType.INFANTRY));
+        humanPlayer.addCard(createCard(CardType.CAVALRY));
+
+        boolean invalidTradeIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
+
+        assertFalse(invalidTradeIn);
+        assertEquals(3, humanPlayer.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+
+        humanPlayer.addCard(createCard(CardType.ARTILLERY));
+
+        boolean validTradeIn = gameModel.handleCardTradeIn(List.of(1, 3, 4));
+
+        assertTrue(validTradeIn);
+        assertEquals(1, humanPlayer.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=4"));
+    }
 }

@@ -345,11 +345,11 @@
     - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes an empty card index list
     - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand is unchanged; `numSetsTradedIn` remains `0`
 
-- **TC75: `null` card selection skips card trade-in** ( :x: )
+- **TC75: `null` card selection skips card trade-in** ( :white_check_mark: )
     - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes `null` for card indices
     - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand is unchanged; `numSetsTradedIn` remains `0`
 
-- **TC76: Invalid card trade-in returns false and does not increment traded-set count** ( :x: )
+- **TC76: Invalid card trade-in returns false and does not increment traded-set count** ( :white_check_mark: )
     - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes an invalid card selection
     - **Expected output**: Returns `false`; no trade-in armies are added; selected cards remain in hand; `numSetsTradedIn` remains `0`
 
