@@ -95,6 +95,6 @@
 
 ### Method under test: `isEliminated()`
 
-- **TC14: NullPlayer is never treated as eliminated**
+- **TC14: NullPlayer is never treated as eliminated** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `isEliminated()` called
     - **Expected output**: Returns `false`

@@ -84,4 +84,9 @@ public class NullPlayer extends Player {
     public void markEliminated() {
         throw new UnsupportedOperationException("NullPlayer cannot be eliminated.");
     }
+
+    @Override
+    public boolean isEliminated() {
+        return false;
+    }
 }

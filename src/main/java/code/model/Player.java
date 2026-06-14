@@ -61,6 +61,8 @@ public abstract class Player {
 
     public abstract void markEliminated();
 
+    public abstract boolean isEliminated();
+
     @Override
     public String toString() {
         return name + " - " + color;

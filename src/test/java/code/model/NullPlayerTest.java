@@ -125,6 +125,13 @@ public final class NullPlayerTest {
         assertEquals("NullPlayer cannot be eliminated.", exception.getMessage());
     }
 
+    @Test
+    public void isEliminatedReturnsFalse() {
+        NullPlayer player = new NullPlayer();
+
+        assertFalse(player.isEliminated());
+    }
+
     public void ownsTerritoryUnassignedOwnerReturnsFalse() {
         NullPlayer player = new NullPlayer();
         Continent continent = new Continent("Asia", ASIA_BONUS_ARMIES);

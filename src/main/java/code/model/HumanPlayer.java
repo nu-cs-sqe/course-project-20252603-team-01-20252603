@@ -195,6 +195,11 @@ public class HumanPlayer extends Player {
         eliminated = true;
     }
 
+    @Override
+    public boolean isEliminated() {
+        return eliminated;
+    }
+
     int getCardCount() {
         return availableCards.size();
     }
