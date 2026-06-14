@@ -84,6 +84,12 @@ public class ConsoleView {
         output.println("Setup is complete. The game is starting now.");
     }
 
+    public String promptFortifyChoice() {
+        output.print("Do you want to fortify? (yes/no): ");
+
+        return scanner.nextLine().trim();
+    }
+
     public void displayCurrentPlayerArmies(final String availableArmies) {
         output.println(availableArmies);
     }

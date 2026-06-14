@@ -149,6 +149,16 @@ public class SetupController {
         view.displaySetupPhaseComplete();
     }
 
+    public void handleFortifyPhase() {
+        view.displayCurrentPlayer(model.getCurrentPlayerName());
+
+        String fortifyChoice = view.promptFortifyChoice();
+        if (fortifyChoice.equalsIgnoreCase("no")
+                || fortifyChoice.equalsIgnoreCase("n")) {
+            model.advanceCurrentPlayerIndex();
+        }
+    }
+
     private HashMap<ArmyType, Integer> createOneInfantryPiece() {
         HashMap<ArmyType, Integer> pieces = new HashMap<>();
         pieces.put(ArmyType.INFANTRY, SETUP_INFANTRY_COUNT);

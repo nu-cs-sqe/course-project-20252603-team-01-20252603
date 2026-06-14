@@ -958,4 +958,24 @@ public final class SetupControllerTest {
         verify(model, view);
     }
 
+    @Test
+    public void handleFortifyPhasePlayerSkipsFortificationAdvancesCurrentPlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("no");
+        expect(model.advanceCurrentPlayerIndex()).andReturn(true);
+
+        replay(model, view);
+
+        SetupController controller = new SetupController(model, view);
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
 }

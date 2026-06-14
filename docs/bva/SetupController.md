@@ -119,7 +119,7 @@
 
 ### Method under test: `handleFortifyPhase()`
 
-- **TC26: Player skips fortification** ( :x: )
+- **TC26: Player skips fortification** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for fortification and enters `"no"`
     - **Expected output**: No source, destination, or army-count prompts are shown; no territory army counts change; controller advances to the next player
 
