@@ -245,7 +245,7 @@
     - **State of the system**: Valid set selected; `numSetsTradedIn = 2`
     - **Expected output**: Player receives 8 Infantry
 
-- **TC54: Fourth trade-in gives 10 armies** ( :x: )
+- **TC54: Fourth trade-in gives 10 armies** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 3`
     - **Expected output**: Player receives 10 Infantry
 
