@@ -772,6 +772,41 @@ public class GameModel {
         return defendingTerritory.getArmyCount() == 0;
     }
 
+    public boolean validateCaptureMovement(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName,
+            final int armiesToMove,
+            final int attackerDiceUsed) {
+        Territory attackingTerritory = findTerritoryOrThrow(
+                attackerTerritoryName,
+                "Attacking territory must exist on the board.");
+
+        if (!isTerritoryCaptured(defenderTerritoryName)) {
+            throw new IllegalArgumentException(
+                    "Cannot move armies because the defending territory has not been captured.");
+        }
+
+        if (armiesToMove <= ZERO_ARMIES) {
+            throw new IllegalArgumentException(
+                    "Attacker must move at least one army into a captured territory.");
+        }
+
+        if (armiesToMove >= attackingTerritory.getArmyCount()) {
+            throw new IllegalArgumentException(
+                    "Attacker must leave at least one army behind.");
+        }
+
+        int maximumMovableArmies = attackingTerritory.getArmyCount() - 1;
+        int minimumArmiesToMove = Math.min(attackerDiceUsed, maximumMovableArmies);
+
+        if (armiesToMove < minimumArmiesToMove) {
+            throw new IllegalArgumentException(
+                    "Attacker must move at least the number of dice used in the final attack when possible.");
+        }
+
+        return true;
+    }
+
     private List<Integer> rollDice(final int numDice) {
         List<Integer> dice = new ArrayList<>();
 

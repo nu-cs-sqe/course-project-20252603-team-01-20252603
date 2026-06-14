@@ -2229,6 +2229,55 @@ public final class GameModelTest {
     }
 
     @Test
+    public void isTerritoryCapturedReturnsTrueWhenDefendingTerritoryHasZeroArmies() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        assertTrue(gameModel.isTerritoryCaptured("Alberta"));
+    }
+
+    @Test
+    public void isTerritoryCapturedUnknownDefendingTerritoryRaisesException() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> gameModel.isTerritoryCaptured("Unknown Territory"));
+
+        assertEquals("Defending territory must exist on the board.", exception.getMessage());
+    }
+
+    @Test
+    public void validateCaptureMovementMinimumDiceUsedMovementReturnsTrue() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertTrue(gameModel.validateCaptureMovement(
+                "Alaska",
+                "Alberta",
+                TWO_ARMIES,
+                TWO_ARMIES));
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = createGameModel();
 
