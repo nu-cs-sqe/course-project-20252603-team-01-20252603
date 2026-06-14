@@ -62,11 +62,11 @@
 
 ### Method under test: `drawCard()`
 
-- **TC12: Draw one card from a full draw pile**
+- **TC12: Draw one card from a full draw pile** ( :white_check_mark: )
     - **State of the system**: Freshly constructed `Deck`
     - **Expected output**: Returns a non-null `RiskCard`; `size()` decreases from `44` to `43`; `getDiscardPileSize()` remains `0`
 
-- **TC13: Draw the last card from the draw pile**
+- **TC13: Draw the last card from the draw pile** ( :white_check_mark: )
     - **State of the system**: `Deck` has exactly one card remaining in the draw pile and discard pile is empty
     - **Expected output**: Returns a non-null `RiskCard`; `size()` becomes `0`; `isEmpty()` returns `true`
 
