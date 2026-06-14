@@ -63,7 +63,7 @@
 
 ### Method under test: `addCard(RiskCard card)`
 
-- **TC10: Adding a card is rejected for NullPlayer**
+- **TC10: Adding a card is rejected for NullPlayer** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `addCard(card)` called
     - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot receive cards."`
 
