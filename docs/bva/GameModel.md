@@ -368,11 +368,11 @@
     - **State of the system**: Current player owns connected source and destination territories; source has `3` armies; `armyCount` is `3`
     - **Expected output**: Returns `false`; source and destination army counts do not change because at least one army must remain
 
-- **TC80: Rejects moving more armies than source can allow** ( :x: )
+- **TC80: Rejects moving more armies than source can allow** ( :white_check_mark: )
     - **State of the system**: Current player owns connected source and destination territories; source has `3` armies; `armyCount` is `4`
     - **Expected output**: Returns `false`; source and destination army counts do not change
 
-- **TC81: Rejects source with only one army** ( :x: )
+- **TC81: Rejects source with only one army** ( :white_check_mark: )
     - **State of the system**: Current player owns connected source and destination territories; source has exactly `1` army; `armyCount` is `1`
     - **Expected output**: Returns `false`; source and destination army counts do not change
 
