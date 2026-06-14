@@ -329,7 +329,7 @@
     - **State of the system**: Human player has zero cards; `addCards(List.of())` is called
     - **Expected output**: Player card count remains `0`
 
-- **TC70: Add one card to empty hand** (:x:)
+- **TC70: Add one card to empty hand** (:white_check_mark:)
     - **State of the system**: Human player has zero cards; `addCards(List.of(card))` is called
     - **Expected output**: Player card count becomes `1`; `getAvailableCards()` contains `card`
 

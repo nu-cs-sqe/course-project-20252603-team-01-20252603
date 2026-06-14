@@ -328,6 +328,17 @@ public final class HumanPlayerTest {
     }
 
     @Test
+    public void addCardsWithOneCardAddsCardToEmptyHand() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        RiskCard card = createCard(CardType.INFANTRY);
+
+        player.addCards(List.of(card));
+
+        assertEquals(ONE_ARMY, player.getCardCount());
+        assertTrue(player.getAvailableCards().contains(card));
+    }
+
+    @Test
     public void hasAvailableArmiesReturnsTrueWhenRequiredInfantryIsAvailable() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
         HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
