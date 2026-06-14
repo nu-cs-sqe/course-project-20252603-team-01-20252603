@@ -140,7 +140,7 @@
     - **State of the system**: Capture succeeds and `handlePlayerElimination(defenderName)` returns `false`
     - **Expected output**: Controller does not display player elimination
 
-- **TC62: Capturing at least one territory awards one Risk card at phase end**
+- **TC62: Capturing at least one territory awards one Risk card at phase end** ( :white_check_mark: )
     - **State of the system**: At least one attack captures a territory; player later stops attacking; `awardRiskCardIfCaptured(true)` returns `true`
     - **Expected output**: Controller awards a Risk card at the end of attack phase and displays Risk-card-awarded message
 

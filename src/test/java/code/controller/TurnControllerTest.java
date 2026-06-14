@@ -971,6 +971,58 @@ public final class TurnControllerTest {
     }
 
     @Test
+    public void handleAttackPhaseAwardsRiskCardAfterAtLeastOneCapture() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+        List<String> territoryChoices = List.of("Alaska", "Alberta");
+        List<Integer> diceCounts = List.of(ONE_ARMY, ONE_ARMY);
+        List<String> battleResult = List.of("Battle resolved");
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(view.promptAttackChoice()).andReturn("yes");
+        expect(view.promptTerritoriesToAttack()).andReturn(territoryChoices);
+        expect(model.validateTerritoriesForAttackAndReturnDefenderName(
+                "Alaska",
+                "Alberta")).andReturn("Alberta");
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(diceCounts);
+        expect(model.validateNumberOfDice("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(true);
+        expect(model.executeBattleAndReturnWinner("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(battleResult);
+        view.displayBattleResult(battleResult);
+        expectLastCall().once();
+        expect(model.isTerritoryCaptured("Alberta")).andReturn(true);
+        expect(view.promptCaptureArmyCount("Alaska", "Alberta")).andReturn("1");
+        expect(model.captureTerritory("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn("Player 2");
+        view.displayTerritoryCaptured("Alaska", "Alberta", ONE_ARMY);
+        expectLastCall().once();
+        expect(model.handlePlayerElimination("Player 2")).andReturn(false);
+        expect(model.currentPlayerHasValidAttack()).andReturn(false);
+        expect(model.awardRiskCardIfCaptured(true)).andReturn(true);
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayRiskCardAwarded("Player 1");
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
     public void handleReinforcementRepromptsAfterMalformedInput() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
