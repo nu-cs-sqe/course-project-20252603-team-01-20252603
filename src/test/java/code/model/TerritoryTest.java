@@ -309,8 +309,8 @@ public final class TerritoryTest {
         HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
         initialArmies.put(ArmyType.INFANTRY, TWO_INFANTRY);
         HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
-        final int armiesToRemove = 3;
-        armiesToRemove.put(ArmyType.INFANTRY, armiesToRemove);
+        final int armiesToRemoveForTest = 3;
+        armiesToRemove.put(ArmyType.INFANTRY, armiesToRemoveForTest);
 
         territory.addArmies(initialArmies);
         boolean removed = territory.removeArmies(armiesToRemove);
