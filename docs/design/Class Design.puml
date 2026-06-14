@@ -131,6 +131,7 @@ package code.model {
         + handleCardTradeIn(cardIndices : List<Integer>) : boolean
         + getCurrentPlayerCards() : String
         +addArmiesDuringSetup(territoryName: String) : boolean
+        + addArmiesToCurrentPlayerBasedOnTerritories() : void
         + addArmiesToCurrentPlayerBasedOnContinents() : void
         + placeArmiesDuringReinforcement(territoryName : String, pieces : HashMap<ArmyType, Integer>) : boolean
         + currentPlayerHasAvailableArmies() : boolean

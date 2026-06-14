@@ -299,41 +299,69 @@
 
 ---
 
+### Method under test: `addArmiesToCurrentPlayerBasedOnTerritories()`
+
+- **TC65: Current player with 1 territory receives minimum 3 Infantry** ( :x: )
+    - **State of the system**: Current player owns exactly `1` territory and has `0` available Infantry before turn-start territory armies are added
+    - **Expected output**: Current player's available Infantry increases to `3`
+
+- **TC66: Current player with 8 territories still receives minimum 3 Infantry** ( :x: )
+    - **State of the system**: Current player owns exactly `8` territories and has `0` available Infantry before turn-start territory armies are added
+    - **Expected output**: Current player's available Infantry increases to `3`
+
+- **TC67: Current player with 12 territories receives 4 Infantry** ( :x: )
+    - **State of the system**: Current player owns exactly `12` territories and has `0` available Infantry before turn-start territory armies are added
+    - **Expected output**: Current player's available Infantry increases to `4`
+
+- **TC68: Current player with 41 territories receives 13 Infantry** ( :x: )
+    - **State of the system**: Current player owns exactly `41` territories and has `0` available Infantry before turn-start territory armies are added
+    - **Expected output**: Current player's available Infantry increases to `13`
+
+- **TC69: Current player with 0 territories raises eliminated-player exception** ( :x: )
+    - **State of the system**: Current player owns `0` territories and `addArmiesToCurrentPlayerBasedOnTerritories()` is called
+    - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 0 territories and play a turn because they have been eliminated."`; current player's available armies are unchanged
+
+- **TC70: Current player with 42 territories raises already-won exception** ( :x: )
+    - **State of the system**: Current player owns `42` territories and `addArmiesToCurrentPlayerBasedOnTerritories()` is called
+    - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 42 territories and play a turn because they should have already won."`; current player's available armies are unchanged
+
+---
+
 ### Method under test: `addArmiesToCurrentPlayerBasedOnContinents()`
 
-- **TC65: Adds no bonus when current player owns no full continent** ( :white_check_mark: )
+- **TC71: Adds no bonus when current player owns no full continent** ( :white_check_mark: )
     - **State of the system**: Current player owns territories in multiple continents but does not fully own any continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry remains `0`
 
-- **TC66: Adds Australia bonus when current player fully owns Australia** ( :white_check_mark: )
+- **TC72: Adds Australia bonus when current player fully owns Australia** ( :white_check_mark: )
     - **State of the system**: Current player owns all `4` Australia territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `2`
 
-- **TC67: Adds South America bonus when current player fully owns South America** ( :white_check_mark: )
+- **TC73: Adds South America bonus when current player fully owns South America** ( :white_check_mark: )
     - **State of the system**: Current player owns all `4` South America territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `2`
 
-- **TC68: Adds Africa bonus when current player fully owns Africa** ( :white_check_mark: )
+- **TC74: Adds Africa bonus when current player fully owns Africa** ( :white_check_mark: )
     - **State of the system**: Current player owns all `6` Africa territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `3`
 
-- **TC69: Adds Europe bonus when current player fully owns Europe** ( :white_check_mark: )
+- **TC75: Adds Europe bonus when current player fully owns Europe** ( :white_check_mark: )
     - **State of the system**: Current player owns all `7` Europe territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `5`
 
-- **TC70: Adds North America bonus when current player fully owns North America** ( :white_check_mark: )
+- **TC76: Adds North America bonus when current player fully owns North America** ( :white_check_mark: )
     - **State of the system**: Current player owns all `9` North America territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `5`
 
-- **TC71: Adds Asia bonus when current player fully owns Asia** ( :white_check_mark: )
+- **TC77: Adds Asia bonus when current player fully owns Asia** ( :white_check_mark: )
     - **State of the system**: Current player owns all `12` Asia territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `7`
 
-- **TC72: Adds bonuses for multiple fully controlled continents** ( :white_check_mark: )
+- **TC78: Adds bonuses for multiple fully controlled continents** ( :white_check_mark: )
     - **State of the system**: Current player owns all Australia territories and all South America territories; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `4`
 
-- **TC73: Adds bonus only for fully controlled continent when another continent is only partially owned** ( :white_check_mark: )
+- **TC79: Adds bonus only for fully controlled continent when another continent is only partially owned** ( :white_check_mark: )
     - **State of the system**: Current player owns all Australia territories and `3` of South America's `4` territories; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `2`
 
