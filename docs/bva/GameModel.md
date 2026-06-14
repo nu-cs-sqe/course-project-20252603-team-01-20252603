@@ -329,7 +329,7 @@
     - **State of the system**: Current player owns all `12` Asia territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `7`
 
-- **TC72: Adds bonuses for multiple fully controlled continents** ( :x: )
+- **TC72: Adds bonuses for multiple fully controlled continents** ( :white_check_mark: )
     - **State of the system**: Current player owns all Australia territories and all South America territories; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `4`
 
