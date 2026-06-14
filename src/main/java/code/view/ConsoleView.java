@@ -48,7 +48,14 @@ public class ConsoleView {
             final List<PlayerColor> availableColors) {
         output.println("Available colors: " + availableColors);
         output.print("Enter color for " + playerName + ": ");
-        return PlayerColor.valueOf(scanner.nextLine().trim().toUpperCase());
+
+        String colorInput = scanner.nextLine().trim().toUpperCase();
+
+        try {
+            return PlayerColor.valueOf(colorInput);
+        } catch (IllegalArgumentException exception) {
+            return PlayerColor.UNASSIGNED;
+        }
     }
 
     public void displayError(final String message) {

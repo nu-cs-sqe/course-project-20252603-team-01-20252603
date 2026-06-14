@@ -78,6 +78,11 @@ public class SetupController {
             Player player = new NullPlayer();
             while (player instanceof NullPlayer) {
                 PlayerColor playerColor = view.promptPlayerColor(playerName, availableColors);
+                if (playerColor == PlayerColor.UNASSIGNED) {
+                    view.displayError("Invalid color.");
+                    continue;
+                }
+
                 if (!availableColors.contains(playerColor)) {
                     view.displayError("Color already selected.");
                     continue;
