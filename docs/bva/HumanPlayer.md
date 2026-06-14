@@ -305,7 +305,7 @@
     - **State of the system**: Human player is active and `isEliminated()` returns `false`
     - **Expected output**: `isEliminated()` returns `true`
 
-- **TC66: Mark already eliminated player as eliminated again** (:x:)
+- **TC66: Mark already eliminated player as eliminated again** (:white_check_mark:)
     - **State of the system**: `markEliminated()` has already been called once
     - **Expected output**: `isEliminated()` remains `true`; no exception is raised
 
