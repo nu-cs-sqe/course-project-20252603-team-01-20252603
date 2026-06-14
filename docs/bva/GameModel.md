@@ -376,7 +376,7 @@
     - **State of the system**: Current player owns connected source and destination territories; source has exactly `1` army; `armyCount` is `1`
     - **Expected output**: Returns `false`; source and destination army counts do not change
 
-- **TC82: Rejects source not owned by current player** ( :x: )
+- **TC82: Rejects source not owned by current player** ( :white_check_mark: )
     - **State of the system**: Source territory is owned by another player; destination is owned by current player; `armyCount` is positive
     - **Expected output**: Returns `false`; source and destination army counts do not change
 
