@@ -649,7 +649,7 @@
     - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; injected `Random` produces equal attacker and defender dice
     - **Expected output**: Attacking territory loses `1` army because defender wins ties; returned battle result reports the tie outcome and updated army counts
 
-- **TC114: Two-versus-one battle compares only highest dice** ( :x: )
+- **TC114: Two-versus-one battle compares only highest dice** ( :white_check_mark: )
     - **State of the system**: Attacker rolls `2` dice; defender rolls `1` die; injected `Random` produces deterministic dice values
     - **Expected output**: Only the highest attacker die is compared to the defender die; exactly one army total is lost across the two territories
 
