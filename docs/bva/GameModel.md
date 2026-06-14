@@ -356,7 +356,7 @@
     - **State of the system**: Current player owns connected source and destination territories; source has `4` armies; `armyCount` is `3`
     - **Expected output**: Returns `true`; source keeps exactly `1` army; destination gains `3` armies
 
-- **TC77: Rejects zero armies moved** ( :x: )
+- **TC77: Rejects zero armies moved** ( :white_check_mark: )
     - **State of the system**: Current player owns connected source and destination territories; source has more than one army; `armyCount` is `0`
     - **Expected output**: Returns `false`; source and destination army counts do not change
 
