@@ -1,10 +1,10 @@
 package code.model;
 
-import static org.easymock.EasyMock.createMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -12,9 +12,16 @@ import org.junit.jupiter.api.Test;
  */
 public final class RiskCardTest {
 
+    private static final int NORTH_AMERICA_BONUS = 5;
+
+    private Territory createRealTerritory(final String name) {
+        Continent continent = new Continent("North America", NORTH_AMERICA_BONUS);
+        return new Territory(name, continent, Collections.emptyList());
+    }
+
     @Test
     public void nonWildInfantryCardStoresTypeAndTerritory() {
-        Territory alaska = createMock(Territory.class);
+        Territory alaska = createRealTerritory("Alaska");
 
         RiskCard card = new RiskCard(alaska, CardType.INFANTRY, false);
 
@@ -33,7 +40,7 @@ public final class RiskCardTest {
 
     @Test
     public void nonWildCavalryCardStoresType() {
-        Territory alaska = createMock(Territory.class);
+        Territory alaska = createRealTerritory("Alaska");
 
         RiskCard card = new RiskCard(alaska, CardType.CAVALRY, false);
 
@@ -42,7 +49,7 @@ public final class RiskCardTest {
 
     @Test
     public void nonWildArtilleryCardStoresType() {
-        Territory alaska = createMock(Territory.class);
+        Territory alaska = createRealTerritory("Alaska");
 
         RiskCard card = new RiskCard(alaska, CardType.ARTILLERY, false);
 
@@ -51,8 +58,8 @@ public final class RiskCardTest {
 
     @Test
     public void nonWildCardDoesNotMatchDifferentTerritory() {
-        Territory alaska = createMock(Territory.class);
-        Territory brazil = createMock(Territory.class);
+        Territory alaska = createRealTerritory("Alaska");
+        Territory brazil = createRealTerritory("Brazil");
 
         RiskCard card = new RiskCard(alaska, CardType.INFANTRY, false);
 
@@ -61,10 +68,21 @@ public final class RiskCardTest {
 
     @Test
     public void wildCardDoesNotMatchTerritory() {
-        Territory alaska = createMock(Territory.class);
+        Territory alaska = createRealTerritory("Alaska");
 
         RiskCard card = new RiskCard(null, CardType.WILD, true);
 
         assertFalse(card.matchesTerritory(alaska));
+    }
+
+    @Test
+    public void nonWildCardMatchesItsOwnTerritoryByReference() {
+        Territory alaska = createRealTerritory("Alaska");
+        Territory alaskaCopy = createRealTerritory("Alaska");
+
+        RiskCard card = new RiskCard(alaska, CardType.INFANTRY, false);
+
+        assertTrue(card.matchesTerritory(alaska));
+        assertFalse(card.matchesTerritory(alaskaCopy));
     }
 }

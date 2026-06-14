@@ -20,6 +20,8 @@ public final class GameControllerTest {
 
     private static final int DECK_CARD_COUNT = 44;
 
+    private static final int EXPECTED_DECK_SIZE = 44;
+
     @Test
     public void gameControllerConstructsWithDefaultDependencies() {
         new GameController();
@@ -76,5 +78,16 @@ public final class GameControllerTest {
 
         assertFalse(model.isDeckEmpty());
 
+    }
+
+    @Test
+    public void startGameInitializesBoard() {
+        GameModel model = new GameModel();
+        ConsoleView view = new ConsoleView();
+        GameController controller = new GameController(model, view);
+
+        controller.startGame();
+
+        assertEquals(EXPECTED_DECK_SIZE, model.getDeckSize());
     }
 }

@@ -114,7 +114,7 @@ pitest {
     timestampedReports = false
     testSourceSets.set(listOf(sourceSets.test.get()))
     mainSourceSets.set(listOf(sourceSets.main.get()))
-    jvmArgs.set(listOf("-Xmx1024m"))
+    jvmArgs.set(listOf("-Xmx1024m", "--add-opens", "java.base/java.lang=ALL-UNNAMED"))
     useClasspathFile.set(true) //useful with bigger projects on Windows
     fileExtensionsToFilter.addAll("xml")
     exportLineCoverage = true

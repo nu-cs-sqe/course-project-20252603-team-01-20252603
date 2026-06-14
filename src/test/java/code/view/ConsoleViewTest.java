@@ -401,6 +401,88 @@ public final class ConsoleViewTest {
         assertEquals("two", armyCount);
     }
 
+    @Test
+    public void displayErrorPrintsErrorMessage() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayError("Invalid selection.");
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("Invalid selection."));
+    }
+
+    @Test
+    public void promptNumberOfPlayersPrintsPromptTextBeforeReadingInput() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("3\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptNumberOfPlayers();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("number of players"));
+    }
+
+    @Test
+    public void promptPlayerNamePrintsPromptTextContainingPlayerNumber() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alice\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptPlayerName(1);
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("player 1"));
+    }
+
+    @Test
+    public void promptPlayerColorPrintsPromptTextContainingPlayerName() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("RED\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptPlayerColor("Alice", List.of(PlayerColor.values()));
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("Alice"));
+    }
+
+    @Test
+    public void getTerritoryChoiceDuringSetupPrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.getTerritoryChoiceDuringSetup();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("territory"));
+    }
+
+    @Test
+    public void promptCurrentPlayerTerritoryChoicePrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptCurrentPlayerTerritoryChoice();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("territory"));
+    }
+
+    @Test
+    public void promptReinforcementPrintsPromptText() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("Alaska 1 0 0\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptReinforcement();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("armies"));
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
