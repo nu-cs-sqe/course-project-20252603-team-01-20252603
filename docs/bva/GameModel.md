@@ -301,7 +301,7 @@
 
 ### Method under test: `addArmiesToCurrentPlayerBasedOnContinents()`
 
-- **TC65: Adds no bonus when current player owns no full continent** ( :x: )
+- **TC65: Adds no bonus when current player owns no full continent** ( :white_check_mark: )
     - **State of the system**: Current player owns territories in multiple continents but does not fully own any continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry remains `0`
 

@@ -493,4 +493,8 @@ public class GameModel {
 
         return player.hasAvailableArmies(oneInfantry);
     }
+
+    public void addArmiesToCurrentPlayerBasedOnContinents() {
+        // No-op placeholder for initial TDD slice.
+    }
 }

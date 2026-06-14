@@ -931,4 +931,25 @@ public final class GameModelTest {
 
         assertTrue(gameModel.currentPlayerHasAvailableArmies());
     }
+
+    @Test
+    public void addArmiesToCurrentPlayerBasedOnContinentsWithNoFullContinentAddsNoBonus() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Brazil", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("India", createInfantryPieces(ONE_INFANTRY));
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - THREE_ARMIES));
+
+        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
+
+        assertTrue(player.getAvailableArmies().contains("INFANTRY"));
+        assertTrue(player.getAvailableArmies().contains(String.valueOf(ZERO_INFANTRY)));
+    }
 }
