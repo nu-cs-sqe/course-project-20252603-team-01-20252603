@@ -149,6 +149,9 @@ package code.model {
         +addArmiesDuringSetup(territoryName: String) : boolean
         + addArmiesToCurrentPlayerBasedOnTerritories() : void
         + addArmiesToCurrentPlayerBasedOnContinents() : void
+        + currentPlayerIsEliminated() : boolean
+        + currentPlayerHasWon() : boolean
+        + advanceToNextActivePlayer() : boolean
         + placeArmiesDuringReinforcement(territoryName : String, pieces : HashMap<ArmyType, Integer>) : boolean
         + currentPlayerHasAvailableArmies() : boolean
         + validateTerritoriesForAttackAndReturnDefenderName(attackerTerritoryName : String, defenderTerritoryName : String) : String

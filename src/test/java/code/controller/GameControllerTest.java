@@ -1,12 +1,10 @@
 package code.controller;
 
 import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import code.model.GameModel;
 import code.view.ConsoleView;
 
@@ -20,13 +18,9 @@ import java.util.Random;
  */
 public final class GameControllerTest {
 
-    private static final int CONTINENT_COUNT = 6;
-
-    private static final int TERRITORY_COUNT = 42;
-
     private static final int DECK_CARD_COUNT = 44;
 
-    private static final int EXPECTED_DECK_SIZE = 44;
+    private static final int WINNER_FOUND_ON_THIRD_CHECK = 3;
 
     private static final class RecordingSetupController extends SetupController {
 
@@ -40,6 +34,21 @@ public final class GameControllerTest {
         @Override
         public void initializeBoard() {
             calls.add("setup");
+        }
+    }
+
+    private static final class InitializingSetupController extends SetupController {
+
+        private final GameModel model;
+
+        InitializingSetupController(final GameModel gameModel) {
+            super(gameModel, new ConsoleView());
+            model = gameModel;
+        }
+
+        @Override
+        public void initializeBoard() {
+            model.initializeContinentsAndTerritories();
         }
     }
 
@@ -283,7 +292,7 @@ public final class GameControllerTest {
         public boolean currentPlayerHasWon() {
             calls.add("check winner");
             winnerChecks++;
-            return winnerChecks == 3;
+            return winnerChecks == WINNER_FOUND_ON_THIRD_CHECK;
         }
 
         @Override
@@ -394,11 +403,17 @@ public final class GameControllerTest {
     @Test
     public void startGameInitializesDeck() {
 
-        GameModel model = new GameModel(new Random(0));
+        List<String> calls = new ArrayList<>();
 
-        ConsoleView view = createMock(ConsoleView.class);
+        GameModel model = new WinningAfterOneTurnGameModel(calls);
 
-        GameController controller = new GameController(model, view);
+        ConsoleView view = new RecordingConsoleView(calls);
+
+        GameController controller = new GameController(
+                model,
+                view,
+                new RecordingSetupController(calls),
+                new RecordingTurnController(calls));
 
         controller.startGame();
 
@@ -410,29 +425,36 @@ public final class GameControllerTest {
 
     @Test
     public void startGameDelegatesBoardInitializationToSetupController() {
-        GameModel model = createMock(GameModel.class);
-        ConsoleView view = createMock(ConsoleView.class);
+        List<String> calls = new ArrayList<>();
+        GameModel model = new WinningAfterOneTurnGameModel(calls);
+        ConsoleView view = new RecordingConsoleView(calls);
 
-        model.initializeContinentsAndTerritories();
-        expectLastCall().once();
-
-        replay(model, view);
-
-        GameController controller = new GameController(model, view);
+        GameController controller = new GameController(
+                model,
+                view,
+                new RecordingSetupController(calls),
+                new RecordingTurnController(calls));
         controller.startGame();
 
-        verify(model, view);
+        assertEquals("setup", calls.get(0));
     }
 
     @Test
     public void startGameInitializesBoard() {
-        GameModel model = new GameModel(new Random(0));
-        ConsoleView view = new ConsoleView();
-        GameController controller = new GameController(model, view);
+        List<String> calls = new ArrayList<>();
+        GameModel model = new WinningAfterOneTurnGameModel(calls);
+        ConsoleView view = new RecordingConsoleView(calls);
+        GameController controller = new GameController(
+                model,
+                view,
+                new InitializingSetupController(model),
+                new RecordingTurnController(calls));
 
         controller.startGame();
 
-        assertEquals(EXPECTED_DECK_SIZE, model.getDeckSize());
+        String unclaimedTerritories = model.getUnclaimedTerritoriesByContinent();
+        assertTrue(unclaimedTerritories.contains("North America"));
+        assertTrue(unclaimedTerritories.contains("Alaska"));
     }
 
     @Test
