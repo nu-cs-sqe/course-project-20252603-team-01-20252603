@@ -99,3 +99,38 @@
     - **State of the system**: Continent constructed with `name = "Australia"`, `bonusArmies = 2`
     - **Expected output**: `getBonusArmies()` returns `2`
 
+---
+
+### Method under test: `isFullyOwnedBy(Player player)`
+
+- **TC23: Empty continent is not fully owned by player** ( :x: )
+    - **State of the system**: Continent has no territories added yet; queried with a real player
+    - **Expected output**: Returns `false`
+
+- **TC24: Single-territory continent owned by player is fully owned** ( :x: )
+    - **State of the system**: Continent contains exactly 1 territory; that territory is owned by the queried player
+    - **Expected output**: Returns `true`
+
+- **TC25: Single-territory continent owned by another player is not fully owned** ( :x: )
+    - **State of the system**: Continent contains exactly 1 territory; that territory is owned by a different player
+    - **Expected output**: Returns `false`
+
+- **TC26: Multi-territory continent fully owned by player returns true** ( :x: )
+    - **State of the system**: Continent contains more than 1 territory; every territory is owned by the queried player
+    - **Expected output**: Returns `true`
+
+- **TC27: Multi-territory continent with first territory owned by another player returns false** ( :x: )
+    - **State of the system**: Continent contains more than 1 territory; the first territory is owned by another player
+    - **Expected output**: Returns `false`
+
+- **TC28: Multi-territory continent with last territory owned by another player returns false** ( :x: )
+    - **State of the system**: Continent contains more than 1 territory; the last territory is owned by another player
+    - **Expected output**: Returns `false`
+
+- **TC29: Multi-territory continent with middle territory owned by another player returns false** ( :x: )
+    - **State of the system**: Continent contains more than 2 territories; a middle territory is owned by another player
+    - **Expected output**: Returns `false`
+
+- **TC30: Querying with NullPlayer returns false** ( :x: )
+    - **State of the system**: Continent contains territories owned by a real player; queried with `NullPlayer`
+    - **Expected output**: Returns `false`
