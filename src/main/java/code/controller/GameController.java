@@ -42,15 +42,6 @@ public class GameController {
         turnController = turns;
     }
 
-    GameController(
-            final GameModel gameModel,
-            final ConsoleView consoleView,
-            final SetupController setup) {
-        model = gameModel;
-        view = consoleView;
-        setupController = setup;
-    }
-
     public void startGame() {
         setupController.initializeBoard();
 
