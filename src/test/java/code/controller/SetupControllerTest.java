@@ -1219,8 +1219,8 @@ public final class SetupControllerTest {
         expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
         expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
         expect(view.promptFortifyArmyCount()).andReturn("4");
-        final int ARMIES_TO_FORTIFY = 4; 
-        expect(model.fortifyTerritory("Alaska", "Alberta", ARMIES_TO_FORTIFY)).andReturn(false);
+        final int armiesToFortify = 4;
+        expect(model.fortifyTerritory("Alaska", "Alberta", armiesToFortify)).andReturn(false);
         view.displayError("Invalid fortify move.");
         expectLastCall().once();
 
