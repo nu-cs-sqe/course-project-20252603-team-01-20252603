@@ -273,7 +273,7 @@
 
 ### Method under test: `removeTerritory(Territory territory)`
 
-- **TC60: Remove the only owned territory** (:x:)
+- **TC60: Remove the only owned territory** (:white_check_mark:)
     - **State of the system**: Human player owns exactly `alaska`; `removeTerritory(alaska)` is called
     - **Expected output**: Player territory count becomes `0`; `ownsTerritory(alaska)` returns `false`
 

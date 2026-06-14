@@ -220,6 +220,18 @@ public final class HumanPlayerTest {
     }
 
     @Test
+    public void removeTerritoryWithOnlyOwnedTerritoryRemovesTerritory() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        Territory alaska = createMock(Territory.class);
+
+        player.addTerritory(alaska);
+        player.removeTerritory(alaska);
+
+        assertEquals(ZERO_ARMIES, player.getTerritoryCount());
+        assertFalse(player.ownsTerritory(alaska));
+    }
+
+    @Test
     public void getTerritoryCountReturnsZeroBeforeTerritoryClaimed() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
 
