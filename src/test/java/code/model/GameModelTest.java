@@ -1416,7 +1416,8 @@ public final class GameModelTest {
                 "Alaska",
                 createInfantryPieces(ONE_INFANTRY));
 
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", 4);
+        final int armiesBeingFortified = 4; 
+        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", armiesBeingFortified);
 
         assertFalse(fortified);
     }
