@@ -51,8 +51,8 @@ public class ConsoleView {
     }
 
     public int promptNumberOfPlayers() {
-        output.print(message("prompt.numberOfPlayers"));
-        return scanner.nextInt();
+        output.println("Enter number of players: ");
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public String promptPlayerName(final int playerNumber) {
