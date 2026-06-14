@@ -129,7 +129,6 @@ package code.model {
         + getCurrentPlayerAvailableArmies() : String
         + checkCardTradeInPossibility() : TradeInPossibility
         + handleCardTradeIn(cardIndices : List<Integer>) : boolean
-        + addArmiesToAvailableDuringTurn(cardIndices : List<Integer>) : boolean
         + getCurrentPlayerCards() : String
         +addArmiesDuringSetup(territoryName: String) : boolean
         + addArmiesToCurrentPlayerBasedOnContinents() : void
