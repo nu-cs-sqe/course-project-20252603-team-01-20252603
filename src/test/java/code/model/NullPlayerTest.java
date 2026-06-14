@@ -1,5 +1,6 @@
 package code.model;
 
+import static org.easymock.EasyMock.createMock;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,6 +46,14 @@ public final class NullPlayerTest {
         requiredArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
 
         assertFalse(player.hasAvailableArmies(requiredArmies));
+    }
+
+    @Test
+    public void ownsTerritoryUnassignedOwnerReturnsFalse() {
+        NullPlayer player = new NullPlayer();
+        Territory territory = createMock(Territory.class);
+
+        assertFalse(player.ownsTerritory(territory));
     }
 
 }
