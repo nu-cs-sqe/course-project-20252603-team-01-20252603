@@ -440,6 +440,10 @@ public class GameModel {
         return territoriesByContinent.toString();
     }
 
+    public String getCurrentPlayerAvailableArmies() {
+        return players.get(currentPlayerIndex).getAvailableArmies();
+    }
+
     public boolean placeArmiesDuringReinforcement(
             final String territoryName,
             final HashMap<ArmyType, Integer> pieces) {

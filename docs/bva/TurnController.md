@@ -32,7 +32,7 @@
 
 ### Method under test: `handleArmiesToAdd()`
 
-- **TC36: Territory and continent armies are added when no trade-in is allowed** ( :x: )
+- **TC36: Territory and continent armies are added when no trade-in is allowed** ( :white_check_mark: )
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.NOT_ALLOWED`
     - **Expected output**: Controller adds territory-based armies and continent bonus armies, does not prompt for a card trade-in, and proceeds to reinforcement
 

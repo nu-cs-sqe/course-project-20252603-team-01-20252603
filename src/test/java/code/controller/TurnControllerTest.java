@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import code.model.ArmyType;
 import code.model.GameModel;
+import code.model.TradeInPossibility;
 import code.view.ConsoleView;
 import org.junit.jupiter.api.Test;
 
@@ -287,6 +288,31 @@ public final class TurnControllerTest {
         replay(model, view);
         TurnController controller = new TurnController(model, view);
         controller.handleReinforcement();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleArmiesToAddWithTradeInNotAllowedAddsArmiesAndDisplaysAvailableArmies() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        model.addArmiesToCurrentPlayerBasedOnTerritories();
+        expectLastCall().once();
+
+        model.addArmiesToCurrentPlayerBasedOnContinents();
+        expectLastCall().once();
+
+        expect(model.checkCardTradeInPossibility()).andReturn(TradeInPossibility.NOT_ALLOWED);
+        expect(model.getCurrentPlayerAvailableArmies()).andReturn("{INFANTRY=5}");
+
+        view.displayCurrentPlayerArmies("{INFANTRY=5}");
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleArmiesToAdd();
 
         verify(model, view);
     }

@@ -2,6 +2,7 @@ package code.controller;
 
 import code.model.ArmyType;
 import code.model.GameModel;
+import code.model.TradeInPossibility;
 import code.view.ConsoleView;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -32,6 +33,17 @@ public class TurnController {
     public TurnController(final GameModel gameModel, final ConsoleView consoleView) {
         model = gameModel;
         view = consoleView;
+    }
+
+    public void handleArmiesToAdd() {
+        model.addArmiesToCurrentPlayerBasedOnTerritories();
+        model.addArmiesToCurrentPlayerBasedOnContinents();
+
+        TradeInPossibility tradeInPossibility = model.checkCardTradeInPossibility();
+
+        if (tradeInPossibility == TradeInPossibility.NOT_ALLOWED) {
+            view.displayCurrentPlayerArmies(model.getCurrentPlayerAvailableArmies());
+        }
     }
 
     public void handleReinforcement() {
