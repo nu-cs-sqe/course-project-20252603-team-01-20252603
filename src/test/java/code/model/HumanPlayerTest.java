@@ -112,6 +112,12 @@ public final class HumanPlayerTest {
 
     private static final int FOUR_CARDS = 4;
 
+    private static final int FIRST_CARD_TYPE_CALLS = 7;
+
+    private static final int SECOND_CARD_TYPE_CALLS = 5;
+
+    private static final int THIRD_CARD_TYPE_CALLS_BEFORE_WILD = 3;
+
     @Test
     public void constructorMinimumSetupInfantryCreatesPlayer() {
         HumanPlayer player = new HumanPlayer(
@@ -896,9 +902,9 @@ public final class HumanPlayerTest {
         RiskCard secondCard = createMock(RiskCard.class);
         RiskCard thirdCard = createMock(RiskCard.class);
 
-        expect(firstCard.getType()).andReturn(CardType.INFANTRY).times(7);
-        expect(secondCard.getType()).andReturn(CardType.WILD).times(5);
-        expect(thirdCard.getType()).andReturn(CardType.CAVALRY).times(3);
+        expect(firstCard.getType()).andReturn(CardType.INFANTRY).times(FIRST_CARD_TYPE_CALLS);
+        expect(secondCard.getType()).andReturn(CardType.WILD).times(SECOND_CARD_TYPE_CALLS);
+        expect(thirdCard.getType()).andReturn(CardType.CAVALRY).times(THIRD_CARD_TYPE_CALLS_BEFORE_WILD);
         expect(thirdCard.getType()).andReturn(CardType.WILD);
         replay(firstCard, secondCard, thirdCard);
 

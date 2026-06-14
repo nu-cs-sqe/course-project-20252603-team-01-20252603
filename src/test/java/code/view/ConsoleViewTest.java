@@ -47,6 +47,8 @@ public final class ConsoleViewTest {
 
     private static final int FOUR = 4;
 
+    private static final int DEFAULT_PLAYER_COUNT = 3;
+
     private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
 
     @Test
@@ -837,7 +839,7 @@ public final class ConsoleViewTest {
 
             ConsoleView view = new ConsoleView();
 
-            assertEquals(3, view.promptNumberOfPlayers());
+            assertEquals(DEFAULT_PLAYER_COUNT, view.promptNumberOfPlayers());
         } finally {
             System.setIn(originalIn);
         }

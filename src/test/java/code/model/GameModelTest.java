@@ -92,6 +92,12 @@ public final class GameModelTest {
 
     private static final int ASIA_TERRITORY_COUNT = 12;
 
+    private static final int FIRST_CARD_TYPE_CALLS = 7;
+
+    private static final int SECOND_CARD_TYPE_CALLS = 5;
+
+    private static final int THIRD_CARD_TYPE_CALLS_BEFORE_WILD = 3;
+
     private static final class StubTerritory extends Territory {
 
         private final String stubName;
@@ -3126,9 +3132,9 @@ public final class GameModelTest {
         RiskCard secondCard = createMock(RiskCard.class);
         RiskCard thirdCard = createMock(RiskCard.class);
 
-        expect(firstCard.getType()).andReturn(CardType.INFANTRY).times(7);
-        expect(secondCard.getType()).andReturn(CardType.WILD).times(5);
-        expect(thirdCard.getType()).andReturn(CardType.CAVALRY).times(3);
+        expect(firstCard.getType()).andReturn(CardType.INFANTRY).times(FIRST_CARD_TYPE_CALLS);
+        expect(secondCard.getType()).andReturn(CardType.WILD).times(SECOND_CARD_TYPE_CALLS);
+        expect(thirdCard.getType()).andReturn(CardType.CAVALRY).times(THIRD_CARD_TYPE_CALLS_BEFORE_WILD);
         expect(thirdCard.getType()).andReturn(CardType.WILD);
         replay(firstCard, secondCard, thirdCard);
 
