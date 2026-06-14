@@ -188,12 +188,12 @@ public class HumanPlayer extends Player {
         List<RiskCard> nonWildCards = selectedCards.stream()
                 .filter(card -> card.getType() != CardType.WILD)
                 .collect(Collectors.toList());
-        boolean hasOneWildAndTwoMatchingCards = wildCardCount == 1
-                && nonWildCards.get(0).getType() == nonWildCards.get(1).getType();
+        boolean hasOneWildAndTwoNonWildCards = wildCardCount == 1
+                && nonWildCards.size() == 2;
 
         if (!hasThreeCardsOfSameType
                 && !hasOneOfEachType
-                && !hasOneWildAndTwoMatchingCards) {
+                && !hasOneWildAndTwoNonWildCards) {
             return false;
         }
 
