@@ -294,6 +294,16 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void displayErrorPrintsErrorMessage() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayError("Invalid selection.");
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("Invalid selection."));
+    }
+
+    @Test
     public void promptNumberOfPlayersPrintsPromptTextBeforeReadingInput() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         ConsoleView view = new ConsoleView(
