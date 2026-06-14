@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import org.junit.jupiter.api.Test;
 
@@ -801,6 +802,33 @@ public final class ConsoleViewTest {
         view.promptChooseCardsToTradeIn();
 
         assertTrue(captured.toString(StandardCharsets.UTF_8).contains("card indices"));
+    }
+
+    @Test
+    public void promptNumberOfPlayersSpanishLocalePrintsSpanishPrompt() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("3\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8),
+                new Locale("es"));
+
+        view.promptNumberOfPlayers();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8).contains("Ingrese el numero de jugadores"));
+    }
+
+    @Test
+    public void displaySetupPhaseCompleteSpanishLocalePrintsSpanishMessage() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner(""),
+                new PrintStream(captured, true, StandardCharsets.UTF_8),
+                new Locale("es"));
+
+        view.displaySetupPhaseComplete();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8)
+                .contains("La configuracion esta completa. El juego comienza ahora."));
     }
 
     private ConsoleView createViewWithInput(final String input) {

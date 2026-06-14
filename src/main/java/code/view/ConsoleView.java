@@ -6,7 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Scanner;
+import java.text.MessageFormat;
 
 public class ConsoleView {
 
@@ -24,29 +27,43 @@ public class ConsoleView {
 
     private final PrintStream output;
 
+    private final ResourceBundle messages;
+
     public ConsoleView() {
-        this(new Scanner(System.in, StandardCharsets.UTF_8), System.out);
+        this(new Scanner(System.in, StandardCharsets.UTF_8), System.out, Locale.ENGLISH);
+    }
+
+    public ConsoleView(final Locale locale) {
+        this(new Scanner(System.in, StandardCharsets.UTF_8), System.out, locale);
     }
 
     ConsoleView(final Scanner inputScanner, final PrintStream outputStream) {
+        this(inputScanner, outputStream, Locale.ENGLISH);
+    }
+
+    ConsoleView(
+            final Scanner inputScanner,
+            final PrintStream outputStream,
+            final Locale locale) {
         scanner = inputScanner;
         output = outputStream;
+        messages = ResourceBundle.getBundle("messages", locale);
     }
 
     public int promptNumberOfPlayers() {
-        output.print("Enter number of players: ");
+        output.print(message("prompt.numberOfPlayers"));
         return scanner.nextInt();
     }
 
     public String promptPlayerName(final int playerNumber) {
-        output.print("Enter player " + playerNumber + " name: ");
+        output.print(message("prompt.playerName", playerNumber));
         return scanner.nextLine();
     }
 
     public PlayerColor promptPlayerColor(
             final String playerName,
             final List<PlayerColor> availableColors) {
-        output.print("Enter color for " + playerName + ": ");
+        output.print(message("prompt.playerColor", playerName));
         return PlayerColor.valueOf(scanner.nextLine().trim().toUpperCase());
     }
 
@@ -72,41 +89,41 @@ public class ConsoleView {
     }
 
     public String getTerritoryChoiceDuringSetup() {
-        output.print("Enter territory to claim: ");
+        output.print(message("prompt.claimTerritory"));
 
         return scanner.nextLine();
     }
 
     public String promptCurrentPlayerTerritoryChoice() {
-        output.print("Enter territory to place army: ");
+        output.print(message("prompt.placeArmyTerritory"));
 
         return scanner.nextLine();
     }
 
     public void displaySetupPhaseComplete() {
-        output.println("Setup is complete. The game is starting now.");
+        output.println(message("message.setupComplete"));
     }
 
     public String promptFortifyChoice() {
-        output.print("Do you want to fortify? (yes/no): ");
+        output.print(message("prompt.fortifyChoice"));
 
         return scanner.nextLine().trim();
     }
 
     public String promptFortifySourceTerritory() {
-        output.print("Enter source territory: ");
+        output.print(message("prompt.fortifySource"));
 
         return scanner.nextLine();
     }
 
     public String promptFortifyDestinationTerritory() {
-        output.print("Enter destination territory: ");
+        output.print(message("prompt.fortifyDestination"));
 
         return scanner.nextLine();
     }
 
     public String promptFortifyArmyCount() {
-        output.print("Enter number of armies to move: ");
+        output.print(message("prompt.fortifyArmyCount"));
 
         return scanner.nextLine();
     }
@@ -120,7 +137,7 @@ public class ConsoleView {
     }
 
     public List<Integer> promptChooseCardsToTradeIn() {
-        output.print("Enter card indices to trade in: ");
+        output.print(message("prompt.tradeInCards"));
         String input = scanner.nextLine().trim();
 
         if (input.isEmpty()) {
@@ -142,7 +159,7 @@ public class ConsoleView {
     }
 
     public List<String> promptReinforcement() {
-        output.print("Enter territory and armies to place: ");
+        output.print(message("prompt.reinforcement"));
         String input = scanner.nextLine().trim();
 
         String[] tokens = input.split("\\s+");
@@ -176,14 +193,14 @@ public class ConsoleView {
         String attackingTerritory = "";
 
         while (attackingTerritory.isBlank()) {
-            output.print("Enter attacking territory: ");
+            output.print(message("prompt.attackingTerritory"));
             attackingTerritory = scanner.nextLine();
         }
 
         String defendingTerritory = "";
 
         while (defendingTerritory.isBlank()) {
-            output.print("Enter defending territory: ");
+            output.print(message("prompt.defendingTerritory"));
             defendingTerritory = scanner.nextLine();
         }
 
@@ -193,14 +210,14 @@ public class ConsoleView {
     public List<Integer> promptNumberOfDice(
             final String attackerName,
             final String defenderName) {
-        output.print("Enter number of dice for " + attackerName + ": ");
+        output.print(message("prompt.attackerDice", attackerName));
         String attackerDiceInput = scanner.nextLine();
 
         if (!isInteger(attackerDiceInput)) {
             return List.of(MALFORMED_CARD_INPUT_SENTINEL);
         }
 
-        output.print("Enter number of dice for " + defenderName + ": ");
+        output.print(message("prompt.defenderDice", defenderName));
         String defenderDiceInput = scanner.nextLine();
 
         if (!isInteger(defenderDiceInput)) {
@@ -226,6 +243,10 @@ public class ConsoleView {
         } catch (NumberFormatException exception) {
             return false;
         }
+    }
+
+    private String message(final String key, final Object... arguments) {
+        return MessageFormat.format(messages.getString(key), arguments);
     }
 
 }
