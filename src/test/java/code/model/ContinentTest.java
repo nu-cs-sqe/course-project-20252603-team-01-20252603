@@ -157,4 +157,12 @@ public final class ContinentTest {
 
         assertEquals(expectedBonusArmies, continent.getBonusArmies());
     }
+
+    @Test
+    public void isFullyOwnedByReturnsFalseWhenContinentHasNoTerritories() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Player player = createMock(Player.class);
+
+        assertFalse(continent.isFullyOwnedBy(player));
+    }
 }
