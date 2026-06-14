@@ -38,6 +38,8 @@ public class TurnController {
 
     private static final int DEFENDER_DICE_INDEX = 1;
 
+    private static final int CAPTURE_MOVEMENT_MIN_RADIX = 10;
+
     @SuppressFBWarnings(
             value = "EI_EXPOSE_REP2",
             justification = "TurnController intentionally stores the model and view it controls."
@@ -160,6 +162,63 @@ public class TurnController {
         view.displayCurrentPlayer(model.getCurrentPlayerName());
         view.displayCurrentPlayerClaimingStatus(model.getCurrentPlayerTerritoriesByContinent());
 
+        boolean capturedTerritoryThisTurn = false;
+
+        if (!model.currentPlayerHasValidAttack()) {
+            view.displayNoValidAttacks();
+            model.awardRiskCardIfCaptured(false);
+            return;
+        }
+
+        while (model.currentPlayerHasValidAttack()) {
+            String attackChoice = view.promptAttackChoice();
+
+            if (isNoChoice(attackChoice)) {
+                break;
+            }
+
+            if (!isYesChoice(attackChoice)) {
+                view.displayError("Invalid attack choice.");
+                continue;
+            }
+
+            String[] territories = promptForValidAttackTerritories();
+            String attackerTerritoryName = territories[ATTACKING_TERRITORY_INDEX];
+            String defenderTerritoryName = territories[DEFENDING_TERRITORY_INDEX];
+            int[] dice = promptForValidDice(attackerTerritoryName, defenderTerritoryName);
+
+            List<String> battleResult = model.executeBattleAndReturnWinner(
+                    attackerTerritoryName,
+                    defenderTerritoryName,
+                    dice[ATTACKER_DICE_INDEX],
+                    dice[DEFENDER_DICE_INDEX]);
+            view.displayBattleResult(battleResult);
+
+            if (model.isTerritoryCaptured(defenderTerritoryName)) {
+                handleCapturedTerritory(
+                        attackerTerritoryName,
+                        defenderTerritoryName,
+                        dice[ATTACKER_DICE_INDEX]);
+                capturedTerritoryThisTurn = true;
+            }
+        }
+
+        if (model.awardRiskCardIfCaptured(capturedTerritoryThisTurn)) {
+            view.displayRiskCardAwarded(model.getCurrentPlayerName());
+        }
+    }
+
+    private boolean isYesChoice(final String attackChoice) {
+        return "yes".equalsIgnoreCase(attackChoice)
+                || "y".equalsIgnoreCase(attackChoice);
+    }
+
+    private boolean isNoChoice(final String attackChoice) {
+        return "no".equalsIgnoreCase(attackChoice)
+                || "n".equalsIgnoreCase(attackChoice);
+    }
+
+    private String[] promptForValidAttackTerritories() {
         boolean validTerritories = false;
         String attackerTerritoryName = "";
         String defenderTerritoryName = "";
@@ -179,6 +238,12 @@ public class TurnController {
             }
         }
 
+        return new String[] {attackerTerritoryName, defenderTerritoryName};
+    }
+
+    private int[] promptForValidDice(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName) {
         boolean validDice = false;
         int attackerDice = 0;
         int defenderDice = 0;
@@ -210,12 +275,56 @@ public class TurnController {
             }
         }
 
-        List<String> battleResult = model.executeBattleAndReturnWinner(
-                attackerTerritoryName,
-                defenderTerritoryName,
-                attackerDice,
-                defenderDice);
-        view.displayBattleResult(battleResult);
+        return new int[] {attackerDice, defenderDice};
+    }
+
+    private void handleCapturedTerritory(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName,
+            final int attackerDice) {
+        boolean captured = false;
+
+        while (!captured) {
+            String captureMovementInput = view.promptCaptureArmyCount(
+                    attackerTerritoryName,
+                    defenderTerritoryName);
+
+            if (!isInteger(captureMovementInput)) {
+                view.displayError("Invalid capture movement input.");
+                continue;
+            }
+
+            int armiesToMove = Integer.parseInt(captureMovementInput);
+
+            try {
+                String defenderName = model.captureTerritory(
+                        attackerTerritoryName,
+                        defenderTerritoryName,
+                        armiesToMove,
+                        attackerDice);
+                view.displayTerritoryCaptured(
+                        attackerTerritoryName,
+                        defenderTerritoryName,
+                        armiesToMove);
+
+                if (model.handlePlayerElimination(defenderName)) {
+                    view.displayPlayerElimination(defenderName);
+                }
+
+                captured = true;
+            } catch (IllegalArgumentException exception) {
+                view.displayError(exception.getMessage());
+            }
+        }
+    }
+
+    private boolean isInteger(final String value) {
+        try {
+            Integer.parseInt(value, CAPTURE_MOVEMENT_MIN_RADIX);
+            return true;
+        } catch (NumberFormatException exception) {
+            return false;
+        }
     }
 
     private boolean isMalformedDiceInput(final List<Integer> diceCounts) {

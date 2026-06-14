@@ -100,7 +100,7 @@
     - **State of the system**: Model raises `IllegalArgumentException` during dice validation, then the player enters valid dice counts
     - **Expected output**: Controller displays the model error message and re-prompts for dice
 
-- **TC52: Battle result is displayed exactly once after successful execution** ( :x: )
+- **TC52: Battle result is displayed exactly once after successful execution** ( :white_check_mark: )
     - **State of the system**: Territory and dice validation succeed; model returns one battle result
     - **Expected output**: Controller calls `displayBattleResult(...)` exactly once with the returned battle result
 

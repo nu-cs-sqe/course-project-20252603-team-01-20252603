@@ -249,6 +249,10 @@ public class ConsoleView {
         output.println(playerName + " received a Risk card.");
     }
 
+    public void displayPlayerElimination(final String playerName) {
+        output.println(playerName + " has been eliminated.");
+    }
+
     private boolean isInteger(final String value) {
         try {
             Integer.parseInt(value);
