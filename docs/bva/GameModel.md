@@ -801,11 +801,11 @@
 
 ### Method under test: `currentPlayerIsEliminated()`
 
-- **TC145: Current active player is not eliminated**
+- **TC145: Current active player is not eliminated** ( :white_check_mark: )
     - **State of the system**: Current player is a `HumanPlayer` with `isEliminated()` returning `false`
     - **Expected output**: Returns `false`
 
-- **TC146: Current eliminated player is eliminated**
+- **TC146: Current eliminated player is eliminated** ( :white_check_mark: )
     - **State of the system**: Current player has been marked eliminated
     - **Expected output**: Returns `true`
 

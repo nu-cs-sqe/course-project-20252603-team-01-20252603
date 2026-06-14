@@ -3637,4 +3637,31 @@ public final class GameModelTest {
 
         assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
     }
+
+    @Test
+    public void currentPlayerIsEliminatedReturnsFalseForActiveCurrentPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertFalse(gameModel.currentPlayerIsEliminated());
+    }
+
+    @Test
+    public void currentPlayerIsEliminatedReturnsTrueForEliminatedCurrentPlayer() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+        player.markEliminated();
+
+        assertTrue(gameModel.currentPlayerIsEliminated());
+    }
 }

@@ -470,6 +470,10 @@ public class GameModel {
         return players.get(currentPlayerIndex).getName();
     }
 
+    public boolean currentPlayerIsEliminated() {
+        return players.get(currentPlayerIndex).isEliminated();
+    }
+
     public boolean hasCurrentPlayerAvailableArmies() {
         HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
         requiredArmies.put(ArmyType.INFANTRY, 1);
