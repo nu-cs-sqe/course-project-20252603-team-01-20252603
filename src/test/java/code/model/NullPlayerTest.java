@@ -16,6 +16,8 @@ public final class NullPlayerTest {
 
     private static final int ONE_INFANTRY = 1;
 
+    private static final int ASIA_BONUS_ARMIES = 7;
+
     @Test
     public void constructorUnassignedOwnershipCreatesPlayerPlaceholder() {
         NullPlayer player = new NullPlayer();
@@ -51,7 +53,7 @@ public final class NullPlayerTest {
     @Test
     public void ownsTerritoryUnassignedOwnerReturnsFalse() {
         NullPlayer player = new NullPlayer();
-        Continent continent = new Continent("Asia", 7);
+        Continent continent = new Continent("Asia", ASIA_BONUS_ARMIES);
         Territory territory = new Territory("Japan", continent, Collections.emptyList());
 
         assertFalse(player.ownsTerritory(territory));

@@ -12,8 +12,10 @@ import org.junit.jupiter.api.Test;
  */
 public final class RiskCardTest {
 
+    private static final int NORTH_AMERICA_BONUS = 5;
+
     private Territory createRealTerritory(final String name) {
-        Continent continent = new Continent("North America", 5);
+        Continent continent = new Continent("North America", NORTH_AMERICA_BONUS);
         return new Territory(name, continent, Collections.emptyList());
     }
 
