@@ -277,7 +277,7 @@
     - **State of the system**: Human player owns exactly `alaska`; `removeTerritory(alaska)` is called
     - **Expected output**: Player territory count becomes `0`; `ownsTerritory(alaska)` returns `false`
 
-- **TC61: Remove one territory while another remains** (:x:)
+- **TC61: Remove one territory while another remains** (:white_check_mark:)
     - **State of the system**: Human player owns `alaska` and `alberta`; `removeTerritory(alaska)` is called
     - **Expected output**: Player territory count becomes `1`; `ownsTerritory(alaska)` returns `false`; `ownsTerritory(alberta)` returns `true`
 
