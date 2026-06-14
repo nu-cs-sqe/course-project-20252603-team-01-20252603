@@ -2153,6 +2153,31 @@ public final class GameModelTest {
     }
 
     @Test
+    public void executeBattleAndReturnWinnerCaptureFlagTrueWhenDefenderLosesLastArmy() {
+        GameModel gameModel = createGameModelWithDiceRolls(6, 3);
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        List<String> battleResult = gameModel.executeBattleAndReturnWinner(
+                "Alaska",
+                "Alberta",
+                ONE_ARMY,
+                ONE_ARMY);
+
+        assertEquals(ZERO_ARMIES, gameModel.findTerritoryByName("Alberta").getArmyCount());
+        assertTrue(battleResult.contains("Captured: true"));
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = createGameModel();
 

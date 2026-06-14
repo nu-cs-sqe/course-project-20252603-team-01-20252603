@@ -677,6 +677,6 @@
     - **State of the system**: Battle resolves with deterministic injected dice and the defending territory still has at least `1` army remaining afterward
     - **Expected output**: Returned battle result indicates that the territory was not captured
 
-- **TC121: Capture flag is true when defending territory loses its last army** ( :x: )
+- **TC121: Capture flag is true when defending territory loses its last army** ( :white_check_mark: )
     - **State of the system**: Battle resolves with deterministic injected dice and the defending territory reaches `0` armies
     - **Expected output**: Returned battle result indicates that the territory was captured
