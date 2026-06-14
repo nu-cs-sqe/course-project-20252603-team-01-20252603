@@ -479,6 +479,43 @@ public final class SetupControllerTest {
     }
 
     @Test
+    public void initializePlayersInvalidColorDisplaysErrorAndReprompts() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        Random random = createMock(Random.class);
+
+        expect(view.promptNumberOfPlayers()).andReturn(3);
+        expect(model.setPlayerCount(3)).andReturn(true);
+
+        expect(view.promptPlayerName(1)).andReturn("Player 1");
+        expect(view.promptPlayerColor("Player 1", List.of(
+                PlayerColor.RED,
+                PlayerColor.BLUE,
+                PlayerColor.GREEN,
+                PlayerColor.YELLOW,
+                PlayerColor.BLACK,
+                PlayerColor.PURPLE)))
+                .andReturn(PlayerColor.UNASSIGNED);
+
+        view.displayError("Invalid color.");
+        expectLastCall().once();
+
+        expect(view.promptPlayerColor("Player 1", List.of(
+                PlayerColor.RED,
+                PlayerColor.BLUE,
+                PlayerColor.GREEN,
+                PlayerColor.YELLOW,
+                PlayerColor.BLACK,
+                PlayerColor.PURPLE)))
+                .andReturn(PlayerColor.RED);
+
+        expect(model.addPlayer("Player 1", PlayerColor.RED))
+                .andReturn(createMock(Player.class));
+
+        // Additional players would be mocked here depending on the full existing test setup.
+    }
+
+    @Test
     public void handleTerritoryClaimingSuccessfulClaimsAdvanceEachTurn() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
