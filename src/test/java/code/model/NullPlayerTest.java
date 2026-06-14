@@ -1,11 +1,11 @@
 package code.model;
 
-import static org.easymock.EasyMock.createMock;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Collections;
 import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +51,8 @@ public final class NullPlayerTest {
     @Test
     public void ownsTerritoryUnassignedOwnerReturnsFalse() {
         NullPlayer player = new NullPlayer();
-        Territory territory = createMock(Territory.class);
+        Continent continent = new Continent("Asia", 7);
+        Territory territory = new Territory("Japan", continent, Collections.emptyList());
 
         assertFalse(player.ownsTerritory(territory));
     }

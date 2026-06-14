@@ -19,6 +19,16 @@ public final class GameModelAdjacencyTest {
         return model;
     }
 
+    @org.junit.jupiter.api.Test
+    public void alaskaIsNotAdjacentToEasternAustralia() {
+        GameModel model = createInitializedModel();
+
+        org.junit.jupiter.api.Assertions.assertFalse(
+                model.areTerritoriesAdjacent("Alaska", "Eastern Australia"));
+        org.junit.jupiter.api.Assertions.assertFalse(
+                model.areTerritoriesAdjacent("Eastern Australia", "Alaska"));
+    }
+
     @ParameterizedTest
     @CsvSource({
             "Alaska,Northwest Territory",

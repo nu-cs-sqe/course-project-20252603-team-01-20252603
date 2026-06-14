@@ -467,6 +467,16 @@ public final class HumanPlayerTest {
     }
 
     @Test
+    public void toStringContainsPlayerNameAndColor() {
+        HumanPlayer player = new HumanPlayer("Alice", PlayerColor.RED, ONE_INFANTRY);
+
+        String result = player.toString();
+
+        assertTrue(result.contains("Alice"));
+        assertTrue(result.contains("RED"));
+    }
+
+    @Test
     public void removeArmiesExactCavalryMatchPreservesRemainingInfantry() {
         HumanPlayer player = new HumanPlayer(
                 "Player 1",
