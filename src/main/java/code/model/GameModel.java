@@ -714,6 +714,7 @@ public class GameModel {
         return hasThreeCardsOfSameType
                 || hasOneOfEachType
                 || (wildCardCount == 1 && nonWildCardCount == 2);
+    }
 
     public boolean areTerritoriesAdjacent(
             final String territory1Name,
