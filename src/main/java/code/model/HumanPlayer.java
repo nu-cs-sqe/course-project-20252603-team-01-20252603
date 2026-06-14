@@ -166,6 +166,10 @@ public class HumanPlayer extends Player {
         return availableCards.size();
     }
 
+    List<RiskCard> getAvailableCards() {
+        return new ArrayList<>(availableCards);
+    }
+
     @Override
     public boolean tradeCardsAndAddArmies(
             final List<Integer> cardIndices,
