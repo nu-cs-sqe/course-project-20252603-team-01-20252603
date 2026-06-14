@@ -196,7 +196,7 @@
     - **State of the system**: Current player is prompted for armies to move and enters `"1"`
     - **Expected output**: Returns `"1"`
 
-- **TC36: Returns multiple army count** ( :x: )
+- **TC36: Returns multiple army count** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for armies to move and enters `"3"`
     - **Expected output**: Returns `"3"`
 
