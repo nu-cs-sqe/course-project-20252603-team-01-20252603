@@ -50,12 +50,14 @@ public class ConsoleView {
         output = outputStream;
         messages = ResourceBundle.getBundle("messages", locale);
     }
+
     private String displayColors(final List<PlayerColor> availableColors) {
         return availableColors.stream()
                 .filter(color -> color != PlayerColor.UNASSIGNED)
                 .map(color -> message("color." + color.name()))
                 .collect(Collectors.joining(", "));
     }
+
     public int promptNumberOfPlayers() {
         output.print(message("prompt.numberOfPlayers"));
         return Integer.parseInt(scanner.nextLine().trim());

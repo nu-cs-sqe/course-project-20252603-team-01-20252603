@@ -57,6 +57,8 @@ public final class SetupControllerTest {
 
     private static final int TWO_INFANTRY = 2;
 
+    private static final int THREE = 3;
+
     private static final int SETUP_INFANTRY_COUNT = 1;
 
     private final List<PlayerColor> allPlayableColors = List.of(
@@ -482,10 +484,8 @@ public final class SetupControllerTest {
     public void initializePlayersInvalidColorDisplaysErrorAndReprompts() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        Random random = createMock(Random.class);
-
-        expect(view.promptNumberOfPlayers()).andReturn(3);
-        expect(model.setPlayerCount(3)).andReturn(true);
+        expect(view.promptNumberOfPlayers()).andReturn(THREE);
+        expect(model.setPlayerCount(THREE)).andReturn(true);
 
         expect(view.promptPlayerName(1)).andReturn("Player 1");
         expect(view.promptPlayerColor("Player 1", List.of(
