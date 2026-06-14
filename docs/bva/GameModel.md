@@ -301,11 +301,11 @@
 
 ### Method under test: `addArmiesToCurrentPlayerBasedOnTerritories()`
 
-- **TC65: Current player with 1 territory receives minimum 3 Infantry** ( :x: )
+- **TC65: Current player with 1 territory receives minimum 3 Infantry** ( :white_check_mark: )
     - **State of the system**: Current player owns exactly `1` territory and has `0` available Infantry before turn-start territory armies are added
     - **Expected output**: Current player's available Infantry increases to `3`
 
-- **TC66: Current player with 8 territories still receives minimum 3 Infantry** ( :x: )
+- **TC66: Current player with 8 territories still receives minimum 3 Infantry** ( :white_check_mark: )
     - **State of the system**: Current player owns exactly `8` territories and has `0` available Infantry before turn-start territory armies are added
     - **Expected output**: Current player's available Infantry increases to `3`
 
