@@ -132,6 +132,7 @@ public final class NullPlayerTest {
         assertFalse(player.isEliminated());
     }
 
+    @Test
     public void ownsTerritoryUnassignedOwnerReturnsFalse() {
         NullPlayer player = new NullPlayer();
         Continent continent = new Continent("Asia", ASIA_BONUS_ARMIES);

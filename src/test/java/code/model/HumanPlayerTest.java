@@ -1,6 +1,8 @@
 package code.model;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -109,6 +111,12 @@ public final class HumanPlayerTest {
     private static final int THREE_CARDS = 3;
 
     private static final int FOUR_CARDS = 4;
+
+    private static final int FIRST_CARD_TYPE_CALLS = 7;
+
+    private static final int SECOND_CARD_TYPE_CALLS = 5;
+
+    private static final int THIRD_CARD_TYPE_CALLS_BEFORE_WILD = 3;
 
     @Test
     public void constructorMinimumSetupInfantryCreatesPlayer() {
@@ -949,6 +957,51 @@ public final class HumanPlayerTest {
     }
 
     @Test
+    public void tradeCardsAndAddArmiesWithoutCavalryCardReturnsFalse() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.ARTILLERY));
+        player.addCard(createCard(CardType.ARTILLERY));
+
+        boolean traded = tradeFirstThreeCards(player, ZERO_TRADE_SETS);
+
+        assertFalse(traded);
+        assertEquals(THREE_CARDS, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
+    @Test
+    public void tradeCardsAndAddArmiesWithoutArtilleryCardReturnsFalse() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+        player.addCard(createCard(CardType.CAVALRY));
+
+        boolean traded = tradeFirstThreeCards(player, ZERO_TRADE_SETS);
+
+        assertFalse(traded);
+        assertEquals(THREE_CARDS, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
+    @Test
+    public void tradeCardsAndAddArmiesWithoutInfantryCardReturnsFalse() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.CAVALRY));
+        player.addCard(createCard(CardType.ARTILLERY));
+        player.addCard(createCard(CardType.ARTILLERY));
+
+        boolean traded = tradeFirstThreeCards(player, ZERO_TRADE_SETS);
+
+        assertFalse(traded);
+        assertEquals(THREE_CARDS, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
+    @Test
     public void tradeCardsAndAddArmiesWithOneWildAndTwoMatchingCardsAddsFourInfantry() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
 
@@ -987,6 +1040,45 @@ public final class HumanPlayerTest {
         player.addCard(createCard(CardType.WILD));
         player.addCard(createCard(CardType.WILD));
         player.addCard(createCard(CardType.INFANTRY));
+
+        boolean traded = tradeFirstThreeCards(player, ZERO_TRADE_SETS);
+
+        assertFalse(traded);
+        assertEquals(THREE_CARDS, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
+    @Test
+    public void tradeCardsAndAddArmiesWithThreeWildCardsReturnsFalse() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.WILD));
+        player.addCard(createCard(CardType.WILD));
+        player.addCard(createCard(CardType.WILD));
+
+        boolean traded = tradeFirstThreeCards(player, ZERO_TRADE_SETS);
+
+        assertFalse(traded);
+        assertEquals(THREE_CARDS, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
+    @Test
+    public void tradeCardsAndAddArmiesWithInconsistentWildClassificationReturnsFalse() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+        RiskCard firstCard = createMock(RiskCard.class);
+        RiskCard secondCard = createMock(RiskCard.class);
+        RiskCard thirdCard = createMock(RiskCard.class);
+
+        expect(firstCard.getType()).andReturn(CardType.INFANTRY).times(FIRST_CARD_TYPE_CALLS);
+        expect(secondCard.getType()).andReturn(CardType.WILD).times(SECOND_CARD_TYPE_CALLS);
+        expect(thirdCard.getType()).andReturn(CardType.CAVALRY).times(THIRD_CARD_TYPE_CALLS_BEFORE_WILD);
+        expect(thirdCard.getType()).andReturn(CardType.WILD);
+        replay(firstCard, secondCard, thirdCard);
+
+        player.addCard(firstCard);
+        player.addCard(secondCard);
+        player.addCard(thirdCard);
 
         boolean traded = tradeFirstThreeCards(player, ZERO_TRADE_SETS);
 

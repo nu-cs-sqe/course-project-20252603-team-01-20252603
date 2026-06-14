@@ -146,27 +146,26 @@ public class HumanPlayer extends Player {
 
     @Override
     public void addArmiesToAvailableBasedOnTerritories() {
-        if (getTerritoryCount() == 0) {
+        int territoryCount = getTerritoryCount();
+
+        if (territoryCount == 0) {
             throw new IllegalStateException(
                     "Player cannot own 0 territories and play a turn because they have been eliminated.");
         }
 
-        if (getTerritoryCount() == TOTAL_TERRITORY_COUNT) {
+        if (territoryCount >= TOTAL_TERRITORY_COUNT) {
+            if (territoryCount == TOTAL_TERRITORY_COUNT) {
+                throw new IllegalStateException(
+                        "Player cannot own 42 territories and play a turn because they should have already won.");
+            }
             throw new IllegalStateException(
-                    "Player cannot own 42 territories and play a turn because they should have already won.");
-        }
-
-        if (getTerritoryCount() > TOTAL_TERRITORY_COUNT) {
-            throw new IllegalStateException(
-                    "Player cannot own " + getTerritoryCount()
+                    "Player cannot own " + territoryCount
                             + " territories because there are only 42 territories on the board.");
         }
 
-        int territoryReinforcement = getTerritoryCount() / TERRITORIES_PER_REINFORCEMENT_ARMY;
-
-        if (territoryReinforcement < MIN_TERRITORY_REINFORCEMENT) {
-            territoryReinforcement = MIN_TERRITORY_REINFORCEMENT;
-        }
+        int territoryReinforcement = Math.max(
+                MIN_TERRITORY_REINFORCEMENT,
+                territoryCount / TERRITORIES_PER_REINFORCEMENT_ARMY);
 
         HashMap<ArmyType, Integer> reinforcementArmies = new HashMap<>();
         reinforcementArmies.put(ArmyType.INFANTRY, territoryReinforcement);
@@ -272,32 +271,21 @@ public class HumanPlayer extends Player {
     }
 
     private int calculateCardTradeInBonus(final int numSetsTradedIn) {
-        if (numSetsTradedIn == 1) {
-            return SECOND_CARD_TRADE_IN_BONUS;
+        int[] fixedBonuses = {
+            FIRST_CARD_TRADE_IN_BONUS,
+            SECOND_CARD_TRADE_IN_BONUS,
+            THIRD_CARD_TRADE_IN_BONUS,
+            FOURTH_CARD_TRADE_IN_BONUS,
+            FIFTH_CARD_TRADE_IN_BONUS,
+            SIXTH_CARD_TRADE_IN_BONUS
+        };
+
+        if (numSetsTradedIn < fixedBonuses.length) {
+            return fixedBonuses[Math.max(numSetsTradedIn, 0)];
         }
 
-        if (numSetsTradedIn == 2) {
-            return THIRD_CARD_TRADE_IN_BONUS;
-        }
-
-        if (numSetsTradedIn == NUMBER_THREE) {
-            return FOURTH_CARD_TRADE_IN_BONUS;
-        }
-
-        if (numSetsTradedIn == NUMBER_FOUR) {
-            return FIFTH_CARD_TRADE_IN_BONUS;
-        }
-
-        if (numSetsTradedIn == NUMBER_FIVE) {
-            return SIXTH_CARD_TRADE_IN_BONUS;
-        }
-
-        if (numSetsTradedIn > NUMBER_FIVE) {
-            return SIXTH_CARD_TRADE_IN_BONUS
-                    + CARD_TRADE_IN_BONUS_INCREMENT * (numSetsTradedIn - NUMBER_FIVE);
-        }
-
-        return FIRST_CARD_TRADE_IN_BONUS;
+        return SIXTH_CARD_TRADE_IN_BONUS
+                + CARD_TRADE_IN_BONUS_INCREMENT * (numSetsTradedIn - NUMBER_FIVE);
     }
 
     private int calculateArmyValue(final HashMap<ArmyType, Integer> armies) {
@@ -305,7 +293,7 @@ public class HumanPlayer extends Player {
         int cavalryCount = armies.getOrDefault(ArmyType.CAVALRY, 0);
         int artilleryCount = armies.getOrDefault(ArmyType.ARTILLERY, 0);
 
-        return infantryCount * INFANTRY_VALUE
+        return infantryCount
                 + cavalryCount * CAVALRY_VALUE
                 + artilleryCount * ARTILLERY_VALUE;
     }
