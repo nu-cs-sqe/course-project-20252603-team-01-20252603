@@ -193,7 +193,7 @@
     - **State of the system**: Human player has 3 cards; selected indices include `0`
     - **Expected output**: Returns `false`; available armies and card hand are unchanged
 
-- **TC41: Selected index above hand size is rejected** ( :x: )
+- **TC41: Selected index above hand size is rejected** ( :white_check_mark: )
     - **State of the system**: Human player has 3 cards; selected indices include `4`
     - **Expected output**: Returns `false`; available armies and card hand are unchanged
 
