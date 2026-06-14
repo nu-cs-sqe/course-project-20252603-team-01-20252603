@@ -404,6 +404,16 @@ public final class ConsoleViewTest {
         assertEquals(List.of(MALFORMED_CARD_INPUT_SENTINEL), cardIndices);
     }
 
+    @Test
+    public void promptTerritoriesToAttackReturnsSingleWordTerritoryNames() {
+        ConsoleView view = createViewWithInput("Alaska\nAlberta\n");
+
+        List<String> territoryChoices = view.promptTerritoriesToAttack();
+
+        assertEquals("Alaska", territoryChoices.get(0));
+        assertEquals("Alberta", territoryChoices.get(1));
+    }
+
     public void promptFortifyChoiceYesChoiceReturnsChoice() {
         ConsoleView view = createViewWithInput("yes\n");
 

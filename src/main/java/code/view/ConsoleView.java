@@ -172,6 +172,16 @@ public class ConsoleView {
                 tokens[artilleryIndex]);
     }
 
+    public List<String> promptTerritoriesToAttack() {
+        output.print("Enter attacking territory: ");
+        String attackingTerritory = scanner.nextLine();
+
+        output.print("Enter defending territory: ");
+        String defendingTerritory = scanner.nextLine();
+
+        return List.of(attackingTerritory, defendingTerritory);
+    }
+
     private boolean isInteger(final String value) {
         try {
             Integer.parseInt(value);

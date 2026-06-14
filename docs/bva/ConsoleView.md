@@ -253,7 +253,7 @@
 
 ### Method under test: `promptTerritoriesToAttack()`
 
-- **TC39: Returns single-word attacking and defending territory names** ( :x: )
+- **TC39: Returns single-word attacking and defending territory names** ( :white_check_mark: )
     - **State of the system**: Player is prompted separately for attacking and defending territories and enters `"Alaska"` and `"Alberta"`
     - **Expected output**: Returns a list containing `"Alaska"` and `"Alberta"`
 
