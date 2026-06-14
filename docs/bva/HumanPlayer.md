@@ -176,3 +176,95 @@
 - **TC37: More than forty-two territories is rejected as an invalid game state** ( :white_check_mark: )
     - **State of the system**: Human player owns 43 territories
     - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 43 territories because there are only 42 territories on the board."`; available armies are unchanged
+
+---
+
+### Method under test: `tradeCardsAndAddArmies(List<Integer> cardIndices, Deck deck, int numSetsTradedIn)`
+
+- **TC38: Fewer than three selected cards is rejected** ( :x: )
+    - **State of the system**: Human player has 3 cards; selected indices contain 2 cards
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC39: More than three selected cards is rejected** ( :x: )
+    - **State of the system**: Human player has 4 cards; selected indices contain 4 cards
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC40: Selected index below one is rejected** ( :x: )
+    - **State of the system**: Human player has 3 cards; selected indices include `0`
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC41: Selected index above hand size is rejected** ( :x: )
+    - **State of the system**: Human player has 3 cards; selected indices include `4`
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC42: Duplicate selected indices are rejected** ( :x: )
+    - **State of the system**: Human player has 3 cards; selected indices are `[1, 1, 2]`
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC43: Three Infantry cards is accepted** ( :x: )
+    - **State of the system**: Selected cards are Infantry, Infantry, Infantry; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC44: Three Cavalry cards is accepted** ( :x: )
+    - **State of the system**: Selected cards are Cavalry, Cavalry, Cavalry; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC45: Three Artillery cards is accepted** ( :x: )
+    - **State of the system**: Selected cards are Artillery, Artillery, Artillery; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC46: One Infantry, one Cavalry, and one Artillery is accepted** ( :x: )
+    - **State of the system**: Selected cards are Infantry, Cavalry, Artillery; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC47: Two matching cards and one different non-wild card is rejected** ( :x: )
+    - **State of the system**: Selected cards are Infantry, Infantry, Cavalry
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC48: One wild card with two matching non-wild cards is accepted** ( :x: )
+    - **State of the system**: Selected cards are Wild, Infantry, Infantry; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC49: One wild card with two different non-wild cards is accepted** ( :x: )
+    - **State of the system**: Selected cards are Wild, Infantry, Cavalry; `numSetsTradedIn = 0`
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+
+- **TC50: Two wild cards are rejected** ( :x: )
+    - **State of the system**: Selected cards include two Wild cards
+    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+
+- **TC51: First trade-in gives 4 armies** ( :x: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 0`
+    - **Expected output**: Player receives 4 Infantry
+
+- **TC52: Second trade-in gives 6 armies** ( :x: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 1`
+    - **Expected output**: Player receives 6 Infantry
+
+- **TC53: Third trade-in gives 8 armies** ( :x: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 2`
+    - **Expected output**: Player receives 8 Infantry
+
+- **TC54: Fourth trade-in gives 10 armies** ( :x: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 3`
+    - **Expected output**: Player receives 10 Infantry
+
+- **TC55: Fifth trade-in gives 12 armies** ( :x: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 4`
+    - **Expected output**: Player receives 12 Infantry
+
+- **TC56: Sixth trade-in gives 15 armies** ( :x: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 5`
+    - **Expected output**: Player receives 15 Infantry
+
+- **TC57: Seventh trade-in gives 20 armies** ( :x: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 6`
+    - **Expected output**: Player receives 20 Infantry
+
+- **TC58: Fourteenth trade-in is accepted as the maximum possible completed trade-in count** ( :x: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 14`
+    - **Expected output**: Returns `true`; player receives the trade-in bonus for the maximum possible completed trade-in count; selected cards are removed from hand
+
+- **TC59: Fifteen trade-ins is rejected as impossible with forty-four cards** ( :x: )
+    - **State of the system**: Valid set selected; `numSetsTradedIn = 15`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 15 sets because a 44-card deck supports at most 14 traded sets."`; available armies and card hand are unchanged
