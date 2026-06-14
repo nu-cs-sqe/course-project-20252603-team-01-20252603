@@ -689,11 +689,11 @@
     - **State of the system**: Defending territory exists and has exactly `1` army
     - **Expected output**: Returns `false`
 
-- **TC123: Returns true when defending territory has zero armies** ( :x: )
+- **TC123: Returns true when defending territory has zero armies** ( :white_check_mark: )
     - **State of the system**: Defending territory exists and has exactly `0` armies after battle resolution
     - **Expected output**: Returns `true`
 
-- **TC124: Unknown defending territory is rejected** ( :x: )
+- **TC124: Unknown defending territory is rejected** ( :white_check_mark: )
     - **State of the system**: `defenderTerritoryName` does not match any territory on the board
     - **Expected output**: `IllegalArgumentException` is raised with message `"Defending territory must exist on the board."`
 
@@ -701,7 +701,7 @@
 
 ### Method under test: `validateCaptureMovement(String attackerTerritoryName, String defenderTerritoryName, int armiesToMove, int attackerDiceUsed)`
 
-- **TC125: Minimum valid movement moves attacker dice used when enough armies are available** ( :x: )
+- **TC125: Minimum valid movement moves attacker dice used when enough armies are available** ( :white_check_mark: )
     - **State of the system**: Attacking territory has enough armies to move `attackerDiceUsed` while leaving one behind; `armiesToMove = attackerDiceUsed`
     - **Expected output**: Returns `true`
 
