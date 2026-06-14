@@ -51,6 +51,13 @@ public class TurnController {
         view = consoleView;
     }
 
+    public void runPlayerTurn() {
+        handleArmiesToAdd();
+        handleReinforcement();
+        handleAttackPhase(null);
+        handleFortifyPhase();
+    }
+
     public void handleArmiesToAdd() {
         model.addArmiesToCurrentPlayerBasedOnTerritories();
         model.addArmiesToCurrentPlayerBasedOnContinents();

@@ -112,7 +112,7 @@
 
 ### Method under test: `runPlayerTurn()`
 
-- **TC72: Runs full player turn phases in order**
+- **TC72: Runs full player turn phases in order** ( :white_check_mark: )
     - **State of the system**: Current player is active and can complete each phase
     - **Expected output**: Controller runs armies-to-add, reinforcement, attack, and fortify phases in that order
 

@@ -5,12 +5,14 @@ import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import code.model.ArmyType;
 import code.model.GameModel;
 import code.model.TradeInPossibility;
 import code.view.ConsoleView;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -41,6 +43,39 @@ public final class TurnControllerTest {
 
     private static final int THIRD_CARD_INDEX = 3;
 
+    private static final class RecordingTurnController extends TurnController {
+
+        private final List<String> calls = new ArrayList<>();
+
+        RecordingTurnController() {
+            super(createMock(GameModel.class), createMock(ConsoleView.class));
+        }
+
+        @Override
+        public void handleArmiesToAdd() {
+            calls.add("handleArmiesToAdd");
+        }
+
+        @Override
+        public void handleReinforcement() {
+            calls.add("handleReinforcement");
+        }
+
+        @Override
+        public void handleAttackPhase(final Object player) {
+            calls.add("handleAttackPhase");
+        }
+
+        @Override
+        public void handleFortifyPhase() {
+            calls.add("handleFortifyPhase");
+        }
+
+        private List<String> getCalls() {
+            return calls;
+        }
+    }
+
     private HashMap<ArmyType, Integer> createArmies(
             final int infantry,
             final int cavalry,
@@ -60,6 +95,21 @@ public final class TurnControllerTest {
         TurnController controller = new TurnController(model, view);
 
         assertNotNull(controller);
+    }
+
+    @Test
+    public void runPlayerTurnRunsFullPlayerTurnPhasesInOrder() {
+        RecordingTurnController controller = new RecordingTurnController();
+
+        controller.runPlayerTurn();
+
+        assertEquals(
+                List.of(
+                        "handleArmiesToAdd",
+                        "handleReinforcement",
+                        "handleAttackPhase",
+                        "handleFortifyPhase"),
+                controller.getCalls());
     }
 
     @Test
