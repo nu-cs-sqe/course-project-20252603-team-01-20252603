@@ -613,6 +613,33 @@ public final class TurnControllerTest {
     }
 
     @Test
+    public void handleAttackPhaseDisplaysNoValidAttacksWhenNoneAvailable() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(model.currentPlayerHasValidAttack()).andReturn(false);
+        view.displayNoValidAttacks();
+        expectLastCall().once();
+        expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
     public void handleReinforcementRepromptsAfterMalformedInput() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
