@@ -396,7 +396,7 @@
     - **State of the system**: Current player owns source, multiple intermediate connected territories, and destination
     - **Expected output**: Returns `true`; armies move from source to destination through the owned path
 
-- **TC87: Rejects path blocked by another player's territory** ( :x: )
+- **TC87: Rejects path blocked by another player's territory** ( :white_check_mark: )
     - **State of the system**: Source and destination are connected on the board only through at least one territory owned by another player
     - **Expected output**: Returns `false`; source and destination army counts do not change
 
