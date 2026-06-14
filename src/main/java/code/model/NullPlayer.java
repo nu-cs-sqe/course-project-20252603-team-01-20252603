@@ -64,4 +64,9 @@ public class NullPlayer extends Player {
             final int numSetsTradedIn) {
         throw new UnsupportedOperationException("NullPlayer cannot trade cards.");
     }
+
+    @Override
+    public void addCard(final RiskCard card) {
+        throw new UnsupportedOperationException("NullPlayer cannot receive cards.");
+    }
 }

@@ -79,6 +79,18 @@ public final class NullPlayerTest {
 
     }
 
+    @Test
+    public void addCardThrowsUnsupportedOperationException() {
+        NullPlayer player = new NullPlayer();
+        RiskCard card = new RiskCard(null, CardType.WILD, true);
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                () -> player.addCard(card));
+
+        assertEquals("NullPlayer cannot receive cards.", exception.getMessage());
+    }
+
     public void ownsTerritoryUnassignedOwnerReturnsFalse() {
         NullPlayer player = new NullPlayer();
         Continent continent = new Continent("Asia", ASIA_BONUS_ARMIES);

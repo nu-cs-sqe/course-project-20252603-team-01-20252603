@@ -170,7 +170,8 @@ public class HumanPlayer extends Player {
         addArmies(reinforcementArmies);
     }
 
-    void addCard(final RiskCard card) {
+    @Override
+    public void addCard(final RiskCard card) {
         availableCards.add(card);
     }
 

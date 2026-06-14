@@ -53,6 +53,8 @@ public abstract class Player {
             Deck deck,
             int numSetsTradedIn);
 
+    public abstract void addCard(RiskCard card);
+
     @Override
     public String toString() {
         return name + " - " + color;
