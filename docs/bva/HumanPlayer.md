@@ -281,7 +281,7 @@
     - **State of the system**: Human player owns `alaska` and `alberta`; `removeTerritory(alaska)` is called
     - **Expected output**: Player territory count becomes `1`; `ownsTerritory(alaska)` returns `false`; `ownsTerritory(alberta)` returns `true`
 
-- **TC62: Removing a territory not owned by the player leaves territories unchanged** (:x:)
+- **TC62: Removing a territory not owned by the player leaves territories unchanged** (:white_check_mark:)
     - **State of the system**: Human player owns `alaska`; `removeTerritory(alberta)` is called
     - **Expected output**: Player territory count remains `1`; `ownsTerritory(alaska)` returns `true`; `ownsTerritory(alberta)` returns `false`
 
