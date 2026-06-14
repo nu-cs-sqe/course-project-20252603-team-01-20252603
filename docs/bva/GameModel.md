@@ -565,7 +565,7 @@
     - **State of the system**: Current player owns the attacking territory; the attacking territory has more than `2` armies; the defending territory is adjacent and owned by another player
     - **Expected output**: Returns the defending territory name
 
-- **TC95: Rejects attacking territory not owned by current player** ( :x: )
+- **TC95: Rejects attacking territory not owned by current player** ( :white_check_mark: )
     - **State of the system**: Selected attacking territory is owned by another player
     - **Expected output**: `IllegalArgumentException` is raised with message `"Current player must own the attacking territory."`
 
