@@ -208,8 +208,8 @@ public final class TerritoryTest {
         boolean added = territory.addArmies(armiesToAdd);
 
         assertTrue(added);
-        final int EXPECTED_RESULT = 3; 
-        assertEquals(EXPECTED_RESULT, territory.getArmyCount());
+        final int expectedResult = 3;
+        assertEquals(expectedResult, territory.getArmyCount());
     }
 
     @Test
@@ -276,8 +276,8 @@ public final class TerritoryTest {
     public void removeArmiesMultipleArmiesWhileArmiesRemainReturnsTrue() {
         Territory territory = createTerritoryWithNoAdjacencies();
         HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
-        final int INITIAL_ARMIES = 3; 
-        initialArmies.put(ArmyType.INFANTRY, INITIAL_ARMIES);
+        final int initialArmies = 3;
+        initialArmies.put(ArmyType.INFANTRY, initialArmies);
         HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
         armiesToRemove.put(ArmyType.INFANTRY, TWO_INFANTRY);
 
@@ -309,8 +309,8 @@ public final class TerritoryTest {
         HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
         initialArmies.put(ArmyType.INFANTRY, TWO_INFANTRY);
         HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
-        final int ARMIES_TO_REMOVE = 3; 
-        armiesToRemove.put(ArmyType.INFANTRY, ARMIES_TO_REMOVE);
+        final int armiesToRemove = 3;
+        armiesToRemove.put(ArmyType.INFANTRY, armiesToRemove);
 
         territory.addArmies(initialArmies);
         boolean removed = territory.removeArmies(armiesToRemove);
