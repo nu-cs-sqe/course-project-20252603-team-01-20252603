@@ -56,7 +56,7 @@
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.REQUIRED`; player enters a valid card selection
     - **Expected output**: Controller processes territory and continent armies, requires card trade-in, and proceeds only after a valid trade succeeds
 
-- **TC42: Required trade-in rejects skip and re-prompts** ( :x: )
+- **TC42: Required trade-in rejects skip and re-prompts** ( :white_check_mark: )
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.REQUIRED`; player attempts to skip card trade-in and `promptChooseCardsToTradeIn()` returns `List.of()`
     - **Expected output**: Error message is displayed; controller re-prompts and does not proceed until a valid trade is completed
 
