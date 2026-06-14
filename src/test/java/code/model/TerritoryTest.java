@@ -173,4 +173,16 @@ public final class TerritoryTest {
         assertEquals(0, territory.getArmyCount());
     }
 
+    @Test
+    public void addArmiesOneArmyToEmptyTerritoryReturnsTrue() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
+        armiesToAdd.put(ArmyType.INFANTRY, ONE_INFANTRY);
+
+        boolean added = territory.addArmies(armiesToAdd);
+
+        assertTrue(added);
+        assertEquals(ONE_INFANTRY, territory.getArmyCount());
+    }
+
 }

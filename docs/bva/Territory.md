@@ -113,7 +113,7 @@
     - **State of the system**: Territory has an existing army count; `addArmies()` is called with `INFANTRY -> 0`
     - **Expected output**: Method returns `true`; territory army count does not change
 
-- **TC20: Add one army to empty territory** ( :x: )
+- **TC20: Add one army to empty territory** ( :white_check_mark: )
     - **State of the system**: Territory has `0` armies; `addArmies()` is called with `INFANTRY -> 1`
     - **Expected output**: Method returns `true`; territory army count becomes `1`
 
