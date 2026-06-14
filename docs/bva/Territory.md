@@ -109,7 +109,7 @@
 
 ### Method under test: `addArmies(HashMap<ArmyType, Integer> armiesToAdd)`
 
-- **TC19: Add zero armies** ( :x: )
+- **TC19: Add zero armies** ( :white_check_mark: )
     - **State of the system**: Territory has an existing army count; `addArmies()` is called with `INFANTRY -> 0`
     - **Expected output**: Method returns `true`; territory army count does not change
 
