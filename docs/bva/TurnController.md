@@ -104,15 +104,15 @@
     - **State of the system**: Territory and dice validation succeed; model returns one battle result
     - **Expected output**: Controller calls `displayBattleResult(...)` exactly once with the returned battle result
 
-- **TC53: Player skips attack phase immediately**
+- **TC53: Player skips attack phase immediately** ( :white_check_mark: )
     - **State of the system**: Current player has valid attacks available, but `promptAttackChoice()` returns `"no"`
     - **Expected output**: Controller does not prompt for attack territories, does not execute battle, does not award a Risk card, and ends attack phase
 
-- **TC54: No valid attacks available ends attack phase**
+- **TC54: No valid attacks available ends attack phase** ( :white_check_mark: )
     - **State of the system**: `currentPlayerHasValidAttack()` returns `false`
     - **Expected output**: Controller displays no-valid-attacks message, does not prompt for attack choice, does not execute battle, and does not award a Risk card
 
-- **TC55: Invalid attack choice re-prompts**
+- **TC55: Invalid attack choice re-prompts** ( :white_check_mark: )
     - **State of the system**: `promptAttackChoice()` returns `"maybe"`, then `"no"`
     - **Expected output**: Controller displays `"Invalid attack choice."`, re-prompts, then ends attack phase without executing battle
 
