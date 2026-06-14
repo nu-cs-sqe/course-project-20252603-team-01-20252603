@@ -1030,6 +1030,25 @@ public final class GameModelTest {
     }
 
     @Test
+    public void addArmiesToCurrentPlayerBasedOnTerritoriesWithFortyOneTerritoriesAddsThirteenInfantry() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        player.addArmies(createInfantryPieces(TERRITORY_COUNT));
+        claimTerritories(gameModel, 41);
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY + ONE_INFANTRY));
+
+        gameModel.addArmiesToCurrentPlayerBasedOnTerritories();
+
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=13"));
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = new GameModel();
 

@@ -313,7 +313,7 @@
     - **State of the system**: Current player owns exactly `12` territories and has `0` available Infantry before turn-start territory armies are added
     - **Expected output**: Current player's available Infantry increases to `4`
 
-- **TC68: Current player with 41 territories receives 13 Infantry** ( :x: )
+- **TC68: Current player with 41 territories receives 13 Infantry** ( :white_check_mark: )
     - **State of the system**: Current player owns exactly `41` territories and has `0` available Infantry before turn-start territory armies are added
     - **Expected output**: Current player's available Infantry increases to `13`
 
