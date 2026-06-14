@@ -438,4 +438,23 @@ public final class HumanPlayerTest {
         assertTrue(remainingArmies.contains("0"));
     }
 
+    @Test
+    public void removeArmiesExactCavalryMatchPreservesRemainingInfantry() {
+        HumanPlayer player = new HumanPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                FIVE_ARMIES);
+        HashMap<ArmyType, Integer> cavalryToAdd =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
+        player.addArmies(cavalryToAdd);
+
+        HashMap<ArmyType, Integer> cavalryToRemove =
+                createArmies(ZERO_ARMIES, ONE_ARMY, ZERO_ARMIES);
+        player.removeArmies(cavalryToRemove);
+
+        String remainingArmies = player.getAvailableArmies();
+        assertTrue(remainingArmies.contains("INFANTRY=5"));
+        assertTrue(remainingArmies.contains("CAVALRY=0"));
+    }
+
 }
