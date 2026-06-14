@@ -177,6 +177,7 @@ package code.view {
         + displayCurrentPlayer(currentPlayerName : String) : void
         + displayUnclaimedTerritoriesByContinent(unclaimedTerritories : String) : void
         + displayCurrentPlayerClaimingStatus(playerClaimingStatus : String) : void
+        + displayCurrentPlayerTerritoriesByContinent(playerTerritories : String) : void
         + getTerritoryChoiceDuringSetup() : String
         + displayCurrentPlayerArmies(availableArmies: String) : void
         + displayCurrentPlayerCards(cards: String): void
@@ -233,7 +234,7 @@ package code.controller {
         ' not required
         +runTurnsTillWin(): void
         +checkAndHandleWin(): Player
-        +handleFortifyPhase(player: Player): void
+        +handleFortifyPhase(): void
       }
 }
 

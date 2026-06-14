@@ -40,6 +40,8 @@ public class TurnController {
 
     private static final int CAPTURE_MOVEMENT_MIN_RADIX = 10;
 
+    private static final int FORTIFY_ARMY_COUNT_RADIX = 10;
+
     @SuppressFBWarnings(
             value = "EI_EXPOSE_REP2",
             justification = "TurnController intentionally stores the model and view it controls."
@@ -205,6 +207,56 @@ public class TurnController {
 
         if (model.awardRiskCardIfCaptured(capturedTerritoryThisTurn)) {
             view.displayRiskCardAwarded(model.getCurrentPlayerName());
+        }
+    }
+
+    public void handleFortifyPhase() {
+        view.displayCurrentPlayer(model.getCurrentPlayerName());
+
+        while (true) {
+            String fortifyChoice = view.promptFortifyChoice();
+
+            if (isNoChoice(fortifyChoice)) {
+                return;
+            }
+
+            if (isYesChoice(fortifyChoice)) {
+                boolean fortified = false;
+                while (!fortified) {
+                    fortified = handleFortifyMove();
+                }
+
+                view.displayCurrentPlayerTerritoriesByContinent(
+                        model.getCurrentPlayerTerritoriesByContinent());
+                return;
+            }
+
+            view.displayError("Invalid fortify choice.");
+        }
+    }
+
+    private boolean handleFortifyMove() {
+        view.displayCurrentPlayerTerritoriesByContinent(
+                model.getCurrentPlayerTerritoriesByContinent());
+        String sourceTerritory = view.promptFortifySourceTerritory();
+        String destinationTerritory = view.promptFortifyDestinationTerritory();
+        String armyCountInput = view.promptFortifyArmyCount();
+
+        try {
+            int armyCount = Integer.parseInt(armyCountInput, FORTIFY_ARMY_COUNT_RADIX);
+            boolean fortified = model.fortifyTerritory(
+                    sourceTerritory,
+                    destinationTerritory,
+                    armyCount);
+
+            if (!fortified) {
+                view.displayError("Invalid fortify move.");
+            }
+
+            return fortified;
+        } catch (NumberFormatException exception) {
+            view.displayError("Invalid army count.");
+            return false;
         }
     }
 

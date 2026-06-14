@@ -31,6 +31,8 @@ public final class TurnControllerTest {
 
     private static final int THREE_ARMIES = 3;
 
+    private static final int FOUR_ARMIES = 4;
+
     private static final int FIFTEEN_ARMIES = 15;
 
     private static final int FIRST_CARD_INDEX = 1;
@@ -242,6 +244,273 @@ public final class TurnControllerTest {
 
         TurnController controller = new TurnController(model, view);
         controller.handleReinforcement();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhasePlayerSkipsFortification() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("no");
+
+        replay(model, view);
+
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhasePlayerSkipsFortificationWithSingleLetterChoice() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("n");
+
+        replay(model, view);
+
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhasePlayerChoosesToFortify() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("yes");
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("2");
+        expect(model.fortifyTerritory("Alaska", "Alberta", TWO_ARMIES)).andReturn(true);
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhasePlayerChoosesToFortifyWithSingleLetterChoice() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("y");
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("2");
+        expect(model.fortifyTerritory("Alaska", "Alberta", TWO_ARMIES)).andReturn(true);
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhaseInvalidFortifyChoiceRepromptsPlayer() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("maybe");
+        view.displayError("Invalid fortify choice.");
+        expectLastCall().once();
+        expect(view.promptFortifyChoice()).andReturn("no");
+
+        replay(model, view);
+
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhaseNonNumericArmyCountRepromptsMoveInput() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("yes");
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("two");
+        view.displayError("Invalid army count.");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("2");
+        expect(model.fortifyTerritory("Alaska", "Alberta", TWO_ARMIES)).andReturn(true);
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhaseModelRejectsInvalidFortifyMoveRepromptsMoveInput() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("yes");
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("2");
+        expect(model.fortifyTerritory("Alaska", "Alberta", TWO_ARMIES)).andReturn(false);
+        view.displayError("Invalid fortify move.");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("1");
+        expect(model.fortifyTerritory("Alaska", "Alberta", ONE_ARMY)).andReturn(true);
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleFortifyPhase();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleFortifyPhaseValidMoveAfterInvalidMoveEndsFortifyPhase() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(view.promptFortifyChoice()).andReturn("yes");
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("4");
+        expect(model.fortifyTerritory("Alaska", "Alberta", FOUR_ARMIES)).andReturn(false);
+        view.displayError("Invalid fortify move.");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+        expect(view.promptFortifySourceTerritory()).andReturn("Alaska");
+        expect(view.promptFortifyDestinationTerritory()).andReturn("Alberta");
+        expect(view.promptFortifyArmyCount()).andReturn("1");
+        expect(model.fortifyTerritory("Alaska", "Alberta", ONE_ARMY)).andReturn(true);
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska, Alberta");
+        view.displayCurrentPlayerTerritoriesByContinent(
+                "North America: Alaska, Alberta");
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleFortifyPhase();
 
         verify(model, view);
     }
