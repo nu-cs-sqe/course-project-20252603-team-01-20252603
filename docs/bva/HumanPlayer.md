@@ -345,10 +345,10 @@
     - **State of the system**: Human player has zero cards; `removeAllCards()` is called
     - **Expected output**: Returns an empty list; player card count remains `0`
 
-- **TC73: Remove all cards from one-card hand** (:x:)
+- **TC73: Remove all cards from one-card hand** (:white_check_mark:)
     - **State of the system**: Human player has exactly one card; `removeAllCards()` is called
     - **Expected output**: Returns a list containing that card; player card count becomes `0`
 
-- **TC74: Remove all cards from multi-card hand** (:x:)
+- **TC74: Remove all cards from multi-card hand** (:white_check_mark:)
     - **State of the system**: Human player has multiple cards; `removeAllCards()` is called
     - **Expected output**: Returns all cards that were in the hand; player card count becomes `0`; returned list size equals the previous card count

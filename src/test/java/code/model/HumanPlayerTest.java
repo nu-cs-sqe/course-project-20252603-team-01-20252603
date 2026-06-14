@@ -378,6 +378,23 @@ public final class HumanPlayerTest {
     }
 
     @Test
+    public void removeAllCardsFromMultiCardHandReturnsAllCardsAndEmptiesHand() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        RiskCard firstCard = createCard(CardType.INFANTRY);
+        RiskCard secondCard = createCard(CardType.CAVALRY);
+        RiskCard thirdCard = createCard(CardType.ARTILLERY);
+
+        player.addCards(List.of(firstCard, secondCard, thirdCard));
+        List<RiskCard> removedCards = player.removeAllCards();
+
+        assertEquals(THREE_CARDS, removedCards.size());
+        assertTrue(removedCards.contains(firstCard));
+        assertTrue(removedCards.contains(secondCard));
+        assertTrue(removedCards.contains(thirdCard));
+        assertEquals(ZERO_CARDS, player.getCardCount());
+    }
+
+    @Test
     public void hasAvailableArmiesReturnsTrueWhenRequiredInfantryIsAvailable() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
         HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
