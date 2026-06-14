@@ -132,7 +132,7 @@
     - **State of the system**: Defending territory is captured; model rejects first numeric movement with `IllegalArgumentException`, then accepts a later movement
     - **Expected output**: Controller displays the model error message, re-prompts, then captures territory with valid movement
 
-- **TC60: Defender elimination is displayed after capture**
+- **TC60: Defender elimination is displayed after capture** ( :white_check_mark: )
     - **State of the system**: Capture succeeds and `handlePlayerElimination(defenderName)` returns `true`
     - **Expected output**: Controller displays player elimination for the defender
 
