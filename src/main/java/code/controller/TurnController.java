@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class TurnController {
 
+    private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
+
     private final GameModel model;
 
     private final ConsoleView view;
@@ -48,9 +50,21 @@ public class TurnController {
 
         if (tradeInPossibility == TradeInPossibility.ALLOWED) {
             view.displayCurrentPlayerCards(model.getCurrentPlayerCards());
-            model.handleCardTradeIn(view.promptChooseCardsToTradeIn());
+            List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+            while (isMalformedCardTradeInInput(cardIndices)) {
+                view.displayError("Invalid card trade-in input.");
+                cardIndices = view.promptChooseCardsToTradeIn();
+            }
+
+            model.handleCardTradeIn(cardIndices);
             view.displayCurrentPlayerArmies(model.getCurrentPlayerAvailableArmies());
         }
+    }
+
+    private boolean isMalformedCardTradeInInput(final List<Integer> cardIndices) {
+        return cardIndices.size() == 1
+                && cardIndices.get(0) == MALFORMED_CARD_INPUT_SENTINEL;
     }
 
     public void handleReinforcement() {

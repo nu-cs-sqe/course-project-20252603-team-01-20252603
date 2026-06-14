@@ -44,7 +44,7 @@
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.ALLOWED`; player skips card trade-in and `promptChooseCardsToTradeIn()` returns `List.of()`
     - **Expected output**: Controller processes territory and continent armies, prompts for card trade-in once, does not add trade-in armies, and proceeds to reinforcement
 
-- **TC39: Malformed optional trade-in input re-prompts when trade-in is allowed** ( :x: )
+- **TC39: Malformed optional trade-in input re-prompts when trade-in is allowed** ( :white_check_mark: )
     - **State of the system**: Current player starts turn; `checkCardTradeInPossibility()` returns `TradeInPossibility.ALLOWED`; player first enters malformed card input and `promptChooseCardsToTradeIn()` returns `List.of(Integer.MIN_VALUE)`
     - **Expected output**: Error message is displayed; controller re-prompts for card trade-in and proceeds only after a valid trade or explicit skip
 

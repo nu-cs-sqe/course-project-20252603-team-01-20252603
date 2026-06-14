@@ -22,6 +22,8 @@ import static org.easymock.EasyMock.expectLastCall;
  */
 public final class TurnControllerTest {
 
+    private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
+
     private static final int ZERO_ARMIES = 0;
 
     private static final int ONE_ARMY = 1;
@@ -365,6 +367,42 @@ public final class TurnControllerTest {
         expect(model.getCurrentPlayerCards()).andReturn("1: Infantry, 2: Cavalry, 3: Artillery");
 
         view.displayCurrentPlayerCards("1: Infantry, 2: Cavalry, 3: Artillery");
+        expectLastCall().once();
+
+        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of());
+        expect(model.handleCardTradeIn(List.of())).andReturn(true);
+        expect(model.getCurrentPlayerAvailableArmies()).andReturn("{INFANTRY=5}");
+
+        view.displayCurrentPlayerArmies("{INFANTRY=5}");
+        expectLastCall().once();
+
+        replay(model, view);
+
+        controller.handleArmiesToAdd();
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleArmiesToAddWithMalformedOptionalTradeInReprompts() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        model.addArmiesToCurrentPlayerBasedOnTerritories();
+        expectLastCall().once();
+
+        model.addArmiesToCurrentPlayerBasedOnContinents();
+        expectLastCall().once();
+
+        expect(model.checkCardTradeInPossibility()).andReturn(TradeInPossibility.ALLOWED);
+        expect(model.getCurrentPlayerCards()).andReturn("1: Infantry, 2: Cavalry, 3: Artillery");
+
+        view.displayCurrentPlayerCards("1: Infantry, 2: Cavalry, 3: Artillery");
+        expectLastCall().once();
+
+        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(MALFORMED_CARD_INPUT_SENTINEL));
+        view.displayError("Invalid card trade-in input.");
         expectLastCall().once();
 
         expect(view.promptChooseCardsToTradeIn()).andReturn(List.of());
