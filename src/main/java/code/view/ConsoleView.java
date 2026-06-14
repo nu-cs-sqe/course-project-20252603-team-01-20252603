@@ -180,8 +180,12 @@ public class ConsoleView {
             attackingTerritory = scanner.nextLine();
         }
 
-        output.print("Enter defending territory: ");
-        String defendingTerritory = scanner.nextLine();
+        String defendingTerritory = "";
+
+        while (defendingTerritory.isBlank()) {
+            output.print("Enter defending territory: ");
+            defendingTerritory = scanner.nextLine();
+        }
 
         return List.of(attackingTerritory, defendingTerritory);
     }

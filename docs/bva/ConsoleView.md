@@ -265,7 +265,7 @@
     - **State of the system**: Player is prompted for attacking territory, enters an empty line, and then enters `"Alaska"`; player then enters `"Alberta"` for defending territory
     - **Expected output**: Re-prompts for the attacking territory and then returns a list containing `"Alaska"` and `"Alberta"`
 
-- **TC42: Re-prompts on blank defending territory input** ( :x: )
+- **TC42: Re-prompts on blank defending territory input** ( :white_check_mark: )
     - **State of the system**: Player enters `"Alaska"` for attacking territory, then enters an empty line for defending territory, and then enters `"Alberta"`
     - **Expected output**: Re-prompts for the defending territory and then returns a list containing `"Alaska"` and `"Alberta"`
 
