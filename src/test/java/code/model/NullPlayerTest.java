@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashMap;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -56,6 +57,17 @@ public final class NullPlayerTest {
                 player::addArmiesToAvailableBasedOnTerritories);
 
         assertEquals("NullPlayer cannot receive armies.", exception.getMessage());
+    }
+
+    @Test
+    public void tradeCardsAndAddArmiesUnassignedOwnershipRaisesException() {
+        NullPlayer player = new NullPlayer();
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                () -> player.tradeCardsAndAddArmies(List.of(1, 2, 3), new Deck(), 0));
+
+        assertEquals("NullPlayer cannot trade cards.", exception.getMessage());
     }
 
 }

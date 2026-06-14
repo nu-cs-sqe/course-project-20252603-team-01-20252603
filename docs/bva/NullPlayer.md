@@ -47,6 +47,6 @@
 
 ### Method under test: `tradeCardsAndAddArmies(List<Integer> cardIndices, Deck deck, int numSetsTradedIn)`
 
-- **TC8: Card trade-in is rejected for NullPlayer** ( :x: )
+- **TC8: Card trade-in is rejected for NullPlayer** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `tradeCardsAndAddArmies(...)` called
     - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot trade cards."` because `NullPlayer` does not represent a real active player

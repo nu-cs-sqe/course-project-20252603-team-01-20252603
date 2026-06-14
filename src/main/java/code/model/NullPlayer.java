@@ -57,6 +57,6 @@ public class NullPlayer extends Player {
             final List<Integer> cardIndices,
             final Deck deck,
             final int numSetsTradedIn) {
-        return false;
+        throw new UnsupportedOperationException("NullPlayer cannot trade cards.");
     }
 }
