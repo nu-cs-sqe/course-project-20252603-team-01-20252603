@@ -361,7 +361,7 @@
 
 ### Method under test: `displayNoValidAttacks()`
 
-- **TC61: Displays no valid attacks message**
+- **TC61: Displays no valid attacks message** ( :white_check_mark: )
     - **State of the system**: Controller determines the current player has no valid attacks
     - **Expected output**: Output contains `"No valid attacks available."`
 

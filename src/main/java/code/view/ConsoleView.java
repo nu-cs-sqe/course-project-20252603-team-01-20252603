@@ -233,6 +233,10 @@ public class ConsoleView {
         }
     }
 
+    public void displayNoValidAttacks() {
+        output.println("No valid attacks available.");
+    }
+
     private boolean isInteger(final String value) {
         try {
             Integer.parseInt(value);
