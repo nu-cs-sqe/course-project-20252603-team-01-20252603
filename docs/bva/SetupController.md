@@ -139,6 +139,6 @@
     - **State of the system**: Current player chooses to fortify and enters numeric move input, but `GameModel.fortifyTerritory(...)` returns `false`
     - **Expected output**: Controller displays `"Invalid fortify move."`; current player is not advanced; source, destination, and army count are requested again
 
-- **TC31: Valid move after one invalid move ends fortify phase** ( :x: )
+- **TC31: Valid move after one invalid move ends fortify phase** ( :white_check_mark: )
     - **State of the system**: First fortify attempt returns `false`; second fortify attempt returns `true`
     - **Expected output**: Controller allows exactly one successful fortify move, displays the updated territories once after success, advances to the next player, and exits the phase
