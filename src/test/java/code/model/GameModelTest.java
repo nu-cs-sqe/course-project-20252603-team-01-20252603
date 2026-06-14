@@ -1631,6 +1631,30 @@ public final class GameModelTest {
     }
 
     @Test
+    public void validateNumberOfDiceMinimumValidDiceCountsReturnsTrue() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        boolean validDice = gameModel.validateNumberOfDice(
+                "Alaska",
+                "Alberta",
+                ONE_ARMY,
+                ONE_ARMY);
+
+        assertTrue(validDice);
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = new GameModel();
 

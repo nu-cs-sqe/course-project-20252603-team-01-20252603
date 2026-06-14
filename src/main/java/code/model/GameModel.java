@@ -674,6 +674,39 @@ public class GameModel {
         return defendingTerritory.getName();
     }
 
+    public boolean validateNumberOfDice(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName,
+            final int attackerNumDice,
+            final int defenderNumDice) {
+        Territory attackingTerritory = findTerritoryOrThrow(
+                attackerTerritoryName,
+                "Attacking territory must exist on the board.");
+        Territory defendingTerritory = findTerritoryOrThrow(
+                defenderTerritoryName,
+                "Defending territory must exist on the board.");
+
+        if (attackerNumDice < 1 || attackerNumDice > 3) {
+            throw new IllegalArgumentException("Attacker must roll between 1 and 3 dice.");
+        }
+
+        if (attackerNumDice > attackingTerritory.getArmyCount() - 1) {
+            throw new IllegalArgumentException(
+                    "Attacker cannot roll more dice than attacking territory armies minus one.");
+        }
+
+        if (defenderNumDice < 1 || defenderNumDice > 2) {
+            throw new IllegalArgumentException("Defender must roll either 1 or 2 dice.");
+        }
+
+        if (defenderNumDice > defendingTerritory.getArmyCount()) {
+            throw new IllegalArgumentException(
+                    "Defender cannot roll more dice than the number of armies on the defending territory.");
+        }
+
+        return true;
+    }
+
 
     public void addArmiesToCurrentPlayerBasedOnContinents() {
         Player player = players.get(currentPlayerIndex);

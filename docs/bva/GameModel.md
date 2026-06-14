@@ -597,7 +597,7 @@
 
 ### Method under test: `validateNumberOfDice(String attackerTerritoryName, String defenderTerritoryName, int attackerNumDice, int defenderNumDice)`
 
-- **TC102: Minimum valid dice counts are accepted** ( :x: )
+- **TC102: Minimum valid dice counts are accepted** ( :white_check_mark: )
     - **State of the system**: Attacking territory has exactly `2` armies; defending territory has exactly `1` army; `attackerNumDice = 1`; `defenderNumDice = 1`
     - **Expected output**: Returns `true`
 
