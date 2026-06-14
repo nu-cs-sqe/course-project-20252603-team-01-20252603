@@ -349,11 +349,11 @@
     - **State of the system**: Player is prompted for capture movement and enters `"3"`
     - **Expected output**: Returns `"3"`
 
-- **TC59: Returns negative capture movement count for controller/model validation**
+- **TC59: Returns negative capture movement count for controller/model validation** ( :white_check_mark: )
     - **State of the system**: Player is prompted for capture movement and enters `"-1"`
     - **Expected output**: Returns `"-1"` so the capture flow can reject a negative movement
 
-- **TC60: Returns non-numeric capture movement count for controller validation**
+- **TC60: Returns non-numeric capture movement count for controller validation** ( :white_check_mark: )
     - **State of the system**: Player is prompted for capture movement and enters `"two"`
     - **Expected output**: Returns `"two"` so the controller can reject it without calling the model
 

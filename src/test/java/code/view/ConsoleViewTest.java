@@ -715,6 +715,35 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptCaptureArmyCountNegativeReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("-1\n");
+
+        String armyCount = view.promptCaptureArmyCount("Alaska", "Alberta");
+
+        assertEquals("-1", armyCount);
+    }
+
+    @Test
+    public void promptCaptureArmyCountNonNumericReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("two\n");
+
+        String armyCount = view.promptCaptureArmyCount("Alaska", "Alberta");
+
+        assertEquals("two", armyCount);
+    }
+
+    @Test
+    public void displayNoValidAttacksPrintsNoValidAttacksMessage() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayNoValidAttacks();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8)
+                .contains("No valid attacks available."));
+    }
+
+    @Test
     public void displayErrorPrintsErrorMessage() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(captured);
