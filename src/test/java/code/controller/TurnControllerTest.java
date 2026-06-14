@@ -515,6 +515,9 @@ public final class TurnControllerTest {
         view.displayCurrentPlayerClaimingStatus("North America: Alaska");
         expectLastCall().once();
 
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(view.promptAttackChoice()).andReturn("yes");
         expect(view.promptTerritoriesToAttack()).andReturn(territoryChoices);
         expect(model.validateTerritoriesForAttackAndReturnDefenderName(
                 "Alaska",
@@ -534,6 +537,9 @@ public final class TurnControllerTest {
                 .andReturn(battleResult);
         view.displayBattleResult(battleResult);
         expectLastCall().once();
+        expect(model.isTerritoryCaptured("Alberta")).andReturn(false);
+        expect(model.currentPlayerHasValidAttack()).andReturn(false);
+        expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
 
         replay(model, view);
 
