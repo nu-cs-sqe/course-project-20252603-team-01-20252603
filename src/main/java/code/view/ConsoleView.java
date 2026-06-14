@@ -173,8 +173,12 @@ public class ConsoleView {
     }
 
     public List<String> promptTerritoriesToAttack() {
-        output.print("Enter attacking territory: ");
-        String attackingTerritory = scanner.nextLine();
+        String attackingTerritory = "";
+
+        while (attackingTerritory.isBlank()) {
+            output.print("Enter attacking territory: ");
+            attackingTerritory = scanner.nextLine();
+        }
 
         output.print("Enter defending territory: ");
         String defendingTerritory = scanner.nextLine();

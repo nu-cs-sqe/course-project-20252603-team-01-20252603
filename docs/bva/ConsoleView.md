@@ -261,7 +261,7 @@
     - **State of the system**: Player is prompted separately for attacking and defending territories and enters `"Western United States"` and `"Eastern United States"`
     - **Expected output**: Returns a list containing `"Western United States"` and `"Eastern United States"`
 
-- **TC41: Re-prompts on blank attacking territory input** ( :x: )
+- **TC41: Re-prompts on blank attacking territory input** ( :white_check_mark: )
     - **State of the system**: Player is prompted for attacking territory, enters an empty line, and then enters `"Alaska"`; player then enters `"Alberta"` for defending territory
     - **Expected output**: Re-prompts for the attacking territory and then returns a list containing `"Alaska"` and `"Alberta"`
 
