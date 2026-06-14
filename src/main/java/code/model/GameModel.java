@@ -528,7 +528,6 @@ public class GameModel {
         Territory sourceTerritory = findTerritoryByName(sourceName);
         Territory destinationTerritory = findTerritoryByName(destinationName);
         Player currentPlayer = players.get(currentPlayerIndex);
-        HashMap<ArmyType, Integer> piecesToMove = createInfantryPieces(armyCount);
 
         if (!sourceTerritory.isOwnedBy(currentPlayer)
                 || !destinationTerritory.isOwnedBy(currentPlayer)) {
@@ -539,13 +538,19 @@ public class GameModel {
             return false;
         }
 
-        if (armyCount <= 0 || sourceTerritory.getArmyCount() <= armyCount) {
+        if (armyCount < SETUP_INFANTRY_COUNT) {
+            return false;
+        }
+
+        if (armyCount >= sourceTerritory.getArmyCount()) {
             return false;
         }
 
         if (!hasOwnedPath(sourceTerritory, destinationTerritory, currentPlayer)) {
             return false;
         }
+
+        HashMap<ArmyType, Integer> piecesToMove = createInfantryPieces(armyCount);
 
         if (!sourceTerritory.removeArmies(piecesToMove)) {
             return false;
@@ -680,13 +685,17 @@ public class GameModel {
     }
 
     private boolean hasAnyValidTradeInSet(final List<RiskCard> cards) {
-        for (int firstIndex = 0; firstIndex < cards.size() - 2; firstIndex++) {
-            for (int secondIndex = firstIndex + 1; secondIndex < cards.size() - 1; secondIndex++) {
-                for (int thirdIndex = secondIndex + 1; thirdIndex < cards.size(); thirdIndex++) {
-                    if (isValidTradeInSet(List.of(
-                            cards.get(firstIndex),
-                            cards.get(secondIndex),
-                            cards.get(thirdIndex)))) {
+        if (cards.size() < MIN_PLAYER_COUNT) {
+            return false;
+        }
+
+        for (RiskCard firstCard : cards) {
+            for (RiskCard secondCard : cards) {
+                for (RiskCard thirdCard : cards) {
+                    if (firstCard != secondCard
+                            && firstCard != thirdCard
+                            && secondCard != thirdCard
+                            && isValidTradeInSet(List.of(firstCard, secondCard, thirdCard))) {
                         return true;
                     }
                 }

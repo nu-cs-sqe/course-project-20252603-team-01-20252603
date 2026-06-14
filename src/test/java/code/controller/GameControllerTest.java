@@ -1,6 +1,9 @@
 package code.controller;
 
 import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -78,6 +81,22 @@ public final class GameControllerTest {
 
         assertFalse(model.isDeckEmpty());
 
+    }
+
+    @Test
+    public void startGameDelegatesBoardInitializationToSetupController() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+
+        model.initializeContinentsAndTerritories();
+        expectLastCall().once();
+
+        replay(model, view);
+
+        GameController controller = new GameController(model, view);
+        controller.startGame();
+
+        verify(model, view);
     }
 
     @Test
