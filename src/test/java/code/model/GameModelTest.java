@@ -2780,6 +2780,22 @@ public final class GameModelTest {
     }
 
     @Test
+    public void handlePlayerEliminationUnknownDefenderRaisesException() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> gameModel.handlePlayerElimination("Missing Player"));
+
+        assertEquals("Player must exist.", exception.getMessage());
+    }
+
+    @Test
     public void currentPlayerHasValidAttackReturnsFalseWhenCurrentPlayerHasNoTerritories() {
         GameModel gameModel = createGameModel();
 
@@ -3620,6 +3636,24 @@ public final class GameModelTest {
         replay(firstCard, secondCard, thirdCard);
 
         assertFalse(isValidTradeInSet(gameModel, List.of(firstCard, secondCard, thirdCard)));
+    }
+
+    @Test
+    public void areTerritoriesAdjacentReturnsTrueForAdjacentTerritories() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        assertTrue(gameModel.areTerritoriesAdjacent("Alaska", "Alberta"));
+    }
+
+    @Test
+    public void areTerritoriesAdjacentReturnsFalseForNonAdjacentTerritories() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        assertFalse(gameModel.areTerritoriesAdjacent("Alaska", "Brazil"));
     }
 
     @Test
