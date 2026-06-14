@@ -45,6 +45,13 @@ public class HumanPlayer extends Player {
 
     private HashMap<ArmyType, Integer> availableArmies;
 
+    private static final int NUMBER_THREE = 3;
+
+    private static final int NUMBER_FOUR = 4;
+
+    private static final int NUMBER_FIVE = 5;
+
+
     public HumanPlayer(
             final String playerName,
             final PlayerColor playerColor,
@@ -181,7 +188,7 @@ public class HumanPlayer extends Player {
                             + " sets because a 44-card deck supports at most 14 traded sets.");
         }
 
-        if (cardIndices.size() != 3) {
+        if (cardIndices.size() != NUMBER_THREE) {
             return false;
         }
 
@@ -241,21 +248,21 @@ public class HumanPlayer extends Player {
             return THIRD_CARD_TRADE_IN_BONUS;
         }
 
-        if (numSetsTradedIn == 3) {
+        if (numSetsTradedIn == NUMBER_THREE) {
             return FOURTH_CARD_TRADE_IN_BONUS;
         }
 
-        if (numSetsTradedIn == 4) {
+        if (numSetsTradedIn == NUMBER_FOUR) {
             return FIFTH_CARD_TRADE_IN_BONUS;
         }
 
-        if (numSetsTradedIn == 5) {
+        if (numSetsTradedIn == NUMBER_FIVE) {
             return SIXTH_CARD_TRADE_IN_BONUS;
         }
 
-        if (numSetsTradedIn > 5) {
+        if (numSetsTradedIn > NUMBER_FIVE) {
             return SIXTH_CARD_TRADE_IN_BONUS
-                    + CARD_TRADE_IN_BONUS_INCREMENT * (numSetsTradedIn - 5);
+                    + CARD_TRADE_IN_BONUS_INCREMENT * (numSetsTradedIn - NUMBER_FIVE);
         }
 
         return FIRST_CARD_TRADE_IN_BONUS;

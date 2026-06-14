@@ -62,6 +62,24 @@ public final class GameModelTest {
 
     private static final int FOUR_CARD_TRADE_IN_ARMIES = 4;
 
+    private static final int EIGHT_TERRITORIES = 8;
+
+    private static final int TWELVE_TERRITORIES = 12;
+
+    private static final int FORTY_ONE_TERRITORIES = 41;
+
+    private static final int AUSTRALIA_TERRITORY_COUNT = 4;
+
+    private static final int SOUTH_AMERICA_TERRITORY_COUNT = 4;
+
+    private static final int AFRICA_TERRITORY_COUNT = 6;
+
+    private static final int EUROPE_TERRITORY_COUNT = 7;
+
+    private static final int NORTH_AMERICA_TERRITORY_COUNT = 9;
+
+    private static final int ASIA_TERRITORY_COUNT = 12;
+
     @Test
     public void deckHasFortyFourCardsAfterBoardInitialization() {
         GameModel gameModel = new GameModel();
@@ -1181,8 +1199,9 @@ public final class GameModelTest {
         gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.initializeContinentsAndTerritories();
 
-        claimTerritories(gameModel, 8);
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - 8));
+        claimTerritories(gameModel, EIGHT_TERRITORIES);
+        player.removeArmies(createInfantryPieces(
+                THREE_PLAYER_STARTING_INFANTRY - EIGHT_TERRITORIES));
 
         gameModel.addArmiesToCurrentPlayerBasedOnTerritories();
 
@@ -1199,8 +1218,9 @@ public final class GameModelTest {
         gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.initializeContinentsAndTerritories();
 
-        claimTerritories(gameModel, 12);
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - 12));
+        claimTerritories(gameModel, TWELVE_TERRITORIES);
+        player.removeArmies(createInfantryPieces(
+                THREE_PLAYER_STARTING_INFANTRY - TWELVE_TERRITORIES));
 
         gameModel.addArmiesToCurrentPlayerBasedOnTerritories();
 
@@ -1218,7 +1238,7 @@ public final class GameModelTest {
         gameModel.initializeContinentsAndTerritories();
 
         player.addArmies(createInfantryPieces(TERRITORY_COUNT));
-        claimTerritories(gameModel, 41);
+        claimTerritories(gameModel, FORTY_ONE_TERRITORIES);
         player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY + ONE_INFANTRY));
 
         gameModel.addArmiesToCurrentPlayerBasedOnTerritories();
@@ -1251,7 +1271,25 @@ public final class GameModelTest {
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
 
+        player.addArmies(createInfantryPieces(TERRITORY_COUNT));
+        claimTerritories(gameModel, TERRITORY_COUNT);
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                gameModel::addArmiesToCurrentPlayerBasedOnTerritories);
+
+        assertEquals(
+                "Player cannot own 42 territories and play a turn because they should have already won.",
+                exception.getMessage());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
+    @Test
     public void setPlayerCountMinimumValidCountReturnsTrue() {
         GameModel gameModel = new GameModel();
 
@@ -1319,143 +1357,22 @@ public final class GameModelTest {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        player.addArmies(createInfantryPieces(TERRITORY_COUNT));
-        claimTerritories(gameModel, TERRITORY_COUNT);
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
-
-        IllegalStateException exception = assertThrows(
-                IllegalStateException.class,
-                gameModel::addArmiesToCurrentPlayerBasedOnTerritories);
-
-        assertEquals(
-                "Player cannot own 42 territories and play a turn because they should have already won.",
-                exception.getMessage());
-        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
-    }
-
-    @Test
-    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
         gameModel.addPlayer("Player 2", PlayerColor.BLUE);
         gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.initializeContinentsAndTerritories();
 
-        gameModel.claimTerritoryDuringSetup("Indonesia", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("New Guinea", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Western Australia", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Eastern Australia", createInfantryPieces(ONE_INFANTRY));
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - 4));
-
-        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
-
-        String availableArmies = player.getAvailableArmies();
-
-        assertTrue(availableArmies.contains("INFANTRY=2"));
-        assertTrue(availableArmies.contains("CAVALRY=0"));
-        assertTrue(availableArmies.contains("ARTILLERY=0"));
-    }
-
-    @Test
-    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullSouthAmericaAddsTwoInfantry() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup("Venezuela", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Peru", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Brazil", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Argentina", createInfantryPieces(ONE_INFANTRY));
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - 4));
-
-        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
-
-        String availableArmies = player.getAvailableArmies();
-
-        assertTrue(availableArmies.contains("INFANTRY=2"));
-        assertTrue(availableArmies.contains("CAVALRY=0"));
-        assertTrue(availableArmies.contains("ARTILLERY=0"));
-    }
-
-    @Test
-    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAfricaAddsThreeInfantry() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup("North Africa", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Egypt", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("East Africa", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Congo", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("South Africa", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Madagascar", createInfantryPieces(ONE_INFANTRY));
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - 6));
-
-        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
-
-        String availableArmies = player.getAvailableArmies();
-
-        assertTrue(availableArmies.contains("INFANTRY=3"));
-        assertTrue(availableArmies.contains("CAVALRY=0"));
-        assertTrue(availableArmies.contains("ARTILLERY=0"));
-    }
-
-    @Test
-    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullEuropeAddsFiveInfantry() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup("Iceland", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Scandinavia", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Ukraine", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Great Britain", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Northern Europe", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Western Europe", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Southern Europe", createInfantryPieces(ONE_INFANTRY));
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - 7));
-
-        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
-
-        String availableArmies = player.getAvailableArmies();
-
-        assertTrue(availableArmies.contains("INFANTRY=5"));
-        assertTrue(availableArmies.contains("CAVALRY=0"));
-        assertTrue(availableArmies.contains("ARTILLERY=0"));
-    }
-
-    @Test
-    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullNorthAmericaAddsFiveInfantry() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
-
+        gameModel.claimTerritoryDuringSetup(
+                "Alaska",
+                createInfantryPieces(ONE_INFANTRY));
         HashMap<ArmyType, Integer> allRemaining =
                 createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - ONE_INFANTRY);
-        gameModel.placeArmiesDuringReinforcement("Alaska", allRemaining);
 
+        boolean placed = gameModel.placeArmiesDuringReinforcement("Alaska", allRemaining);
+
+        assertTrue(placed);
         assertFalse(gameModel.currentPlayerHasAvailableArmies());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
     }
 
     @Test
@@ -1484,7 +1401,7 @@ public final class GameModelTest {
 
         String output = gameModel.getUnclaimedTerritoriesByContinent();
         int firstOccurrence = output.indexOf("North America");
-        int secondOccurrence = output.indexOf("North America", firstOccurrence + 1);
+        int secondOccurrence = output.indexOf("North America", firstOccurrence + ONE_ARMY);
 
         assertEquals(-1, secondOccurrence);
     }
@@ -1492,6 +1409,7 @@ public final class GameModelTest {
     @Test
     public void isDeckEmptyReturnsFalseWhenDeckHasCards() {
         GameModel gameModel = new GameModel();
+
         assertFalse(gameModel.isDeckEmpty());
     }
 
@@ -1506,16 +1424,123 @@ public final class GameModelTest {
     }
 
     @Test
-    public void fortifyTerritoryAdjacentOwnedTerritoriesWithOneArmyReturnsTrue() {
+    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = new GameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
         gameModel.addPlayer("Player 2", PlayerColor.BLUE);
         gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.initializeContinentsAndTerritories();
 
+        gameModel.claimTerritoryDuringSetup("Indonesia", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("New Guinea", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Western Australia", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Eastern Australia", createInfantryPieces(ONE_INFANTRY));
+        player.removeArmies(createInfantryPieces(
+                THREE_PLAYER_STARTING_INFANTRY - AUSTRALIA_TERRITORY_COUNT));
+
+        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(availableArmies.contains("INFANTRY=2"));
+        assertTrue(availableArmies.contains("CAVALRY=0"));
+        assertTrue(availableArmies.contains("ARTILLERY=0"));
+    }
+
+    @Test
+    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullSouthAmericaAddsTwoInfantry() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Venezuela", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Peru", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Brazil", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Argentina", createInfantryPieces(ONE_INFANTRY));
+        player.removeArmies(createInfantryPieces(
+                THREE_PLAYER_STARTING_INFANTRY - SOUTH_AMERICA_TERRITORY_COUNT));
+
+        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(availableArmies.contains("INFANTRY=2"));
+        assertTrue(availableArmies.contains("CAVALRY=0"));
+        assertTrue(availableArmies.contains("ARTILLERY=0"));
+    }
+
+    @Test
+    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAfricaAddsThreeInfantry() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("North Africa", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Egypt", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("East Africa", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Congo", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("South Africa", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Madagascar", createInfantryPieces(ONE_INFANTRY));
+        player.removeArmies(createInfantryPieces(
+                THREE_PLAYER_STARTING_INFANTRY - AFRICA_TERRITORY_COUNT));
+
+        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(availableArmies.contains("INFANTRY=3"));
+        assertTrue(availableArmies.contains("CAVALRY=0"));
+        assertTrue(availableArmies.contains("ARTILLERY=0"));
+    }
+
+    @Test
+    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullEuropeAddsFiveInfantry() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup("Iceland", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Scandinavia", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Ukraine", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Great Britain", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Northern Europe", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Western Europe", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Southern Europe", createInfantryPieces(ONE_INFANTRY));
+        player.removeArmies(createInfantryPieces(
+                THREE_PLAYER_STARTING_INFANTRY - EUROPE_TERRITORY_COUNT));
+
+        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
+
+        String availableArmies = player.getAvailableArmies();
+
+        assertTrue(availableArmies.contains("INFANTRY=5"));
+        assertTrue(availableArmies.contains("CAVALRY=0"));
+        assertTrue(availableArmies.contains("ARTILLERY=0"));
+    }
+
+    @Test
+    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullNorthAmericaAddsFiveInfantry() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
 
         gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
         gameModel.claimTerritoryDuringSetup("Northwest Territory", createInfantryPieces(ONE_INFANTRY));
@@ -1526,7 +1551,8 @@ public final class GameModelTest {
         gameModel.claimTerritoryDuringSetup("Western United States", createInfantryPieces(ONE_INFANTRY));
         gameModel.claimTerritoryDuringSetup("Eastern United States", createInfantryPieces(ONE_INFANTRY));
         gameModel.claimTerritoryDuringSetup("Central America", createInfantryPieces(ONE_INFANTRY));
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - 9));
+        player.removeArmies(createInfantryPieces(
+                THREE_PLAYER_STARTING_INFANTRY - NORTH_AMERICA_TERRITORY_COUNT));
 
         gameModel.addArmiesToCurrentPlayerBasedOnContinents();
 
@@ -1543,41 +1569,9 @@ public final class GameModelTest {
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", ONE_ARMY);
-        boolean sourceCannotFortifyAgain = gameModel.fortifyTerritory(
-                "Alaska",
-                "Alberta",
-                ONE_ARMY);
-        boolean destinationCanFortifyBack = gameModel.fortifyTerritory(
-                "Alberta",
-                "Alaska",
-                ONE_ARMY);
-
-        assertTrue(fortified);
-        assertFalse(sourceCannotFortifyAgain);
-        assertTrue(destinationCanFortifyBack);
-    }
-
-    @Test
-    public void fortifyTerritoryConnectedOwnedTerritoriesLeavingOneArmyReturnsTrue() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
         gameModel.addPlayer("Player 2", PlayerColor.BLUE);
         gameModel.addPlayer("Player 3", PlayerColor.GREEN);
         gameModel.initializeContinentsAndTerritories();
-
 
         gameModel.claimTerritoryDuringSetup("Ural", createInfantryPieces(ONE_INFANTRY));
         gameModel.claimTerritoryDuringSetup("Siberia", createInfantryPieces(ONE_INFANTRY));
@@ -1591,7 +1585,8 @@ public final class GameModelTest {
         gameModel.claimTerritoryDuringSetup("Middle East", createInfantryPieces(ONE_INFANTRY));
         gameModel.claimTerritoryDuringSetup("India", createInfantryPieces(ONE_INFANTRY));
         gameModel.claimTerritoryDuringSetup("Siam", createInfantryPieces(ONE_INFANTRY));
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - 12));
+        player.removeArmies(createInfantryPieces(
+                THREE_PLAYER_STARTING_INFANTRY - ASIA_TERRITORY_COUNT));
 
         gameModel.addArmiesToCurrentPlayerBasedOnContinents();
 
@@ -1601,866 +1596,4 @@ public final class GameModelTest {
         assertTrue(availableArmies.contains("CAVALRY=0"));
         assertTrue(availableArmies.contains("ARTILLERY=0"));
     }
-
-    @Test
-    public void addArmiesToCurrentPlayerBasedOnContinentsWithAustraliaAndSouthAmericaAddsFourInfantry() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", THREE_ARMIES);
-        boolean sourceCannotFortifyAgain = gameModel.fortifyTerritory(
-                "Alaska",
-                "Alberta",
-                ONE_ARMY);
-        boolean destinationCanFortifyBack = gameModel.fortifyTerritory(
-                "Alberta",
-                "Alaska",
-                THREE_ARMIES);
-
-        assertTrue(fortified);
-        assertFalse(sourceCannotFortifyAgain);
-        assertTrue(destinationCanFortifyBack);
-    }
-
-    @Test
-    public void fortifyTerritoryConnectedOwnedTerritoriesWithZeroArmiesReturnsFalse() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup("Indonesia", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("New Guinea", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Western Australia", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Eastern Australia", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Venezuela", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Peru", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Brazil", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Argentina", createInfantryPieces(ONE_INFANTRY));
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - 8));
-
-        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
-
-        String availableArmies = player.getAvailableArmies();
-
-        assertTrue(availableArmies.contains("INFANTRY=4"));
-        assertTrue(availableArmies.contains("CAVALRY=0"));
-        assertTrue(availableArmies.contains("ARTILLERY=0"));
-    }
-
-    @Test
-    public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAndPartialSouthAmericaAddsTwoInfantry() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", ZERO_ARMIES);
-
-        assertFalse(fortified);
-    }
-
-    @Test
-    public void fortifyTerritoryConnectedOwnedTerritoriesWithNegativeArmiesReturnsFalse() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-
-        gameModel.claimTerritoryDuringSetup("Indonesia", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("New Guinea", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Western Australia", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Eastern Australia", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Venezuela", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Peru", createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup("Brazil", createInfantryPieces(ONE_INFANTRY));
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY - 7));
-
-        gameModel.addArmiesToCurrentPlayerBasedOnContinents();
-
-        String availableArmies = player.getAvailableArmies();
-
-        assertTrue(availableArmies.contains("INFANTRY=2"));
-        assertTrue(availableArmies.contains("CAVALRY=0"));
-        assertTrue(availableArmies.contains("ARTILLERY=0"));
-    }
-
-    @Test
-    public void handleCardTradeInWithEmptyCardSelectionSkipsTradeIn() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.ARTILLERY));
-
-        boolean tradedIn = gameModel.handleCardTradeIn(List.of());
-
-        assertTrue(tradedIn);
-        assertEquals(3, humanPlayer.getCardCount());
-        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
-        assertFalse(player.getAvailableArmies().contains(String.valueOf(FOUR_CARD_TRADE_IN_ARMIES)));
-    }
-
-    @Test
-    public void handleCardTradeInWithNullCardSelectionSkipsTradeIn() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.ARTILLERY));
-
-        boolean tradedIn = gameModel.handleCardTradeIn(null);
-
-        assertTrue(tradedIn);
-        assertEquals(3, humanPlayer.getCardCount());
-        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
-        assertFalse(player.getAvailableArmies().contains(String.valueOf(FOUR_CARD_TRADE_IN_ARMIES)));
-    }
-
-    @Test
-    public void handleCardTradeInWithInvalidCardSelectionReturnsFalseAndDoesNotIncrementTradeCount() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-
-        boolean invalidTradeIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
-
-        assertFalse(invalidTradeIn);
-        assertEquals(3, humanPlayer.getCardCount());
-        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
-
-        humanPlayer.addCard(createCard(CardType.ARTILLERY));
-
-        boolean validTradeIn = gameModel.handleCardTradeIn(List.of(1, 3, 4));
-
-        assertTrue(validTradeIn);
-        assertEquals(1, humanPlayer.getCardCount());
-        assertTrue(player.getAvailableArmies().contains("INFANTRY=4"));
-    }
-
-    @Test
-    public void handleCardTradeInWithFirstValidTradeAddsFourInfantryAndIncrementsTradeCount() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.ARTILLERY));
-
-        boolean firstTradeIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
-
-        assertTrue(firstTradeIn);
-        assertEquals(0, humanPlayer.getCardCount());
-        assertTrue(player.getAvailableArmies().contains("INFANTRY=4"));
-
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.ARTILLERY));
-
-        boolean secondTradeIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
-
-        assertTrue(secondTradeIn);
-        assertEquals(0, humanPlayer.getCardCount());
-        assertTrue(player.getAvailableArmies().contains("INFANTRY=10"));
-    }
-
-    @Test
-    public void handleCardTradeInWithSecondValidTradeAddsSixInfantry() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.ARTILLERY));
-
-        boolean firstTradeIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
-
-        assertTrue(firstTradeIn);
-        assertTrue(player.getAvailableArmies().contains("INFANTRY=4"));
-
-        player.removeArmies(createInfantryPieces(FOUR_CARD_TRADE_IN_ARMIES));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.ARTILLERY));
-
-        boolean secondTradeIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
-
-        assertTrue(secondTradeIn);
-        assertEquals(0, humanPlayer.getCardCount());
-        assertTrue(player.getAvailableArmies().contains("INFANTRY=6"));
-    }
-
-    @Test
-    public void handleCardTradeInWithFourteenthValidTradeAddsFiftyFiveInfantry() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
-
-        for (int tradeNumber = 0; tradeNumber < 13; tradeNumber++) {
-            addValidTradeInSet(humanPlayer);
-            assertTrue(gameModel.handleCardTradeIn(List.of(1, 2, 3)));
-        }
-
-        player.removeArmies(createInfantryPieces(300));
-        addValidTradeInSet(humanPlayer);
-
-        boolean fourteenthTradeIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
-
-        assertTrue(fourteenthTradeIn);
-        assertEquals(0, humanPlayer.getCardCount());
-        assertTrue(player.getAvailableArmies().contains("INFANTRY=55"));
-    }
-
-    @Test
-    public void handleCardTradeInWithFifteenthTradeRaisesException() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
-
-        for (int tradeNumber = 0; tradeNumber < 14; tradeNumber++) {
-            addValidTradeInSet(humanPlayer);
-            assertTrue(gameModel.handleCardTradeIn(List.of(1, 2, 3)));
-        }
-
-        player.removeArmies(createInfantryPieces(355));
-        addValidTradeInSet(humanPlayer);
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> gameModel.handleCardTradeIn(List.of(1, 2, 3)));
-
-        assertEquals(
-                "Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets.",
-                exception.getMessage());
-        assertEquals(3, humanPlayer.getCardCount());
-        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
-    }
-
-    @Test
-    public void checkCardTradeInPossibilityWithFewerThanThreeCardsReturnsNotAllowed() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
-
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
-
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
-    }
-
-    @Test
-    public void checkCardTradeInPossibilityWithThreeCardsAndNoValidSetReturnsNotAllowed() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-
-        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
-    }
-
-    @Test
-    public void checkCardTradeInPossibilityWithThreeCardsAndValidSetReturnsAllowed() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.ARTILLERY));
-
-        assertEquals(TradeInPossibility.ALLOWED, gameModel.checkCardTradeInPossibility());
-    }
-
-    @Test
-    public void checkCardTradeInPossibilityWithFourCardsAndNoValidSetReturnsNotAllowed() {
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", -ONE_ARMY);
-
-        assertFalse(fortified);
-    }
-
-    @Test
-    public void fortifyTerritoryConnectedOwnedTerritoriesMovingAllArmiesReturnsFalse() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", THREE_ARMIES);
-
-        assertFalse(fortified);
-    }
-
-    @Test
-    public void fortifyTerritoryConnectedOwnedTerritoriesMovingTooManyArmiesReturnsFalse() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-
-        final int armiesBeingFortified = 4;
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", armiesBeingFortified);
-
-        assertFalse(fortified);
-    }
-
-    @Test
-    public void fortifyTerritoryConnectedOwnedTerritoriesWithOneSourceArmyReturnsFalse() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", ONE_ARMY);
-
-        assertFalse(fortified);
-    }
-
-    @Test
-    public void fortifyTerritorySourceNotOwnedByCurrentPlayerReturnsFalse() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.advanceCurrentPlayerIndex();
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", ONE_ARMY);
-
-        assertFalse(fortified);
-    }
-
-    @Test
-    public void fortifyTerritoryDestinationNotOwnedByCurrentPlayerReturnsFalse() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.advanceCurrentPlayerIndex();
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-
-        gameModel.advanceCurrentPlayerIndex();
-        gameModel.advanceCurrentPlayerIndex();
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alberta", ONE_ARMY);
-
-        assertFalse(fortified);
-    }
-
-    @Test
-    public void fortifyTerritorySameSourceAndDestinationReturnsFalse() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Alaska", ONE_ARMY);
-
-        assertFalse(fortified);
-    }
-
-    @Test
-    public void fortifyTerritoryOwnedPathWithOneIntermediateTerritoryReturnsTrue() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Ontario",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Ontario", ONE_ARMY);
-        boolean sourceCannotFortifyAgain = gameModel.fortifyTerritory(
-                "Alaska",
-                "Ontario",
-                ONE_ARMY);
-        boolean destinationCanFortifyBack = gameModel.fortifyTerritory(
-                "Ontario",
-                "Alaska",
-                ONE_ARMY);
-
-        assertTrue(fortified);
-        assertFalse(sourceCannotFortifyAgain);
-        assertTrue(destinationCanFortifyBack);
-    }
-
-    @Test
-    public void fortifyTerritoryOwnedPathWithMultipleIntermediateTerritoriesReturnsTrue() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Ontario",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Quebec",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Quebec", ONE_ARMY);
-        boolean sourceCannotFortifyAgain = gameModel.fortifyTerritory(
-                "Alaska",
-                "Quebec",
-                ONE_ARMY);
-        boolean destinationCanFortifyBack = gameModel.fortifyTerritory(
-                "Quebec",
-                "Alaska",
-                ONE_ARMY);
-
-        assertTrue(fortified);
-        assertFalse(sourceCannotFortifyAgain);
-        assertTrue(destinationCanFortifyBack);
-    }
-
-    @Test
-    public void fortifyTerritoryPathBlockedByAnotherPlayersTerritoryReturnsFalse() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.advanceCurrentPlayerIndex();
-        gameModel.claimTerritoryDuringSetup(
-                "Ontario",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.advanceCurrentPlayerIndex();
-        gameModel.advanceCurrentPlayerIndex();
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Ontario", ONE_ARMY);
-
-        assertFalse(fortified);
-    }
-
-    @Test
-    public void fortifyTerritoryDisconnectedOwnedTerritoriesReturnsFalse() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        gameModel.addPlayer("Player 1", PlayerColor.RED);
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Brazil",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.addArmiesDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean fortified = gameModel.fortifyTerritory("Alaska", "Brazil", ONE_ARMY);
-
-        assertFalse(fortified);
-    }
-
-    @Test
-    public void hasOwnedPathAdjacentOwnedTerritoriesReturnsTrue() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-
-        assertEquals(TradeInPossibility.NOT_ALLOWED, gameModel.checkCardTradeInPossibility());
-    }
-
-    @Test
-    public void checkCardTradeInPossibilityWithFourCardsAndValidSubsetReturnsAllowed() {
-
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean hasPath = gameModel.hasOwnedPath(
-                gameModel.findTerritoryByName("Alaska"),
-                gameModel.findTerritoryByName("Alberta"),
-                player);
-
-        assertTrue(hasPath);
-    }
-
-    @Test
-    public void hasOwnedPathLongerOwnedPathReturnsTrue() {
-
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.ARTILLERY));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-
-        assertEquals(TradeInPossibility.ALLOWED, gameModel.checkCardTradeInPossibility());
-    }
-
-    @Test
-    public void checkCardTradeInPossibilityWithFiveCardsReturnsRequired() {
-
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Ontario",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Quebec",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean hasPath = gameModel.hasOwnedPath(
-                gameModel.findTerritoryByName("Alaska"),
-                gameModel.findTerritoryByName("Quebec"),
-                player);
-
-        assertTrue(hasPath);
-    }
-
-    @Test
-    public void hasOwnedPathCircularOwnedTerritoryStructureReturnsTrue() {
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.ARTILLERY));
-
-        assertEquals(TradeInPossibility.REQUIRED, gameModel.checkCardTradeInPossibility());
-    }
-
-    @Test
-    public void checkCardTradeInPossibilityWithMoreThanFiveCardsReturnsRequired() {
-
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Northwest Territory",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.claimTerritoryDuringSetup(
-                "Ontario",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean hasPath = gameModel.hasOwnedPath(
-                gameModel.findTerritoryByName("Alaska"),
-                gameModel.findTerritoryByName("Ontario"),
-                player);
-
-        assertTrue(hasPath);
-    }
-
-    @Test
-    public void hasOwnedPathEnemyOwnedTerritoryInPathReturnsFalse() {
-
-        GameModel gameModel = new GameModel();
-
-        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
-        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
-
-        HumanPlayer humanPlayer = (HumanPlayer) player;
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.INFANTRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.CAVALRY));
-        humanPlayer.addCard(createCard(CardType.ARTILLERY));
-        humanPlayer.addCard(createCard(CardType.WILD));
-
-        assertEquals(TradeInPossibility.REQUIRED, gameModel.checkCardTradeInPossibility());
-    }
-
-        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
-        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
-        gameModel.initializeContinentsAndTerritories();
-
-        gameModel.claimTerritoryDuringSetup(
-                "Alaska",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.advanceCurrentPlayerIndex();
-        gameModel.claimTerritoryDuringSetup(
-                "Alberta",
-                createInfantryPieces(ONE_INFANTRY));
-        gameModel.advanceCurrentPlayerIndex();
-        gameModel.advanceCurrentPlayerIndex();
-        gameModel.claimTerritoryDuringSetup(
-                "Ontario",
-                createInfantryPieces(ONE_INFANTRY));
-
-        boolean hasPath = gameModel.hasOwnedPath(
-                gameModel.findTerritoryByName("Alaska"),
-                gameModel.findTerritoryByName("Ontario"),
-                player);
-
-        assertFalse(hasPath);
-    }
-
-
 }

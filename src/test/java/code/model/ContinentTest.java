@@ -7,12 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 /**
  * Tests boundary values and core behavior for the Continent class.
@@ -161,7 +160,6 @@ public final class ContinentTest {
         assertEquals(expectedBonusArmies, continent.getBonusArmies());
     }
 
-
     @Test
     public void isFullyOwnedByReturnsFalseWhenContinentHasNoTerritories() {
         Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
@@ -272,9 +270,6 @@ public final class ContinentTest {
         continent.addTerritory(territory);
 
         assertFalse(continent.isFullyOwnedBy(nullPlayer));
-
-    private Territory createRealTerritory(final String name, final Continent continent) {
-        return new Territory(name, continent, Collections.emptyList());
     }
 
     @Test
@@ -320,5 +315,9 @@ public final class ContinentTest {
         continent.addTerritory(japan);
 
         assertFalse(continent.containsTerritory(china));
+    }
+
+    private Territory createRealTerritory(final String name, final Continent continent) {
+        return new Territory(name, continent, Collections.emptyList());
     }
 }

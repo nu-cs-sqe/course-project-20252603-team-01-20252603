@@ -22,6 +22,8 @@ public final class NullPlayerTest {
 
     private static final int AUSTRALIA_BONUS_ARMIES = 5;
 
+    private static final int THREE = 3;
+
     @Test
     public void constructorUnassignedOwnershipCreatesPlayerPlaceholder() {
         NullPlayer player = new NullPlayer();
@@ -71,9 +73,11 @@ public final class NullPlayerTest {
 
         UnsupportedOperationException exception = assertThrows(
                 UnsupportedOperationException.class,
-                () -> player.tradeCardsAndAddArmies(List.of(1, 2, 3), new Deck(), 0));
+                () -> player.tradeCardsAndAddArmies(List.of(1, 2, THREE), new Deck(), 0));
 
         assertEquals("NullPlayer cannot trade cards.", exception.getMessage());
+
+    }
 
     public void ownsTerritoryUnassignedOwnerReturnsFalse() {
         NullPlayer player = new NullPlayer();

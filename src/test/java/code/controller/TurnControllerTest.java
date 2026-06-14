@@ -1,21 +1,19 @@
 package code.controller;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.expectLastCall;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import code.model.ArmyType;
 import code.model.GameModel;
 import code.model.TradeInPossibility;
 import code.view.ConsoleView;
-import org.junit.jupiter.api.Test;
-
 import java.util.HashMap;
 import java.util.List;
-
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.easymock.EasyMock.expectLastCall;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests turn flow behavior for the TurnController class.
@@ -33,6 +31,12 @@ public final class TurnControllerTest {
     private static final int THREE_ARMIES = 3;
 
     private static final int FIFTEEN_ARMIES = 15;
+
+    private static final int FIRST_CARD_INDEX = 1;
+
+    private static final int SECOND_CARD_INDEX = 2;
+
+    private static final int THIRD_CARD_INDEX = 3;
 
     private HashMap<ArmyType, Integer> createArmies(
             final int infantry,
@@ -146,7 +150,6 @@ public final class TurnControllerTest {
         HashMap<ArmyType, Integer> invalidPieces =
                 createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
 
-
         expect(model.currentPlayerHasAvailableArmies()).andReturn(true);
 
         expect(model.getCurrentPlayerName()).andReturn("Player 1");
@@ -187,8 +190,10 @@ public final class TurnControllerTest {
                 "1",
                 "0",
                 "0"));
+
         HashMap<ArmyType, Integer> validPieces =
                 createArmies(ONE_ARMY, ZERO_ARMIES, ZERO_ARMIES);
+
         expect(model.placeArmiesDuringReinforcement("Alaska", validPieces))
                 .andReturn(true);
 
@@ -233,6 +238,7 @@ public final class TurnControllerTest {
         expect(model.currentPlayerHasAvailableArmies()).andReturn(false);
 
         replay(model, view);
+
         TurnController controller = new TurnController(model, view);
         controller.handleReinforcement();
 
@@ -243,8 +249,6 @@ public final class TurnControllerTest {
     public void handleReinforcementRepromptsAfterMalformedInput() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-
-
 
         expect(model.currentPlayerHasAvailableArmies()).andReturn(true);
 
@@ -288,6 +292,7 @@ public final class TurnControllerTest {
         expect(model.currentPlayerHasAvailableArmies()).andReturn(false);
 
         replay(model, view);
+
         TurnController controller = new TurnController(model, view);
         controller.handleReinforcement();
 
@@ -298,7 +303,6 @@ public final class TurnControllerTest {
     public void handleArmiesToAddWithTradeInNotAllowedAddsArmiesAndDisplaysAvailableArmies() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
 
         model.addArmiesToCurrentPlayerBasedOnTerritories();
         expectLastCall().once();
@@ -314,6 +318,7 @@ public final class TurnControllerTest {
 
         replay(model, view);
 
+        TurnController controller = new TurnController(model, view);
         controller.handleArmiesToAdd();
 
         verify(model, view);
@@ -323,7 +328,6 @@ public final class TurnControllerTest {
     public void handleArmiesToAddWithOptionalValidTradeInProcessesTradeAndDisplaysAvailableArmies() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
 
         model.addArmiesToCurrentPlayerBasedOnTerritories();
         expectLastCall().once();
@@ -337,8 +341,14 @@ public final class TurnControllerTest {
         view.displayCurrentPlayerCards("1: Infantry, 2: Cavalry, 3: Artillery");
         expectLastCall().once();
 
-        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(1, 2, 3));
-        expect(model.handleCardTradeIn(List.of(1, 2, 3))).andReturn(true);
+        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX));
+        expect(model.handleCardTradeIn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX))).andReturn(true);
         expect(model.getCurrentPlayerAvailableArmies()).andReturn("{INFANTRY=9}");
 
         view.displayCurrentPlayerArmies("{INFANTRY=9}");
@@ -346,6 +356,7 @@ public final class TurnControllerTest {
 
         replay(model, view);
 
+        TurnController controller = new TurnController(model, view);
         controller.handleArmiesToAdd();
 
         verify(model, view);
@@ -355,7 +366,6 @@ public final class TurnControllerTest {
     public void handleArmiesToAddWithOptionalTradeInSkipDisplaysAvailableArmies() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
 
         model.addArmiesToCurrentPlayerBasedOnTerritories();
         expectLastCall().once();
@@ -378,6 +388,7 @@ public final class TurnControllerTest {
 
         replay(model, view);
 
+        TurnController controller = new TurnController(model, view);
         controller.handleArmiesToAdd();
 
         verify(model, view);
@@ -387,7 +398,6 @@ public final class TurnControllerTest {
     public void handleArmiesToAddWithMalformedOptionalTradeInReprompts() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
 
         model.addArmiesToCurrentPlayerBasedOnTerritories();
         expectLastCall().once();
@@ -414,6 +424,7 @@ public final class TurnControllerTest {
 
         replay(model, view);
 
+        TurnController controller = new TurnController(model, view);
         controller.handleArmiesToAdd();
 
         verify(model, view);
@@ -423,7 +434,6 @@ public final class TurnControllerTest {
     public void handleArmiesToAddWithNumericInvalidOptionalTradeInReprompts() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
 
         model.addArmiesToCurrentPlayerBasedOnTerritories();
         expectLastCall().once();
@@ -437,8 +447,14 @@ public final class TurnControllerTest {
         view.displayCurrentPlayerCards("1: Infantry, 2: Cavalry, 3: Artillery");
         expectLastCall().once();
 
-        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(1, 1, 2));
-        expect(model.handleCardTradeIn(List.of(1, 1, 2))).andReturn(false);
+        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(
+                FIRST_CARD_INDEX,
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX));
+        expect(model.handleCardTradeIn(List.of(
+                FIRST_CARD_INDEX,
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX))).andReturn(false);
         view.displayError("Invalid card trade-in selection.");
         expectLastCall().once();
 
@@ -451,6 +467,7 @@ public final class TurnControllerTest {
 
         replay(model, view);
 
+        TurnController controller = new TurnController(model, view);
         controller.handleArmiesToAdd();
 
         verify(model, view);
@@ -460,7 +477,6 @@ public final class TurnControllerTest {
     public void handleArmiesToAddWithRequiredValidTradeInProcessesTradeAndDisplaysAvailableArmies() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
 
         model.addArmiesToCurrentPlayerBasedOnTerritories();
         expectLastCall().once();
@@ -474,8 +490,14 @@ public final class TurnControllerTest {
         view.displayCurrentPlayerCards("1: Infantry, 2: Cavalry, 3: Artillery");
         expectLastCall().once();
 
-        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(1, 2, 3));
-        expect(model.handleCardTradeIn(List.of(1, 2, 3))).andReturn(true);
+        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX));
+        expect(model.handleCardTradeIn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX))).andReturn(true);
         expect(model.getCurrentPlayerAvailableArmies()).andReturn("{INFANTRY=11}");
 
         view.displayCurrentPlayerArmies("{INFANTRY=11}");
@@ -483,6 +505,7 @@ public final class TurnControllerTest {
 
         replay(model, view);
 
+        TurnController controller = new TurnController(model, view);
         controller.handleArmiesToAdd();
 
         verify(model, view);
@@ -492,7 +515,6 @@ public final class TurnControllerTest {
     public void handleArmiesToAddWithRequiredTradeInSkipReprompts() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
 
         model.addArmiesToCurrentPlayerBasedOnTerritories();
         expectLastCall().once();
@@ -510,8 +532,14 @@ public final class TurnControllerTest {
         view.displayError("Card trade-in is required.");
         expectLastCall().once();
 
-        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(1, 2, 3));
-        expect(model.handleCardTradeIn(List.of(1, 2, 3))).andReturn(true);
+        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX));
+        expect(model.handleCardTradeIn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX))).andReturn(true);
         expect(model.getCurrentPlayerAvailableArmies()).andReturn("{INFANTRY=11}");
 
         view.displayCurrentPlayerArmies("{INFANTRY=11}");
@@ -519,6 +547,7 @@ public final class TurnControllerTest {
 
         replay(model, view);
 
+        TurnController controller = new TurnController(model, view);
         controller.handleArmiesToAdd();
 
         verify(model, view);
@@ -528,7 +557,6 @@ public final class TurnControllerTest {
     public void handleArmiesToAddWithRequiredMalformedTradeInReprompts() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
 
         model.addArmiesToCurrentPlayerBasedOnTerritories();
         expectLastCall().once();
@@ -546,8 +574,14 @@ public final class TurnControllerTest {
         view.displayError("Invalid card trade-in input.");
         expectLastCall().once();
 
-        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(1, 2, 3));
-        expect(model.handleCardTradeIn(List.of(1, 2, 3))).andReturn(true);
+        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX));
+        expect(model.handleCardTradeIn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX))).andReturn(true);
         expect(model.getCurrentPlayerAvailableArmies()).andReturn("{INFANTRY=11}");
 
         view.displayCurrentPlayerArmies("{INFANTRY=11}");
@@ -555,6 +589,7 @@ public final class TurnControllerTest {
 
         replay(model, view);
 
+        TurnController controller = new TurnController(model, view);
         controller.handleArmiesToAdd();
 
         verify(model, view);
@@ -564,7 +599,6 @@ public final class TurnControllerTest {
     public void handleArmiesToAddWithRequiredNumericInvalidTradeInReprompts() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
 
         model.addArmiesToCurrentPlayerBasedOnTerritories();
         expectLastCall().once();
@@ -578,13 +612,25 @@ public final class TurnControllerTest {
         view.displayCurrentPlayerCards("1: Infantry, 2: Cavalry, 3: Artillery");
         expectLastCall().once();
 
-        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(1, 1, 2));
-        expect(model.handleCardTradeIn(List.of(1, 1, 2))).andReturn(false);
+        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(
+                FIRST_CARD_INDEX,
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX));
+        expect(model.handleCardTradeIn(List.of(
+                FIRST_CARD_INDEX,
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX))).andReturn(false);
         view.displayError("Invalid card trade-in selection.");
         expectLastCall().once();
 
-        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(1, 2, 3));
-        expect(model.handleCardTradeIn(List.of(1, 2, 3))).andReturn(true);
+        expect(view.promptChooseCardsToTradeIn()).andReturn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX));
+        expect(model.handleCardTradeIn(List.of(
+                FIRST_CARD_INDEX,
+                SECOND_CARD_INDEX,
+                THIRD_CARD_INDEX))).andReturn(true);
         expect(model.getCurrentPlayerAvailableArmies()).andReturn("{INFANTRY=11}");
 
         view.displayCurrentPlayerArmies("{INFANTRY=11}");
@@ -592,6 +638,7 @@ public final class TurnControllerTest {
 
         replay(model, view);
 
+        TurnController controller = new TurnController(model, view);
         controller.handleArmiesToAdd();
 
         verify(model, view);
@@ -601,7 +648,6 @@ public final class TurnControllerTest {
     public void handleArmiesToAddDisplaysUpdatedAvailableArmiesAfterProcessing() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
-        TurnController controller = new TurnController(model, view);
 
         model.addArmiesToCurrentPlayerBasedOnTerritories();
         expectLastCall().once();
@@ -617,6 +663,7 @@ public final class TurnControllerTest {
 
         replay(model, view);
 
+        TurnController controller = new TurnController(model, view);
         controller.handleArmiesToAdd();
 
         verify(model, view);

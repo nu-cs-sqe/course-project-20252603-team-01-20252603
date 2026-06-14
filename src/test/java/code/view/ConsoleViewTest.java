@@ -40,6 +40,10 @@ public final class ConsoleViewTest {
 
     private static final int THIRD_CARD_INDEX = 3;
 
+    private static final int THREE = 3;
+
+    private static final int FOUR = 4;
+
     private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
 
     @Test
@@ -384,11 +388,11 @@ public final class ConsoleViewTest {
 
         List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
 
-        assertEquals(4, cardIndices.size());
+        assertEquals(FOUR, cardIndices.size());
         assertEquals(FIRST_CARD_INDEX, cardIndices.get(0));
         assertEquals(SECOND_CARD_INDEX, cardIndices.get(1));
         assertEquals(THIRD_CARD_INDEX, cardIndices.get(2));
-        assertEquals(4, cardIndices.get(3));
+        assertEquals(FOUR, cardIndices.get(THREE));
     }
 
     @Test
@@ -398,6 +402,8 @@ public final class ConsoleViewTest {
         List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
 
         assertEquals(List.of(MALFORMED_CARD_INPUT_SENTINEL), cardIndices);
+    }
+
     public void promptFortifyChoiceYesChoiceReturnsChoice() {
         ConsoleView view = createViewWithInput("yes\n");
 
