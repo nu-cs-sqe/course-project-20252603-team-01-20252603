@@ -301,7 +301,7 @@
 
 ### Method under test: `markEliminated()`
 
-- **TC65: Mark active player as eliminated** (:x:)
+- **TC65: Mark active player as eliminated** (:white_check_mark:)
     - **State of the system**: Human player is active and `isEliminated()` returns `false`
     - **Expected output**: `isEliminated()` returns `true`
 

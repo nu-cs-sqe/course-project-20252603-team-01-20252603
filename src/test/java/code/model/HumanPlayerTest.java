@@ -275,6 +275,15 @@ public final class HumanPlayerTest {
     }
 
     @Test
+    public void markEliminatedMakesHumanPlayerEliminated() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+
+        player.markEliminated();
+
+        assertTrue(player.isEliminated());
+    }
+
+    @Test
     public void hasAvailableArmiesReturnsTrueWhenRequiredInfantryIsAvailable() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
         HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
