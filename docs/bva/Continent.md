@@ -115,7 +115,7 @@
     - **State of the system**: Continent contains exactly 1 territory; that territory is owned by a different player
     - **Expected output**: Returns `false`
 
-- **TC26: Multi-territory continent fully owned by player returns true** ( :x: )
+- **TC26: Multi-territory continent fully owned by player returns true** ( :white_check_mark: )
     - **State of the system**: Continent contains more than 1 territory; every territory is owned by the queried player
     - **Expected output**: Returns `true`
 

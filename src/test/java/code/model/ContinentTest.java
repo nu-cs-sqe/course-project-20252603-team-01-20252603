@@ -193,4 +193,20 @@ public final class ContinentTest {
 
         assertFalse(continent.isFullyOwnedBy(player));
     }
+
+    @Test
+    public void isFullyOwnedByReturnsTrueWhenAllTerritoriesAreOwnedByPlayer() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Player player = createMock(Player.class);
+        Territory firstTerritory = createMock(Territory.class);
+        Territory secondTerritory = createMock(Territory.class);
+
+        expect(firstTerritory.isOwnedBy(player)).andReturn(true);
+        expect(secondTerritory.isOwnedBy(player)).andReturn(true);
+        replay(firstTerritory, secondTerritory);
+        continent.addTerritory(firstTerritory);
+        continent.addTerritory(secondTerritory);
+
+        assertTrue(continent.isFullyOwnedBy(player));
+    }
 }
