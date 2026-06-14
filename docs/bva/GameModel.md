@@ -357,7 +357,7 @@
     - **State of the system**: Current player holds a valid trade-in set and `numSetsTradedIn = 0`
     - **Expected output**: Returns `true`; current player receives `4` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `1`
 
-- **TC78: Second valid card trade-in uses incremented trade-in count** ( :x: )
+- **TC78: Second valid card trade-in uses incremented trade-in count** ( :white_check_mark: )
     - **State of the system**: Current player holds a valid trade-in set and `numSetsTradedIn = 1`
     - **Expected output**: Returns `true`; current player receives `6` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `2`
 

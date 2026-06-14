@@ -1300,4 +1300,36 @@ public final class GameModelTest {
         assertEquals(0, humanPlayer.getCardCount());
         assertTrue(player.getAvailableArmies().contains("INFANTRY=10"));
     }
+
+    @Test
+    public void handleCardTradeInWithSecondValidTradeAddsSixInfantry() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer humanPlayer = (HumanPlayer) player;
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+        humanPlayer.addCard(createCard(CardType.INFANTRY));
+        humanPlayer.addCard(createCard(CardType.CAVALRY));
+        humanPlayer.addCard(createCard(CardType.ARTILLERY));
+
+        boolean firstTradeIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
+
+        assertTrue(firstTradeIn);
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=4"));
+
+        player.removeArmies(createInfantryPieces(FOUR_CARD_TRADE_IN_ARMIES));
+        humanPlayer.addCard(createCard(CardType.INFANTRY));
+        humanPlayer.addCard(createCard(CardType.CAVALRY));
+        humanPlayer.addCard(createCard(CardType.ARTILLERY));
+
+        boolean secondTradeIn = gameModel.handleCardTradeIn(List.of(1, 2, 3));
+
+        assertTrue(secondTradeIn);
+        assertEquals(0, humanPlayer.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=6"));
+    }
 }
