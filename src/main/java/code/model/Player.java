@@ -32,6 +32,8 @@ public abstract class Player {
 
     public abstract void addTerritory(Territory territory);
 
+    public abstract void removeTerritory(Territory territory);
+
     public abstract boolean ownsTerritory(Territory territory);
 
     public abstract int getTerritoryCount();

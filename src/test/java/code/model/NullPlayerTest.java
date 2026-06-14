@@ -99,6 +99,19 @@ public final class NullPlayerTest {
     }
 
     @Test
+    public void removeTerritoryThrowsUnsupportedOperationException() {
+        NullPlayer nullPlayer = new NullPlayer();
+        Continent continent = new Continent("North America", AUSTRALIA_BONUS_ARMIES);
+        Territory territory = new Territory("Alaska", continent, List.of());
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                () -> nullPlayer.removeTerritory(territory));
+
+        assertEquals("NullPlayer cannot remove territories.", exception.getMessage());
+    }
+
+    @Test
     public void getTerritoryCountReturnsZero() {
         NullPlayer nullPlayer = new NullPlayer();
 

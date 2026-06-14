@@ -18,6 +18,11 @@ public class NullPlayer extends Player {
     }
 
     @Override
+    public void removeTerritory(final Territory territory) {
+        throw new UnsupportedOperationException("NullPlayer cannot remove territories.");
+    }
+
+    @Override
     public boolean ownsTerritory(final Territory territory) {
         return false;
     }

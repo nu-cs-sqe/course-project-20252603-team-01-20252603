@@ -55,7 +55,7 @@
 
 ### Method under test: `removeTerritory(Territory territory)`
 
-- **TC9: Removing territory is rejected for NullPlayer**
+- **TC9: Removing territory is rejected for NullPlayer** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `removeTerritory(alaska)` called
     - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot remove territories."`
 

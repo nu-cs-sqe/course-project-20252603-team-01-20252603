@@ -69,6 +69,11 @@ public class HumanPlayer extends Player {
     }
 
     @Override
+    public void removeTerritory(final Territory territory) {
+        territories.remove(territory);
+    }
+
+    @Override
     public boolean ownsTerritory(final Territory territory) {
         return territories.contains(territory);
     }
