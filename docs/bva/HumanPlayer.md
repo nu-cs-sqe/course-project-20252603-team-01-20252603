@@ -183,88 +183,88 @@
 
 - **TC38: Fewer than three selected cards is rejected** ( :white_check_mark: )
     - **State of the system**: Human player has 3 cards; selected indices contain 2 cards
-    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+    - **Expected output**: Returns `false`; available armies, card hand, and deck discard pile are unchanged
 
 - **TC39: More than three selected cards is rejected** ( :white_check_mark: )
     - **State of the system**: Human player has 4 cards; selected indices contain 4 cards
-    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+    - **Expected output**: Returns `false`; available armies, card hand, and deck discard pile are unchanged
 
 - **TC40: Selected index below one is rejected** ( :white_check_mark: )
     - **State of the system**: Human player has 3 cards; selected indices include `0`
-    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+    - **Expected output**: Returns `false`; available armies, card hand, and deck discard pile are unchanged
 
 - **TC41: Selected index above hand size is rejected** ( :white_check_mark: )
     - **State of the system**: Human player has 3 cards; selected indices include `4`
-    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+    - **Expected output**: Returns `false`; available armies, card hand, and deck discard pile are unchanged
 
 - **TC42: Duplicate selected indices are rejected** ( :white_check_mark: )
     - **State of the system**: Human player has 3 cards; selected indices are `[1, 1, 2]`
-    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+    - **Expected output**: Returns `false`; available armies, card hand, and deck discard pile are unchanged
 
 - **TC43: Three Infantry cards is accepted** ( :white_check_mark: )
     - **State of the system**: Selected cards are Infantry, Infantry, Infantry; `numSetsTradedIn = 0`
-    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC44: Three Cavalry cards is accepted** ( :white_check_mark: )
     - **State of the system**: Selected cards are Cavalry, Cavalry, Cavalry; `numSetsTradedIn = 0`
-    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC45: Three Artillery cards is accepted** ( :white_check_mark: )
     - **State of the system**: Selected cards are Artillery, Artillery, Artillery; `numSetsTradedIn = 0`
-    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC46: One Infantry, one Cavalry, and one Artillery is accepted** ( :white_check_mark: )
     - **State of the system**: Selected cards are Infantry, Cavalry, Artillery; `numSetsTradedIn = 0`
-    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC47: Two matching cards and one different non-wild card is rejected** ( :white_check_mark: )
     - **State of the system**: Selected cards are Infantry, Infantry, Cavalry
-    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+    - **Expected output**: Returns `false`; available armies, card hand, and deck discard pile are unchanged
 
 - **TC48: One wild card with two matching non-wild cards is accepted** ( :white_check_mark: )
     - **State of the system**: Selected cards are Wild, Infantry, Infantry; `numSetsTradedIn = 0`
-    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC49: One wild card with two different non-wild cards is accepted** ( :white_check_mark: )
     - **State of the system**: Selected cards are Wild, Infantry, Cavalry; `numSetsTradedIn = 0`
-    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand
+    - **Expected output**: Returns `true`; player receives 4 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC50: Two wild cards are rejected** ( :white_check_mark: )
     - **State of the system**: Selected cards include two Wild cards
-    - **Expected output**: Returns `false`; available armies and card hand are unchanged
+    - **Expected output**: Returns `false`; available armies, card hand, and deck discard pile are unchanged
 
 - **TC51: First trade-in gives 4 armies** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 0`
-    - **Expected output**: Player receives 4 Infantry
+    - **Expected output**: Player receives 4 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC52: Second trade-in gives 6 armies** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 1`
-    - **Expected output**: Player receives 6 Infantry
+    - **Expected output**: Player receives 6 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC53: Third trade-in gives 8 armies** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 2`
-    - **Expected output**: Player receives 8 Infantry
+    - **Expected output**: Player receives 8 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC54: Fourth trade-in gives 10 armies** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 3`
-    - **Expected output**: Player receives 10 Infantry
+    - **Expected output**: Player receives 10 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC55: Fifth trade-in gives 12 armies** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 4`
-    - **Expected output**: Player receives 12 Infantry
+    - **Expected output**: Player receives 12 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC56: Sixth trade-in gives 15 armies** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 5`
-    - **Expected output**: Player receives 15 Infantry
+    - **Expected output**: Player receives 15 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC57: Seventh trade-in gives 20 armies** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 6`
-    - **Expected output**: Player receives 20 Infantry
+    - **Expected output**: Player receives 20 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC58: Fourteenth trade-in gives 55 armies as the maximum legal trade-in** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 13`
-    - **Expected output**: Returns `true`; player receives 55 Infantry; selected cards are removed from hand
+    - **Expected output**: Returns `true`; player receives 55 Infantry; selected cards are removed from hand and added to the deck discard pile
 
 - **TC59: Fifteenth trade-in is rejected as impossible with forty-four cards** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 14`
-    - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets."`; available armies and card hand are unchanged
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets."`; available armies, card hand, and deck discard pile are unchanged

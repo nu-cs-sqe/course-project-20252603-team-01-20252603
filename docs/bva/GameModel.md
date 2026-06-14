@@ -418,31 +418,31 @@
 
 - **TC74: Empty card selection skips card trade-in** ( :white_check_mark: )
     - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes an empty card index list
-    - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand is unchanged; `numSetsTradedIn` remains `0`
+    - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand and deck discard pile are unchanged; `numSetsTradedIn` remains `0`
 
 - **TC75: `null` card selection skips card trade-in** ( :white_check_mark: )
     - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes `null` for card indices
-    - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand is unchanged; `numSetsTradedIn` remains `0`
+    - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand and deck discard pile are unchanged; `numSetsTradedIn` remains `0`
 
 - **TC76: Invalid card trade-in returns false and does not increment traded-set count** ( :white_check_mark: )
     - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes an invalid card selection
-    - **Expected output**: Returns `false`; no trade-in armies are added; selected cards remain in hand; `numSetsTradedIn` remains `0`
+    - **Expected output**: Returns `false`; no trade-in armies are added; selected cards remain in hand; deck discard pile is unchanged; `numSetsTradedIn` remains `0`
 
 - **TC77: First valid card trade-in adds first trade-in armies and increments traded-set count** ( :white_check_mark: )
     - **State of the system**: Current player holds a valid trade-in set and `numSetsTradedIn = 0`
-    - **Expected output**: Returns `true`; current player receives `4` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `1`
+    - **Expected output**: Returns `true`; current player receives `4` Infantry from the trade-in; traded cards are removed from the hand and added to the deck discard pile; `numSetsTradedIn` increases to `1`
 
 - **TC78: Second valid card trade-in uses incremented trade-in count** ( :white_check_mark: )
     - **State of the system**: Current player holds a valid trade-in set and `numSetsTradedIn = 1`
-    - **Expected output**: Returns `true`; current player receives `6` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `2`
+    - **Expected output**: Returns `true`; current player receives `6` Infantry from the trade-in; traded cards are removed from the hand and added to the deck discard pile; `numSetsTradedIn` increases to `2`
 
 - **TC79: Fourteenth valid card trade-in awards the maximum legal bonus** ( :white_check_mark: )
     - **State of the system**: Current player holds a valid trade-in set and `13` sets have already been traded (`numSetsTradedIn = 13`)
-    - **Expected output**: Returns `true`; current player receives `55` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `14`
+    - **Expected output**: Returns `true`; current player receives `55` Infantry from the trade-in; traded cards are removed from the hand and added to the deck discard pile; `numSetsTradedIn` increases to `14`
 
 - **TC80: Fifteenth trade-in is rejected because a 44-card deck supports at most 14 traded sets** ( :white_check_mark: )
     - **State of the system**: Current player holds a valid trade-in set and `14` sets have already been traded (`numSetsTradedIn = 14`)
-    - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets."`; current player's available armies and hand are unchanged; `numSetsTradedIn` remains `14`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets."`; current player's available armies, hand, and deck discard pile are unchanged; `numSetsTradedIn` remains `14`
 
 ---
 
