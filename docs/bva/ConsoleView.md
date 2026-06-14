@@ -281,7 +281,7 @@
     - **State of the system**: Player enters `"2"` for attacker dice and `"1"` for defender dice
     - **Expected output**: Returns a list containing `2` and `1`
 
-- **TC45: Returns maximum valid attacker and defender dice counts** ( :x: )
+- **TC45: Returns maximum valid attacker and defender dice counts** ( :white_check_mark: )
     - **State of the system**: Player enters `"3"` for attacker dice and `"2"` for defender dice
     - **Expected output**: Returns a list containing `3` and `2`
 

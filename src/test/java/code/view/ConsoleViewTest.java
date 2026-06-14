@@ -465,6 +465,16 @@ public final class ConsoleViewTest {
         assertEquals(FIRST_CARD_INDEX, diceCounts.get(1));
     }
 
+    @Test
+    public void promptNumberOfDiceReturnsMaximumValidAttackerAndDefenderDiceCounts() {
+        ConsoleView view = createViewWithInput("3\n2\n");
+
+        List<Integer> diceCounts = view.promptNumberOfDice("Attacker", "Defender");
+
+        assertEquals(THREE, diceCounts.get(0));
+        assertEquals(SECOND_CARD_INDEX, diceCounts.get(1));
+    }
+
     public void promptFortifyChoiceYesChoiceReturnsChoice() {
         ConsoleView view = createViewWithInput("yes\n");
 
