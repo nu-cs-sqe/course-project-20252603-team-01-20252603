@@ -661,7 +661,7 @@
     - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; injected `Random` produces values such that, after sorting, attacker wins both comparisons
     - **Expected output**: Defending territory loses `2` armies; attacking territory loses `0` armies; returned battle result reports both losses, updated army counts, and capture flag if the defending territory reaches `0` armies
 
-- **TC117: Three-versus-two battle splits losses one each** ( :x: )
+- **TC117: Three-versus-two battle splits losses one each** ( :white_check_mark: )
     - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; injected `Random` produces values such that, after sorting, attacker wins one comparison and defender wins one comparison
     - **Expected output**: Each territory loses `1` army; returned battle result reports both losses and updated army counts
 

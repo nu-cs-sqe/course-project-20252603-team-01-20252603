@@ -2046,6 +2046,39 @@ public final class GameModelTest {
     }
 
     @Test
+    public void executeBattleAndReturnWinnerThreeVersusTwoSplitLossesRemovesOneArmyFromEachTerritory() {
+        GameModel gameModel = createGameModelWithDiceRolls(6, 2, 1, 5, 4);
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").placeArmies(createInfantryPieces(TWO_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        List<String> battleResult = gameModel.executeBattleAndReturnWinner(
+                "Alaska",
+                "Alberta",
+                THREE_ARMIES,
+                TWO_ARMIES);
+
+        assertEquals(THREE_ARMIES, gameModel.findTerritoryByName("Alaska").getArmyCount());
+        assertEquals(TWO_ARMIES, gameModel.findTerritoryByName("Alberta").getArmyCount());
+        assertTrue(battleResult.contains("Attacker dice: [6, 2, 1]"));
+        assertTrue(battleResult.contains("Defender dice: [5, 4]"));
+        assertTrue(battleResult.contains("Attacker losses: 1"));
+        assertTrue(battleResult.contains("Defender losses: 1"));
+        assertTrue(battleResult.contains("Attacking territory armies: 3"));
+        assertTrue(battleResult.contains("Defending territory armies: 2"));
+        assertTrue(battleResult.contains("Captured: false"));
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = createGameModel();
 
