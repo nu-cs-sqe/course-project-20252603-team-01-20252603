@@ -26,7 +26,7 @@
     - **State of the system**: Freshly constructed `Deck`
     - **Expected output**: At least one card of each of the three non-wild CardTypes exists in the deck
 
-- **TC7: Discard pile starts empty**
+- **TC7: Discard pile starts empty** ( :white_check_mark: )
     - **State of the system**: Freshly constructed `Deck`
     - **Expected output**: `getDiscardPileSize()` returns `0`
 

@@ -101,6 +101,13 @@ public final class DeckTest {
     }
 
     @Test
+    public void freshDeckStartsWithEmptyDiscardPile() {
+        Deck deck = new Deck();
+
+        assertEquals(0, deck.getDiscardPileSize());
+    }
+
+    @Test
     public void freshDeckIsNotEmpty() {
         Deck deck = new Deck();
 

@@ -20,8 +20,11 @@ public class Deck {
 
     private final List<RiskCard> cards;
 
+    private final List<RiskCard> discardPile;
+
     public Deck() {
         cards = new ArrayList<>();
+        discardPile = new ArrayList<>();
         initializeTerritoryCards();
         initializeWildCards();
     }
@@ -32,6 +35,10 @@ public class Deck {
 
     public List<RiskCard> getCards() {
         return new ArrayList<>(cards);
+    }
+
+    public int getDiscardPileSize() {
+        return discardPile.size();
     }
 
     private void initializeTerritoryCards() {
