@@ -93,7 +93,7 @@ public class GameModel {
         deck = new Deck();
         deck.shuffle();
         numSetsTradedIn = 0;
-        random = new Random(0); 
+        random = new Random(0);
     }
 
     public void initializeContinentsAndTerritories() {
