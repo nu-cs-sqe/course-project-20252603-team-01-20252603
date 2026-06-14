@@ -312,6 +312,20 @@ public final class GameControllerTest {
         }
     }
 
+    private static final class RecordingWinnerNameConsoleView extends ConsoleView {
+
+        private final List<String> calls;
+
+        RecordingWinnerNameConsoleView(final List<String> recordedCalls) {
+            calls = recordedCalls;
+        }
+
+        @Override
+        public void displayWinner(final String playerName) {
+            calls.add("display winner " + playerName);
+        }
+    }
+
     @Test
     public void gameControllerConstructsWithDefaultDependencies() {
         new GameController();
@@ -578,6 +592,31 @@ public final class GameControllerTest {
                         "turn",
                         "check winner",
                         "display winner"),
+                calls);
+    }
+
+    @Test
+    public void startGameDisplaysWinnerUsingCurrentPlayerName() {
+        List<String> calls = new ArrayList<>();
+        GameModel model = new WinningAfterOneTurnGameModel(calls);
+        ConsoleView view = new RecordingWinnerNameConsoleView(calls);
+        SetupController setupController = new RecordingSetupController(calls);
+        TurnController turnController = new RecordingTurnController(calls);
+        GameController controller = new GameController(
+                model,
+                view,
+                setupController,
+                turnController);
+
+        controller.startGame();
+
+        assertEquals(
+                List.of(
+                        "setup",
+                        "check eliminated",
+                        "turn",
+                        "check winner",
+                        "display winner Player 1"),
                 calls);
     }
 }

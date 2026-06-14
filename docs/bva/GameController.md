@@ -39,7 +39,7 @@
     - **State of the system**: Two active players complete turns; `model.currentPlayerHasWon()` returns `false` after the first turn and `true` after the second turn
     - **Expected output**: Controller runs two turns, advances once between turns, displays the winner after the second turn, and stops
 
-- **TC10: Winner display uses current player name**
+- **TC10: Winner display uses current player name** ( :white_check_mark: )
     - **State of the system**: `model.currentPlayerHasWon()` returns `true`; `model.getCurrentPlayerName()` returns `"Player 1"`
     - **Expected output**: Controller calls `view.displayWinner("Player 1")`
 
