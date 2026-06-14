@@ -59,6 +59,8 @@ public abstract class Player {
 
     public abstract List<RiskCard> removeAllCards();
 
+    public abstract void markEliminated();
+
     @Override
     public String toString() {
         return name + " - " + color;

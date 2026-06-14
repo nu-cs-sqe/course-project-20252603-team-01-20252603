@@ -87,7 +87,7 @@
 
 ### Method under test: `markEliminated()`
 
-- **TC13: Marking eliminated is rejected for NullPlayer**
+- **TC13: Marking eliminated is rejected for NullPlayer** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `markEliminated()` called
     - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot be eliminated."`
 

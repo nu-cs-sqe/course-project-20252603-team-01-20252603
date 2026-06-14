@@ -43,6 +43,8 @@ public class HumanPlayer extends Player {
 
     private final List<RiskCard> availableCards;
 
+    private boolean eliminated;
+
     private HashMap<ArmyType, Integer> availableArmies;
 
     private static final int NUMBER_THREE = 3;
@@ -59,6 +61,7 @@ public class HumanPlayer extends Player {
         super(playerName, playerColor, startingInfantry);
         territories = new ArrayList<>();
         availableCards = new ArrayList<>();
+        eliminated = false;
         availableArmies = new HashMap<>();
         availableArmies.put(ArmyType.INFANTRY, startingInfantry);
     }
@@ -185,6 +188,11 @@ public class HumanPlayer extends Player {
         List<RiskCard> removedCards = new ArrayList<>(availableCards);
         availableCards.clear();
         return removedCards;
+    }
+
+    @Override
+    public void markEliminated() {
+        eliminated = true;
     }
 
     int getCardCount() {

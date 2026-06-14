@@ -79,4 +79,9 @@ public class NullPlayer extends Player {
     public List<RiskCard> removeAllCards() {
         throw new UnsupportedOperationException("NullPlayer cannot transfer cards.");
     }
+
+    @Override
+    public void markEliminated() {
+        throw new UnsupportedOperationException("NullPlayer cannot be eliminated.");
+    }
 }
