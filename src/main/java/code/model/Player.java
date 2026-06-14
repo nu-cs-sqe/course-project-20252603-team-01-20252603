@@ -55,6 +55,8 @@ public abstract class Player {
 
     public abstract void addCard(RiskCard card);
 
+    public abstract void addCards(List<RiskCard> cardsToAdd);
+
     @Override
     public String toString() {
         return name + " - " + color;

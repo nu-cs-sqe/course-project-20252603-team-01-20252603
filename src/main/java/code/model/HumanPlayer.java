@@ -175,6 +175,11 @@ public class HumanPlayer extends Player {
         availableCards.add(card);
     }
 
+    @Override
+    public void addCards(final List<RiskCard> cardsToAdd) {
+        availableCards.addAll(cardsToAdd);
+    }
+
     int getCardCount() {
         return availableCards.size();
     }
