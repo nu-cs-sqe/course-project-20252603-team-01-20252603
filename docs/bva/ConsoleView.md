@@ -289,7 +289,7 @@
     - **State of the system**: Player enters `"0"` for attacker dice and `"1"` for defender dice
     - **Expected output**: Returns a list containing `0` and `1`
 
-- **TC47: Returns above-maximum attacker dice count for controller and model validation** ( :x: )
+- **TC47: Returns above-maximum attacker dice count for controller and model validation** ( :white_check_mark: )
     - **State of the system**: Player enters `"4"` for attacker dice and `"1"` for defender dice
     - **Expected output**: Returns a list containing `4` and `1`
 
