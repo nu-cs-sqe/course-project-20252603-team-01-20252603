@@ -227,7 +227,7 @@ public class GameModel {
         territories.add(territory);
     }
 
-    private Territory findTerritoryByName(final String territoryName) {
+    Territory findTerritoryByName(final String territoryName) {
         return territories.stream()
                 .filter(territory -> territory.getName().equals(territoryName))
                 .findFirst()
@@ -531,7 +531,7 @@ public class GameModel {
         return true;
     }
 
-    private boolean hasOwnedPath(
+    boolean hasOwnedPath(
             final Territory sourceTerritory,
             final Territory destinationTerritory,
             final Player currentPlayer) {

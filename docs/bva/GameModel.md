@@ -408,7 +408,7 @@
 
 ### Method under test: `hasOwnedPath(Territory source, Territory destination, Player player)`
 
-- **TC89: Finds destination immediately adjacent to source** ( :x: )
+- **TC89: Finds destination immediately adjacent to source** ( :white_check_mark: )
     - **State of the system**: Source and destination are adjacent and both owned by the current player
     - **Expected output**: Returns `true`
 
