@@ -84,7 +84,7 @@
     - **State of the system**: Model raises `IllegalArgumentException` with message `"Current player must own the attacking territory."` during territory validation, then the player enters valid territories
     - **Expected output**: Controller displays the model error message and re-prompts for attacking and defending territories
 
-- **TC48: Invalid defending territory re-prompts for territories** ( :x: )
+- **TC48: Invalid defending territory re-prompts for territories** ( :white_check_mark: )
     - **State of the system**: Model raises `IllegalArgumentException` with message `"Defending territory must be owned by another player."` or `"Attacking and defending territories must be adjacent."`, then the player enters valid territories
     - **Expected output**: Controller displays the model error message and re-prompts for attacking and defending territories
 
