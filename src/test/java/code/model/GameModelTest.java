@@ -2013,6 +2013,39 @@ public final class GameModelTest {
     }
 
     @Test
+    public void executeBattleAndReturnWinnerThreeVersusTwoAttackerWinsBothRemovesTwoDefendingArmies() {
+        GameModel gameModel = createGameModelWithDiceRolls(6, 5, 1, 4, 3);
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").placeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        List<String> battleResult = gameModel.executeBattleAndReturnWinner(
+                "Alaska",
+                "Alberta",
+                THREE_ARMIES,
+                TWO_ARMIES);
+
+        assertEquals(FOUR_CARD_TRADE_IN_ARMIES, gameModel.findTerritoryByName("Alaska").getArmyCount());
+        assertEquals(ZERO_ARMIES, gameModel.findTerritoryByName("Alberta").getArmyCount());
+        assertTrue(battleResult.contains("Attacker dice: [6, 5, 1]"));
+        assertTrue(battleResult.contains("Defender dice: [4, 3]"));
+        assertTrue(battleResult.contains("Attacker losses: 0"));
+        assertTrue(battleResult.contains("Defender losses: 2"));
+        assertTrue(battleResult.contains("Attacking territory armies: 4"));
+        assertTrue(battleResult.contains("Defending territory armies: 0"));
+        assertTrue(battleResult.contains("Captured: true"));
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = createGameModel();
 
