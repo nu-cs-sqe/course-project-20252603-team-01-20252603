@@ -474,6 +474,10 @@ public class GameModel {
         return players.get(currentPlayerIndex).isEliminated();
     }
 
+    public boolean currentPlayerHasWon() {
+        return players.get(currentPlayerIndex).getTerritoryCount() == TOTAL_TERRITORY_COUNT;
+    }
+
     public boolean hasCurrentPlayerAvailableArmies() {
         HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();
         requiredArmies.put(ArmyType.INFANTRY, 1);

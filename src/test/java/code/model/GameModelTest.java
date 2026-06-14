@@ -3664,4 +3664,50 @@ public final class GameModelTest {
 
         assertTrue(gameModel.currentPlayerIsEliminated());
     }
+
+    @Test
+    public void currentPlayerHasWonReturnsFalseWithFortyOneTerritories() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+        player.addArmies(createInfantryPieces(TERRITORY_COUNT));
+        claimTerritories(gameModel, FORTY_ONE_TERRITORIES);
+
+        assertFalse(gameModel.currentPlayerHasWon());
+    }
+
+    @Test
+    public void currentPlayerHasWonReturnsTrueWithAllTerritories() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+        player.addArmies(createInfantryPieces(TERRITORY_COUNT));
+        claimTerritories(gameModel, TERRITORY_COUNT);
+
+        assertTrue(gameModel.currentPlayerHasWon());
+    }
+
+    @Test
+    public void currentPlayerHasWonReturnsFalseWithZeroTerritories() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.setCurrentPlayerIndex(0);
+        player.markEliminated();
+
+        assertFalse(gameModel.currentPlayerHasWon());
+    }
 }
