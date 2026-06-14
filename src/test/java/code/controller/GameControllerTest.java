@@ -11,6 +11,8 @@ import code.model.GameModel;
 import code.view.ConsoleView;
 
 import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -25,6 +27,77 @@ public final class GameControllerTest {
     private static final int DECK_CARD_COUNT = 44;
 
     private static final int EXPECTED_DECK_SIZE = 44;
+
+    private static final class RecordingSetupController extends SetupController {
+
+        private final List<String> calls;
+
+        RecordingSetupController(final List<String> recordedCalls) {
+            super(new GameModel(new Random(0)), new ConsoleView());
+            calls = recordedCalls;
+        }
+
+        @Override
+        public void initializeBoard() {
+            calls.add("setup");
+        }
+    }
+
+    private static final class RecordingTurnController extends TurnController {
+
+        private final List<String> calls;
+
+        RecordingTurnController(final List<String> recordedCalls) {
+            super(new GameModel(new Random(0)), new ConsoleView());
+            calls = recordedCalls;
+        }
+
+        @Override
+        public void runPlayerTurn() {
+            calls.add("turn");
+        }
+    }
+
+    private static final class WinningAfterOneTurnGameModel extends GameModel {
+
+        private final List<String> calls;
+
+        WinningAfterOneTurnGameModel(final List<String> recordedCalls) {
+            super(new Random(0));
+            calls = recordedCalls;
+        }
+
+        @Override
+        public boolean currentPlayerIsEliminated() {
+            calls.add("check eliminated");
+            return false;
+        }
+
+        @Override
+        public boolean currentPlayerHasWon() {
+            calls.add("check winner");
+            return true;
+        }
+
+        @Override
+        public String getCurrentPlayerName() {
+            return "Player 1";
+        }
+    }
+
+    private static final class RecordingConsoleView extends ConsoleView {
+
+        private final List<String> calls;
+
+        RecordingConsoleView(final List<String> recordedCalls) {
+            calls = recordedCalls;
+        }
+
+        @Override
+        public void displayWinner(final String playerName) {
+            calls.add("display winner");
+        }
+    }
 
     @Test
     public void gameControllerConstructsWithDefaultDependencies() {
@@ -109,5 +182,25 @@ public final class GameControllerTest {
         controller.startGame();
 
         assertEquals(EXPECTED_DECK_SIZE, model.getDeckSize());
+    }
+
+    @Test
+    public void startGameRunsSetupBeforeFirstPlayerTurn() {
+        List<String> calls = new ArrayList<>();
+        GameModel model = new WinningAfterOneTurnGameModel(calls);
+        ConsoleView view = new RecordingConsoleView(calls);
+        SetupController setupController = new RecordingSetupController(calls);
+        TurnController turnController = new RecordingTurnController(calls);
+        GameController controller = new GameController(
+                model,
+                view,
+                setupController,
+                turnController);
+
+        controller.startGame();
+
+        assertEquals(
+                List.of("setup", "check eliminated", "turn", "check winner", "display winner"),
+                calls);
     }
 }

@@ -11,7 +11,7 @@
     - **State of the system**: `startGame()` called
     - **Expected output**: `model.getDeck().size()` returns `44`; `model.getDeck().isEmpty()` returns `false`
 
-- **TC3: Game loop begins only after setup completes**
+- **TC3: Game loop begins only after setup completes** ( :white_check_mark: )
     - **State of the system**: `startGame()` is called on a controller with setup and turn dependencies
     - **Expected output**: `setupController.initializeBoard()` is called before any player turn is run
 
