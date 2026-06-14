@@ -190,6 +190,18 @@ public class ConsoleView {
         return List.of(attackingTerritory, defendingTerritory);
     }
 
+    public List<Integer> promptNumberOfDice(
+            final String attackerName,
+            final String defenderName) {
+        output.print("Enter number of dice for " + attackerName + ": ");
+        int attackerDice = Integer.parseInt(scanner.nextLine());
+
+        output.print("Enter number of dice for " + defenderName + ": ");
+        int defenderDice = Integer.parseInt(scanner.nextLine());
+
+        return List.of(attackerDice, defenderDice);
+    }
+
     private boolean isInteger(final String value) {
         try {
             Integer.parseInt(value);

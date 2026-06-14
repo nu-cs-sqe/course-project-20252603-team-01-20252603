@@ -273,7 +273,7 @@
 
 ### Method under test: `promptNumberOfDice(String attackerName, String defenderName)`
 
-- **TC43: Returns minimum valid attacker and defender dice counts** ( :x: )
+- **TC43: Returns minimum valid attacker and defender dice counts** ( :white_check_mark: )
     - **State of the system**: Player enters `"1"` for attacker dice and `"1"` for defender dice
     - **Expected output**: Returns a list containing `1` and `1`
 
