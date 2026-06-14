@@ -131,7 +131,7 @@
     - **State of the system**: Current player enters a value other than yes/y/no/n at the fortify choice prompt
     - **Expected output**: Controller displays `"Invalid fortify choice."`; no army movement is attempted; the fortify choice is requested again
 
-- **TC29: Non-numeric army count re-prompts move input** ( :x: )
+- **TC29: Non-numeric army count re-prompts move input** ( :white_check_mark: )
     - **State of the system**: Current player chooses to fortify, enters valid source and destination names, then enters a non-numeric army count
     - **Expected output**: Controller displays `"Invalid army count."`; `GameModel.fortifyTerritory(...)` is not called; source, destination, and army count are requested again
 

@@ -160,24 +160,37 @@ public class SetupController {
                 return;
             } else if (fortifyChoice.equalsIgnoreCase("yes")
                     || fortifyChoice.equalsIgnoreCase("y")) {
+                boolean fortified = false;
+                while (!fortified) {
+                    fortified = handleFortifyMove();
+                }
+
                 view.displayCurrentPlayerTerritoriesByContinent(
                         model.getCurrentPlayerTerritoriesByContinent());
-                String sourceTerritory = view.promptFortifySourceTerritory();
-                String destinationTerritory = view.promptFortifyDestinationTerritory();
-                int armyCount = Integer.parseInt(view.promptFortifyArmyCount());
-
-                if (model.fortifyTerritory(
-                        sourceTerritory,
-                        destinationTerritory,
-                        armyCount)) {
-                    view.displayCurrentPlayerTerritoriesByContinent(
-                            model.getCurrentPlayerTerritoriesByContinent());
-                    model.advanceCurrentPlayerIndex();
-                    return;
-                }
+                model.advanceCurrentPlayerIndex();
+                return;
             } else {
                 view.displayError("Invalid fortify choice.");
             }
+        }
+    }
+
+    private boolean handleFortifyMove() {
+        view.displayCurrentPlayerTerritoriesByContinent(
+                model.getCurrentPlayerTerritoriesByContinent());
+        String sourceTerritory = view.promptFortifySourceTerritory();
+        String destinationTerritory = view.promptFortifyDestinationTerritory();
+        String armyCountInput = view.promptFortifyArmyCount();
+
+        try {
+            int armyCount = Integer.parseInt(armyCountInput);
+            return model.fortifyTerritory(
+                    sourceTerritory,
+                    destinationTerritory,
+                    armyCount);
+        } catch (NumberFormatException exception) {
+            view.displayError("Invalid army count.");
+            return false;
         }
     }
 
