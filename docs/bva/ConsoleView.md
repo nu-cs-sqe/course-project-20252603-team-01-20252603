@@ -144,3 +144,66 @@
     - **State of the system**: Player enters `"Alaska -1 0 0"`
     - **Expected output**: Returns a list containing `"Alaska"`, `"-1"`, `"0"`, and `"0"`
 
+---
+
+### Method under test: `promptFortifyChoice()`
+
+- **TC27: Returns yes choice** ( :x: )
+    - **State of the system**: Current player is asked whether to fortify and enters `"yes"`
+    - **Expected output**: Returns `"yes"` so the controller can begin fortification
+
+- **TC28: Returns no choice** ( :x: )
+    - **State of the system**: Current player is asked whether to fortify and enters `"no"`
+    - **Expected output**: Returns `"no"` so the controller can skip fortification
+
+- **TC29: Returns invalid choice for controller validation** ( :x: )
+    - **State of the system**: Current player is asked whether to fortify and enters a value other than yes/y/no/n
+    - **Expected output**: Returns the entered string so the controller can reject it and re-prompt
+
+---
+
+### Method under test: `promptFortifySourceTerritory()`
+
+- **TC30: Returns single-word source territory** ( :x: )
+    - **State of the system**: Current player is prompted for a source territory and enters `"Alaska"`
+    - **Expected output**: Returns `"Alaska"`
+
+- **TC31: Returns multi-word source territory** ( :x: )
+    - **State of the system**: Current player is prompted for a source territory and enters `"Northwest Territory"`
+    - **Expected output**: Returns `"Northwest Territory"`
+
+---
+
+### Method under test: `promptFortifyDestinationTerritory()`
+
+- **TC32: Returns single-word destination territory** ( :x: )
+    - **State of the system**: Current player is prompted for a destination territory and enters `"Alberta"`
+    - **Expected output**: Returns `"Alberta"`
+
+- **TC33: Returns multi-word destination territory** ( :x: )
+    - **State of the system**: Current player is prompted for a destination territory and enters `"Western United States"`
+    - **Expected output**: Returns `"Western United States"`
+
+---
+
+### Method under test: `promptFortifyArmyCount()`
+
+- **TC34: Returns zero army count for controller/model validation** ( :x: )
+    - **State of the system**: Current player is prompted for armies to move and enters `"0"`
+    - **Expected output**: Returns `"0"` so the fortify flow can reject moving zero armies
+
+- **TC35: Returns one army count** ( :x: )
+    - **State of the system**: Current player is prompted for armies to move and enters `"1"`
+    - **Expected output**: Returns `"1"`
+
+- **TC36: Returns multiple army count** ( :x: )
+    - **State of the system**: Current player is prompted for armies to move and enters `"3"`
+    - **Expected output**: Returns `"3"`
+
+- **TC37: Returns negative army count for controller/model validation** ( :x: )
+    - **State of the system**: Current player is prompted for armies to move and enters `"-1"`
+    - **Expected output**: Returns `"-1"` so the fortify flow can reject moving a negative number of armies
+
+- **TC38: Returns non-numeric army count for controller validation** ( :x: )
+    - **State of the system**: Current player is prompted for armies to move and enters `"two"`
+    - **Expected output**: Returns `"two"` so the controller can reject it without calling the model

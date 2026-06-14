@@ -104,3 +104,51 @@
 - **TC18: Place one Infantry on territory with existing Infantry** ( :white_check_mark: )
     - **State of the system**: Territory already contains `INFANTRY -> 1`; `placeArmies()` is called with a map containing `INFANTRY -> 1`
     - **Expected output**: Method returns `true`; territory contains exactly two Infantry pieces
+
+---
+
+### Method under test: `addArmies(HashMap<ArmyType, Integer> armiesToAdd)`
+
+- **TC19: Add zero armies** ( :x: )
+    - **State of the system**: Territory has an existing army count; `addArmies()` is called with `INFANTRY -> 0`
+    - **Expected output**: Method returns `true`; territory army count does not change
+
+- **TC20: Add one army to empty territory** ( :x: )
+    - **State of the system**: Territory has `0` armies; `addArmies()` is called with `INFANTRY -> 1`
+    - **Expected output**: Method returns `true`; territory army count becomes `1`
+
+- **TC21: Add multiple armies to occupied territory** ( :x: )
+    - **State of the system**: Territory already has at least `1` army; `addArmies()` is called with more than one army
+    - **Expected output**: Method returns `true`; territory army count increases by the total armies added
+
+---
+
+### Method under test: `removeArmies(HashMap<ArmyType, Integer> armiesToRemove)`
+
+- **TC22: Reject zero armies removed** ( :x: )
+    - **State of the system**: Territory has at least `1` army; `removeArmies()` is called with `INFANTRY -> 0`
+    - **Expected output**: Method returns `false`; territory army count does not change
+
+- **TC23: Reject negative armies removed** ( :x: )
+    - **State of the system**: Territory has at least `1` army; `removeArmies()` is called with `INFANTRY -> -1`
+    - **Expected output**: Method returns `false`; territory army count does not change
+
+- **TC24: Remove one army from territory with one army** ( :x: )
+    - **State of the system**: Territory has exactly `1` army; `removeArmies()` is called with `INFANTRY -> 1`
+    - **Expected output**: Method returns `true`; territory army count becomes `0`
+
+- **TC25: Remove one army while armies remain** ( :x: )
+    - **State of the system**: Territory has more than `1` army; `removeArmies()` is called with `INFANTRY -> 1`
+    - **Expected output**: Method returns `true`; territory army count decreases by `1`
+
+- **TC26: Remove multiple armies while armies remain** ( :x: )
+    - **State of the system**: Territory has more armies than the requested removal; `removeArmies()` is called with more than one army
+    - **Expected output**: Method returns `true`; territory army count decreases by the total armies removed
+
+- **TC27: Remove exactly all armies** ( :x: )
+    - **State of the system**: Territory has exactly the same number of armies as the requested removal
+    - **Expected output**: Method returns `true`; territory army count becomes `0`
+
+- **TC28: Reject removing more armies than present** ( :x: )
+    - **State of the system**: Territory has `2` armies; `removeArmies()` is called with `INFANTRY -> 3`
+    - **Expected output**: Method returns `false`; territory army count remains `2`

@@ -344,3 +344,82 @@
     - **State of the system**: Current player has available armies containing `ARTILLERY -> 1`
     - **Expected output**: Returns `true`
 
+---
+
+### Method under test: `fortifyTerritory(String sourceName, String destinationName, int armyCount)`
+
+- **TC75: Moves one army between adjacent owned territories** ( :x: )
+    - **State of the system**: Current player owns adjacent source and destination territories; source has exactly `2` armies; `armyCount` is `1`
+    - **Expected output**: Returns `true`; source army count decreases to `1`; destination army count increases by `1`
+
+- **TC76: Moves multiple armies while leaving one behind** ( :x: )
+    - **State of the system**: Current player owns connected source and destination territories; source has `4` armies; `armyCount` is `3`
+    - **Expected output**: Returns `true`; source keeps exactly `1` army; destination gains `3` armies
+
+- **TC77: Rejects zero armies moved** ( :x: )
+    - **State of the system**: Current player owns connected source and destination territories; source has more than one army; `armyCount` is `0`
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC78: Rejects negative armies moved** ( :x: )
+    - **State of the system**: Current player owns connected source and destination territories; source has more than one army; `armyCount` is `-1`
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC79: Rejects moving all armies from source** ( :x: )
+    - **State of the system**: Current player owns connected source and destination territories; source has `3` armies; `armyCount` is `3`
+    - **Expected output**: Returns `false`; source and destination army counts do not change because at least one army must remain
+
+- **TC80: Rejects moving more armies than source can allow** ( :x: )
+    - **State of the system**: Current player owns connected source and destination territories; source has `3` armies; `armyCount` is `4`
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC81: Rejects source with only one army** ( :x: )
+    - **State of the system**: Current player owns connected source and destination territories; source has exactly `1` army; `armyCount` is `1`
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC82: Rejects source not owned by current player** ( :x: )
+    - **State of the system**: Source territory is owned by another player; destination is owned by current player; `armyCount` is positive
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC83: Rejects destination not owned by current player** ( :x: )
+    - **State of the system**: Source territory is owned by current player and has more than one army; destination is owned by another player
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC84: Rejects same source and destination territory** ( :x: )
+    - **State of the system**: Current player owns the selected territory with more than one army; the same territory name is passed as source and destination
+    - **Expected output**: Returns `false`; territory army count does not change
+
+- **TC85: Allows path through exactly one owned territory** ( :x: )
+    - **State of the system**: Current player owns source, one intermediate adjacent territory, and destination; source and destination are not directly adjacent
+    - **Expected output**: Returns `true`; armies move from source to destination through the owned path
+
+- **TC86: Allows path through more than one owned territory** ( :x: )
+    - **State of the system**: Current player owns source, multiple intermediate connected territories, and destination
+    - **Expected output**: Returns `true`; armies move from source to destination through the owned path
+
+- **TC87: Rejects path blocked by another player's territory** ( :x: )
+    - **State of the system**: Source and destination are connected on the board only through at least one territory owned by another player
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+- **TC88: Rejects disconnected owned territories** ( :x: )
+    - **State of the system**: Current player owns source and destination, but there is no connected path of current-player-owned territories between them
+    - **Expected output**: Returns `false`; source and destination army counts do not change
+
+---
+
+### Method under test: `hasOwnedPath(Territory source, Territory destination, Player player)`
+
+- **TC89: Finds destination immediately adjacent to source** ( :x: )
+    - **State of the system**: Source and destination are adjacent and both owned by the current player
+    - **Expected output**: Returns `true`
+
+- **TC90: Finds destination at the end of a longer owned path** ( :x: )
+    - **State of the system**: Source and destination are connected through more than one intermediate territory owned by the current player
+    - **Expected output**: Returns `true`
+
+- **TC91: Handles circular owned territory structure** ( :x: )
+    - **State of the system**: Current player's owned territories contain a cycle in the adjacency graph
+    - **Expected output**: Search terminates and returns whether the destination is reachable without looping forever
+
+- **TC92: Does not traverse enemy-owned territory** ( :x: )
+    - **State of the system**: Destination can only be reached by crossing a territory not owned by the current player
+    - **Expected output**: Returns `false`
