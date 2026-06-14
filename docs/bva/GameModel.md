@@ -352,7 +352,7 @@
     - **State of the system**: Current player owns adjacent source and destination territories; source has exactly `2` armies; `armyCount` is `1`
     - **Expected output**: Returns `true`; source army count decreases to `1`; destination army count increases by `1`
 
-- **TC76: Moves multiple armies while leaving one behind** ( :x: )
+- **TC76: Moves multiple armies while leaving one behind** ( :white_check_mark: )
     - **State of the system**: Current player owns connected source and destination territories; source has `4` armies; `armyCount` is `3`
     - **Expected output**: Returns `true`; source keeps exactly `1` army; destination gains `3` armies
 
