@@ -569,7 +569,7 @@
     - **State of the system**: Selected attacking territory is owned by another player
     - **Expected output**: `IllegalArgumentException` is raised with message `"Current player must own the attacking territory."`
 
-- **TC96: Rejects defending territory owned by current player** ( :x: )
+- **TC96: Rejects defending territory owned by current player** ( :white_check_mark: )
     - **State of the system**: Selected defending territory is owned by the current player
     - **Expected output**: `IllegalArgumentException` is raised with message `"Defending territory must be owned by another player."`
 
