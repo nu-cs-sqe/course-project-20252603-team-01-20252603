@@ -141,7 +141,7 @@
     - **State of the system**: Player enters `"0 1 2"`
     - **Expected output**: Returns a list containing `0`, `1`, and `2`
 
-- **TC27: Returns duplicate indices for controller and model validation** ( :x: )
+- **TC27: Returns duplicate indices for controller and model validation** ( :white_check_mark: )
     - **State of the system**: Player enters `"1 1 2"`
     - **Expected output**: Returns a list containing `1`, `1`, and `2`
 

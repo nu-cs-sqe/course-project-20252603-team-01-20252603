@@ -299,6 +299,17 @@ public final class ConsoleViewTest {
         assertEquals(SECOND_CARD_INDEX, cardIndices.get(2));
     }
 
+    @Test
+    public void promptChooseCardsToTradeInReturnsDuplicateIndicesForValidation() {
+        ConsoleView view = createViewWithInput("1 1 2\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(0));
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(1));
+        assertEquals(SECOND_CARD_INDEX, cardIndices.get(2));
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
