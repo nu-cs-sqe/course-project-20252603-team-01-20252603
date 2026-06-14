@@ -320,6 +320,15 @@ public final class ConsoleViewTest {
         assertEquals("maybe", fortifyChoice);
     }
 
+    @Test
+    public void promptFortifySourceTerritorySingleWordTerritoryReturnsTerritory() {
+        ConsoleView view = createViewWithInput("Alaska\n");
+
+        String sourceTerritory = view.promptFortifySourceTerritory();
+
+        assertEquals("Alaska", sourceTerritory);
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 

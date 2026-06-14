@@ -164,7 +164,7 @@
 
 ### Method under test: `promptFortifySourceTerritory()`
 
-- **TC30: Returns single-word source territory** ( :x: )
+- **TC30: Returns single-word source territory** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for a source territory and enters `"Alaska"`
     - **Expected output**: Returns `"Alaska"`
 
