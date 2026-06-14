@@ -745,15 +745,15 @@
 
 ### Method under test: `handlePlayerElimination(String defenderName)`
 
-- **TC134: Defender with remaining territories is not eliminated** ( :x: )
+- **TC134: Defender with remaining territories is not eliminated** ( :white_check_mark: )
     - **State of the system**: Defender still owns at least one territory after capture
     - **Expected output**: Returns `false`; defender `isEliminated()` remains `false`; cards are not transferred
 
-- **TC135: Defender with zero territories is eliminated** ( :x: )
+- **TC135: Defender with zero territories is eliminated** ( :white_check_mark: )
     - **State of the system**: Defender owns no territories after capture
     - **Expected output**: Returns `true`; defender `isEliminated()` returns `true`
 
-- **TC136: Eliminated defender cards transfer to current player** ( :x: )
+- **TC136: Eliminated defender cards transfer to current player** ( :white_check_mark: )
     - **State of the system**: Defender owns no territories and has cards in hand
     - **Expected output**: Defender hand becomes empty; current player's hand gains all defender cards
 

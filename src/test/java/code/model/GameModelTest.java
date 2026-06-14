@@ -2485,6 +2485,79 @@ public final class GameModelTest {
     }
 
     @Test
+    public void handlePlayerEliminationDefenderWithRemainingTerritoryReturnsFalse() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player defender = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Ontario", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+        gameModel.captureTerritory("Alaska", "Alberta", TWO_ARMIES, TWO_ARMIES);
+
+        boolean eliminated = gameModel.handlePlayerElimination("Player 2");
+
+        assertFalse(eliminated);
+        assertFalse(defender.isEliminated());
+    }
+
+    @Test
+    public void handlePlayerEliminationDefenderWithZeroTerritoriesReturnsTrue() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player defender = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+        gameModel.captureTerritory("Alaska", "Alberta", TWO_ARMIES, TWO_ARMIES);
+
+        boolean eliminated = gameModel.handlePlayerElimination("Player 2");
+
+        assertTrue(eliminated);
+        assertTrue(defender.isEliminated());
+    }
+
+    @Test
+    public void handlePlayerEliminationTransfersDefenderCardsToCurrentPlayer() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer attacker = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer defender = (HumanPlayer) gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        RiskCard defenderCard = createCard(CardType.INFANTRY);
+        defender.addCard(defenderCard);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+        gameModel.captureTerritory("Alaska", "Alberta", TWO_ARMIES, TWO_ARMIES);
+
+        gameModel.handlePlayerElimination("Player 2");
+
+        assertEquals(ZERO_ARMIES, defender.getCardCount());
+        assertEquals(ONE_ARMY, attacker.getCardCount());
+        assertTrue(attacker.getAvailableCards().contains(defenderCard));
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = createGameModel();
 

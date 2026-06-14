@@ -263,6 +263,13 @@ public class GameModel {
                 .orElseThrow(() -> new IllegalArgumentException(errorMessage));
     }
 
+    private Player findPlayerByName(final String playerName) {
+        return players.stream()
+                .filter(player -> player.getName().equals(playerName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Player must exist."));
+    }
+
     private void connect(
             final String firstTerritoryName,
             final String secondTerritoryName) {
@@ -836,6 +843,19 @@ public class GameModel {
         defendingTerritory.addArmies(movedArmies);
 
         return defendingPlayerName;
+    }
+
+    public boolean handlePlayerElimination(final String defenderName) {
+        Player defender = findPlayerByName(defenderName);
+
+        if (defender.getTerritoryCount() > ZERO_ARMIES) {
+            return false;
+        }
+
+        Player currentPlayer = players.get(currentPlayerIndex);
+        defender.markEliminated();
+        currentPlayer.addCards(defender.removeAllCards());
+        return true;
     }
 
     private List<Integer> rollDice(final int numDice) {
