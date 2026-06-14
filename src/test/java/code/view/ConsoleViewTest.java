@@ -533,6 +533,26 @@ public final class ConsoleViewTest {
         assertEquals(List.of(MALFORMED_CARD_INPUT_SENTINEL), diceCounts);
     }
 
+    @Test
+    public void displayBattleResultPrintsBattleResult() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+        List<String> battleResult = List.of(
+                "Attacker dice: [6, 5, 2]",
+                "Defender dice: [6, 3]",
+                "Attacker loses 1 army",
+                "Defender loses 1 army",
+                "Attacking territory armies: 4",
+                "Defending territory armies: 2");
+
+        view.displayBattleResult(battleResult);
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        for (String battleResultLine : battleResult) {
+            assertTrue(displayedText.contains(battleResultLine));
+        }
+    }
+
     public void promptFortifyChoiceYesChoiceReturnsChoice() {
         ConsoleView view = createViewWithInput("yes\n");
 

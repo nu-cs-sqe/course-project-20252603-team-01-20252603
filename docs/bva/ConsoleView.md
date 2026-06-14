@@ -313,6 +313,6 @@
 
 ### Method under test: `displayBattleResult(List<String> battleResult)`
 
-- **TC52: Displays battle result exactly as provided** ( :x: )
+- **TC52: Displays battle result exactly as provided** ( :white_check_mark: )
     - **State of the system**: Controller provides a formatted battle-result list containing attacker dice, defender dice, losses, and updated army counts
     - **Expected output**: Output displays the battle result exactly as provided

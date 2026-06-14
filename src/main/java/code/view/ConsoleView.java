@@ -213,6 +213,12 @@ public class ConsoleView {
         return List.of(attackerDice, defenderDice);
     }
 
+    public void displayBattleResult(final List<String> battleResult) {
+        for (String battleResultLine : battleResult) {
+            output.println(battleResultLine);
+        }
+    }
+
     private boolean isInteger(final String value) {
         try {
             Integer.parseInt(value);
