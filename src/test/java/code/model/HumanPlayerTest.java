@@ -355,6 +355,16 @@ public final class HumanPlayerTest {
     }
 
     @Test
+    public void removeAllCardsFromEmptyHandReturnsEmptyList() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+
+        List<RiskCard> removedCards = player.removeAllCards();
+
+        assertTrue(removedCards.isEmpty());
+        assertEquals(ZERO_CARDS, player.getCardCount());
+    }
+
+    @Test
     public void hasAvailableArmiesReturnsTrueWhenRequiredInfantryIsAvailable() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
         HashMap<ArmyType, Integer> requiredArmies = new HashMap<>();

@@ -341,7 +341,7 @@
 
 ### Method under test: `removeAllCards()`
 
-- **TC72: Remove all cards from empty hand** (:x:)
+- **TC72: Remove all cards from empty hand** (:white_check_mark:)
     - **State of the system**: Human player has zero cards; `removeAllCards()` is called
     - **Expected output**: Returns an empty list; player card count remains `0`
 
