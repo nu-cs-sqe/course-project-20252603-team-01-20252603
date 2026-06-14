@@ -74,7 +74,6 @@ public class GameModel {
         createAsia();
         createAustralia();
         initializeAdjacencies();
-        initializeDeck();
     }
 
     public int getDeckSize() {
@@ -332,10 +331,6 @@ public class GameModel {
         connect("Western Australia", "Eastern Australia");
     }
 
-    private void initializeDeck() {
-        deck = new Deck();
-        deck.shuffle();
-    }
 
     public boolean claimTerritoryDuringSetup(
             final String territoryName,
