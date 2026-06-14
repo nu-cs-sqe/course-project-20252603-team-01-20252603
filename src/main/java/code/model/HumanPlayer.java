@@ -158,8 +158,16 @@ public class HumanPlayer extends Player {
             return false;
         }
 
-        return cardIndices.stream()
-                .noneMatch(index -> index < 1 || index > availableCards.size());
+        if (cardIndices.stream()
+                .anyMatch(index -> index < 1 || index > availableCards.size())) {
+            return false;
+        }
+
+        if (cardIndices.stream().distinct().count() != cardIndices.size()) {
+            return false;
+        }
+
+        return true;
     }
 
     private int calculateArmyValue(final HashMap<ArmyType, Integer> armies) {

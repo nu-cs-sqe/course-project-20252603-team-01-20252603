@@ -197,7 +197,7 @@
     - **State of the system**: Human player has 3 cards; selected indices include `4`
     - **Expected output**: Returns `false`; available armies and card hand are unchanged
 
-- **TC42: Duplicate selected indices are rejected** ( :x: )
+- **TC42: Duplicate selected indices are rejected** ( :white_check_mark: )
     - **State of the system**: Human player has 3 cards; selected indices are `[1, 1, 2]`
     - **Expected output**: Returns `false`; available armies and card hand are unchanged
 
