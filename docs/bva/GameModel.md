@@ -321,7 +321,7 @@
     - **State of the system**: Current player owns `0` territories and `addArmiesToCurrentPlayerBasedOnTerritories()` is called
     - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 0 territories and play a turn because they have been eliminated."`; current player's available armies are unchanged
 
-- **TC70: Current player with 42 territories raises already-won exception** ( :x: )
+- **TC70: Current player with 42 territories raises already-won exception** ( :white_check_mark: )
     - **State of the system**: Current player owns `42` territories and `addArmiesToCurrentPlayerBasedOnTerritories()` is called
     - **Expected output**: `IllegalStateException` is raised with message `"Player cannot own 42 territories and play a turn because they should have already won."`; current player's available armies are unchanged
 
