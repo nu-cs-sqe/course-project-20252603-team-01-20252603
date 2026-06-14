@@ -561,7 +561,7 @@
     - **State of the system**: Current player owns the attacking territory; the attacking territory has exactly `2` armies; the defending territory is adjacent and owned by another player
     - **Expected output**: Returns the defending territory name
 
-- **TC94: Valid attack with more than minimum armies returns defender name** ( :x: )
+- **TC94: Valid attack with more than minimum armies returns defender name** ( :white_check_mark: )
     - **State of the system**: Current player owns the attacking territory; the attacking territory has more than `2` armies; the defending territory is adjacent and owned by another player
     - **Expected output**: Returns the defending territory name
 
