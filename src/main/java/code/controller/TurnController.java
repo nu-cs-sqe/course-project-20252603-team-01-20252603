@@ -43,6 +43,13 @@ public class TurnController {
 
         if (tradeInPossibility == TradeInPossibility.NOT_ALLOWED) {
             view.displayCurrentPlayerArmies(model.getCurrentPlayerAvailableArmies());
+            return;
+        }
+
+        if (tradeInPossibility == TradeInPossibility.ALLOWED) {
+            view.displayCurrentPlayerCards(model.getCurrentPlayerCards());
+            model.handleCardTradeIn(view.promptChooseCardsToTradeIn());
+            view.displayCurrentPlayerArmies(model.getCurrentPlayerAvailableArmies());
         }
     }
 

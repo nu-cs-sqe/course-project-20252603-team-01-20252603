@@ -444,6 +444,24 @@ public class GameModel {
         return players.get(currentPlayerIndex).getAvailableArmies();
     }
 
+    public String getCurrentPlayerCards() {
+        HumanPlayer player = (HumanPlayer) players.get(currentPlayerIndex);
+        StringBuilder cards = new StringBuilder();
+        List<RiskCard> availableCards = player.getAvailableCards();
+
+        for (int index = 0; index < availableCards.size(); index++) {
+            if (index > 0) {
+                cards.append(", ");
+            }
+
+            cards.append(index + 1)
+                    .append(": ")
+                    .append(availableCards.get(index).getType());
+        }
+
+        return cards.toString();
+    }
+
     public boolean placeArmiesDuringReinforcement(
             final String territoryName,
             final HashMap<ArmyType, Integer> pieces) {
