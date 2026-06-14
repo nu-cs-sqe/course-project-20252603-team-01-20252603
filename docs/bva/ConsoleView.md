@@ -301,7 +301,7 @@
     - **State of the system**: Player enters `"1"` for attacker dice and `"3"` for defender dice
     - **Expected output**: Returns a list containing `1` and `3`
 
-- **TC50: Returns non-numeric attacker dice input sentinel** ( :x: )
+- **TC50: Returns non-numeric attacker dice input sentinel** ( :white_check_mark: )
     - **State of the system**: Player enters `"one"` for attacker dice
     - **Expected output**: Returns `List.of(Integer.MIN_VALUE)` to signal malformed attacker-dice input
 

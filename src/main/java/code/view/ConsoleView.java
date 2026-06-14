@@ -194,10 +194,21 @@ public class ConsoleView {
             final String attackerName,
             final String defenderName) {
         output.print("Enter number of dice for " + attackerName + ": ");
-        int attackerDice = Integer.parseInt(scanner.nextLine());
+        String attackerDiceInput = scanner.nextLine();
+
+        if (!isInteger(attackerDiceInput)) {
+            return List.of(MALFORMED_CARD_INPUT_SENTINEL);
+        }
 
         output.print("Enter number of dice for " + defenderName + ": ");
-        int defenderDice = Integer.parseInt(scanner.nextLine());
+        String defenderDiceInput = scanner.nextLine();
+
+        if (!isInteger(defenderDiceInput)) {
+            return List.of(MALFORMED_CARD_INPUT_SENTINEL);
+        }
+
+        int attackerDice = Integer.parseInt(attackerDiceInput);
+        int defenderDice = Integer.parseInt(defenderDiceInput);
 
         return List.of(attackerDice, defenderDice);
     }

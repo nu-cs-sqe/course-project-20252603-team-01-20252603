@@ -515,6 +515,15 @@ public final class ConsoleViewTest {
         assertEquals(THREE, diceCounts.get(1));
     }
 
+    @Test
+    public void promptNumberOfDiceReturnsMalformedSentinelForNonNumericAttackerInput() {
+        ConsoleView view = createViewWithInput("one\n");
+
+        List<Integer> diceCounts = view.promptNumberOfDice("Attacker", "Defender");
+
+        assertEquals(List.of(MALFORMED_CARD_INPUT_SENTINEL), diceCounts);
+    }
+
     public void promptFortifyChoiceYesChoiceReturnsChoice() {
         ConsoleView view = createViewWithInput("yes\n");
 
