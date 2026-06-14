@@ -200,4 +200,19 @@ public final class TerritoryTest {
         assertEquals(3, territory.getArmyCount());
     }
 
+    @Test
+    public void removeArmiesZeroArmiesReturnsFalse() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
+        initialArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToRemove = new HashMap<>();
+        armiesToRemove.put(ArmyType.INFANTRY, 0);
+
+        territory.addArmies(initialArmies);
+        boolean removed = territory.removeArmies(armiesToRemove);
+
+        assertFalse(removed);
+        assertEquals(ONE_INFANTRY, territory.getArmyCount());
+    }
+
 }

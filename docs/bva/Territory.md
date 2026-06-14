@@ -125,7 +125,7 @@
 
 ### Method under test: `removeArmies(HashMap<ArmyType, Integer> armiesToRemove)`
 
-- **TC22: Reject zero armies removed** ( :x: )
+- **TC22: Reject zero armies removed** ( :white_check_mark: )
     - **State of the system**: Territory has at least `1` army; `removeArmies()` is called with `INFANTRY -> 0`
     - **Expected output**: Method returns `false`; territory army count does not change
 
