@@ -188,7 +188,7 @@
 
 ### Method under test: `promptFortifyArmyCount()`
 
-- **TC34: Returns zero army count for controller/model validation** ( :x: )
+- **TC34: Returns zero army count for controller/model validation** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for armies to move and enters `"0"`
     - **Expected output**: Returns `"0"` so the fortify flow can reject moving zero armies
 

@@ -356,6 +356,15 @@ public final class ConsoleViewTest {
         assertEquals("Western United States", destinationTerritory);
     }
 
+    @Test
+    public void promptFortifyArmyCountZeroArmyCountReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("0\n");
+
+        String armyCount = view.promptFortifyArmyCount();
+
+        assertEquals("0", armyCount);
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
