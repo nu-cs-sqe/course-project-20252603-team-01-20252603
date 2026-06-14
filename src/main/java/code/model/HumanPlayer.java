@@ -24,6 +24,8 @@ public class HumanPlayer extends Player {
 
     private final List<Territory> territories;
 
+    private final List<RiskCard> availableCards;
+
     private HashMap<ArmyType, Integer> availableArmies;
 
     public HumanPlayer(
@@ -32,6 +34,7 @@ public class HumanPlayer extends Player {
             final int startingInfantry) {
         super(playerName, playerColor, startingInfantry);
         territories = new ArrayList<>();
+        availableCards = new ArrayList<>();
         availableArmies = new HashMap<>();
         availableArmies.put(ArmyType.INFANTRY, startingInfantry);
     }
@@ -136,6 +139,22 @@ public class HumanPlayer extends Player {
         HashMap<ArmyType, Integer> reinforcementArmies = new HashMap<>();
         reinforcementArmies.put(ArmyType.INFANTRY, territoryReinforcement);
         addArmies(reinforcementArmies);
+    }
+
+    void addCard(final RiskCard card) {
+        availableCards.add(card);
+    }
+
+    int getCardCount() {
+        return availableCards.size();
+    }
+
+    @Override
+    public boolean tradeCardsAndAddArmies(
+            final List<Integer> cardIndices,
+            final Deck deck,
+            final int numSetsTradedIn) {
+        return cardIndices.size() == 3;
     }
 
     private int calculateArmyValue(final HashMap<ArmyType, Integer> armies) {

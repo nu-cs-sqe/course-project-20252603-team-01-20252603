@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashMap;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -280,6 +281,14 @@ public final class HumanPlayerTest {
         for (int index = 0; index < territoryCount; index++) {
             player.addTerritory(createMock(Territory.class));
         }
+    }
+
+    private RiskCard createCard(final CardType cardType) {
+        if (cardType == CardType.WILD) {
+            return new RiskCard(null, CardType.WILD, true);
+        }
+
+        return new RiskCard(createMock(Territory.class), cardType, false);
     }
 
     @Test
@@ -572,6 +581,21 @@ public final class HumanPlayerTest {
         assertEquals(
                 "Player cannot own 43 territories because there are only 42 territories on the board.",
                 exception.getMessage());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
+    @Test
+    public void tradeCardsAndAddArmiesWithFewerThanThreeSelectedCardsReturnsFalse() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+        player.addCard(createCard(CardType.ARTILLERY));
+
+        boolean traded = player.tradeCardsAndAddArmies(List.of(1, 2), new Deck(), 0);
+
+        assertFalse(traded);
+        assertEquals(3, player.getCardCount());
         assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
     }
 

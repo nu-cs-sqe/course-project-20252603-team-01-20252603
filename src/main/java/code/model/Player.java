@@ -1,6 +1,7 @@
 package code.model;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Represents a player in the Risk game.
@@ -44,6 +45,11 @@ public abstract class Player {
     public abstract String getAvailableArmies();
 
     public abstract void addArmiesToAvailableBasedOnTerritories();
+
+    public abstract boolean tradeCardsAndAddArmies(
+            List<Integer> cardIndices,
+            Deck deck,
+            int numSetsTradedIn);
 
     @Override
     public String toString() {

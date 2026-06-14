@@ -181,7 +181,7 @@
 
 ### Method under test: `tradeCardsAndAddArmies(List<Integer> cardIndices, Deck deck, int numSetsTradedIn)`
 
-- **TC38: Fewer than three selected cards is rejected** ( :x: )
+- **TC38: Fewer than three selected cards is rejected** ( :white_check_mark: )
     - **State of the system**: Human player has 3 cards; selected indices contain 2 cards
     - **Expected output**: Returns `false`; available armies and card hand are unchanged
 
