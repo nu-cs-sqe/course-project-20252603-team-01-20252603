@@ -117,7 +117,7 @@
     - **State of the system**: Territory has `0` armies; `addArmies()` is called with `INFANTRY -> 1`
     - **Expected output**: Method returns `true`; territory army count becomes `1`
 
-- **TC21: Add multiple armies to occupied territory** ( :x: )
+- **TC21: Add multiple armies to occupied territory** ( :white_check_mark: )
     - **State of the system**: Territory already has at least `1` army; `addArmies()` is called with more than one army
     - **Expected output**: Method returns `true`; territory army count increases by the total armies added
 

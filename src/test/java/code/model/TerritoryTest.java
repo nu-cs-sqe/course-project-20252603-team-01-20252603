@@ -185,4 +185,19 @@ public final class TerritoryTest {
         assertEquals(ONE_INFANTRY, territory.getArmyCount());
     }
 
+    @Test
+    public void addArmiesMultipleArmiesToOccupiedTerritoryReturnsTrue() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        HashMap<ArmyType, Integer> initialArmies = new HashMap<>();
+        initialArmies.put(ArmyType.INFANTRY, ONE_INFANTRY);
+        HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
+        armiesToAdd.put(ArmyType.INFANTRY, TWO_INFANTRY);
+
+        territory.addArmies(initialArmies);
+        boolean added = territory.addArmies(armiesToAdd);
+
+        assertTrue(added);
+        assertEquals(3, territory.getArmyCount());
+    }
+
 }
