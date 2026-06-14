@@ -1,11 +1,11 @@
 # BVA Analysis — `GameModel`
 
 
-### Method under test: `GameModel()` *(constructor)*
+### Method under test: `GameModel(Random randomGenerator)` *(constructor)*
 
-- **TC1: GameModel constructs without error** ( :white_check_mark: )
-    - **State of the system**: `new GameModel()` called
-    - **Expected output**: Object created; `getContinents()` returns an empty list before initialization
+- **TC1: GameModel constructs with injected random generator** ( :x: )
+    - **State of the system**: `new GameModel(randomGenerator)` called with a supplied `Random`
+    - **Expected output**: Object created successfully; board state remains uninitialized until `initializeContinentsAndTerritories()` is called; subsequent battle-resolution dice rolls use the injected `Random`
 
 ---
 
@@ -638,45 +638,45 @@
 ### Method under test: `executeBattleAndReturnWinner(String attackerTerritoryName, String defenderTerritoryName, int attackerNumDice, int defenderNumDice)`
 
 - **TC111: One-versus-one battle where attacker die beats defender die removes one defending army** ( :x: )
-    - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; attacker die is greater than defender die
+    - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; injected `Random` produces an attacker die greater than the defender die
     - **Expected output**: Defending territory loses `1` army; attacking territory loses `0` armies; returned battle result reports sorted dice, losses, updated army counts, and no capture when defenders remain
 
 - **TC112: One-versus-one battle where defender die beats attacker die removes one attacking army** ( :x: )
-    - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; defender die is greater than attacker die
+    - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; injected `Random` produces a defender die greater than the attacker die
     - **Expected output**: Attacking territory loses `1` army; defending territory loses `0` armies; returned battle result reports sorted dice, losses, updated army counts, and no capture
 
 - **TC113: One-versus-one battle tie removes one attacking army** ( :x: )
-    - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; attacker die equals defender die
+    - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; injected `Random` produces equal attacker and defender dice
     - **Expected output**: Attacking territory loses `1` army because defender wins ties; returned battle result reports the tie outcome and updated army counts
 
 - **TC114: Two-versus-one battle compares only highest dice** ( :x: )
-    - **State of the system**: Attacker rolls `2` dice; defender rolls `1` die
+    - **State of the system**: Attacker rolls `2` dice; defender rolls `1` die; injected `Random` produces deterministic dice values
     - **Expected output**: Only the highest attacker die is compared to the defender die; exactly one army total is lost across the two territories
 
 - **TC115: Three-versus-two battle compares top two dice and attacker loses both comparisons** ( :x: )
-    - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; after sorting, defender wins both comparisons
+    - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; injected `Random` produces values such that, after sorting, defender wins both comparisons
     - **Expected output**: Attacking territory loses `2` armies; defending territory loses `0` armies; returned battle result reports both losses and updated army counts
 
 - **TC116: Three-versus-two battle compares top two dice and defender loses both comparisons** ( :x: )
-    - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; after sorting, attacker wins both comparisons
+    - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; injected `Random` produces values such that, after sorting, attacker wins both comparisons
     - **Expected output**: Defending territory loses `2` armies; attacking territory loses `0` armies; returned battle result reports both losses, updated army counts, and capture flag if the defending territory reaches `0` armies
 
 - **TC117: Three-versus-two battle splits losses one each** ( :x: )
-    - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; after sorting, attacker wins one comparison and defender wins one comparison
+    - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; injected `Random` produces values such that, after sorting, attacker wins one comparison and defender wins one comparison
     - **Expected output**: Each territory loses `1` army; returned battle result reports both losses and updated army counts
 
 - **TC118: Returned attacker dice are sorted from highest to lowest** ( :x: )
-    - **State of the system**: Attacker rolls more than one die and the raw roll order is not descending
+    - **State of the system**: Attacker rolls more than one die and the injected `Random` yields attacker dice in a raw order that is not descending
     - **Expected output**: The attacker dice reported in the battle result are sorted from highest to lowest
 
 - **TC119: Returned defender dice are sorted from highest to lowest** ( :x: )
-    - **State of the system**: Defender rolls two dice and the raw roll order is not descending
+    - **State of the system**: Defender rolls two dice and the injected `Random` yields defender dice in a raw order that is not descending
     - **Expected output**: The defender dice reported in the battle result are sorted from highest to lowest
 
 - **TC120: Capture flag is false when defending territory still has armies remaining** ( :x: )
-    - **State of the system**: Battle resolves and defending territory still has at least `1` army remaining afterward
+    - **State of the system**: Battle resolves with deterministic injected dice and the defending territory still has at least `1` army remaining afterward
     - **Expected output**: Returned battle result indicates that the territory was not captured
 
 - **TC121: Capture flag is true when defending territory loses its last army** ( :x: )
-    - **State of the system**: Battle resolves and defending territory reaches `0` armies
+    - **State of the system**: Battle resolves with deterministic injected dice and the defending territory reaches `0` armies
     - **Expected output**: Returned battle result indicates that the territory was captured

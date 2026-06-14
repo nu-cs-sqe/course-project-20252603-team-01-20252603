@@ -2,6 +2,7 @@ package code.controller;
 
 import code.model.GameModel;
 import code.view.ConsoleView;
+import java.util.Random;
 
 /**
  * Controls the overall game flow.
@@ -15,7 +16,7 @@ public class GameController {
     private final SetupController setupController;
 
     public GameController() {
-        this(new GameModel(), new ConsoleView());
+        this(new GameModel(new Random()), new ConsoleView());
     }
 
     GameController(

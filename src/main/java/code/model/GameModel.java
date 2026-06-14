@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -63,13 +64,16 @@ public class GameModel {
 
     private final List<Territory> territories;
 
-    public GameModel() {
+    private final Random random;
+
+    public GameModel(final Random randomGenerator) {
         continents = new ArrayList<>();
         territories = new ArrayList<>();
         players = new ArrayList<>();
         deck = new Deck();
         deck.shuffle();
         numSetsTradedIn = 0;
+        random = randomGenerator;
     }
 
     public void initializeContinentsAndTerritories() {

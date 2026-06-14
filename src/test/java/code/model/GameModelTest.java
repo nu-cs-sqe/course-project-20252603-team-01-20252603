@@ -2,6 +2,7 @@ package code.model;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Tests board initialization behavior for the GameModel class.
@@ -80,9 +82,21 @@ public final class GameModelTest {
 
     private static final int ASIA_TERRITORY_COUNT = 12;
 
+    private GameModel createGameModel() {
+        return new GameModel(new Random(0));
+    }
+
+    @Test
+    public void constructorWithInjectedRandomConstructsGameModel() {
+        GameModel gameModel = createGameModel();
+
+        assertNotNull(gameModel);
+        assertFalse(gameModel.isDeckEmpty());
+    }
+
     @Test
     public void deckHasFortyFourCardsAfterBoardInitialization() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.initializeContinentsAndTerritories();
 
@@ -91,7 +105,7 @@ public final class GameModelTest {
 
     @Test
     public void deckIsNotEmptyAfterBoardInitialization() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.initializeContinentsAndTerritories();
 
@@ -100,21 +114,21 @@ public final class GameModelTest {
 
     @Test
     public void setPlayerCountBelowMinimumPlayerCountReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         assertFalse(gameModel.setPlayerCount(BELOW_MIN_PLAYER_COUNT));
     }
 
     @Test
     public void setPlayerCountAboveMaximumPlayerCountReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         assertFalse(gameModel.setPlayerCount(ABOVE_MAX_PLAYER_COUNT));
     }
 
     @Test
     public void addPlayerThreePlayerGameWithNoRegisteredPlayersReturnsPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -127,7 +141,7 @@ public final class GameModelTest {
 
     @Test
     public void addPlayerFourPlayerGameWithNoRegisteredPlayersReturnsPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(FOUR_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.BLUE);
@@ -139,7 +153,7 @@ public final class GameModelTest {
 
     @Test
     public void addPlayerFivePlayerGameWithNoRegisteredPlayersReturnsPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(FIVE_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.GREEN);
@@ -151,7 +165,7 @@ public final class GameModelTest {
 
     @Test
     public void addPlayerSixPlayerGameWithNoRegisteredPlayersReturnsPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MAX_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.YELLOW);
@@ -163,7 +177,7 @@ public final class GameModelTest {
 
     @Test
     public void addPlayerPlayerListAlreadyFullReturnsNullPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -176,7 +190,7 @@ public final class GameModelTest {
 
     @Test
     public void setCurrentPlayerIndexFirstPlayerIndexSetsCurrentPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -189,7 +203,7 @@ public final class GameModelTest {
 
     @Test
     public void setCurrentPlayerIndexLastPlayerIndexSetsCurrentPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -202,7 +216,7 @@ public final class GameModelTest {
 
     @Test
     public void setCurrentPlayerIndexIndexBelowRangeDoesNotChangeCurrentPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -216,7 +230,7 @@ public final class GameModelTest {
 
     @Test
     public void setCurrentPlayerIndexIndexAboveRangeDoesNotChangeCurrentPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -229,7 +243,7 @@ public final class GameModelTest {
 
     @Test
     public void getCurrentPlayerNameSelectedFirstPlayerReturnsFirstPlayerName() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -241,7 +255,7 @@ public final class GameModelTest {
 
     @Test
     public void getCurrentPlayerNameSelectedLastPlayerReturnsLastPlayerName() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -279,7 +293,7 @@ public final class GameModelTest {
 
     @Test
     public void claimTerritoryDuringSetupUnclaimedTerritoryWithOneInfantryReturnsTrue() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -301,7 +315,7 @@ public final class GameModelTest {
 
     @Test
     public void claimTerritoryDuringSetupAlreadyClaimedTerritoryReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player playerOne = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -328,7 +342,7 @@ public final class GameModelTest {
 
     @Test
     public void claimTerritoryDuringSetupZeroInfantryReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -351,7 +365,7 @@ public final class GameModelTest {
 
     @Test
     public void claimTerritoryDuringSetupMoreThanOneInfantryReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -374,7 +388,7 @@ public final class GameModelTest {
 
     @Test
     public void claimTerritoryDuringSetupNoAvailableInfantryReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -400,7 +414,7 @@ public final class GameModelTest {
 
     @Test
     public void advanceCurrentPlayerIndexNoPlayersReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         boolean advanced = gameModel.advanceCurrentPlayerIndex();
 
@@ -409,7 +423,7 @@ public final class GameModelTest {
 
     @Test
     public void advanceCurrentPlayerIndexLastPlayerWrapsToFirstPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -425,7 +439,7 @@ public final class GameModelTest {
 
     @Test
     public void advanceCurrentPlayerIndexMiddlePlayerAdvancesToNextPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -441,7 +455,7 @@ public final class GameModelTest {
 
     @Test
     public void advanceCurrentPlayerIndexFirstPlayerAdvancesToSecondPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -456,7 +470,7 @@ public final class GameModelTest {
 
     @Test
     public void areAllTerritoriesClaimedReturnsFalseWhenNoTerritoriesClaimed() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.initializeContinentsAndTerritories();
 
@@ -522,7 +536,7 @@ public final class GameModelTest {
 
     @Test
     public void areAllTerritoriesClaimedReturnsFalseWhenOneTerritoryRemainsUnclaimed() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -539,7 +553,7 @@ public final class GameModelTest {
 
     @Test
     public void areAllTerritoriesClaimedReturnsTrueWhenAllTerritoriesClaimed() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -556,7 +570,7 @@ public final class GameModelTest {
 
     @Test
     public void getCurrentPlayerNameFirstPlayerIndexReturnsFirstPlayerName() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -568,7 +582,7 @@ public final class GameModelTest {
 
     @Test
     public void getCurrentPlayerNameMiddlePlayerIndexReturnsMiddlePlayerName() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -581,7 +595,7 @@ public final class GameModelTest {
 
     @Test
     public void getUnclaimedTerritoriesByContinentReturnsAllTerritoriesWhenNoneClaimed() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.initializeContinentsAndTerritories();
 
@@ -597,7 +611,7 @@ public final class GameModelTest {
 
     @Test
     public void getUnclaimedTerritoriesByContinentExcludesClaimedTerritory() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -618,7 +632,7 @@ public final class GameModelTest {
 
     @Test
     public void getCurrentPlayerTerritoriesByContinentReturnsNoTerritoriesWhenNoneOwned() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -635,7 +649,7 @@ public final class GameModelTest {
 
     @Test
     public void getCurrentPlayerTerritoriesByContinentExcludesOtherPlayerTerritory() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -668,7 +682,7 @@ public final class GameModelTest {
 
     @Test
     public void hasCurrentPlayerAvailableArmiesCurrentPlayerHasZeroArmiesRemainingReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -682,7 +696,7 @@ public final class GameModelTest {
 
     @Test
     public void hasCurrentPlayerAvailableArmiesCurrentPlayerHasOneArmyRemainingReturnsTrue() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -696,7 +710,7 @@ public final class GameModelTest {
 
     @Test
     public void hasCurrentPlayerAvailableArmiesCurrentPlayerHasMultipleArmiesRemainingReturnsTrue() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -708,7 +722,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesDuringSetupOwnedTerritoryWithOneInfantryReturnsTrue() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -730,7 +744,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesDuringSetupOwnedTerritoryWithFinalInfantryReturnsTrue() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -753,7 +767,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesDuringSetupTerritoryOwnedByAnotherPlayerReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -776,7 +790,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesDuringSetupUnknownTerritoryNameReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -795,7 +809,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesDuringSetupOwnedTerritoryWithZeroInfantryReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -817,7 +831,7 @@ public final class GameModelTest {
 
     @Test
     public void addTwoArmiesDuringSetupOwnedTerritoryReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -839,7 +853,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesDuringSetupOwnedTerritoryWithNoArmiesRemainingReturnsFalse() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -862,7 +876,7 @@ public final class GameModelTest {
 
     @Test
     public void placeArmiesDuringReinforcementPlacesOneInfantryOnOwnedTerritory() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -887,7 +901,7 @@ public final class GameModelTest {
 
     @Test
     public void placeArmiesDuringReinforcementPlacesMixedArmiesOnOwnedTerritory() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -915,7 +929,7 @@ public final class GameModelTest {
 
     @Test
     public void placeArmiesDuringReinforcementRejectsZeroArmies() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -940,7 +954,7 @@ public final class GameModelTest {
 
     @Test
     public void placeArmiesDuringReinforcementRejectsNegativeInfantry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -965,7 +979,7 @@ public final class GameModelTest {
 
     @Test
     public void placeArmiesDuringReinforcementRejectsNegativeCavalry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -990,7 +1004,7 @@ public final class GameModelTest {
 
     @Test
     public void placeArmiesDuringReinforcementRejectsNegativeArtillery() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1015,7 +1029,7 @@ public final class GameModelTest {
 
     @Test
     public void placeArmiesDuringReinforcementRejectsMoreArmiesThanAvailable() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1045,7 +1059,7 @@ public final class GameModelTest {
 
     @Test
     public void placeArmiesDuringReinforcementRejectsOtherPlayersTerritory() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1072,7 +1086,7 @@ public final class GameModelTest {
 
     @Test
     public void placeArmiesDuringReinforcementRejectsUnownedTerritory() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1093,7 +1107,7 @@ public final class GameModelTest {
 
     @Test
     public void currentPlayerHasAvailableArmiesReturnsFalseWhenNoArmiesAvailable() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1107,7 +1121,7 @@ public final class GameModelTest {
 
     @Test
     public void currentPlayerHasAvailableArmiesReturnsTrueWhenOneInfantryAvailable() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1122,7 +1136,7 @@ public final class GameModelTest {
 
     @Test
     public void currentPlayerHasAvailableArmiesReturnsTrueWhenOnlyCavalryAvailable() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1137,7 +1151,7 @@ public final class GameModelTest {
 
     @Test
     public void currentPlayerHasAvailableArmiesReturnsTrueWhenOnlyArtilleryAvailable() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1152,7 +1166,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithNoFullContinentAddsNoBonus() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1173,7 +1187,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnTerritoriesWithOneTerritoryAddsThreeInfantry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1191,7 +1205,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnTerritoriesWithEightTerritoriesAddsThreeInfantry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1210,7 +1224,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnTerritoriesWithTwelveTerritoriesAddsFourInfantry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1229,7 +1243,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnTerritoriesWithFortyOneTerritoriesAddsThirteenInfantry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1248,7 +1262,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnTerritoriesWithZeroTerritoriesRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1267,7 +1281,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnTerritoriesWithFortyTwoTerritoriesRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1291,21 +1305,21 @@ public final class GameModelTest {
 
     @Test
     public void setPlayerCountMinimumValidCountReturnsTrue() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         assertTrue(gameModel.setPlayerCount(MIN_PLAYER_COUNT));
     }
 
     @Test
     public void setPlayerCountMaximumValidCountReturnsTrue() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         assertTrue(gameModel.setPlayerCount(MAX_PLAYER_COUNT));
     }
 
     @Test
     public void setCurrentPlayerIndexZeroAfterNonZeroIndexSetsFirstPlayer() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1319,7 +1333,7 @@ public final class GameModelTest {
 
     @Test
     public void getUnclaimedTerritoriesByContinentShowsAlaskaUnderNorthAmericaSection() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.initializeContinentsAndTerritories();
 
@@ -1334,7 +1348,7 @@ public final class GameModelTest {
 
     @Test
     public void getCurrentPlayerTerritoriesByContinentShowsClaimedAlaskaUnderNorthAmerica() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1354,7 +1368,7 @@ public final class GameModelTest {
 
     @Test
     public void placeArmiesDuringReinforcementDepletesPlayerAvailableArmies() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1377,7 +1391,7 @@ public final class GameModelTest {
 
     @Test
     public void initializeContinentsAndTerritoriesCalledTwiceDoesNotDuplicateTerritoriesInUnclaimedList() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1394,7 +1408,7 @@ public final class GameModelTest {
 
     @Test
     public void initializeContinentsAndTerritoriesCalledTwiceDoesNotDuplicateContinentSections() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.initializeContinentsAndTerritories();
         gameModel.initializeContinentsAndTerritories();
@@ -1408,14 +1422,14 @@ public final class GameModelTest {
 
     @Test
     public void isDeckEmptyReturnsFalseWhenDeckHasCards() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         assertFalse(gameModel.isDeckEmpty());
     }
 
     @Test
     public void initializeContinentsAndTerritoriesInitializesDeck() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.initializeContinentsAndTerritories();
 
@@ -1425,7 +1439,7 @@ public final class GameModelTest {
 
     @Test
     public void validateTerritoriesForAttackAndReturnDefenderNameMinimumValidAttackReturnsDefendingTerritoryName() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1448,7 +1462,7 @@ public final class GameModelTest {
 
     @Test
     public void validateTerritoriesForAttackAndReturnDefenderNameMoreThanMinimumArmiesReturnsDefendingTerritoryName() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1471,7 +1485,7 @@ public final class GameModelTest {
 
     @Test
     public void validateTerritoriesForAttackAndReturnDefenderNameAttackingTerritoryNotOwnedRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1496,7 +1510,7 @@ public final class GameModelTest {
 
     @Test
     public void validateTerritoriesForAttackAndReturnDefenderNameDefendingTerritoryOwnedByCurrentPlayerRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1518,7 +1532,7 @@ public final class GameModelTest {
 
     @Test
     public void validateTerritoriesForAttackAndReturnDefenderNameNonAdjacentTerritoriesRaiseException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1542,7 +1556,7 @@ public final class GameModelTest {
 
     @Test
     public void validateTerritoriesForAttackAndReturnDefenderNameOneArmyAttackingTerritoryRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1565,7 +1579,7 @@ public final class GameModelTest {
 
     @Test
     public void validateTerritoriesForAttackAndReturnDefenderNameSameTerritoryRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1588,7 +1602,7 @@ public final class GameModelTest {
 
     @Test
     public void validateTerritoriesForAttackAndReturnDefenderNameUnknownAttackingTerritoryRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1610,7 +1624,7 @@ public final class GameModelTest {
 
     @Test
     public void validateTerritoriesForAttackAndReturnDefenderNameUnknownDefendingTerritoryRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1632,7 +1646,7 @@ public final class GameModelTest {
 
     @Test
     public void validateNumberOfDiceMinimumValidDiceCountsReturnsTrue() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1656,7 +1670,7 @@ public final class GameModelTest {
 
     @Test
     public void validateNumberOfDiceMaximumValidDiceCountsReturnsTrue() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1681,7 +1695,7 @@ public final class GameModelTest {
 
     @Test
     public void validateNumberOfDiceThreeArmiesAllowsTwoAttackerDice() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1705,7 +1719,7 @@ public final class GameModelTest {
 
     @Test
     public void validateNumberOfDiceZeroAttackerDiceRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1731,7 +1745,7 @@ public final class GameModelTest {
 
     @Test
     public void validateNumberOfDiceAttackerRollingMoreThanArmiesMinusOneRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1759,7 +1773,7 @@ public final class GameModelTest {
 
     @Test
     public void validateNumberOfDiceZeroDefenderDiceRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1785,7 +1799,7 @@ public final class GameModelTest {
 
     @Test
     public void validateNumberOfDiceDefenderRollingMoreThanTerritoryArmiesRaisesException() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1813,7 +1827,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1839,7 +1853,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullSouthAmericaAddsTwoInfantry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1865,7 +1879,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAfricaAddsThreeInfantry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1893,7 +1907,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullEuropeAddsFiveInfantry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1922,7 +1936,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullNorthAmericaAddsFiveInfantry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
@@ -1953,7 +1967,7 @@ public final class GameModelTest {
 
     @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAsiaAddsSevenInfantry() {
-        GameModel gameModel = new GameModel();
+        GameModel gameModel = createGameModel();
 
         gameModel.setPlayerCount(MIN_PLAYER_COUNT);
         Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);

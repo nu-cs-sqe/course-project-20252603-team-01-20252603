@@ -2,6 +2,7 @@ package code.model;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Random;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -14,7 +15,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 public final class GameModelAdjacencyTest {
 
     private GameModel createInitializedModel() {
-        GameModel model = new GameModel();
+        GameModel model = new GameModel(new Random(0));
         model.initializeContinentsAndTerritories();
         return model;
     }

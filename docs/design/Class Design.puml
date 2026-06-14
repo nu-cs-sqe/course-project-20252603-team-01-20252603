@@ -113,7 +113,8 @@ package code.model {
         - currentPlayerIndex : int
         - territories : List<Territory>
         - numSetsTradedIn : int
-        + GameModel()
+        - random : Random
+        + GameModel(randomGenerator : Random)
         + initializeContinentsAndTerritories() : void
         + getDeckSize() : int
         + isDeckEmpty() : boolean

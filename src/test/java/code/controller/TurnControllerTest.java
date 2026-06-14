@@ -13,6 +13,7 @@ import code.model.TradeInPossibility;
 import code.view.ConsoleView;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -51,7 +52,7 @@ public final class TurnControllerTest {
 
     @Test
     public void constructorCreatesTurnController() {
-        GameModel model = new GameModel();
+        GameModel model = new GameModel(new Random(0));
         ConsoleView view = new ConsoleView();
 
         TurnController controller = new TurnController(model, view);
