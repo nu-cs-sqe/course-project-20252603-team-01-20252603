@@ -397,6 +397,6 @@
     - **State of the system**: Current player has exactly `5` cards in hand
     - **Expected output**: Returns `TradeInPossibility.REQUIRED`
 
-- **TC87: More than five cards also requires a trade-in** ( :x: )
+- **TC87: More than five cards also requires a trade-in** ( :white_check_mark: )
     - **State of the system**: Current player has `6` or more cards in hand
     - **Expected output**: Returns `TradeInPossibility.REQUIRED`

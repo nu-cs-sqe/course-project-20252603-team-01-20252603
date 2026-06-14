@@ -1505,4 +1505,24 @@ public final class GameModelTest {
 
         assertEquals(TradeInPossibility.REQUIRED, gameModel.checkCardTradeInPossibility());
     }
+
+    @Test
+    public void checkCardTradeInPossibilityWithMoreThanFiveCardsReturnsRequired() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer humanPlayer = (HumanPlayer) player;
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        humanPlayer.addCard(createCard(CardType.INFANTRY));
+        humanPlayer.addCard(createCard(CardType.INFANTRY));
+        humanPlayer.addCard(createCard(CardType.CAVALRY));
+        humanPlayer.addCard(createCard(CardType.CAVALRY));
+        humanPlayer.addCard(createCard(CardType.ARTILLERY));
+        humanPlayer.addCard(createCard(CardType.WILD));
+
+        assertEquals(TradeInPossibility.REQUIRED, gameModel.checkCardTradeInPossibility());
+    }
 }
