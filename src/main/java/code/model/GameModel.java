@@ -495,6 +495,13 @@ public class GameModel {
         return true;
     }
 
+    public boolean fortifyTerritory(
+            final String sourceName,
+            final String destinationName,
+            final int armyCount) {
+        return true;
+    }
+
     private boolean hasValidArmyCounts(final HashMap<ArmyType, Integer> pieces) {
         boolean hasPositiveCount = false;
 

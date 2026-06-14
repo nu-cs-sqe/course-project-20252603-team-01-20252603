@@ -156,6 +156,22 @@ public class SetupController {
         if (fortifyChoice.equalsIgnoreCase("no")
                 || fortifyChoice.equalsIgnoreCase("n")) {
             model.advanceCurrentPlayerIndex();
+        } else if (fortifyChoice.equalsIgnoreCase("yes")
+                || fortifyChoice.equalsIgnoreCase("y")) {
+            view.displayCurrentPlayerTerritoriesByContinent(
+                    model.getCurrentPlayerTerritoriesByContinent());
+            String sourceTerritory = view.promptFortifySourceTerritory();
+            String destinationTerritory = view.promptFortifyDestinationTerritory();
+            int armyCount = Integer.parseInt(view.promptFortifyArmyCount());
+
+            if (model.fortifyTerritory(
+                    sourceTerritory,
+                    destinationTerritory,
+                    armyCount)) {
+                view.displayCurrentPlayerTerritoriesByContinent(
+                        model.getCurrentPlayerTerritoriesByContinent());
+                model.advanceCurrentPlayerIndex();
+            }
         }
     }
 

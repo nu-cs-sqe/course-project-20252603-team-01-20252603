@@ -123,7 +123,7 @@
     - **State of the system**: Current player is prompted for fortification and enters `"no"`
     - **Expected output**: No source, destination, or army-count prompts are shown; no territory army counts change; controller advances to the next player
 
-- **TC27: Player chooses to fortify** ( :x: )
+- **TC27: Player chooses to fortify** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for fortification and enters `"yes"`; source, destination, and army count form a valid fortify move
     - **Expected output**: Controller displays current player's territories, passes the move to `GameModel.fortifyTerritory(...)`, displays the updated territories, and advances to the next player
 
