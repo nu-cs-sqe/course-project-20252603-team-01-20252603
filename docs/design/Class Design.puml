@@ -33,6 +33,7 @@ package code.model {
     abstract class Player {
         {abstract} + getName() : String
         {abstract} + addTerritory(territory : Territory) : void
+        {abstract} + removeTerritory(territory : Territory) : void
         {abstract} + ownsTerritory(territory : Territory) : boolean
         {abstract} + getTerritoryCount() : int
         {abstract} + addArmies(armiesToAdd : HashMap<ArmyType, Integer>) : void
@@ -41,6 +42,11 @@ package code.model {
         {abstract} + getAvailableArmies() : String
         {abstract} + addArmiesToAvailableBasedOnTerritories(): void
         {abstract} + tradeCardsAndAddArmies(cardIndices: List<Integer>, deck: Deck, numSetsTradedIn: int): boolean
+        {abstract} + addCard(card : RiskCard) : void
+        {abstract} + addCards(cardsToAdd : List<RiskCard>) : void
+        {abstract} + removeAllCards() : List<RiskCard>
+        {abstract} + markEliminated() : void
+        {abstract} + isEliminated() : boolean
     }
 
     class HumanPlayer {
@@ -48,8 +54,8 @@ package code.model {
         - color : PlayerColor
         - territories : List<Territory>
         - availableArmies : HashMap<ArmyType, Integer>
-        - availableArmies : HashMap<ArmyType, Integer>
         - availableCards: List<RiskCard>
+        - eliminated : boolean
         + HumanPlayer(playerName : String, playerColor : PlayerColor, startingInfantry : int)
     }
 
@@ -84,8 +90,12 @@ package code.model {
         + isUnclaimed() : boolean
         + setOwner(player : Player) : void
         + isOwnedBy(player : Player) : boolean
+        ~ getOwner() : Player
         + placeArmies(newPieces : HashMap<ArmyType, Integer>) : boolean
+        + addArmies(armiesToAdd : HashMap<ArmyType, Integer>) : boolean
+        + removeArmies(armiesToRemove : HashMap<ArmyType, Integer>) : boolean
         + getContinentName() : String
+        + getArmiesOfType(armyType : ArmyType) : int
     }
 
     class RiskCard {
@@ -98,11 +108,16 @@ package code.model {
 
     class Deck {
         - cards : List<RiskCard>
+        - discardPile : List<RiskCard>
         + Deck()
         + size() : int
+        + getDiscardPileSize() : int
         + getCards() : List<RiskCard>
         + isEmpty() : boolean
         + shuffle() : void
+        + drawCard() : RiskCard
+        + discardCards(cardsToDiscard : List<RiskCard>) : void
+        + reinitializeDrawPileFromDiscardPile() : void
     }
 
     class GameModel {
@@ -140,7 +155,12 @@ package code.model {
         + validateNumberOfDice(attackerTerritoryName : String, defenderTerritoryName : String, attackerNumDice : int, defenderNumDice : int) : boolean
         ' last element of the battle result list is a bool flag for whether territory was captured or not
         + executeBattleAndReturnWinner(attackerTerritoryName : String, defenderTerritoryName : String, attackerNumDice : int, defenderNumDice : int) : List<String>
-        + handlePlayerElimination() : boolean
+        + isTerritoryCaptured(defenderTerritoryName : String) : boolean
+        + validateCaptureMovement(attackerTerritoryName : String, defenderTerritoryName : String, armiesToMove : int, attackerDiceUsed : int) : boolean
+        + captureTerritory(attackerTerritoryName : String, defenderTerritoryName : String, armiesToMove : int, attackerDiceUsed : int) : String
+        + handlePlayerElimination(defenderName : String) : boolean
+        + currentPlayerHasValidAttack() : boolean
+        + awardRiskCardIfCaptured(capturedTerritoryThisTurn : boolean) : boolean
     }
 }
 
@@ -162,10 +182,15 @@ package code.view {
         + displayCurrentPlayerCards(cards: String): void
         + promptChooseCardsToTradeIn(): List<Integer>
         + promptReinforcement(): List<String>
+        + promptAttackChoice() : String
         + promptTerritoriesToAttack() : List<String>
         + promptNumberOfDice(attackerName : String, defenderName : String) : List<Integer>
+        + promptCaptureArmyCount(attackerName : String, defenderName : String) : String
         + displayBattleResult(battleResult : List<String>) : void
+        + displayNoValidAttacks() : void
+        + displayTerritoryCaptured(attackerName : String, defenderName : String, movedArmies : int) : void
         + displayPlayerElimination(playerName : String) : void
+        + displayRiskCardAwarded(playerName : String) : void
         + displaySetupPhaseComplete() : void
     }
 }

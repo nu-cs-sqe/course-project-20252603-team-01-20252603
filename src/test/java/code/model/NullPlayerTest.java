@@ -80,6 +80,59 @@ public final class NullPlayerTest {
     }
 
     @Test
+    public void addCardThrowsUnsupportedOperationException() {
+        NullPlayer player = new NullPlayer();
+        RiskCard card = new RiskCard(null, CardType.WILD, true);
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                () -> player.addCard(card));
+
+        assertEquals("NullPlayer cannot receive cards.", exception.getMessage());
+    }
+
+    @Test
+    public void addCardsThrowsUnsupportedOperationException() {
+        NullPlayer player = new NullPlayer();
+        RiskCard card = new RiskCard(null, CardType.WILD, true);
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                () -> player.addCards(List.of(card)));
+
+        assertEquals("NullPlayer cannot receive cards.", exception.getMessage());
+    }
+
+    @Test
+    public void removeAllCardsThrowsUnsupportedOperationException() {
+        NullPlayer player = new NullPlayer();
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                player::removeAllCards);
+
+        assertEquals("NullPlayer cannot transfer cards.", exception.getMessage());
+    }
+
+    @Test
+    public void markEliminatedThrowsUnsupportedOperationException() {
+        NullPlayer player = new NullPlayer();
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                player::markEliminated);
+
+        assertEquals("NullPlayer cannot be eliminated.", exception.getMessage());
+    }
+
+    @Test
+    public void isEliminatedReturnsFalse() {
+        NullPlayer player = new NullPlayer();
+
+        assertFalse(player.isEliminated());
+    }
+
+    @Test
     public void ownsTerritoryUnassignedOwnerReturnsFalse() {
         NullPlayer player = new NullPlayer();
         Continent continent = new Continent("Asia", ASIA_BONUS_ARMIES);
@@ -97,6 +150,19 @@ public final class NullPlayerTest {
         assertThrows(
                 UnsupportedOperationException.class,
                 () -> nullPlayer.addTerritory(territory));
+    }
+
+    @Test
+    public void removeTerritoryThrowsUnsupportedOperationException() {
+        NullPlayer nullPlayer = new NullPlayer();
+        Continent continent = new Continent("North America", AUSTRALIA_BONUS_ARMIES);
+        Territory territory = new Territory("Alaska", continent, List.of());
+
+        UnsupportedOperationException exception = assertThrows(
+                UnsupportedOperationException.class,
+                () -> nullPlayer.removeTerritory(territory));
+
+        assertEquals("NullPlayer cannot remove territories.", exception.getMessage());
     }
 
     @Test

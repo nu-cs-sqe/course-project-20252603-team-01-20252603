@@ -117,6 +117,10 @@ public class GameModel {
         return deck.isEmpty();
     }
 
+    int getDeckDiscardPileSize() {
+        return deck.getDiscardPileSize();
+    }
+
     public boolean setPlayerCount(final int count) {
         if (count < MIN_PLAYER_COUNT || count > MAX_PLAYER_COUNT) {
             return false;
@@ -271,6 +275,13 @@ public class GameModel {
                 .filter(territory -> territory.getName().equals(territoryName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(errorMessage));
+    }
+
+    private Player findPlayerByName(final String playerName) {
+        return players.stream()
+                .filter(player -> player.getName().equals(playerName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Player must exist."));
     }
 
     private void connect(
@@ -777,6 +788,130 @@ public class GameModel {
                 "Attacking territory armies: " + attackingTerritory.getArmyCount(),
                 "Defending territory armies: " + defendingTerritory.getArmyCount(),
                 "Captured: " + (defendingTerritory.getArmyCount() == 0));
+    }
+
+    public boolean isTerritoryCaptured(final String defenderTerritoryName) {
+        Territory defendingTerritory = findTerritoryOrThrow(
+                defenderTerritoryName,
+                "Defending territory must exist on the board.");
+
+        return defendingTerritory.getArmyCount() == 0;
+    }
+
+    public boolean validateCaptureMovement(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName,
+            final int armiesToMove,
+            final int attackerDiceUsed) {
+        Territory attackingTerritory = findTerritoryOrThrow(
+                attackerTerritoryName,
+                "Attacking territory must exist on the board.");
+
+        if (!isTerritoryCaptured(defenderTerritoryName)) {
+            throw new IllegalArgumentException(
+                    "Cannot move armies because the defending territory has not been captured.");
+        }
+
+        if (armiesToMove <= ZERO_ARMIES) {
+            throw new IllegalArgumentException(
+                    "Attacker must move at least one army into a captured territory.");
+        }
+
+        if (armiesToMove >= attackingTerritory.getArmyCount()) {
+            throw new IllegalArgumentException(
+                    "Attacker must leave at least one army behind.");
+        }
+
+        int maximumMovableArmies = attackingTerritory.getArmyCount() - 1;
+        int minimumArmiesToMove = Math.min(attackerDiceUsed, maximumMovableArmies);
+
+        if (armiesToMove < minimumArmiesToMove) {
+            throw new IllegalArgumentException(
+                    "Attacker must move at least the number of dice used in the final attack when possible.");
+        }
+
+        return true;
+    }
+
+    public String captureTerritory(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName,
+            final int armiesToMove,
+            final int attackerDiceUsed) {
+        validateCaptureMovement(
+                attackerTerritoryName,
+                defenderTerritoryName,
+                armiesToMove,
+                attackerDiceUsed);
+
+        Territory attackingTerritory = findTerritoryOrThrow(
+                attackerTerritoryName,
+                "Attacking territory must exist on the board.");
+        Territory defendingTerritory = findTerritoryOrThrow(
+                defenderTerritoryName,
+                "Defending territory must exist on the board.");
+        Player attackingPlayer = players.get(currentPlayerIndex);
+        Player defendingPlayer = defendingTerritory.getOwner();
+        String defendingPlayerName = defendingPlayer.getName();
+        HashMap<ArmyType, Integer> movedArmies = createInfantryPieces(armiesToMove);
+
+        defendingPlayer.removeTerritory(defendingTerritory);
+        attackingPlayer.addTerritory(defendingTerritory);
+        defendingTerritory.setOwner(attackingPlayer);
+        attackingTerritory.removeArmies(movedArmies);
+        defendingTerritory.addArmies(movedArmies);
+
+        return defendingPlayerName;
+    }
+
+    public boolean handlePlayerElimination(final String defenderName) {
+        Player defender = findPlayerByName(defenderName);
+
+        if (defender.getTerritoryCount() > ZERO_ARMIES) {
+            return false;
+        }
+
+        Player currentPlayer = players.get(currentPlayerIndex);
+        defender.markEliminated();
+        currentPlayer.addCards(defender.removeAllCards());
+        return true;
+    }
+
+    public boolean currentPlayerHasValidAttack() {
+        Player currentPlayer = players.get(currentPlayerIndex);
+
+        for (Territory territory : territories) {
+            if (territory.isOwnedBy(currentPlayer)
+                    && territory.getArmyCount() >= 2
+                    && hasAdjacentEnemyTerritory(territory, currentPlayer)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean awardRiskCardIfCaptured(final boolean capturedTerritoryThisTurn) {
+        if (!capturedTerritoryThisTurn) {
+            return false;
+        }
+
+        Player currentPlayer = players.get(currentPlayerIndex);
+        currentPlayer.addCard(deck.drawCard());
+        return true;
+    }
+
+    private boolean hasAdjacentEnemyTerritory(
+            final Territory territory,
+            final Player currentPlayer) {
+        for (Territory adjacentTerritory : territory.getAdjacentTerritories()) {
+            if (!adjacentTerritory.isUnclaimed()
+                    && !adjacentTerritory.isOwnedBy(currentPlayer)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private List<Integer> rollDice(final int numDice) {

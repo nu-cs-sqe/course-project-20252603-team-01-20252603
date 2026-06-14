@@ -18,6 +18,11 @@ public class NullPlayer extends Player {
     }
 
     @Override
+    public void removeTerritory(final Territory territory) {
+        throw new UnsupportedOperationException("NullPlayer cannot remove territories.");
+    }
+
+    @Override
     public boolean ownsTerritory(final Territory territory) {
         return false;
     }
@@ -58,5 +63,30 @@ public class NullPlayer extends Player {
             final Deck deck,
             final int numSetsTradedIn) {
         throw new UnsupportedOperationException("NullPlayer cannot trade cards.");
+    }
+
+    @Override
+    public void addCard(final RiskCard card) {
+        throw new UnsupportedOperationException("NullPlayer cannot receive cards.");
+    }
+
+    @Override
+    public void addCards(final List<RiskCard> cardsToAdd) {
+        throw new UnsupportedOperationException("NullPlayer cannot receive cards.");
+    }
+
+    @Override
+    public List<RiskCard> removeAllCards() {
+        throw new UnsupportedOperationException("NullPlayer cannot transfer cards.");
+    }
+
+    @Override
+    public void markEliminated() {
+        throw new UnsupportedOperationException("NullPlayer cannot be eliminated.");
+    }
+
+    @Override
+    public boolean isEliminated() {
+        return false;
     }
 }

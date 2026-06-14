@@ -316,3 +316,71 @@
 - **TC52: Displays battle result exactly as provided** ( :white_check_mark: )
     - **State of the system**: Controller provides a formatted battle-result list containing attacker dice, defender dice, losses, and updated army counts
     - **Expected output**: Output displays the battle result exactly as provided
+
+---
+
+### Method under test: `promptAttackChoice()`
+
+- **TC53: Returns yes attack choice** ( :white_check_mark: )
+    - **State of the system**: Player is prompted whether to attack and enters `"yes"`
+    - **Expected output**: Returns `"yes"`
+
+- **TC54: Returns no attack choice** ( :white_check_mark: )
+    - **State of the system**: Player is prompted whether to attack and enters `"no"`
+    - **Expected output**: Returns `"no"`
+
+- **TC55: Returns invalid attack choice for controller validation** ( :white_check_mark: )
+    - **State of the system**: Player is prompted whether to attack and enters `"maybe"`
+    - **Expected output**: Returns `"maybe"` so the controller can reject it and re-prompt
+
+---
+
+### Method under test: `promptCaptureArmyCount(String attackerName, String defenderName)`
+
+- **TC56: Returns zero capture movement count for controller/model validation** ( :white_check_mark: )
+    - **State of the system**: Player is prompted for capture movement and enters `"0"`
+    - **Expected output**: Returns `"0"` so the capture flow can reject moving zero armies
+
+- **TC57: Returns one capture movement count** ( :white_check_mark: )
+    - **State of the system**: Player is prompted for capture movement and enters `"1"`
+    - **Expected output**: Returns `"1"`
+
+- **TC58: Returns multiple capture movement count** ( :white_check_mark: )
+    - **State of the system**: Player is prompted for capture movement and enters `"3"`
+    - **Expected output**: Returns `"3"`
+
+- **TC59: Returns negative capture movement count for controller/model validation** ( :white_check_mark: )
+    - **State of the system**: Player is prompted for capture movement and enters `"-1"`
+    - **Expected output**: Returns `"-1"` so the capture flow can reject a negative movement
+
+- **TC60: Returns non-numeric capture movement count for controller validation** ( :white_check_mark: )
+    - **State of the system**: Player is prompted for capture movement and enters `"two"`
+    - **Expected output**: Returns `"two"` so the controller can reject it without calling the model
+
+---
+
+### Method under test: `displayNoValidAttacks()`
+
+- **TC61: Displays no valid attacks message** ( :white_check_mark: )
+    - **State of the system**: Controller determines the current player has no valid attacks
+    - **Expected output**: Output contains `"No valid attacks available."`
+
+---
+
+### Method under test: `displayTerritoryCaptured(String attackerName, String defenderName, int movedArmies)`
+
+- **TC62: Displays territory capture with one moved army**
+    - **State of the system**: `"Alaska"` captures `"Alberta"` and `1` army is moved
+    - **Expected output**: Output contains attacking territory, defending territory, and moved army count
+
+- **TC63: Displays territory capture with multiple moved armies**
+    - **State of the system**: `"Alaska"` captures `"Alberta"` and `3` armies are moved
+    - **Expected output**: Output contains attacking territory, defending territory, and moved army count
+
+---
+
+### Method under test: `displayRiskCardAwarded(String playerName)`
+
+- **TC64: Displays Risk card awarded message**
+    - **State of the system**: Current player captured at least one territory and receives a card
+    - **Expected output**: Output contains player name and states that a Risk card was awarded

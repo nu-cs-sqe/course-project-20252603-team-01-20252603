@@ -189,6 +189,12 @@ public class ConsoleView {
                 tokens[artilleryIndex]);
     }
 
+    public String promptAttackChoice() {
+        output.print("Do you want to attack? (yes/no): ");
+
+        return scanner.nextLine().trim();
+    }
+
     public List<String> promptTerritoriesToAttack() {
         String attackingTerritory = "";
 
@@ -230,10 +236,38 @@ public class ConsoleView {
         return List.of(attackerDice, defenderDice);
     }
 
+    public String promptCaptureArmyCount(
+            final String attackerName,
+            final String defenderName) {
+        output.print("Enter armies to move from " + attackerName + " to " + defenderName + ": ");
+
+        return scanner.nextLine().trim();
+    }
+
     public void displayBattleResult(final List<String> battleResult) {
         for (String battleResultLine : battleResult) {
             output.println(battleResultLine);
         }
+    }
+
+    public void displayNoValidAttacks() {
+        output.println("No valid attacks available.");
+    }
+
+    public void displayTerritoryCaptured(
+            final String attackerName,
+            final String defenderName,
+            final int movedArmies) {
+        output.println(attackerName + " captured " + defenderName
+                + " and moved " + movedArmies + " armies.");
+    }
+
+    public void displayRiskCardAwarded(final String playerName) {
+        output.println(playerName + " received a Risk card.");
+    }
+
+    public void displayPlayerElimination(final String playerName) {
+        output.println(playerName + " has been eliminated.");
     }
 
     private boolean isInteger(final String value) {

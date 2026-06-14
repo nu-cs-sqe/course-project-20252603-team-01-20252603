@@ -418,31 +418,31 @@
 
 - **TC74: Empty card selection skips card trade-in** ( :white_check_mark: )
     - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes an empty card index list
-    - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand is unchanged; `numSetsTradedIn` remains `0`
+    - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand and deck discard pile are unchanged; `numSetsTradedIn` remains `0`
 
 - **TC75: `null` card selection skips card trade-in** ( :white_check_mark: )
     - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes `null` for card indices
-    - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand is unchanged; `numSetsTradedIn` remains `0`
+    - **Expected output**: Returns `true`; no trade-in armies are added; current player's hand and deck discard pile are unchanged; `numSetsTradedIn` remains `0`
 
 - **TC76: Invalid card trade-in returns false and does not increment traded-set count** ( :white_check_mark: )
     - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes an invalid card selection
-    - **Expected output**: Returns `false`; no trade-in armies are added; selected cards remain in hand; `numSetsTradedIn` remains `0`
+    - **Expected output**: Returns `false`; no trade-in armies are added; selected cards remain in hand; deck discard pile is unchanged; `numSetsTradedIn` remains `0`
 
 - **TC77: First valid card trade-in adds first trade-in armies and increments traded-set count** ( :white_check_mark: )
     - **State of the system**: Current player holds a valid trade-in set and `numSetsTradedIn = 0`
-    - **Expected output**: Returns `true`; current player receives `4` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `1`
+    - **Expected output**: Returns `true`; current player receives `4` Infantry from the trade-in; traded cards are removed from the hand and added to the deck discard pile; `numSetsTradedIn` increases to `1`
 
 - **TC78: Second valid card trade-in uses incremented trade-in count** ( :white_check_mark: )
     - **State of the system**: Current player holds a valid trade-in set and `numSetsTradedIn = 1`
-    - **Expected output**: Returns `true`; current player receives `6` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `2`
+    - **Expected output**: Returns `true`; current player receives `6` Infantry from the trade-in; traded cards are removed from the hand and added to the deck discard pile; `numSetsTradedIn` increases to `2`
 
 - **TC79: Fourteenth valid card trade-in awards the maximum legal bonus** ( :white_check_mark: )
     - **State of the system**: Current player holds a valid trade-in set and `13` sets have already been traded (`numSetsTradedIn = 13`)
-    - **Expected output**: Returns `true`; current player receives `55` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `14`
+    - **Expected output**: Returns `true`; current player receives `55` Infantry from the trade-in; traded cards are removed from the hand and added to the deck discard pile; `numSetsTradedIn` increases to `14`
 
 - **TC80: Fifteenth trade-in is rejected because a 44-card deck supports at most 14 traded sets** ( :white_check_mark: )
     - **State of the system**: Current player holds a valid trade-in set and `14` sets have already been traded (`numSetsTradedIn = 14`)
-    - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets."`; current player's available armies and hand are unchanged; `numSetsTradedIn` remains `14`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets."`; current player's available armies, hand, and deck discard pile are unchanged; `numSetsTradedIn` remains `14`
 
 ---
 
@@ -680,3 +680,119 @@
 - **TC121: Capture flag is true when defending territory loses its last army** ( :white_check_mark: )
     - **State of the system**: Battle resolves with deterministic injected dice and the defending territory reaches `0` armies
     - **Expected output**: Returned battle result indicates that the territory was captured
+
+---
+
+### Method under test: `isTerritoryCaptured(String defenderTerritoryName)`
+
+- **TC122: Returns false when defending territory still has one army** ( :white_check_mark: )
+    - **State of the system**: Defending territory exists and has exactly `1` army
+    - **Expected output**: Returns `false`
+
+- **TC123: Returns true when defending territory has zero armies** ( :white_check_mark: )
+    - **State of the system**: Defending territory exists and has exactly `0` armies after battle resolution
+    - **Expected output**: Returns `true`
+
+- **TC124: Unknown defending territory is rejected** ( :white_check_mark: )
+    - **State of the system**: `defenderTerritoryName` does not match any territory on the board
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Defending territory must exist on the board."`
+
+---
+
+### Method under test: `validateCaptureMovement(String attackerTerritoryName, String defenderTerritoryName, int armiesToMove, int attackerDiceUsed)`
+
+- **TC125: Minimum valid movement moves attacker dice used when enough armies are available** ( :white_check_mark: )
+    - **State of the system**: Attacking territory has enough armies to move `attackerDiceUsed` while leaving one behind; `armiesToMove = attackerDiceUsed`
+    - **Expected output**: Returns `true`
+
+- **TC126: Minimum valid movement uses maximum possible when attacker dice used cannot be fully moved** ( :white_check_mark: )
+    - **State of the system**: Attacking territory does not have enough armies to move `attackerDiceUsed` while leaving one behind; `armiesToMove = attacking territory armies - 1`
+    - **Expected output**: Returns `true`
+
+- **TC127: Moving zero armies is rejected** ( :white_check_mark: )
+    - **State of the system**: Captured territory has zero armies; `armiesToMove = 0`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must move at least one army into a captured territory."`
+
+- **TC128: Moving fewer than required minimum armies is rejected** ( :white_check_mark: )
+    - **State of the system**: Attacking territory can move at least `attackerDiceUsed`; `armiesToMove < attackerDiceUsed`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must move at least the number of dice used in the final attack when possible."`
+
+- **TC129: Moving too many armies and leaving attacking territory empty is rejected** ( :white_check_mark: )
+    - **State of the system**: `armiesToMove >= attacking territory army count`
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must leave at least one army behind."`
+
+- **TC130: Capturing movement is rejected when defending territory still has armies** ( :white_check_mark: )
+    - **State of the system**: Defending territory has at least `1` army remaining
+    - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot move armies because the defending territory has not been captured."`
+
+---
+
+### Method under test: `captureTerritory(String attackerTerritoryName, String defenderTerritoryName, int armiesToMove, int attackerDiceUsed)`
+
+- **TC131: Capture transfers territory ownership from defender to attacker** ( :white_check_mark: )
+    - **State of the system**: Defending territory has zero armies; movement is valid
+    - **Expected output**: Defending territory owner becomes current player; attacker owns defending territory; defender no longer owns defending territory
+
+- **TC132: Capture moves the selected number of armies into captured territory** ( :white_check_mark: )
+    - **State of the system**: Defending territory has zero armies; attacker moves a valid number of armies
+    - **Expected output**: Attacking territory army count decreases by moved armies; captured territory army count increases by moved armies
+
+- **TC133: Capture returns the defending player's name** ( :white_check_mark: )
+    - **State of the system**: Defending territory was owned by another player before capture
+    - **Expected output**: Returns the previous defender player name
+
+---
+
+### Method under test: `handlePlayerElimination(String defenderName)`
+
+- **TC134: Defender with remaining territories is not eliminated** ( :white_check_mark: )
+    - **State of the system**: Defender still owns at least one territory after capture
+    - **Expected output**: Returns `false`; defender `isEliminated()` remains `false`; cards are not transferred
+
+- **TC135: Defender with zero territories is eliminated** ( :white_check_mark: )
+    - **State of the system**: Defender owns no territories after capture
+    - **Expected output**: Returns `true`; defender `isEliminated()` returns `true`
+
+- **TC136: Eliminated defender cards transfer to current player** ( :white_check_mark: )
+    - **State of the system**: Defender owns no territories and has cards in hand
+    - **Expected output**: Defender hand becomes empty; current player's hand gains all defender cards
+
+---
+
+### Method under test: `currentPlayerHasValidAttack()`
+
+- **TC137: Returns false when current player has no territories** ( :white_check_mark: )
+    - **State of the system**: Current player owns zero territories
+    - **Expected output**: Returns `false`
+
+- **TC138: Returns false when current player territories all have one army** ( :white_check_mark: )
+    - **State of the system**: Current player owns territories, but none has at least `2` armies
+    - **Expected output**: Returns `false`
+
+- **TC139: Returns false when current player has no adjacent enemy territory** ( :white_check_mark: )
+    - **State of the system**: Current player owns territories with at least `2` armies, but adjacent territories are also owned by current player or no enemy adjacency exists
+    - **Expected output**: Returns `false`
+
+- **TC140: Returns true when current player has an owned territory with at least two armies adjacent to enemy territory** ( :white_check_mark: )
+    - **State of the system**: Current player owns a territory with at least `2` armies; that territory is adjacent to another player's territory
+    - **Expected output**: Returns `true`
+
+---
+
+### Method under test: `awardRiskCardIfCaptured(boolean capturedTerritoryThisTurn)`
+
+- **TC141: No card is awarded when no territory was captured** ( :white_check_mark: )
+    - **State of the system**: `capturedTerritoryThisTurn = false`
+    - **Expected output**: Returns `false`; current player's card count is unchanged; deck size is unchanged
+
+- **TC142: One card is awarded when at least one territory was captured** ( :white_check_mark: )
+    - **State of the system**: `capturedTerritoryThisTurn = true`; draw pile has cards
+    - **Expected output**: Returns `true`; current player's card count increases by `1`; deck size decreases by `1`
+
+- **TC143: Exactly one card is awarded even if multiple territories were captured** ( :white_check_mark: )
+    - **State of the system**: Attack phase recorded one or more captures and calls `awardRiskCardIfCaptured(true)` once at the end of the phase
+    - **Expected output**: Current player's card count increases by exactly `1`
+
+- **TC144: Award card reinitializes draw pile from discard pile when draw pile is empty** ( :white_check_mark: )
+    - **State of the system**: `capturedTerritoryThisTurn = true`; draw pile is empty; discard pile contains cards
+    - **Expected output**: Returns `true`; deck reinitializes from discard pile, awards one card, and discard pile becomes empty

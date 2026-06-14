@@ -50,3 +50,51 @@
 - **TC8: Card trade-in is rejected for NullPlayer** ( :white_check_mark: )
     - **State of the system**: `NullPlayer` constructed; `tradeCardsAndAddArmies(...)` called
     - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot trade cards."` because `NullPlayer` does not represent a real active player
+
+---
+
+### Method under test: `removeTerritory(Territory territory)`
+
+- **TC9: Removing territory is rejected for NullPlayer** ( :white_check_mark: )
+    - **State of the system**: `NullPlayer` constructed; `removeTerritory(alaska)` called
+    - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot remove territories."`
+
+---
+
+### Method under test: `addCard(RiskCard card)`
+
+- **TC10: Adding a card is rejected for NullPlayer** ( :white_check_mark: )
+    - **State of the system**: `NullPlayer` constructed; `addCard(card)` called
+    - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot receive cards."`
+
+---
+
+### Method under test: `addCards(List<RiskCard> cardsToAdd)`
+
+- **TC11: Adding cards is rejected for NullPlayer** ( :white_check_mark: )
+    - **State of the system**: `NullPlayer` constructed; `addCards(List.of(card))` called
+    - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot receive cards."`
+
+---
+
+### Method under test: `removeAllCards()`
+
+- **TC12: Removing all cards is rejected for NullPlayer** ( :white_check_mark: )
+    - **State of the system**: `NullPlayer` constructed; `removeAllCards()` called
+    - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot transfer cards."`
+
+---
+
+### Method under test: `markEliminated()`
+
+- **TC13: Marking eliminated is rejected for NullPlayer** ( :white_check_mark: )
+    - **State of the system**: `NullPlayer` constructed; `markEliminated()` called
+    - **Expected output**: `UnsupportedOperationException` is raised with message `"NullPlayer cannot be eliminated."`
+
+---
+
+### Method under test: `isEliminated()`
+
+- **TC14: NullPlayer is never treated as eliminated** ( :white_check_mark: )
+    - **State of the system**: `NullPlayer` constructed; `isEliminated()` called
+    - **Expected output**: Returns `false`

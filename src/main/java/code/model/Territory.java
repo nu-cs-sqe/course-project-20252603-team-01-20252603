@@ -79,6 +79,10 @@ public class Territory {
         return owner.equals(player);
     }
 
+    Player getOwner() {
+        return owner;
+    }
+
     public boolean placeArmies(final HashMap<ArmyType, Integer> newPieces) {
         if (newPieces.values().stream().anyMatch(count -> count < 0)) {
             return false;

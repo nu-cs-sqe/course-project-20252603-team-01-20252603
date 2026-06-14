@@ -100,6 +100,50 @@
     - **State of the system**: Model raises `IllegalArgumentException` during dice validation, then the player enters valid dice counts
     - **Expected output**: Controller displays the model error message and re-prompts for dice
 
-- **TC52: Battle result is displayed exactly once after successful execution** ( :x: )
+- **TC52: Battle result is displayed exactly once after successful execution** ( :white_check_mark: )
     - **State of the system**: Territory and dice validation succeed; model returns one battle result
     - **Expected output**: Controller calls `displayBattleResult(...)` exactly once with the returned battle result
+
+- **TC53: Player skips attack phase immediately** ( :white_check_mark: )
+    - **State of the system**: Current player has valid attacks available, but `promptAttackChoice()` returns `"no"`
+    - **Expected output**: Controller does not prompt for attack territories, does not execute battle, does not award a Risk card, and ends attack phase
+
+- **TC54: No valid attacks available ends attack phase** ( :white_check_mark: )
+    - **State of the system**: `currentPlayerHasValidAttack()` returns `false`
+    - **Expected output**: Controller displays no-valid-attacks message, does not prompt for attack choice, does not execute battle, and does not award a Risk card
+
+- **TC55: Invalid attack choice re-prompts** ( :white_check_mark: )
+    - **State of the system**: `promptAttackChoice()` returns `"maybe"`, then `"no"`
+    - **Expected output**: Controller displays `"Invalid attack choice."`, re-prompts, then ends attack phase without executing battle
+
+- **TC56: Valid attack without capture asks whether to attack again and awards no card** ( :white_check_mark: )
+    - **State of the system**: Player chooses to attack; battle resolves; `isTerritoryCaptured(defender)` returns `false`; player then chooses not to attack again
+    - **Expected output**: Controller displays battle result, does not prompt for capture movement, and calls `awardRiskCardIfCaptured(false)`
+
+- **TC57: Captured territory prompts for movement and captures territory** ( :white_check_mark: )
+    - **State of the system**: Battle resolves with captured defending territory; player enters valid capture movement count
+    - **Expected output**: Controller validates and executes capture movement, displays captured-territory message, and tracks that a territory was captured this phase
+
+- **TC58: Non-numeric capture movement re-prompts** ( :white_check_mark: )
+    - **State of the system**: Defending territory is captured; player first enters `"two"` for movement, then enters a valid number
+    - **Expected output**: Controller displays `"Invalid capture movement input."`, re-prompts, then captures territory with valid movement
+
+- **TC59: Invalid capture movement from model re-prompts** ( :white_check_mark: )
+    - **State of the system**: Defending territory is captured; model rejects first numeric movement with `IllegalArgumentException`, then accepts a later movement
+    - **Expected output**: Controller displays the model error message, re-prompts, then captures territory with valid movement
+
+- **TC60: Defender elimination is displayed after capture** ( :white_check_mark: )
+    - **State of the system**: Capture succeeds and `handlePlayerElimination(defenderName)` returns `true`
+    - **Expected output**: Controller displays player elimination for the defender
+
+- **TC61: Defender not eliminated after capture is not displayed as eliminated** ( :white_check_mark: )
+    - **State of the system**: Capture succeeds and `handlePlayerElimination(defenderName)` returns `false`
+    - **Expected output**: Controller does not display player elimination
+
+- **TC62: Capturing at least one territory awards one Risk card at phase end** ( :white_check_mark: )
+    - **State of the system**: At least one attack captures a territory; player later stops attacking; `awardRiskCardIfCaptured(true)` returns `true`
+    - **Expected output**: Controller awards a Risk card at the end of attack phase and displays Risk-card-awarded message
+
+- **TC63: Multiple attacks can occur in one attack phase** ( :white_check_mark: )
+    - **State of the system**: Player chooses to attack, resolves one battle, chooses to attack again, resolves another battle, then stops
+    - **Expected output**: Controller executes both battles in sequence and awards at most one Risk card at phase end if at least one territory was captured

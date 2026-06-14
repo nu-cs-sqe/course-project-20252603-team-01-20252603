@@ -228,10 +228,178 @@ public final class HumanPlayerTest {
     }
 
     @Test
+    public void removeTerritoryWithOnlyOwnedTerritoryRemovesTerritory() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        Territory alaska = createMock(Territory.class);
+
+        player.addTerritory(alaska);
+        player.removeTerritory(alaska);
+
+        assertEquals(ZERO_ARMIES, player.getTerritoryCount());
+        assertFalse(player.ownsTerritory(alaska));
+    }
+
+    @Test
+    public void removeTerritoryWithAnotherOwnedTerritoryLeavesOtherTerritoryOwned() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        Territory alaska = createMock(Territory.class);
+        Territory alberta = createMock(Territory.class);
+
+        player.addTerritory(alaska);
+        player.addTerritory(alberta);
+        player.removeTerritory(alaska);
+
+        assertEquals(ONE_ARMY, player.getTerritoryCount());
+        assertFalse(player.ownsTerritory(alaska));
+        assertTrue(player.ownsTerritory(alberta));
+    }
+
+    @Test
+    public void removeTerritoryNotOwnedByPlayerLeavesTerritoriesUnchanged() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        Territory alaska = createMock(Territory.class);
+        Territory alberta = createMock(Territory.class);
+
+        player.addTerritory(alaska);
+        player.removeTerritory(alberta);
+
+        assertEquals(ONE_ARMY, player.getTerritoryCount());
+        assertTrue(player.ownsTerritory(alaska));
+        assertFalse(player.ownsTerritory(alberta));
+    }
+
+    @Test
     public void getTerritoryCountReturnsZeroBeforeTerritoryClaimed() {
         HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
 
         assertEquals(ZERO_ARMIES, player.getTerritoryCount());
+    }
+
+    @Test
+    public void isEliminatedReturnsFalseForNewHumanPlayer() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+
+        assertFalse(player.isEliminated());
+    }
+
+    @Test
+    public void markEliminatedMakesHumanPlayerEliminated() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+
+        player.markEliminated();
+
+        assertTrue(player.isEliminated());
+    }
+
+    @Test
+    public void markEliminatedOnAlreadyEliminatedHumanPlayerKeepsPlayerEliminated() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+
+        player.markEliminated();
+        player.markEliminated();
+
+        assertTrue(player.isEliminated());
+    }
+
+    @Test
+    public void addCardToEmptyHandAddsFirstRiskCard() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        RiskCard card = createCard(CardType.INFANTRY);
+
+        player.addCard(card);
+
+        assertEquals(ONE_ARMY, player.getCardCount());
+        assertTrue(player.getAvailableCards().contains(card));
+    }
+
+    @Test
+    public void addCardToNonEmptyHandAddsAnotherRiskCard() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        RiskCard firstCard = createCard(CardType.INFANTRY);
+        RiskCard secondCard = createCard(CardType.CAVALRY);
+
+        player.addCard(firstCard);
+        player.addCard(secondCard);
+
+        assertEquals(SECOND_CARD_INDEX, player.getCardCount());
+        assertTrue(player.getAvailableCards().contains(firstCard));
+        assertTrue(player.getAvailableCards().contains(secondCard));
+    }
+
+    @Test
+    public void addCardsWithEmptyListLeavesHandEmpty() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+
+        player.addCards(List.of());
+
+        assertEquals(ZERO_CARDS, player.getCardCount());
+    }
+
+    @Test
+    public void addCardsWithOneCardAddsCardToEmptyHand() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        RiskCard card = createCard(CardType.INFANTRY);
+
+        player.addCards(List.of(card));
+
+        assertEquals(ONE_ARMY, player.getCardCount());
+        assertTrue(player.getAvailableCards().contains(card));
+    }
+
+    @Test
+    public void addCardsWithMultipleCardsAddsCardsToNonEmptyHand() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        RiskCard firstCard = createCard(CardType.INFANTRY);
+        RiskCard secondCard = createCard(CardType.CAVALRY);
+        RiskCard thirdCard = createCard(CardType.ARTILLERY);
+
+        player.addCard(firstCard);
+        player.addCards(List.of(secondCard, thirdCard));
+
+        assertEquals(THREE_CARDS, player.getCardCount());
+        assertTrue(player.getAvailableCards().contains(firstCard));
+        assertTrue(player.getAvailableCards().contains(secondCard));
+        assertTrue(player.getAvailableCards().contains(thirdCard));
+    }
+
+    @Test
+    public void removeAllCardsFromEmptyHandReturnsEmptyList() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+
+        List<RiskCard> removedCards = player.removeAllCards();
+
+        assertTrue(removedCards.isEmpty());
+        assertEquals(ZERO_CARDS, player.getCardCount());
+    }
+
+    @Test
+    public void removeAllCardsFromOneCardHandReturnsCardAndEmptiesHand() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        RiskCard card = createCard(CardType.INFANTRY);
+
+        player.addCard(card);
+        List<RiskCard> removedCards = player.removeAllCards();
+
+        assertEquals(ONE_ARMY, removedCards.size());
+        assertTrue(removedCards.contains(card));
+        assertEquals(ZERO_CARDS, player.getCardCount());
+    }
+
+    @Test
+    public void removeAllCardsFromMultiCardHandReturnsAllCardsAndEmptiesHand() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, STARTING_INFANTRY);
+        RiskCard firstCard = createCard(CardType.INFANTRY);
+        RiskCard secondCard = createCard(CardType.CAVALRY);
+        RiskCard thirdCard = createCard(CardType.ARTILLERY);
+
+        player.addCards(List.of(firstCard, secondCard, thirdCard));
+        List<RiskCard> removedCards = player.removeAllCards();
+
+        assertEquals(THREE_CARDS, removedCards.size());
+        assertTrue(removedCards.contains(firstCard));
+        assertTrue(removedCards.contains(secondCard));
+        assertTrue(removedCards.contains(thirdCard));
+        assertEquals(ZERO_CARDS, player.getCardCount());
     }
 
     @Test

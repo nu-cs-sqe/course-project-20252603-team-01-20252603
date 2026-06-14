@@ -2437,6 +2437,487 @@ public final class GameModelTest {
     }
 
     @Test
+    public void isTerritoryCapturedReturnsFalseWhenDefendingTerritoryHasOneArmy() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+
+        assertFalse(gameModel.isTerritoryCaptured("Alberta"));
+    }
+
+    @Test
+    public void isTerritoryCapturedReturnsTrueWhenDefendingTerritoryHasZeroArmies() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        assertTrue(gameModel.isTerritoryCaptured("Alberta"));
+    }
+
+    @Test
+    public void isTerritoryCapturedUnknownDefendingTerritoryRaisesException() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.initializeContinentsAndTerritories();
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> gameModel.isTerritoryCaptured("Unknown Territory"));
+
+        assertEquals("Defending territory must exist on the board.", exception.getMessage());
+    }
+
+    @Test
+    public void validateCaptureMovementMinimumDiceUsedMovementReturnsTrue() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertTrue(gameModel.validateCaptureMovement(
+                "Alaska",
+                "Alberta",
+                TWO_ARMIES,
+                TWO_ARMIES));
+    }
+
+    @Test
+    public void validateCaptureMovementMaximumPossibleMovementReturnsTrueWhenDiceUsedCannotBeMoved() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertTrue(gameModel.validateCaptureMovement(
+                "Alaska",
+                "Alberta",
+                ONE_ARMY,
+                THREE_ARMIES));
+    }
+
+    @Test
+    public void validateCaptureMovementZeroArmiesRaisesException() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> gameModel.validateCaptureMovement(
+                        "Alaska",
+                        "Alberta",
+                        ZERO_ARMIES,
+                        ONE_ARMY));
+
+        assertEquals(
+                "Attacker must move at least one army into a captured territory.",
+                exception.getMessage());
+    }
+
+    @Test
+    public void validateCaptureMovementFewerThanRequiredMinimumRaisesException() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> gameModel.validateCaptureMovement(
+                        "Alaska",
+                        "Alberta",
+                        ONE_ARMY,
+                        TWO_ARMIES));
+
+        assertEquals(
+                "Attacker must move at least the number of dice used in the final attack when possible.",
+                exception.getMessage());
+    }
+
+    @Test
+    public void validateCaptureMovementLeavingAttackingTerritoryEmptyRaisesException() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> gameModel.validateCaptureMovement(
+                        "Alaska",
+                        "Alberta",
+                        TWO_ARMIES,
+                        ONE_ARMY));
+
+        assertEquals("Attacker must leave at least one army behind.", exception.getMessage());
+    }
+
+    @Test
+    public void validateCaptureMovementDefendingTerritoryStillHasArmiesRaisesException() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> gameModel.validateCaptureMovement(
+                        "Alaska",
+                        "Alberta",
+                        ONE_ARMY,
+                        ONE_ARMY));
+
+        assertEquals(
+                "Cannot move armies because the defending territory has not been captured.",
+                exception.getMessage());
+    }
+
+    @Test
+    public void captureTerritoryTransfersOwnershipFromDefenderToAttacker() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player attacker = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player defender = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        gameModel.captureTerritory("Alaska", "Alberta", TWO_ARMIES, TWO_ARMIES);
+
+        Territory capturedTerritory = gameModel.findTerritoryByName("Alberta");
+        assertTrue(capturedTerritory.isOwnedBy(attacker));
+        assertTrue(attacker.ownsTerritory(capturedTerritory));
+        assertFalse(defender.ownsTerritory(capturedTerritory));
+    }
+
+    @Test
+    public void captureTerritoryMovesSelectedArmiesIntoCapturedTerritory() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        gameModel.captureTerritory("Alaska", "Alberta", TWO_ARMIES, TWO_ARMIES);
+
+        assertEquals(TWO_ARMIES, gameModel.findTerritoryByName("Alaska").getArmyCount());
+        assertEquals(TWO_ARMIES, gameModel.findTerritoryByName("Alberta").getArmyCount());
+    }
+
+    @Test
+    public void captureTerritoryReturnsDefendingPlayerName() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        String defenderName = gameModel.captureTerritory(
+                "Alaska",
+                "Alberta",
+                TWO_ARMIES,
+                TWO_ARMIES);
+
+        assertEquals("Player 2", defenderName);
+    }
+
+    @Test
+    public void handlePlayerEliminationDefenderWithRemainingTerritoryReturnsFalse() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player defender = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Ontario", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+        gameModel.captureTerritory("Alaska", "Alberta", TWO_ARMIES, TWO_ARMIES);
+
+        boolean eliminated = gameModel.handlePlayerElimination("Player 2");
+
+        assertFalse(eliminated);
+        assertFalse(defender.isEliminated());
+    }
+
+    @Test
+    public void handlePlayerEliminationDefenderWithZeroTerritoriesReturnsTrue() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        Player defender = gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+        gameModel.captureTerritory("Alaska", "Alberta", TWO_ARMIES, TWO_ARMIES);
+
+        boolean eliminated = gameModel.handlePlayerElimination("Player 2");
+
+        assertTrue(eliminated);
+        assertTrue(defender.isEliminated());
+    }
+
+    @Test
+    public void handlePlayerEliminationTransfersDefenderCardsToCurrentPlayer() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer attacker = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer defender = (HumanPlayer) gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        RiskCard defenderCard = createCard(CardType.INFANTRY);
+        defender.addCard(defenderCard);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(THREE_ARMIES));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alberta").removeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+        gameModel.captureTerritory("Alaska", "Alberta", TWO_ARMIES, TWO_ARMIES);
+
+        gameModel.handlePlayerElimination("Player 2");
+
+        assertEquals(ZERO_ARMIES, defender.getCardCount());
+        assertEquals(ONE_ARMY, attacker.getCardCount());
+        assertTrue(attacker.getAvailableCards().contains(defenderCard));
+    }
+
+    @Test
+    public void currentPlayerHasValidAttackReturnsFalseWhenCurrentPlayerHasNoTerritories() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertFalse(gameModel.currentPlayerHasValidAttack());
+    }
+
+    @Test
+    public void currentPlayerHasValidAttackReturnsFalseWhenOwnedTerritoriesHaveOneArmy() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertFalse(gameModel.currentPlayerHasValidAttack());
+    }
+
+    @Test
+    public void currentPlayerHasValidAttackReturnsFalseWhenNoAdjacentEnemyTerritoryExists() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Brazil", createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertFalse(gameModel.currentPlayerHasValidAttack());
+    }
+
+    @Test
+    public void currentPlayerHasValidAttackReturnsTrueWhenOwnedTerritoryCanAttackAdjacentEnemy() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+        gameModel.findTerritoryByName("Alaska").placeArmies(createInfantryPieces(ONE_INFANTRY));
+        gameModel.advanceCurrentPlayerIndex();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+        gameModel.setCurrentPlayerIndex(0);
+
+        assertTrue(gameModel.currentPlayerHasValidAttack());
+    }
+
+    @Test
+    public void awardRiskCardIfCapturedFalseDoesNotAwardCard() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        int startingDeckSize = gameModel.getDeckSize();
+
+        boolean awarded = gameModel.awardRiskCardIfCaptured(false);
+
+        assertFalse(awarded);
+        assertEquals(ZERO_ARMIES, player.getCardCount());
+        assertEquals(startingDeckSize, gameModel.getDeckSize());
+    }
+
+    @Test
+    public void awardRiskCardIfCapturedTrueAwardsOneCard() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        int startingDeckSize = gameModel.getDeckSize();
+
+        boolean awarded = gameModel.awardRiskCardIfCaptured(true);
+
+        assertTrue(awarded);
+        assertEquals(ONE_ARMY, player.getCardCount());
+        assertEquals(startingDeckSize - ONE_ARMY, gameModel.getDeckSize());
+    }
+
+    @Test
+    public void awardRiskCardIfCapturedTrueAwardsExactlyOneCard() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        gameModel.awardRiskCardIfCaptured(true);
+
+        assertEquals(ONE_ARMY, player.getCardCount());
+    }
+
+    @Test
+    public void awardRiskCardIfCapturedReinitializesDrawPileFromDiscardPileWhenDrawPileIsEmpty() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        addValidTradeInSet(player);
+        gameModel.handleCardTradeIn(List.of(FIRST_CARD_INDEX, SECOND_CARD_INDEX, THIRD_CARD_INDEX));
+
+        for (int cardIndex = 0; cardIndex < DECK_CARD_COUNT; cardIndex++) {
+            gameModel.awardRiskCardIfCaptured(true);
+        }
+        boolean awarded = gameModel.awardRiskCardIfCaptured(true);
+
+        assertTrue(awarded);
+        assertEquals(DECK_CARD_COUNT + ONE_ARMY, player.getCardCount());
+        assertEquals(TWO_ARMIES, gameModel.getDeckSize());
+        assertEquals(ZERO_ARMIES, gameModel.getDeckDiscardPileSize());
+    }
+
+    @Test
     public void addArmiesToCurrentPlayerBasedOnContinentsWithFullAustraliaAddsTwoInfantry() {
         GameModel gameModel = createGameModel();
 

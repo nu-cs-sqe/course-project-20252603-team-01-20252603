@@ -20,8 +20,11 @@ public class Deck {
 
     private final List<RiskCard> cards;
 
+    private final List<RiskCard> discardPile;
+
     public Deck() {
         cards = new ArrayList<>();
+        discardPile = new ArrayList<>();
         initializeTerritoryCards();
         initializeWildCards();
     }
@@ -32,6 +35,33 @@ public class Deck {
 
     public List<RiskCard> getCards() {
         return new ArrayList<>(cards);
+    }
+
+    public int getDiscardPileSize() {
+        return discardPile.size();
+    }
+
+    public RiskCard drawCard() {
+        if (cards.isEmpty()) {
+            reinitializeDrawPileFromDiscardPile();
+        }
+
+        if (cards.isEmpty()) {
+            throw new IllegalStateException(
+                    "Cannot draw a card because both the draw pile and discard pile are empty.");
+        }
+
+        return cards.remove(0);
+    }
+
+    public void discardCards(final List<RiskCard> cardsToDiscard) {
+        discardPile.addAll(cardsToDiscard);
+    }
+
+    public void reinitializeDrawPileFromDiscardPile() {
+        cards.addAll(discardPile);
+        discardPile.clear();
+        shuffle();
     }
 
     private void initializeTerritoryCards() {

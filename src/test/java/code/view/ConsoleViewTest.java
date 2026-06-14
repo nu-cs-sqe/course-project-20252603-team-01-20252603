@@ -676,6 +676,127 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void promptAttackChoiceYesReturnsYes() {
+        ConsoleView view = createViewWithInput("yes\n");
+
+        String attackChoice = view.promptAttackChoice();
+
+        assertEquals("yes", attackChoice);
+    }
+
+    @Test
+    public void promptAttackChoiceNoReturnsNo() {
+        ConsoleView view = createViewWithInput("no\n");
+
+        String attackChoice = view.promptAttackChoice();
+
+        assertEquals("no", attackChoice);
+    }
+
+    @Test
+    public void promptAttackChoiceInvalidChoiceReturnsEnteredChoice() {
+        ConsoleView view = createViewWithInput("maybe\n");
+
+        String attackChoice = view.promptAttackChoice();
+
+        assertEquals("maybe", attackChoice);
+    }
+
+    @Test
+    public void promptCaptureArmyCountZeroReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("0\n");
+
+        String armyCount = view.promptCaptureArmyCount("Alaska", "Alberta");
+
+        assertEquals("0", armyCount);
+    }
+
+    @Test
+    public void promptCaptureArmyCountOneReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("1\n");
+
+        String armyCount = view.promptCaptureArmyCount("Alaska", "Alberta");
+
+        assertEquals("1", armyCount);
+    }
+
+    @Test
+    public void promptCaptureArmyCountMultipleReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("3\n");
+
+        String armyCount = view.promptCaptureArmyCount("Alaska", "Alberta");
+
+        assertEquals("3", armyCount);
+    }
+
+    @Test
+    public void promptCaptureArmyCountNegativeReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("-1\n");
+
+        String armyCount = view.promptCaptureArmyCount("Alaska", "Alberta");
+
+        assertEquals("-1", armyCount);
+    }
+
+    @Test
+    public void promptCaptureArmyCountNonNumericReturnsArmyCount() {
+        ConsoleView view = createViewWithInput("two\n");
+
+        String armyCount = view.promptCaptureArmyCount("Alaska", "Alberta");
+
+        assertEquals("two", armyCount);
+    }
+
+    @Test
+    public void displayNoValidAttacksPrintsNoValidAttacksMessage() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayNoValidAttacks();
+
+        assertTrue(captured.toString(StandardCharsets.UTF_8)
+                .contains("No valid attacks available."));
+    }
+
+    @Test
+    public void displayTerritoryCapturedWithOneMovedArmyPrintsCaptureDetails() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayTerritoryCaptured("Alaska", "Alberta", 1);
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Alaska"));
+        assertTrue(displayedText.contains("Alberta"));
+        assertTrue(displayedText.contains("1"));
+    }
+
+    @Test
+    public void displayTerritoryCapturedWithMultipleMovedArmiesPrintsCaptureDetails() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayTerritoryCaptured("Alaska", "Alberta", THREE);
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Alaska"));
+        assertTrue(displayedText.contains("Alberta"));
+        assertTrue(displayedText.contains(String.valueOf(THREE)));
+    }
+
+    @Test
+    public void displayRiskCardAwardedPrintsPlayerNameAndAwardMessage() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayRiskCardAwarded("Player 1");
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Player 1"));
+        assertTrue(displayedText.contains("Risk card"));
+    }
+
+    @Test
     public void displayErrorPrintsErrorMessage() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         ConsoleView view = createViewWithOutput(captured);

@@ -43,6 +43,8 @@ public class HumanPlayer extends Player {
 
     private final List<RiskCard> availableCards;
 
+    private boolean eliminated;
+
     private HashMap<ArmyType, Integer> availableArmies;
 
     private static final int NUMBER_THREE = 3;
@@ -59,6 +61,7 @@ public class HumanPlayer extends Player {
         super(playerName, playerColor, startingInfantry);
         territories = new ArrayList<>();
         availableCards = new ArrayList<>();
+        eliminated = false;
         availableArmies = new HashMap<>();
         availableArmies.put(ArmyType.INFANTRY, startingInfantry);
     }
@@ -66,6 +69,11 @@ public class HumanPlayer extends Player {
     @Override
     public void addTerritory(final Territory territory) {
         territories.add(territory);
+    }
+
+    @Override
+    public void removeTerritory(final Territory territory) {
+        territories.remove(territory);
     }
 
     @Override
@@ -164,8 +172,31 @@ public class HumanPlayer extends Player {
         addArmies(reinforcementArmies);
     }
 
-    void addCard(final RiskCard card) {
+    @Override
+    public void addCard(final RiskCard card) {
         availableCards.add(card);
+    }
+
+    @Override
+    public void addCards(final List<RiskCard> cardsToAdd) {
+        availableCards.addAll(cardsToAdd);
+    }
+
+    @Override
+    public List<RiskCard> removeAllCards() {
+        List<RiskCard> removedCards = new ArrayList<>(availableCards);
+        availableCards.clear();
+        return removedCards;
+    }
+
+    @Override
+    public void markEliminated() {
+        eliminated = true;
+    }
+
+    @Override
+    public boolean isEliminated() {
+        return eliminated;
     }
 
     int getCardCount() {
@@ -230,6 +261,7 @@ public class HumanPlayer extends Player {
         HashMap<ArmyType, Integer> armiesToAdd = new HashMap<>();
         armiesToAdd.put(ArmyType.INFANTRY, calculateCardTradeInBonus(numSetsTradedIn));
         addArmies(armiesToAdd);
+        deck.discardCards(selectedCards);
 
         cardIndices.stream()
                 .sorted((firstIndex, secondIndex) -> secondIndex - firstIndex)

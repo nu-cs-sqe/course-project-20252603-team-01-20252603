@@ -139,6 +139,35 @@ public final class TerritoryTest {
     }
 
     @Test
+    public void getOwnerReturnsNullPlayerWhenTerritoryIsUnclaimed() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+
+        assertTrue(territory.getOwner() instanceof NullPlayer);
+    }
+
+    @Test
+    public void getOwnerReturnsHumanPlayerAfterOwnerIsSet() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        Player player = createMock(Player.class);
+
+        territory.setOwner(player);
+
+        assertEquals(player, territory.getOwner());
+    }
+
+    @Test
+    public void getOwnerReturnsUpdatedHumanPlayerAfterOwnerChanges() {
+        Territory territory = createTerritoryWithNoAdjacencies();
+        Player playerOne = createMock(Player.class);
+        Player playerTwo = createMock(Player.class);
+
+        territory.setOwner(playerOne);
+        territory.setOwner(playerTwo);
+
+        assertEquals(playerTwo, territory.getOwner());
+    }
+
+    @Test
     public void placeArmiesAddsOneInfantryToEmptyTerritory() {
         Territory territory = createTerritoryWithNoAdjacencies();
         HashMap<ArmyType, Integer> pieces = new HashMap<>();

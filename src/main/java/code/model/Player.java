@@ -32,6 +32,8 @@ public abstract class Player {
 
     public abstract void addTerritory(Territory territory);
 
+    public abstract void removeTerritory(Territory territory);
+
     public abstract boolean ownsTerritory(Territory territory);
 
     public abstract int getTerritoryCount();
@@ -50,6 +52,16 @@ public abstract class Player {
             List<Integer> cardIndices,
             Deck deck,
             int numSetsTradedIn);
+
+    public abstract void addCard(RiskCard card);
+
+    public abstract void addCards(List<RiskCard> cardsToAdd);
+
+    public abstract List<RiskCard> removeAllCards();
+
+    public abstract void markEliminated();
+
+    public abstract boolean isEliminated();
 
     @Override
     public String toString() {

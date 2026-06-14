@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests boundary values and core behavior for the Deck class.
@@ -23,6 +24,10 @@ public final class DeckTest {
     private static final int TERRITORY_CARD_COUNT = 42;
 
     private static final int WILD_CARD_COUNT = 2;
+
+    private static final int THREE_CARDS = 3;
+
+    private static final int FOUR_CARDS = 4;
 
     @Test
     public void freshDeckContainsFortyFourCards() {
@@ -101,10 +106,198 @@ public final class DeckTest {
     }
 
     @Test
+    public void freshDeckStartsWithEmptyDiscardPile() {
+        Deck deck = new Deck();
+
+        assertEquals(0, deck.getDiscardPileSize());
+    }
+
+    @Test
     public void freshDeckIsNotEmpty() {
         Deck deck = new Deck();
 
         assertFalse(deck.isEmpty());
+    }
+
+    @Test
+    public void drawCardFromFullDeckReturnsCardAndDecreasesDrawPileSize() {
+        Deck deck = new Deck();
+
+        RiskCard drawnCard = deck.drawCard();
+
+        assertNotNull(drawnCard);
+        assertEquals(TOTAL_CARD_COUNT - 1, deck.size());
+        assertEquals(0, deck.getDiscardPileSize());
+    }
+
+    @Test
+    public void drawLastCardFromDeckReturnsCardAndLeavesDrawPileEmpty() {
+        Deck deck = new Deck();
+
+        for (int cardIndex = 0; cardIndex < TOTAL_CARD_COUNT - 1; cardIndex++) {
+            deck.drawCard();
+        }
+
+        RiskCard drawnCard = deck.drawCard();
+
+        assertNotNull(drawnCard);
+        assertEquals(0, deck.size());
+        assertTrue(deck.isEmpty());
+    }
+
+    @Test
+    public void drawCardFromEmptyDeckWithOneDiscardedCardReinitializesAndDrawsCard() {
+        Deck deck = new Deck();
+        RiskCard discardedCard = deck.drawCard();
+
+        deck.discardCards(List.of(discardedCard));
+        for (int cardIndex = 0; cardIndex < TOTAL_CARD_COUNT - 1; cardIndex++) {
+            deck.drawCard();
+        }
+
+        RiskCard drawnCard = deck.drawCard();
+
+        assertNotNull(drawnCard);
+        assertEquals(0, deck.size());
+        assertEquals(0, deck.getDiscardPileSize());
+    }
+
+    @Test
+    public void drawCardFromEmptyDeckWithMultipleDiscardedCardsReinitializesAndDrawsCard() {
+        Deck deck = new Deck();
+        List<RiskCard> discardedCards = List.of(
+                deck.drawCard(),
+                deck.drawCard(),
+                deck.drawCard());
+
+        deck.discardCards(discardedCards);
+        for (int cardIndex = 0; cardIndex < TOTAL_CARD_COUNT - THREE_CARDS; cardIndex++) {
+            deck.drawCard();
+        }
+
+        RiskCard drawnCard = deck.drawCard();
+
+        assertNotNull(drawnCard);
+        assertEquals(THREE_CARDS - 1, deck.size());
+        assertEquals(0, deck.getDiscardPileSize());
+    }
+
+    @Test
+    public void drawCardFromEmptyDeckWithEmptyDiscardPileRaisesException() {
+        Deck deck = new Deck();
+
+        for (int cardIndex = 0; cardIndex < TOTAL_CARD_COUNT; cardIndex++) {
+            deck.drawCard();
+        }
+
+        IllegalStateException exception = assertThrows(
+                IllegalStateException.class,
+                deck::drawCard);
+
+        assertEquals(
+                "Cannot draw a card because both the draw pile and discard pile are empty.",
+                exception.getMessage());
+    }
+
+    @Test
+    public void discardOneCardIntoEmptyDiscardPileIncreasesDiscardPileSize() {
+        Deck deck = new Deck();
+        RiskCard card = deck.drawCard();
+        int drawPileSize = deck.size();
+
+        deck.discardCards(List.of(card));
+
+        assertEquals(1, deck.getDiscardPileSize());
+        assertEquals(drawPileSize, deck.size());
+    }
+
+    @Test
+    public void discardMultipleCardsIntoEmptyDiscardPileIncreasesDiscardPileSize() {
+        Deck deck = new Deck();
+        List<RiskCard> cardsToDiscard = List.of(
+                deck.drawCard(),
+                deck.drawCard(),
+                deck.drawCard());
+        int drawPileSize = deck.size();
+
+        deck.discardCards(cardsToDiscard);
+
+        assertEquals(THREE_CARDS, deck.getDiscardPileSize());
+        assertEquals(drawPileSize, deck.size());
+    }
+
+    @Test
+    public void discardNoCardsLeavesDiscardPileUnchanged() {
+        Deck deck = new Deck();
+        int drawPileSize = deck.size();
+
+        deck.discardCards(List.of());
+
+        assertEquals(0, deck.getDiscardPileSize());
+        assertEquals(drawPileSize, deck.size());
+    }
+
+    @Test
+    public void discardCardsAfterDiscardPileHasCardsAccumulatesDiscardPileSize() {
+        Deck deck = new Deck();
+        RiskCard firstDiscardedCard = deck.drawCard();
+        List<RiskCard> nextDiscardedCards = List.of(
+                deck.drawCard(),
+                deck.drawCard(),
+                deck.drawCard());
+        int drawPileSize = deck.size();
+
+        deck.discardCards(List.of(firstDiscardedCard));
+        deck.discardCards(nextDiscardedCards);
+
+        assertEquals(FOUR_CARDS, deck.getDiscardPileSize());
+        assertEquals(drawPileSize, deck.size());
+    }
+
+    @Test
+    public void reinitializeDrawPileFromOneDiscardedCardMovesDiscardToDrawPile() {
+        Deck deck = new Deck();
+        RiskCard discardedCard = deck.drawCard();
+
+        deck.discardCards(List.of(discardedCard));
+        for (int cardIndex = 0; cardIndex < TOTAL_CARD_COUNT - 1; cardIndex++) {
+            deck.drawCard();
+        }
+        deck.reinitializeDrawPileFromDiscardPile();
+
+        assertEquals(1, deck.size());
+        assertEquals(0, deck.getDiscardPileSize());
+    }
+
+    @Test
+    public void reinitializeDrawPileFromMultipleDiscardedCardsMovesDiscardToDrawPile() {
+        Deck deck = new Deck();
+        List<RiskCard> discardedCards = List.of(
+                deck.drawCard(),
+                deck.drawCard(),
+                deck.drawCard());
+
+        deck.discardCards(discardedCards);
+        for (int cardIndex = 0; cardIndex < TOTAL_CARD_COUNT - THREE_CARDS; cardIndex++) {
+            deck.drawCard();
+        }
+        deck.reinitializeDrawPileFromDiscardPile();
+
+        assertEquals(THREE_CARDS, deck.size());
+        assertEquals(0, deck.getDiscardPileSize());
+    }
+
+    @Test
+    public void reinitializeDrawPileFromEmptyDiscardPileLeavesDrawPileEmpty() {
+        Deck deck = new Deck();
+
+        for (int cardIndex = 0; cardIndex < TOTAL_CARD_COUNT; cardIndex++) {
+            deck.drawCard();
+        }
+        deck.reinitializeDrawPileFromDiscardPile();
+
+        assertEquals(0, deck.size());
+        assertEquals(0, deck.getDiscardPileSize());
     }
 
     @Test
