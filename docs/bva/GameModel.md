@@ -641,11 +641,11 @@
     - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; injected `Random` produces an attacker die greater than the defender die
     - **Expected output**: Defending territory loses `1` army; attacking territory loses `0` armies; returned battle result reports sorted dice, losses, updated army counts, and no capture when defenders remain
 
-- **TC112: One-versus-one battle where defender die beats attacker die removes one attacking army** ( :x: )
+- **TC112: One-versus-one battle where defender die beats attacker die removes one attacking army** ( :white_check_mark: )
     - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; injected `Random` produces a defender die greater than the attacker die
     - **Expected output**: Attacking territory loses `1` army; defending territory loses `0` armies; returned battle result reports sorted dice, losses, updated army counts, and no capture
 
-- **TC113: One-versus-one battle tie removes one attacking army** ( :x: )
+- **TC113: One-versus-one battle tie removes one attacking army** ( :white_check_mark: )
     - **State of the system**: Attacking and defending territories are valid for attack; each side rolls `1` die; injected `Random` produces equal attacker and defender dice
     - **Expected output**: Attacking territory loses `1` army because defender wins ties; returned battle result reports the tie outcome and updated army counts
 
