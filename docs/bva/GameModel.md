@@ -400,7 +400,7 @@
     - **State of the system**: Source and destination are connected on the board only through at least one territory owned by another player
     - **Expected output**: Returns `false`; source and destination army counts do not change
 
-- **TC88: Rejects disconnected owned territories** ( :x: )
+- **TC88: Rejects disconnected owned territories** ( :white_check_mark: )
     - **State of the system**: Current player owns source and destination, but there is no connected path of current-player-owned territories between them
     - **Expected output**: Returns `false`; source and destination army counts do not change
 
