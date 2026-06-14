@@ -43,6 +43,6 @@
     - **State of the system**: `model.currentPlayerHasWon()` returns `true`; `model.getCurrentPlayerName()` returns `"Player 1"`
     - **Expected output**: Controller calls `view.displayWinner("Player 1")`
 
-- **TC11: Game loop stops after winner is displayed**
+- **TC11: Game loop stops after winner is displayed** ( :white_check_mark: )
     - **State of the system**: `model.currentPlayerHasWon()` returns `true` after a completed turn
     - **Expected output**: Controller does not run another turn and does not call `model.advanceToNextActivePlayer()`

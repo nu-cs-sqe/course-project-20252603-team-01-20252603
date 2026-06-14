@@ -326,6 +326,30 @@ public final class GameControllerTest {
         }
     }
 
+    private static final class FailsOnSecondTurnController extends TurnController {
+
+        private final List<String> calls;
+
+        private int turnCount;
+
+        FailsOnSecondTurnController(final List<String> recordedCalls) {
+            super(new GameModel(new Random(0)), new ConsoleView());
+            calls = recordedCalls;
+            turnCount = 0;
+        }
+
+        @Override
+        public void runPlayerTurn() {
+            turnCount++;
+
+            if (turnCount > 1) {
+                throw new AssertionError("Turn ran after winner was displayed.");
+            }
+
+            calls.add("turn");
+        }
+    }
+
     @Test
     public void gameControllerConstructsWithDefaultDependencies() {
         new GameController();
@@ -617,6 +641,26 @@ public final class GameControllerTest {
                         "turn",
                         "check winner",
                         "display winner Player 1"),
+                calls);
+    }
+
+    @Test
+    public void startGameStopsLoopAfterWinnerIsDisplayed() {
+        List<String> calls = new ArrayList<>();
+        GameModel model = new WinningAfterOneTurnGameModel(calls);
+        ConsoleView view = new RecordingConsoleView(calls);
+        SetupController setupController = new RecordingSetupController(calls);
+        TurnController turnController = new FailsOnSecondTurnController(calls);
+        GameController controller = new GameController(
+                model,
+                view,
+                setupController,
+                turnController);
+
+        controller.startGame();
+
+        assertEquals(
+                List.of("setup", "check eliminated", "turn", "check winner", "display winner"),
                 calls);
     }
 }
