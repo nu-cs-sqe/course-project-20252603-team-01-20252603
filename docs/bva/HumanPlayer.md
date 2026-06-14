@@ -265,6 +265,6 @@
     - **State of the system**: Valid set selected; `numSetsTradedIn = 14`
     - **Expected output**: Returns `true`; player receives the trade-in bonus for the maximum possible completed trade-in count; selected cards are removed from hand
 
-- **TC59: Fifteen trade-ins is rejected as impossible with forty-four cards** ( :x: )
+- **TC59: Fifteen trade-ins is rejected as impossible with forty-four cards** ( :white_check_mark: )
     - **State of the system**: Valid set selected; `numSetsTradedIn = 15`
     - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 15 sets because a 44-card deck supports at most 14 traded sets."`; available armies and card hand are unchanged

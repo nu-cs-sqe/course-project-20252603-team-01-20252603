@@ -37,6 +37,8 @@ public class HumanPlayer extends Player {
 
     private static final int CARD_TRADE_IN_BONUS_INCREMENT = 5;
 
+    private static final int MAX_CARD_TRADE_IN_COUNT = 14;
+
     private final List<Territory> territories;
 
     private final List<RiskCard> availableCards;
@@ -169,6 +171,12 @@ public class HumanPlayer extends Player {
             final List<Integer> cardIndices,
             final Deck deck,
             final int numSetsTradedIn) {
+        if (numSetsTradedIn > MAX_CARD_TRADE_IN_COUNT) {
+            throw new IllegalArgumentException(
+                    "Cannot trade cards after " + numSetsTradedIn
+                            + " sets because a 44-card deck supports at most 14 traded sets.");
+        }
+
         if (cardIndices.size() != 3) {
             return false;
         }

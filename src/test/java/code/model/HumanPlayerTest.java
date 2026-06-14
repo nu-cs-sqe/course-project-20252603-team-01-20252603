@@ -918,4 +918,23 @@ public final class HumanPlayerTest {
                 "INFANTRY=" + SIXTY_CARD_TRADE_IN_ARMIES));
     }
 
+    @Test
+    public void tradeCardsAndAddArmiesWithFifteenTradeInsRaisesException() {
+        HumanPlayer player = new HumanPlayer("Player 1", PlayerColor.RED, ZERO_INFANTRY);
+
+        player.addCard(createCard(CardType.INFANTRY));
+        player.addCard(createCard(CardType.CAVALRY));
+        player.addCard(createCard(CardType.ARTILLERY));
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> player.tradeCardsAndAddArmies(List.of(1, 2, 3), new Deck(), 15));
+
+        assertEquals(
+                "Cannot trade cards after 15 sets because a 44-card deck supports at most 14 traded sets.",
+                exception.getMessage());
+        assertEquals(3, player.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
+    }
+
 }
