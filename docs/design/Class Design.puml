@@ -192,6 +192,7 @@ package code.view {
         + displayTerritoryCaptured(attackerName : String, defenderName : String, movedArmies : int) : void
         + displayPlayerElimination(playerName : String) : void
         + displayRiskCardAwarded(playerName : String) : void
+        + displayWinner(playerName : String) : void
         + displaySetupPhaseComplete() : void
     }
 }
@@ -201,9 +202,12 @@ package code.controller {
         - model : GameModel
         - view : ConsoleView
         - setupController : SetupController
+        - turnController : TurnController
         + GameController()
         ~ GameController(gameModel : GameModel, consoleView : ConsoleView)
+        ~ GameController(gameModel : GameModel, consoleView : ConsoleView, setup : SetupController, turns : TurnController)
         + startGame() : void
+        - runGameLoopUntilWinner() : void
     }
 
     class SetupController {
@@ -229,11 +233,6 @@ package code.controller {
         +handleReinforcement(player: Player): void
         ' below function will have a local variable to track if territory was captured in this turn
         +handleAttackPhase(player: Player): void
-
-
-        ' not required
-        +runTurnsTillWin(): void
-        +checkAndHandleWin(): Player
         +handleFortifyPhase(): void
       }
 }
