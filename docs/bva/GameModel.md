@@ -365,7 +365,7 @@
     - **State of the system**: Current player holds a valid trade-in set and `13` sets have already been traded (`numSetsTradedIn = 13`)
     - **Expected output**: Returns `true`; current player receives `55` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `14`
 
-- **TC80: Fifteenth trade-in is rejected because a 44-card deck supports at most 14 traded sets** ( :x: )
+- **TC80: Fifteenth trade-in is rejected because a 44-card deck supports at most 14 traded sets** ( :white_check_mark: )
     - **State of the system**: Current player holds a valid trade-in set and `14` sets have already been traded (`numSetsTradedIn = 14`)
     - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets."`; current player's available armies and hand are unchanged; `numSetsTradedIn` remains `14`
 

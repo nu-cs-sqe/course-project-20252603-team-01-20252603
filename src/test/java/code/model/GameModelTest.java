@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests board initialization behavior for the GameModel class.
@@ -1364,5 +1365,36 @@ public final class GameModelTest {
         assertTrue(fourteenthTradeIn);
         assertEquals(0, humanPlayer.getCardCount());
         assertTrue(player.getAvailableArmies().contains("INFANTRY=55"));
+    }
+
+    @Test
+    public void handleCardTradeInWithFifteenthTradeRaisesException() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        HumanPlayer humanPlayer = (HumanPlayer) player;
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        player.removeArmies(createInfantryPieces(THREE_PLAYER_STARTING_INFANTRY));
+
+        for (int tradeNumber = 0; tradeNumber < 14; tradeNumber++) {
+            addValidTradeInSet(humanPlayer);
+            assertTrue(gameModel.handleCardTradeIn(List.of(1, 2, 3)));
+        }
+
+        player.removeArmies(createInfantryPieces(355));
+        addValidTradeInSet(humanPlayer);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> gameModel.handleCardTradeIn(List.of(1, 2, 3)));
+
+        assertEquals(
+                "Cannot trade cards after 14 sets because a 44-card deck supports at most 14 traded sets.",
+                exception.getMessage());
+        assertEquals(3, humanPlayer.getCardCount());
+        assertTrue(player.getAvailableArmies().contains("INFANTRY=0"));
     }
 }
