@@ -149,7 +149,7 @@
     - **State of the system**: Player enters `"1 2"`
     - **Expected output**: Returns a list containing `1` and `2`
 
-- **TC29: Returns more than three indices for controller and model validation** ( :x: )
+- **TC29: Returns more than three indices for controller and model validation** ( :white_check_mark: )
     - **State of the system**: Player enters `"1 2 3 4"`
     - **Expected output**: Returns a list containing `1`, `2`, `3`, and `4`
 

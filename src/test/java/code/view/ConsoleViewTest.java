@@ -321,6 +321,19 @@ public final class ConsoleViewTest {
         assertEquals(SECOND_CARD_INDEX, cardIndices.get(1));
     }
 
+    @Test
+    public void promptChooseCardsToTradeInReturnsMoreThanThreeIndicesForValidation() {
+        ConsoleView view = createViewWithInput("1 2 3 4\n");
+
+        List<Integer> cardIndices = view.promptChooseCardsToTradeIn();
+
+        assertEquals(4, cardIndices.size());
+        assertEquals(FIRST_CARD_INDEX, cardIndices.get(0));
+        assertEquals(SECOND_CARD_INDEX, cardIndices.get(1));
+        assertEquals(THIRD_CARD_INDEX, cardIndices.get(2));
+        assertEquals(4, cardIndices.get(3));
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
