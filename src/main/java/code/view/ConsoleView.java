@@ -73,6 +73,10 @@ public class ConsoleView {
         output.println(availableArmies);
     }
 
+    public void displayCurrentPlayerCards(final String cards) {
+        output.println(cards);
+    }
+
     public List<String> promptReinforcement() {
         output.print("Enter territory and armies to place: ");
         String input = scanner.nextLine().trim();

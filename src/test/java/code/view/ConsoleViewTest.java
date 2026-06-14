@@ -152,6 +152,19 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void displayCurrentPlayerCardsPrintsCards() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+
+        String cards = "1: Infantry, 2: Cavalry, 3: Artillery";
+
+        view.displayCurrentPlayerCards(cards);
+        String displayedText = output.toString(StandardCharsets.UTF_8);
+
+        assertTrue(displayedText.contains(cards));
+    }
+
+    @Test
     public void promptReinforcementReturnsOneInfantryPlacement() {
         ConsoleView view = createViewWithInput("Alaska 1 0 0\n");
 
