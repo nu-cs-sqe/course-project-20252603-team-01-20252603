@@ -1550,4 +1550,35 @@ public final class GameModelTest {
 
         assertTrue(hasPath);
     }
+
+    @Test
+    public void hasOwnedPathLongerOwnedPathReturnsTrue() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        gameModel.claimTerritoryDuringSetup(
+                "Alaska",
+                createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup(
+                "Alberta",
+                createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup(
+                "Ontario",
+                createInfantryPieces(ONE_INFANTRY));
+        gameModel.claimTerritoryDuringSetup(
+                "Quebec",
+                createInfantryPieces(ONE_INFANTRY));
+
+        boolean hasPath = gameModel.hasOwnedPath(
+                gameModel.findTerritoryByName("Alaska"),
+                gameModel.findTerritoryByName("Quebec"),
+                player);
+
+        assertTrue(hasPath);
+    }
 }

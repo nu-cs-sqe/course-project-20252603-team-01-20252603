@@ -412,7 +412,7 @@
     - **State of the system**: Source and destination are adjacent and both owned by the current player
     - **Expected output**: Returns `true`
 
-- **TC90: Finds destination at the end of a longer owned path** ( :x: )
+- **TC90: Finds destination at the end of a longer owned path** ( :white_check_mark: )
     - **State of the system**: Source and destination are connected through more than one intermediate territory owned by the current player
     - **Expected output**: Returns `true`
 
