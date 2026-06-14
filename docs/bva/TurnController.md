@@ -124,7 +124,7 @@
     - **State of the system**: Battle resolves with captured defending territory; player enters valid capture movement count
     - **Expected output**: Controller validates and executes capture movement, displays captured-territory message, and tracks that a territory was captured this phase
 
-- **TC58: Non-numeric capture movement re-prompts**
+- **TC58: Non-numeric capture movement re-prompts** ( :white_check_mark: )
     - **State of the system**: Defending territory is captured; player first enters `"two"` for movement, then enters a valid number
     - **Expected output**: Controller displays `"Invalid capture movement input."`, re-prompts, then captures territory with valid movement
 
