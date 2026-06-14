@@ -15,7 +15,7 @@
     - **State of the system**: `startGame()` is called on a controller with setup and turn dependencies
     - **Expected output**: `setupController.initializeBoard()` is called before any player turn is run
 
-- **TC4: First winner check happens only after first completed turn**
+- **TC4: First winner check happens only after first completed turn** ( :white_check_mark: )
     - **State of the system**: First current player already controls all `42` territories before the loop starts
     - **Expected output**: Controller still calls `turnController.runPlayerTurn()` once before calling `model.currentPlayerHasWon()`
 

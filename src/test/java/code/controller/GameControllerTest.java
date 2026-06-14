@@ -85,6 +85,37 @@ public final class GameControllerTest {
         }
     }
 
+    private static final class ErrorIfWinnerCheckedBeforeTurnGameModel extends GameModel {
+
+        private final List<String> calls;
+
+        ErrorIfWinnerCheckedBeforeTurnGameModel(final List<String> recordedCalls) {
+            super(new Random(0));
+            calls = recordedCalls;
+        }
+
+        @Override
+        public boolean currentPlayerIsEliminated() {
+            calls.add("check eliminated");
+            return false;
+        }
+
+        @Override
+        public boolean currentPlayerHasWon() {
+            if (!calls.contains("turn")) {
+                throw new AssertionError("Winner checked before first completed turn.");
+            }
+
+            calls.add("check winner");
+            return true;
+        }
+
+        @Override
+        public String getCurrentPlayerName() {
+            return "Player 1";
+        }
+    }
+
     private static final class RecordingConsoleView extends ConsoleView {
 
         private final List<String> calls;
@@ -188,6 +219,26 @@ public final class GameControllerTest {
     public void startGameRunsSetupBeforeFirstPlayerTurn() {
         List<String> calls = new ArrayList<>();
         GameModel model = new WinningAfterOneTurnGameModel(calls);
+        ConsoleView view = new RecordingConsoleView(calls);
+        SetupController setupController = new RecordingSetupController(calls);
+        TurnController turnController = new RecordingTurnController(calls);
+        GameController controller = new GameController(
+                model,
+                view,
+                setupController,
+                turnController);
+
+        controller.startGame();
+
+        assertEquals(
+                List.of("setup", "check eliminated", "turn", "check winner", "display winner"),
+                calls);
+    }
+
+    @Test
+    public void startGameChecksWinnerOnlyAfterFirstCompletedTurn() {
+        List<String> calls = new ArrayList<>();
+        GameModel model = new ErrorIfWinnerCheckedBeforeTurnGameModel(calls);
         ConsoleView view = new RecordingConsoleView(calls);
         SetupController setupController = new RecordingSetupController(calls);
         TurnController turnController = new RecordingTurnController(calls);
