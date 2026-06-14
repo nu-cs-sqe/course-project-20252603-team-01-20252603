@@ -353,7 +353,7 @@
     - **State of the system**: Current player has cards in hand, `numSetsTradedIn = 0`, and passes an invalid card selection
     - **Expected output**: Returns `false`; no trade-in armies are added; selected cards remain in hand; `numSetsTradedIn` remains `0`
 
-- **TC77: First valid card trade-in adds first trade-in armies and increments traded-set count** ( :x: )
+- **TC77: First valid card trade-in adds first trade-in armies and increments traded-set count** ( :white_check_mark: )
     - **State of the system**: Current player holds a valid trade-in set and `numSetsTradedIn = 0`
     - **Expected output**: Returns `true`; current player receives `4` Infantry from the trade-in; traded cards are removed from the hand; `numSetsTradedIn` increases to `1`
 
