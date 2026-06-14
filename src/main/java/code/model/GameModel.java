@@ -86,6 +86,16 @@ public class GameModel {
         random = randomGenerator;
     }
 
+    public GameModel() {
+        continents = new ArrayList<>();
+        territories = new ArrayList<>();
+        players = new ArrayList<>();
+        deck = new Deck();
+        deck.shuffle();
+        numSetsTradedIn = 0;
+        random = new Random(0); 
+    }
+
     public void initializeContinentsAndTerritories() {
         continents.clear();
         territories.clear();
