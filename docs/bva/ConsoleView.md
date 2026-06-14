@@ -145,7 +145,7 @@
     - **State of the system**: Player enters `"1 1 2"`
     - **Expected output**: Returns a list containing `1`, `1`, and `2`
 
-- **TC28: Returns fewer than three indices for controller and model validation** ( :x: )
+- **TC28: Returns fewer than three indices for controller and model validation** ( :white_check_mark: )
     - **State of the system**: Player enters `"1 2"`
     - **Expected output**: Returns a list containing `1` and `2`
 
