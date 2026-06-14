@@ -428,6 +428,24 @@ public final class ConsoleViewTest {
     }
 
     @Test
+    public void getTerritoryChoiceDuringSetupTrimsInput() {
+        ConsoleView view = createViewWithInput("  Alaska  \n");
+
+        String territoryChoice = view.getTerritoryChoiceDuringSetup();
+
+        assertEquals("Alaska", territoryChoice);
+    }
+
+    @Test
+    public void promptFortifySourceTerritoryTrimsInput() {
+        ConsoleView view = createViewWithInput("  Northwest Territory  \n");
+
+        String sourceTerritory = view.promptFortifySourceTerritory();
+
+        assertEquals("Northwest Territory", sourceTerritory);
+    }
+
+    @Test
     public void promptPlayerColorPrintsAllAvailableColors() {
         ByteArrayOutputStream captured = new ByteArrayOutputStream();
         ConsoleView view = new ConsoleView(

@@ -105,13 +105,13 @@ public class ConsoleView {
     public String getTerritoryChoiceDuringSetup() {
         output.print(message("prompt.claimTerritory"));
 
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     public String promptCurrentPlayerTerritoryChoice() {
         output.print(message("prompt.placeArmyTerritory"));
 
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     public void displaySetupPhaseComplete() {
@@ -127,13 +127,13 @@ public class ConsoleView {
     public String promptFortifySourceTerritory() {
         output.print(message("prompt.fortifySource"));
 
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     public String promptFortifyDestinationTerritory() {
         output.print(message("prompt.fortifyDestination"));
 
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     public String promptFortifyArmyCount() {
