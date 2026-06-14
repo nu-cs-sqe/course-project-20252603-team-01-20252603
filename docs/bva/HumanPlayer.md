@@ -313,7 +313,7 @@
 
 ### Method under test: `addCard(RiskCard card)`
 
-- **TC67: Add first Risk card to empty hand** (:x:)
+- **TC67: Add first Risk card to empty hand** (:white_check_mark:)
     - **State of the system**: Human player has zero cards; `addCard(card)` is called
     - **Expected output**: Player card count becomes `1`; `getAvailableCards()` contains `card`
 
