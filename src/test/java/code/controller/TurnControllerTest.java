@@ -270,8 +270,6 @@ public final class TurnControllerTest {
         expectLastCall().once();
 
         expect(model.currentPlayerHasValidAttack()).andReturn(true);
-        expect(view.promptAttackChoice()).andReturn("yes");
-        expect(model.currentPlayerHasValidAttack()).andReturn(true);
         expect(model.currentPlayerHasValidAttack()).andReturn(true);
         expect(view.promptAttackChoice()).andReturn("yes");
         expect(view.promptTerritoriesToAttack()).andReturn(territoryChoices);
@@ -287,8 +285,7 @@ public final class TurnControllerTest {
         expectLastCall().once();
         expect(model.isTerritoryCaptured("Alberta")).andReturn(false);
 
-        expect(model.currentPlayerHasValidAttack()).andReturn(true);
-        expect(view.promptAttackChoice()).andReturn("no");
+        expect(model.currentPlayerHasValidAttack()).andReturn(false);
         expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
 
         replay(model, view);
@@ -317,6 +314,9 @@ public final class TurnControllerTest {
         view.displayCurrentPlayerClaimingStatus("North America: Alaska");
         expectLastCall().once();
 
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(view.promptAttackChoice()).andReturn("yes");
         expect(view.promptTerritoriesToAttack()).andReturn(invalidTerritoryChoices);
         expect(model.validateTerritoriesForAttackAndReturnDefenderName(
                 "Alberta",
@@ -366,6 +366,9 @@ public final class TurnControllerTest {
         view.displayCurrentPlayerClaimingStatus("North America: Alaska");
         expectLastCall().once();
 
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(view.promptAttackChoice()).andReturn("yes");
         expect(view.promptTerritoriesToAttack()).andReturn(invalidTerritoryChoices);
         expect(model.validateTerritoriesForAttackAndReturnDefenderName(
                 "Alaska",
@@ -385,6 +388,9 @@ public final class TurnControllerTest {
                 .andReturn(battleResult);
         view.displayBattleResult(battleResult);
         expectLastCall().once();
+        expect(model.isTerritoryCaptured("Alberta")).andReturn(false);
+        expect(model.currentPlayerHasValidAttack()).andReturn(false);
+        expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
 
         replay(model, view);
 
@@ -413,6 +419,7 @@ public final class TurnControllerTest {
         expectLastCall().once();
 
         expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
         expect(view.promptAttackChoice()).andReturn("yes");
         expect(view.promptTerritoriesToAttack()).andReturn(territoryChoices);
         expect(model.validateTerritoriesForAttackAndReturnDefenderName(
@@ -431,8 +438,7 @@ public final class TurnControllerTest {
         expectLastCall().once();
         expect(model.isTerritoryCaptured("Alberta")).andReturn(false);
 
-        expect(model.currentPlayerHasValidAttack()).andReturn(true);
-        expect(view.promptAttackChoice()).andReturn("no");
+        expect(model.currentPlayerHasValidAttack()).andReturn(false);
         expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
 
         replay(model, view);
@@ -570,6 +576,33 @@ public final class TurnControllerTest {
         expectLastCall().once();
         expect(model.isTerritoryCaptured("Alberta")).andReturn(false);
         expect(model.currentPlayerHasValidAttack()).andReturn(false);
+        expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleAttackPhaseSkipsImmediatelyWhenPlayerChoosesNo() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(view.promptAttackChoice()).andReturn("no");
         expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
 
         replay(model, view);
