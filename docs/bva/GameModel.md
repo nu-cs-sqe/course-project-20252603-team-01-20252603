@@ -392,7 +392,7 @@
     - **State of the system**: Current player owns source, one intermediate adjacent territory, and destination; source and destination are not directly adjacent
     - **Expected output**: Returns `true`; armies move from source to destination through the owned path
 
-- **TC86: Allows path through more than one owned territory** ( :x: )
+- **TC86: Allows path through more than one owned territory** ( :white_check_mark: )
     - **State of the system**: Current player owns source, multiple intermediate connected territories, and destination
     - **Expected output**: Returns `true`; armies move from source to destination through the owned path
 
