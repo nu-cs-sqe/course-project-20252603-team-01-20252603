@@ -293,6 +293,15 @@ public final class ConsoleViewTest {
         assertTrue(reinforcementInput.isEmpty());
     }
 
+    @Test
+    public void promptFortifyChoiceYesChoiceReturnsChoice() {
+        ConsoleView view = createViewWithInput("yes\n");
+
+        String fortifyChoice = view.promptFortifyChoice();
+
+        assertEquals("yes", fortifyChoice);
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 

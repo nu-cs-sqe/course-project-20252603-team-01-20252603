@@ -148,7 +148,7 @@
 
 ### Method under test: `promptFortifyChoice()`
 
-- **TC27: Returns yes choice** ( :x: )
+- **TC27: Returns yes choice** ( :white_check_mark: )
     - **State of the system**: Current player is asked whether to fortify and enters `"yes"`
     - **Expected output**: Returns `"yes"` so the controller can begin fortification
 
