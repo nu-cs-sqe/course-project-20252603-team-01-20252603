@@ -107,6 +107,10 @@ public class GameModel {
         return deck.isEmpty();
     }
 
+    int getDeckDiscardPileSize() {
+        return deck.getDiscardPileSize();
+    }
+
     public boolean setPlayerCount(final int count) {
         if (count < MIN_PLAYER_COUNT || count > MAX_PLAYER_COUNT) {
             return false;
@@ -870,6 +874,16 @@ public class GameModel {
         }
 
         return false;
+    }
+
+    public boolean awardRiskCardIfCaptured(final boolean capturedTerritoryThisTurn) {
+        if (!capturedTerritoryThisTurn) {
+            return false;
+        }
+
+        Player currentPlayer = players.get(currentPlayerIndex);
+        currentPlayer.addCard(deck.drawCard());
+        return true;
     }
 
     private boolean hasAdjacentEnemyTerritory(

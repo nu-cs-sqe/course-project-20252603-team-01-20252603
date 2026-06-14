@@ -781,18 +781,18 @@
 
 ### Method under test: `awardRiskCardIfCaptured(boolean capturedTerritoryThisTurn)`
 
-- **TC141: No card is awarded when no territory was captured** ( :x: )
+- **TC141: No card is awarded when no territory was captured** ( :white_check_mark: )
     - **State of the system**: `capturedTerritoryThisTurn = false`
     - **Expected output**: Returns `false`; current player's card count is unchanged; deck size is unchanged
 
-- **TC142: One card is awarded when at least one territory was captured** ( :x: )
+- **TC142: One card is awarded when at least one territory was captured** ( :white_check_mark: )
     - **State of the system**: `capturedTerritoryThisTurn = true`; draw pile has cards
     - **Expected output**: Returns `true`; current player's card count increases by `1`; deck size decreases by `1`
 
-- **TC143: Exactly one card is awarded even if multiple territories were captured** ( :x: )
+- **TC143: Exactly one card is awarded even if multiple territories were captured** ( :white_check_mark: )
     - **State of the system**: Attack phase recorded one or more captures and calls `awardRiskCardIfCaptured(true)` once at the end of the phase
     - **Expected output**: Current player's card count increases by exactly `1`
 
-- **TC144: Award card reinitializes draw pile from discard pile when draw pile is empty** ( :x: )
+- **TC144: Award card reinitializes draw pile from discard pile when draw pile is empty** ( :white_check_mark: )
     - **State of the system**: `capturedTerritoryThisTurn = true`; draw pile is empty; discard pile contains cards
     - **Expected output**: Returns `true`; deck reinitializes from discard pile, awards one card, and discard pile becomes empty

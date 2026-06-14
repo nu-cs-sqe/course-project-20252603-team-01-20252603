@@ -94,6 +94,12 @@ public final class GameModelTest {
 
     private static final int DIE_ROLL_SIX = 6;
 
+    private static final int FIRST_CARD_INDEX = 1;
+
+    private static final int SECOND_CARD_INDEX = 2;
+
+    private static final int THIRD_CARD_INDEX = 3;
+
     private GameModel createGameModel() {
         return new GameModel(new Random(0));
     }
@@ -2623,6 +2629,76 @@ public final class GameModelTest {
         gameModel.setCurrentPlayerIndex(0);
 
         assertTrue(gameModel.currentPlayerHasValidAttack());
+    }
+
+    @Test
+    public void awardRiskCardIfCapturedFalseDoesNotAwardCard() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        int startingDeckSize = gameModel.getDeckSize();
+
+        boolean awarded = gameModel.awardRiskCardIfCaptured(false);
+
+        assertFalse(awarded);
+        assertEquals(ZERO_ARMIES, player.getCardCount());
+        assertEquals(startingDeckSize, gameModel.getDeckSize());
+    }
+
+    @Test
+    public void awardRiskCardIfCapturedTrueAwardsOneCard() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        int startingDeckSize = gameModel.getDeckSize();
+
+        boolean awarded = gameModel.awardRiskCardIfCaptured(true);
+
+        assertTrue(awarded);
+        assertEquals(ONE_ARMY, player.getCardCount());
+        assertEquals(startingDeckSize - ONE_ARMY, gameModel.getDeckSize());
+    }
+
+    @Test
+    public void awardRiskCardIfCapturedTrueAwardsExactlyOneCard() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+
+        gameModel.awardRiskCardIfCaptured(true);
+
+        assertEquals(ONE_ARMY, player.getCardCount());
+    }
+
+    @Test
+    public void awardRiskCardIfCapturedReinitializesDrawPileFromDiscardPileWhenDrawPileIsEmpty() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        HumanPlayer player = (HumanPlayer) gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        addValidTradeInSet(player);
+        gameModel.handleCardTradeIn(List.of(FIRST_CARD_INDEX, SECOND_CARD_INDEX, THIRD_CARD_INDEX));
+
+        for (int cardIndex = 0; cardIndex < DECK_CARD_COUNT; cardIndex++) {
+            gameModel.awardRiskCardIfCaptured(true);
+        }
+        boolean awarded = gameModel.awardRiskCardIfCaptured(true);
+
+        assertTrue(awarded);
+        assertEquals(DECK_CARD_COUNT + ONE_ARMY, player.getCardCount());
+        assertEquals(TWO_ARMIES, gameModel.getDeckSize());
+        assertEquals(ZERO_ARMIES, gameModel.getDeckDiscardPileSize());
     }
 
     @Test
