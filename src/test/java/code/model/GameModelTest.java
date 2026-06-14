@@ -136,12 +136,6 @@ public final class GameModelTest {
 
     private static final int DIE_ROLL_SIX = 6;
 
-    private static final int FIRST_CARD_INDEX = 1;
-
-    private static final int SECOND_CARD_INDEX = 2;
-
-    private static final int THIRD_CARD_INDEX = 3;
-
     private GameModel createGameModel() {
         return new GameModel(new Random(0));
     }
