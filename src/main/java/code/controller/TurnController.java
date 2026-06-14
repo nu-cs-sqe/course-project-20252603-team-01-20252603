@@ -16,6 +16,8 @@ public class TurnController {
 
     private static final int MALFORMED_CARD_INPUT_SENTINEL = Integer.MIN_VALUE;
 
+    private static final int MALFORMED_DICE_INPUT_SENTINEL = Integer.MIN_VALUE;
+
     private final GameModel model;
 
     private final ConsoleView view;
@@ -27,6 +29,14 @@ public class TurnController {
     private static final int CAVALRY_INPUT_INDEX = 2;
 
     private static final int ARTILLERY_INPUT_INDEX = 3;
+
+    private static final int ATTACKING_TERRITORY_INDEX = 0;
+
+    private static final int DEFENDING_TERRITORY_INDEX = 1;
+
+    private static final int ATTACKER_DICE_INDEX = 0;
+
+    private static final int DEFENDER_DICE_INDEX = 1;
 
     @SuppressFBWarnings(
             value = "EI_EXPOSE_REP2",
@@ -144,5 +154,35 @@ public class TurnController {
                 Integer.parseInt(reinforcementInput.get(ARTILLERY_INPUT_INDEX)));
 
         return pieces;
+    }
+
+    public void handleAttackPhase(final Object player) {
+        view.displayCurrentPlayer(model.getCurrentPlayerName());
+        view.displayCurrentPlayerClaimingStatus(model.getCurrentPlayerTerritoriesByContinent());
+
+        List<String> territoryChoices = view.promptTerritoriesToAttack();
+        String attackerTerritoryName = territoryChoices.get(ATTACKING_TERRITORY_INDEX);
+        String defenderTerritoryName = territoryChoices.get(DEFENDING_TERRITORY_INDEX);
+        model.validateTerritoriesForAttackAndReturnDefenderName(
+                attackerTerritoryName,
+                defenderTerritoryName);
+
+        List<Integer> diceCounts = view.promptNumberOfDice(
+                attackerTerritoryName,
+                defenderTerritoryName);
+        int attackerDice = diceCounts.get(ATTACKER_DICE_INDEX);
+        int defenderDice = diceCounts.get(DEFENDER_DICE_INDEX);
+        model.validateNumberOfDice(
+                attackerTerritoryName,
+                defenderTerritoryName,
+                attackerDice,
+                defenderDice);
+
+        List<String> battleResult = model.executeBattleAndReturnWinner(
+                attackerTerritoryName,
+                defenderTerritoryName,
+                attackerDice,
+                defenderDice);
+        view.displayBattleResult(battleResult);
     }
 }

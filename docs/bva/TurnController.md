@@ -76,7 +76,7 @@
 
 ### Method under test: `handleAttackPhase(Player player)`
 
-- **TC46: Valid attack resolves one battle and displays result** ( :x: )
+- **TC46: Valid attack resolves one battle and displays result** ( :white_check_mark: )
     - **State of the system**: Current player selects valid attacking and defending territories; selected dice counts are valid; model returns a battle result
     - **Expected output**: Controller validates territories and dice, executes one battle, displays the battle result, and returns from the attack phase
 
