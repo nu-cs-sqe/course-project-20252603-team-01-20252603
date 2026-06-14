@@ -117,7 +117,7 @@
 
 ### Method under test: `displayCurrentPlayerCards(String cards)`
 
-- **TC22: Displays current player's cards** ( :x: )
+- **TC22: Displays current player's cards** ( :white_check_mark: )
     - **State of the system**: Model provides a formatted string containing the current player's cards
     - **Expected output**: Output displays the cards string exactly as provided by the model
 
