@@ -20,6 +20,8 @@ public final class NullPlayerTest {
 
     private static final int ASIA_BONUS_ARMIES = 7;
 
+    private static final int AUSTRALIA_BONUS_ARMIES = 5;
+
     @Test
     public void constructorUnassignedOwnershipCreatesPlayerPlaceholder() {
         NullPlayer player = new NullPlayer();
@@ -64,7 +66,7 @@ public final class NullPlayerTest {
     @Test
     public void addTerritoryThrowsUnsupportedOperationException() {
         NullPlayer nullPlayer = new NullPlayer();
-        Continent continent = new Continent("North America", 5);
+        Continent continent = new Continent("North America", AUSTRALIA_BONUS_ARMIES);
         Territory territory = new Territory("Alaska", continent, List.of());
 
         assertThrows(
