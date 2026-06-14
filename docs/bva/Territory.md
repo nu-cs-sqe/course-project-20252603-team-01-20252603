@@ -145,7 +145,7 @@
     - **State of the system**: Territory has more armies than the requested removal; `removeArmies()` is called with more than one army
     - **Expected output**: Method returns `true`; territory army count decreases by the total armies removed
 
-- **TC27: Remove exactly all armies** ( :x: )
+- **TC27: Remove exactly all armies** ( :white_check_mark: )
     - **State of the system**: Territory has exactly the same number of armies as the requested removal
     - **Expected output**: Method returns `true`; territory army count becomes `0`
 
