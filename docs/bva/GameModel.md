@@ -673,7 +673,7 @@
     - **State of the system**: Defender rolls two dice and the injected `Random` yields defender dice in a raw order that is not descending
     - **Expected output**: The defender dice reported in the battle result are sorted from highest to lowest
 
-- **TC120: Capture flag is false when defending territory still has armies remaining** ( :x: )
+- **TC120: Capture flag is false when defending territory still has armies remaining** ( :white_check_mark: )
     - **State of the system**: Battle resolves with deterministic injected dice and the defending territory still has at least `1` army remaining afterward
     - **Expected output**: Returned battle result indicates that the territory was not captured
 
