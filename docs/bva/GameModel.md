@@ -653,7 +653,7 @@
     - **State of the system**: Attacker rolls `2` dice; defender rolls `1` die; injected `Random` produces deterministic dice values
     - **Expected output**: Only the highest attacker die is compared to the defender die; exactly one army total is lost across the two territories
 
-- **TC115: Three-versus-two battle compares top two dice and attacker loses both comparisons** ( :x: )
+- **TC115: Three-versus-two battle compares top two dice and attacker loses both comparisons** ( :white_check_mark: )
     - **State of the system**: Attacker rolls `3` dice; defender rolls `2` dice; injected `Random` produces values such that, after sorting, defender wins both comparisons
     - **Expected output**: Attacking territory loses `2` armies; defending territory loses `0` armies; returned battle result reports both losses and updated army counts
 

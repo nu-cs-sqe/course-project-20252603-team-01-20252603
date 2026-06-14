@@ -726,13 +726,22 @@ public class GameModel {
         List<Integer> defenderDice = rollDice(defenderNumDice);
         int attackerLosses = 0;
         int defenderLosses = 0;
+        int comparisonCount = Math.min(attackerDice.size(), defenderDice.size());
 
-        if (attackerDice.get(0) > defenderDice.get(0)) {
-            defenderLosses++;
-            defendingTerritory.removeArmies(createInfantryPieces(1));
-        } else {
-            attackerLosses++;
-            attackingTerritory.removeArmies(createInfantryPieces(1));
+        for (int comparisonIndex = 0; comparisonIndex < comparisonCount; comparisonIndex++) {
+            if (attackerDice.get(comparisonIndex) > defenderDice.get(comparisonIndex)) {
+                defenderLosses++;
+            } else {
+                attackerLosses++;
+            }
+        }
+
+        if (attackerLosses > 0) {
+            attackingTerritory.removeArmies(createInfantryPieces(attackerLosses));
+        }
+
+        if (defenderLosses > 0) {
+            defendingTerritory.removeArmies(createInfantryPieces(defenderLosses));
         }
 
         return List.of(
