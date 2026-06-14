@@ -23,7 +23,7 @@
     - **State of the system**: Active current player completes a turn; `model.currentPlayerHasWon()` returns `true`
     - **Expected output**: Controller calls `view.displayWinner(model.getCurrentPlayerName())` exactly once and does not advance to the next player
 
-- **TC6: No winner after completed turn advances to next active player** 
+- **TC6: No winner after completed turn advances to next active player** ( :white_check_mark: )
     - **State of the system**: Active current player completes a turn; `model.currentPlayerHasWon()` returns `false`
     - **Expected output**: Controller calls `model.advanceToNextActivePlayer()` and continues the game loop
 
