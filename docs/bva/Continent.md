@@ -131,6 +131,6 @@
     - **State of the system**: Continent contains more than 2 territories; a middle territory is owned by another player
     - **Expected output**: Returns `false`
 
-- **TC30: Querying with NullPlayer returns false** ( :x: )
+- **TC30: Querying with NullPlayer returns false** ( :white_check_mark: )
     - **State of the system**: Continent contains territories owned by a real player; queried with `NullPlayer`
     - **Expected output**: Returns `false`

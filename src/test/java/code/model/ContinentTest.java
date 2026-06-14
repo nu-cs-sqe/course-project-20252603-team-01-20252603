@@ -258,4 +258,17 @@ public final class ContinentTest {
 
         assertFalse(continent.isFullyOwnedBy(player));
     }
+
+    @Test
+    public void isFullyOwnedByReturnsFalseWhenQueriedWithNullPlayer() {
+        Continent continent = new Continent("Asia", MAX_BONUS_ARMIES);
+        Player nullPlayer = new NullPlayer();
+        Territory territory = createMock(Territory.class);
+
+        expect(territory.isOwnedBy(nullPlayer)).andReturn(false);
+        replay(territory);
+        continent.addTerritory(territory);
+
+        assertFalse(continent.isFullyOwnedBy(nullPlayer));
+    }
 }
