@@ -1,6 +1,7 @@
 package code.view;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import code.model.PlayerColor;
@@ -704,6 +705,36 @@ public final class ConsoleViewTest {
         view.promptPlayerColor("Alice", List.of(PlayerColor.values()));
 
         assertTrue(captured.toString(StandardCharsets.UTF_8).contains("Alice"));
+    }
+
+    @Test
+    public void promptPlayerColorPrintsAllAvailableColors() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("RED\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptPlayerColor("Alice", List.of(PlayerColor.RED, PlayerColor.BLUE, PlayerColor.GREEN));
+
+        String output = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(output.contains("RED"));
+        assertTrue(output.contains("BLUE"));
+        assertTrue(output.contains("GREEN"));
+    }
+
+    @Test
+    public void promptPlayerColorDoesNotPrintUnavailableColors() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("RED\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptPlayerColor("Alice", List.of(PlayerColor.RED));
+
+        String output = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(output.contains("RED"));
+        assertFalse(output.contains("BLUE"));
+        assertFalse(output.contains("GREEN"));
     }
 
     @Test

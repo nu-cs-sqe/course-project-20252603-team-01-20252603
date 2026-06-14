@@ -34,18 +34,19 @@ public class ConsoleView {
     }
 
     public int promptNumberOfPlayers() {
-        output.print("Enter number of players: ");
-        return scanner.nextInt();
+        output.println("Enter number of players: ");
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public String promptPlayerName(final int playerNumber) {
-        output.print("Enter player " + playerNumber + " name: ");
+        output.println("Enter player " + playerNumber + " name: ");
         return scanner.nextLine();
     }
 
     public PlayerColor promptPlayerColor(
             final String playerName,
             final List<PlayerColor> availableColors) {
+        output.println("Available colors: " + availableColors);
         output.print("Enter color for " + playerName + ": ");
         return PlayerColor.valueOf(scanner.nextLine().trim().toUpperCase());
     }

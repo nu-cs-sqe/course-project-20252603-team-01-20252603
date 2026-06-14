@@ -1,6 +1,6 @@
 package code.controller;
 
-import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -65,30 +65,25 @@ public final class GameControllerTest {
 //    }
 
     @Test
-    public void startGameInitializesDeck() {
-
-        GameModel model = new GameModel(new Random(0));
-
+    public void startGameRunsFullSetupFlow() {
+        GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
+        SetupController setupController = createMock(SetupController.class);
 
-        GameController controller = new GameController(model, view);
+        setupController.initializeBoard();
+        expectLastCall().once();
 
+        setupController.initializePlayers();
+        expectLastCall().once();
+
+        setupController.handleTerritoryClaiming();
+        expectLastCall().once();
+
+        replay(model, view, setupController);
+
+        GameController controller = new GameController(model, view, setupController);
         controller.startGame();
 
-        assertEquals(DECK_CARD_COUNT, model.getDeckSize());
-
-        assertFalse(model.isDeckEmpty());
-
-    }
-
-    @Test
-    public void startGameInitializesBoard() {
-        GameModel model = new GameModel(new Random(0));
-        ConsoleView view = new ConsoleView();
-        GameController controller = new GameController(model, view);
-
-        controller.startGame();
-
-        assertEquals(EXPECTED_DECK_SIZE, model.getDeckSize());
+        verify(model, view, setupController);
     }
 }
