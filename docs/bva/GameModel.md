@@ -325,7 +325,7 @@
     - **State of the system**: Current player owns all `9` North America territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `5`
 
-- **TC71: Adds Asia bonus when current player fully owns Asia** ( :x: )
+- **TC71: Adds Asia bonus when current player fully owns Asia** ( :white_check_mark: )
     - **State of the system**: Current player owns all `12` Asia territories and no other fully controlled continent; current player has `0` available Infantry before continent bonus is applied
     - **Expected output**: Current player's available Infantry increases to `7`
 
