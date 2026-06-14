@@ -807,6 +807,37 @@ public class GameModel {
         return true;
     }
 
+    public String captureTerritory(
+            final String attackerTerritoryName,
+            final String defenderTerritoryName,
+            final int armiesToMove,
+            final int attackerDiceUsed) {
+        validateCaptureMovement(
+                attackerTerritoryName,
+                defenderTerritoryName,
+                armiesToMove,
+                attackerDiceUsed);
+
+        Territory attackingTerritory = findTerritoryOrThrow(
+                attackerTerritoryName,
+                "Attacking territory must exist on the board.");
+        Territory defendingTerritory = findTerritoryOrThrow(
+                defenderTerritoryName,
+                "Defending territory must exist on the board.");
+        Player attackingPlayer = players.get(currentPlayerIndex);
+        Player defendingPlayer = defendingTerritory.getOwner();
+        String defendingPlayerName = defendingPlayer.getName();
+        HashMap<ArmyType, Integer> movedArmies = createInfantryPieces(armiesToMove);
+
+        defendingPlayer.removeTerritory(defendingTerritory);
+        attackingPlayer.addTerritory(defendingTerritory);
+        defendingTerritory.setOwner(attackingPlayer);
+        attackingTerritory.removeArmies(movedArmies);
+        defendingTerritory.addArmies(movedArmies);
+
+        return defendingPlayerName;
+    }
+
     private List<Integer> rollDice(final int numDice) {
         List<Integer> dice = new ArrayList<>();
 

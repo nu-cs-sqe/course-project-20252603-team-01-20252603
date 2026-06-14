@@ -721,7 +721,7 @@
     - **State of the system**: `armiesToMove >= attacking territory army count`
     - **Expected output**: `IllegalArgumentException` is raised with message `"Attacker must leave at least one army behind."`
 
-- **TC130: Capturing movement is rejected when defending territory still has armies** ( :x: )
+- **TC130: Capturing movement is rejected when defending territory still has armies** ( :white_check_mark: )
     - **State of the system**: Defending territory has at least `1` army remaining
     - **Expected output**: `IllegalArgumentException` is raised with message `"Cannot move armies because the defending territory has not been captured."`
 
@@ -729,15 +729,15 @@
 
 ### Method under test: `captureTerritory(String attackerTerritoryName, String defenderTerritoryName, int armiesToMove, int attackerDiceUsed)`
 
-- **TC131: Capture transfers territory ownership from defender to attacker** ( :x: )
+- **TC131: Capture transfers territory ownership from defender to attacker** ( :white_check_mark: )
     - **State of the system**: Defending territory has zero armies; movement is valid
     - **Expected output**: Defending territory owner becomes current player; attacker owns defending territory; defender no longer owns defending territory
 
-- **TC132: Capture moves the selected number of armies into captured territory** ( :x: )
+- **TC132: Capture moves the selected number of armies into captured territory** ( :white_check_mark: )
     - **State of the system**: Defending territory has zero armies; attacker moves a valid number of armies
     - **Expected output**: Attacking territory army count decreases by moved armies; captured territory army count increases by moved armies
 
-- **TC133: Capture returns the defending player's name** ( :x: )
+- **TC133: Capture returns the defending player's name** ( :white_check_mark: )
     - **State of the system**: Defending territory was owned by another player before capture
     - **Expected output**: Returns the previous defender player name
 
