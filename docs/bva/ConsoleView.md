@@ -384,3 +384,19 @@
 - **TC64: Displays Risk card awarded message**
     - **State of the system**: Current player captured at least one territory and receives a card
     - **Expected output**: Output contains player name and states that a Risk card was awarded
+
+---
+
+### Method under test: `displayPlayerElimination(String playerName)`
+
+- **TC65: Displays eliminated player message**
+    - **State of the system**: A player has been eliminated during attack effects
+    - **Expected output**: Output contains player name and states that the player has been eliminated
+
+---
+
+### Method under test: `displayWinner(String playerName)`
+
+- **TC66: Displays winner message**
+    - **State of the system**: Current player controls all `42` territories after a completed turn
+    - **Expected output**: Output contains player name and states that the player won the game
