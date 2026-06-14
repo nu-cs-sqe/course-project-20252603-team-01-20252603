@@ -338,6 +338,15 @@ public final class ConsoleViewTest {
         assertEquals("Northwest Territory", sourceTerritory);
     }
 
+    @Test
+    public void promptFortifyDestinationTerritorySingleWordTerritoryReturnsTerritory() {
+        ConsoleView view = createViewWithInput("Alberta\n");
+
+        String destinationTerritory = view.promptFortifyDestinationTerritory();
+
+        assertEquals("Alberta", destinationTerritory);
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 

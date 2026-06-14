@@ -176,7 +176,7 @@
 
 ### Method under test: `promptFortifyDestinationTerritory()`
 
-- **TC32: Returns single-word destination territory** ( :x: )
+- **TC32: Returns single-word destination territory** ( :white_check_mark: )
     - **State of the system**: Current player is prompted for a destination territory and enters `"Alberta"`
     - **Expected output**: Returns `"Alberta"`
 
