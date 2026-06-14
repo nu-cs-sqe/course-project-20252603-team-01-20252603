@@ -207,7 +207,8 @@ public class TurnController {
     }
 
     private boolean isMalformedDiceInput(final List<Integer> diceCounts) {
-        return diceCounts.size() == 1
+        return diceCounts.size() != 2
+                || diceCounts.size() == 1
                 && diceCounts.get(0) == MALFORMED_DICE_INPUT_SENTINEL;
     }
 }

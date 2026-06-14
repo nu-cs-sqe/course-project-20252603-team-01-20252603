@@ -92,7 +92,7 @@
     - **State of the system**: View returns `List.of(Integer.MIN_VALUE)` for dice input, then returns valid dice counts
     - **Expected output**: Controller displays `"Invalid dice input."` and re-prompts for dice
 
-- **TC50: Incorrect number of dice entries re-prompts for dice** ( :x: )
+- **TC50: Incorrect number of dice entries re-prompts for dice** ( :white_check_mark: )
     - **State of the system**: View returns a dice-count list with fewer or more than two values, then returns valid dice counts
     - **Expected output**: Controller displays `"Invalid dice input."` and re-prompts for dice
 
