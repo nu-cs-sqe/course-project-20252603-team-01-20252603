@@ -1,8 +1,5 @@
 package code.view;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import code.model.PlayerColor;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,6 +10,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Tests boundary values and core behavior for the ConsoleView class.
@@ -442,6 +443,117 @@ public final class ConsoleViewTest {
         assertTrue(displayedText.contains("defending territory"));
     }
 
+    public void getTerritoryChoiceDuringSetupTrimsInput() {
+        ConsoleView view = createViewWithInput("  Alaska  \n");
+
+        String territoryChoice = view.getTerritoryChoiceDuringSetup();
+
+        assertEquals("Alaska", territoryChoice);
+    }
+
+    @Test
+    public void promptFortifySourceTerritoryTrimsInput() {
+        ConsoleView view = createViewWithInput("  Northwest Territory  \n");
+
+        String sourceTerritory = view.promptFortifySourceTerritory();
+
+        assertEquals("Northwest Territory", sourceTerritory);
+    }
+
+    @Test
+    public void promptPlayerColorPrintsAllAvailableColors() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("RED\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptPlayerColor("Alice", List.of(PlayerColor.RED, PlayerColor.BLUE));
+
+        String output = captured.toString(StandardCharsets.UTF_8);
+
+        assertTrue(output.contains("Available colors"));
+        assertTrue(output.contains("Red"));
+        assertTrue(output.contains("Blue"));
+    }
+
+    @Test
+    public void promptPlayerColorDoesNotPrintUnavailableColors() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("BLUE\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptPlayerColor("Bob", List.of(PlayerColor.BLUE));
+
+        String output = captured.toString(StandardCharsets.UTF_8);
+
+        assertTrue(output.contains("Available colors"));
+        assertTrue(output.contains("Blue"));
+        assertFalse(output.contains("Red"));
+    }
+
+    @Test
+    public void promptPlayerColorPrintsLocalizedAvailableColorNames() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("RED\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptPlayerColor("Alice", List.of(PlayerColor.RED, PlayerColor.BLUE));
+
+        String output = captured.toString(StandardCharsets.UTF_8);
+
+        assertTrue(output.contains("Available colors"));
+        assertTrue(output.contains("Red"));
+        assertTrue(output.contains("Blue"));
+    }
+
+    @Test
+    public void promptPlayerColorDoesNotPrintUnavailableLocalizedColorNames() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = new ConsoleView(
+                new Scanner("BLUE\n"),
+                new PrintStream(captured, true, StandardCharsets.UTF_8));
+
+        view.promptPlayerColor("Bob", List.of(PlayerColor.BLUE));
+
+        String output = captured.toString(StandardCharsets.UTF_8);
+
+        assertTrue(output.contains("Available colors"));
+        assertTrue(output.contains("Blue"));
+        assertFalse(output.contains("Red"));
+        assertFalse(output.contains("Green"));
+        assertFalse(output.contains("Yellow"));
+        assertFalse(output.contains("Black"));
+        assertFalse(output.contains("Purple"));
+    }
+
+    @Test
+    public void promptPlayerColorReturnsEnumWhenUserTypesEnumName() {
+        ConsoleView view = new ConsoleView(
+                new Scanner("RED\n"),
+                new PrintStream(new ByteArrayOutputStream(), true, StandardCharsets.UTF_8));
+
+        PlayerColor selectedColor = view.promptPlayerColor(
+                "Alice",
+                List.of(PlayerColor.RED, PlayerColor.BLUE));
+
+        assertEquals(PlayerColor.RED, selectedColor);
+    }
+
+    @Test
+    public void promptPlayerColorInvalidColorReturnsUnassigned() {
+        ConsoleView view = new ConsoleView(
+                new Scanner("FD\n"),
+                new PrintStream(new ByteArrayOutputStream(), true, StandardCharsets.UTF_8));
+
+        PlayerColor selectedColor = view.promptPlayerColor(
+                "Alice",
+                List.of(PlayerColor.RED, PlayerColor.BLUE));
+
+        assertEquals(PlayerColor.UNASSIGNED, selectedColor);
+    }
+
     @Test
     public void promptTerritoriesToAttackReturnsMultiWordTerritoryNames() {
         ConsoleView view = createViewWithInput(
@@ -859,7 +971,22 @@ public final class ConsoleViewTest {
 
         String displayedText = captured.toString(StandardCharsets.UTF_8);
         assertTrue(displayedText.contains("Player 1"));
-        assertTrue(displayedText.contains("eliminated"));
+        view.displayPlayerElimination("Player 2");
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Player 2"));
+    }
+
+    @Test
+    public void displayWinnerPrintsPlayerNameAndWinnerMessage() {
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(captured);
+
+        view.displayWinner("Player 1");
+
+        String displayedText = captured.toString(StandardCharsets.UTF_8);
+        assertTrue(displayedText.contains("Player 1"));
+        assertTrue(displayedText.contains("won"));
     }
 
     @Test

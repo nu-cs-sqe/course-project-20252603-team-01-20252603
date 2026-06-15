@@ -3,13 +3,14 @@ package code.model;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 
 /**
  * Represents the main model for the Risk game.
@@ -261,6 +262,12 @@ public class GameModel {
         territories.add(territory);
     }
 
+    Optional<Territory> findTerritoryByNameOptional(final String territoryName) {
+        return territories.stream()
+                .filter(territory -> territory.getName().equalsIgnoreCase(territoryName.trim()))
+                .findFirst();
+    }
+
     Territory findTerritoryByName(final String territoryName) {
         return territories.stream()
                 .filter(territory -> territory.getName().equals(territoryName))
@@ -389,7 +396,13 @@ public class GameModel {
             final String territoryName,
             final HashMap<ArmyType, Integer> pieces) {
         Player player = players.get(currentPlayerIndex);
-        Territory territory = findTerritoryByName(territoryName);
+        Optional<Territory> territoryOptional = findTerritoryByNameOptional(territoryName);
+
+        if (territoryOptional.isEmpty()) {
+            return false;
+        }
+
+        Territory territory = territoryOptional.get();
 
         if (!territory.isUnclaimed()) {
             return false;
@@ -461,6 +474,39 @@ public class GameModel {
         return true;
     }
 
+    public boolean advanceToNextActivePlayer() {
+        if (players.isEmpty()) {
+            return false;
+        }
+
+        if (getActivePlayerCount() <= 1) {
+            throw new IllegalStateException(
+                    "Cannot advance turns because only one active player remains.");
+        }
+
+        for (int checkedPlayers = 0; checkedPlayers < players.size(); checkedPlayers++) {
+            advanceCurrentPlayerIndex();
+
+            if (!players.get(currentPlayerIndex).isEliminated()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private int getActivePlayerCount() {
+        int activePlayerCount = 0;
+
+        for (Player player : players) {
+            if (!player.isEliminated()) {
+                activePlayerCount++;
+            }
+        }
+
+        return activePlayerCount;
+    }
+
     public boolean areAllTerritoriesClaimed() {
         return territories.size() == TOTAL_TERRITORY_COUNT
                 && territories.stream().allMatch(territory -> !territory.isUnclaimed());
@@ -468,6 +514,14 @@ public class GameModel {
 
     public String getCurrentPlayerName() {
         return players.get(currentPlayerIndex).getName();
+    }
+
+    public boolean currentPlayerIsEliminated() {
+        return players.get(currentPlayerIndex).isEliminated();
+    }
+
+    public boolean currentPlayerHasWon() {
+        return players.get(currentPlayerIndex).getTerritoryCount() == TOTAL_TERRITORY_COUNT;
     }
 
     public boolean hasCurrentPlayerAvailableArmies() {
@@ -544,7 +598,13 @@ public class GameModel {
     public boolean placeArmiesDuringReinforcement(
             final String territoryName,
             final HashMap<ArmyType, Integer> pieces) {
-        Territory territory = findTerritoryByName(territoryName);
+        Optional<Territory> territoryOptional = findTerritoryByNameOptional(territoryName);
+
+        if (territoryOptional.isEmpty()) {
+            return false;
+        }
+
+        Territory territory = territoryOptional.get();
         Player player = players.get(currentPlayerIndex);
 
         if (!territory.isOwnedBy(player)) {
@@ -569,8 +629,19 @@ public class GameModel {
             final String sourceName,
             final String destinationName,
             final int armyCount) {
-        Territory sourceTerritory = findTerritoryByName(sourceName);
-        Territory destinationTerritory = findTerritoryByName(destinationName);
+        Optional<Territory> territoryOptional = findTerritoryByNameOptional(sourceName);
+
+        if (territoryOptional.isEmpty()) {
+            return false;
+        }
+
+        Territory sourceTerritory = territoryOptional.get();
+        Optional<Territory> territoryOptional1 = findTerritoryByNameOptional(destinationName);
+
+        if (territoryOptional1.isEmpty()) {
+            return false;
+        }
+        Territory destinationTerritory = territoryOptional1.get();
         Player currentPlayer = players.get(currentPlayerIndex);
 
         if (!sourceTerritory.isOwnedBy(currentPlayer)

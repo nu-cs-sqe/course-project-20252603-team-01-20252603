@@ -78,6 +78,10 @@ public class SetupController {
             Player player = new NullPlayer();
             while (player instanceof NullPlayer) {
                 PlayerColor playerColor = view.promptPlayerColor(playerName, availableColors);
+                if (playerColor == PlayerColor.UNASSIGNED) {
+                    view.displayError("Invalid color.");
+                    continue;
+                }
                 if (!availableColors.contains(playerColor)) {
                     view.displayError("Color already selected.");
                     continue;
@@ -147,57 +151,6 @@ public class SetupController {
         }
 
         view.displaySetupPhaseComplete();
-    }
-
-    public void handleFortifyPhase() {
-        view.displayCurrentPlayer(model.getCurrentPlayerName());
-
-        while (true) {
-            String fortifyChoice = view.promptFortifyChoice();
-            if (fortifyChoice.equalsIgnoreCase("no")
-                    || fortifyChoice.equalsIgnoreCase("n")) {
-                model.advanceCurrentPlayerIndex();
-                return;
-            } else if (fortifyChoice.equalsIgnoreCase("yes")
-                    || fortifyChoice.equalsIgnoreCase("y")) {
-                boolean fortified = false;
-                while (!fortified) {
-                    fortified = handleFortifyMove();
-                }
-
-                view.displayCurrentPlayerTerritoriesByContinent(
-                        model.getCurrentPlayerTerritoriesByContinent());
-                model.advanceCurrentPlayerIndex();
-                return;
-            } else {
-                view.displayError("Invalid fortify choice.");
-            }
-        }
-    }
-
-    private boolean handleFortifyMove() {
-        view.displayCurrentPlayerTerritoriesByContinent(
-                model.getCurrentPlayerTerritoriesByContinent());
-        String sourceTerritory = view.promptFortifySourceTerritory();
-        String destinationTerritory = view.promptFortifyDestinationTerritory();
-        String armyCountInput = view.promptFortifyArmyCount();
-
-        try {
-            int armyCount = Integer.parseInt(armyCountInput);
-            boolean fortified = model.fortifyTerritory(
-                    sourceTerritory,
-                    destinationTerritory,
-                    armyCount);
-
-            if (!fortified) {
-                view.displayError("Invalid fortify move.");
-            }
-
-            return fortified;
-        } catch (NumberFormatException exception) {
-            view.displayError("Invalid army count.");
-            return false;
-        }
     }
 
     private HashMap<ArmyType, Integer> createOneInfantryPiece() {

@@ -1,6 +1,31 @@
 # Week 3 (04/13/2026-04/19/2026)
 **Planning and Progress Tracking**:
-1. [done] Aanand: gitignore and README 
+1. [done] Aanand: gitignore and README
 2. [done] Anant: Branch Protection and GitHub Actions Setup
-3. [done] Vihaan: Project Management Tool Setup 
+3. [done] Vihaan: Project Management Tool Setup
 
+# Week 8 (05/25/2026-05/31/2026)
+*Planning and Progress Tracking*:
+1.[done] Anant, Vihaan, Anant: Completed the initial game setup design. This work helped align the project implementation plan with the class design and closed the related Feature Design issue.
+2.[done] Vihaan, Aanand: Set up code coverage and mutation testing tooling by adding JaCoCo and PIT dependencies.
+3.[done] Anant: Set up Checkstyle and SpotBugs linter configuration based on Oracle coding guidelines and Clean Code practices.
+
+# Week 9 (05/31/2026-06/07/2026)
+*Planning and Progress Tracking*:
+1.[done] Anant, Vihaan, Aanand: Included a more detailed class design puml diagram in the project repository for all other phases in the game including battle execution, and the game loop.
+
+# Week 10 (06/08/2026-06/14/2026)
+*Planning and Progress Tracking*:
+1.[done] Aanand: Completed the core board/deck initialization feature using BVA and TDD. This included initializing the 6 Risk continents, 42 territories, reciprocal adjacency relationships, deck setup with 44 cards, card type distribution, and startup controller behavior through SetupController and GameController. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/33))
+2.[done] Vihaan: Completed the player initialization flow. This added support for registering 3–6 players, prompting for player names/colors, preventing duplicate colors, assigning starting Infantry based on player count, selecting a random starting player, and displaying the registered players and starting player. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/34))
+3.[done] Aanand: Implemented the initial territory claiming setup phase. Players can now take turns claiming one unclaimed territory at a time, with exactly one Infantry placed automatically on each successful claim. This included model logic for ownership, turn advancement, all-territories-claimed detection, setup controller loop behavior, and view prompts/displays for claiming. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/42))
+4.[done] Anant: Updated the class design to support a single turn of Risk. This design refactoring added/updated the class and method structure needed for turn phases before the related development work began. The PR linked to the Feature Design issue and was reviewed/approved before merge. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/44))
+5.[done] Aanand: Implemented the reinforcement “place armies” flow. This added TurnController, reinforcement input parsing in ConsoleView, model-level placement validation in GameModel, and refactoring in HumanPlayer so available armies can be checked by equivalent army value while preserving exact piece removal when possible. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/45))
+6.[done] Vihaan: Implemented the remaining setup-army placement flow. This work added BVA/TDD coverage for placing remaining setup armies, including owned-territory placement, final Infantry placement, rejection for unowned/unknown territories, zero-army placement, attempts to place two armies during setup, and behavior when no armies remain. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/47))
+7.[done] Anant: Implemented the reinforcement army calculation phase. This added support for territory-based reinforcement calculation using classic Risk rules, continent bonus detection, minimum reinforcement handling, and integration with the turn flow so reinforcement armies are awarded before placement begins. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/51))
+8.[done] Anant: Implemented single-battle attack validation and execution. This work added validation for ownership, adjacency, army-count requirements, attacker and defender dice selection rules, dice rolling and sorting logic, casualty calculation, territory army updates, and battle result display behavior. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/52))
+9.[done] Vihaan: Implemented the fortify phase. This added support for optional end-of-turn fortification, owned-path validation between territories, army movement constraints, source and destination ownership validation, army count updates, and completion of the turn after a successful fortification or skip. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/49))
+10.[done] Vihaan: Expanded automated testing and quality assurance coverage. This work added additional JaCoCo coverage and PIT mutation tests across implemented setup and gameplay functionality, increasing confidence in correctness and helping identify untested edge cases. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/48), [GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/53), [GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/59))
+11.[done] Vihaan: Added internationalization support to the application. This work introduced the infrastructure required to support multiple languages and externalized user-facing text so future language packs can be added without modifying core game logic. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/56))
+12.[done] Anant: Implemented attack-phase territory capture and elimination behavior. This added territory ownership transfer after successful captures, army movement into captured territories, player elimination detection, defeated-player card transfer, Risk card rewards for successful attacks, and attack-phase progression across multiple attacks. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/60))
+13.[done] Anant: Implemented the full classic Risk game loop. This work connected setup and single-turn functionality into a complete playable game, including player turn rotation, elimination skipping, win-condition checking, winner declaration, and game termination when a player controls all territories. ([GitHub](https://github.com/nu-cs-sqe/course-project-20252603-team-01-20252603/pull/61))
