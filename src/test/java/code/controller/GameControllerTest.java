@@ -416,12 +416,12 @@ public final class GameControllerTest {
     @Test
     public void startGameInitializesDeck() {
         List<String> calls = new ArrayList<>();
-        GameModel model = new GameModel(new Random(0));
+        GameModel model = new WinningAfterOneTurnGameModel(calls);
         ConsoleView view = new RecordingConsoleView(calls);
         GameController controller = new GameController(
                 model,
                 view,
-                new InitializingSetupController(model),
+                new RecordingSetupController(calls),
                 new RecordingTurnController(calls));
 
         controller.startGame();
