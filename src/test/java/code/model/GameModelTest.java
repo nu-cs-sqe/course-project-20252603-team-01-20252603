@@ -228,6 +228,93 @@ public final class GameModelTest {
         }
     }
 
+    private static final class ScriptedEliminationPlayer extends Player {
+
+        private final boolean[] eliminationStates;
+
+        private int eliminationCheckCount;
+
+        ScriptedEliminationPlayer(
+                final String playerName,
+                final PlayerColor playerColor,
+                final boolean... scriptedEliminationStates) {
+            super(playerName, playerColor, ZERO_INFANTRY);
+            eliminationStates = scriptedEliminationStates;
+        }
+
+        @Override
+        public void addTerritory(final Territory territory) {
+        }
+
+        @Override
+        public void removeTerritory(final Territory territory) {
+        }
+
+        @Override
+        public boolean ownsTerritory(final Territory territory) {
+            return false;
+        }
+
+        @Override
+        public int getTerritoryCount() {
+            return ZERO_ARMIES;
+        }
+
+        @Override
+        public void addArmies(final HashMap<ArmyType, Integer> armiesToAdd) {
+        }
+
+        @Override
+        public void removeArmies(final HashMap<ArmyType, Integer> armiesToRemove) {
+        }
+
+        @Override
+        public boolean hasAvailableArmies(final HashMap<ArmyType, Integer> requiredArmies) {
+            return false;
+        }
+
+        @Override
+        public String getAvailableArmies() {
+            return "{}";
+        }
+
+        @Override
+        public void addArmiesToAvailableBasedOnTerritories() {
+        }
+
+        @Override
+        public boolean tradeCardsAndAddArmies(
+                final List<Integer> cardIndices,
+                final Deck deck,
+                final int numSetsTradedIn) {
+            return false;
+        }
+
+        @Override
+        public void addCard(final RiskCard card) {
+        }
+
+        @Override
+        public void addCards(final List<RiskCard> cardsToAdd) {
+        }
+
+        @Override
+        public List<RiskCard> removeAllCards() {
+            return List.of();
+        }
+
+        @Override
+        public void markEliminated() {
+        }
+
+        @Override
+        public boolean isEliminated() {
+            int stateIndex = Math.min(eliminationCheckCount, eliminationStates.length - 1);
+            eliminationCheckCount++;
+            return eliminationStates[stateIndex];
+        }
+    }
+
     private static final int DIE_ROLL_ONE = 1;
 
     private static final int DIE_ROLL_TWO = 2;
@@ -4153,6 +4240,30 @@ public final class GameModelTest {
         players.add(new FlakyEliminationPlayer("Player 1"));
         players.add(new FlakyEliminationPlayer("Player 2"));
         players.add(new FlakyEliminationPlayer("Player 3"));
+
+        assertFalse(gameModel.advanceToNextActivePlayer());
+    }
+
+    @Test
+    public void advanceToNextActivePlayerDoesNotRevisitPlayersBeyondOneFullCycle() {
+        GameModel gameModel = createGameModel();
+        List<Player> players = getPlayers(gameModel);
+        players.clear();
+        players.add(new ScriptedEliminationPlayer(
+                "Player 1",
+                PlayerColor.RED,
+                false,
+                true));
+        players.add(new ScriptedEliminationPlayer(
+                "Player 2",
+                PlayerColor.BLUE,
+                false,
+                true,
+                false));
+        players.add(new ScriptedEliminationPlayer(
+                "Player 3",
+                PlayerColor.GREEN,
+                true));
 
         assertFalse(gameModel.advanceToNextActivePlayer());
     }
