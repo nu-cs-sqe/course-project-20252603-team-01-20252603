@@ -148,6 +148,86 @@ public final class GameModelTest {
         }
     }
 
+    private static final class FlakyEliminationPlayer extends Player {
+
+        private int eliminationCheckCount;
+
+        FlakyEliminationPlayer(final String playerName) {
+            super(playerName, PlayerColor.RED, ZERO_INFANTRY);
+        }
+
+        @Override
+        public void addTerritory(final Territory territory) {
+        }
+
+        @Override
+        public void removeTerritory(final Territory territory) {
+        }
+
+        @Override
+        public boolean ownsTerritory(final Territory territory) {
+            return false;
+        }
+
+        @Override
+        public int getTerritoryCount() {
+            return ZERO_ARMIES;
+        }
+
+        @Override
+        public void addArmies(final HashMap<ArmyType, Integer> armiesToAdd) {
+        }
+
+        @Override
+        public void removeArmies(final HashMap<ArmyType, Integer> armiesToRemove) {
+        }
+
+        @Override
+        public boolean hasAvailableArmies(final HashMap<ArmyType, Integer> requiredArmies) {
+            return false;
+        }
+
+        @Override
+        public String getAvailableArmies() {
+            return "{}";
+        }
+
+        @Override
+        public void addArmiesToAvailableBasedOnTerritories() {
+        }
+
+        @Override
+        public boolean tradeCardsAndAddArmies(
+                final List<Integer> cardIndices,
+                final Deck deck,
+                final int numSetsTradedIn) {
+            return false;
+        }
+
+        @Override
+        public void addCard(final RiskCard card) {
+        }
+
+        @Override
+        public void addCards(final List<RiskCard> cardsToAdd) {
+        }
+
+        @Override
+        public List<RiskCard> removeAllCards() {
+            return List.of();
+        }
+
+        @Override
+        public void markEliminated() {
+        }
+
+        @Override
+        public boolean isEliminated() {
+            eliminationCheckCount++;
+            return eliminationCheckCount > 1;
+        }
+    }
+
     private static final int DIE_ROLL_ONE = 1;
 
     private static final int DIE_ROLL_TWO = 2;
@@ -450,6 +530,17 @@ public final class GameModelTest {
             Field territoriesField = GameModel.class.getDeclaredField("territories");
             territoriesField.setAccessible(true);
             return (List<Territory>) territoriesField.get(gameModel);
+        } catch (ReflectiveOperationException exception) {
+            throw new AssertionError(exception);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Player> getPlayers(final GameModel gameModel) {
+        try {
+            Field playersField = GameModel.class.getDeclaredField("players");
+            playersField.setAccessible(true);
+            return (List<Player>) playersField.get(gameModel);
         } catch (ReflectiveOperationException exception) {
             throw new AssertionError(exception);
         }
@@ -1332,6 +1423,24 @@ public final class GameModelTest {
         boolean placed = gameModel.placeArmiesDuringReinforcement(
                 "Alaska",
                 reinforcementPieces);
+
+        assertFalse(placed);
+    }
+
+    @Test
+    public void placeArmiesDuringReinforcementRejectsUnknownTerritory() {
+        GameModel gameModel = createGameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        Player player = gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        player.addArmies(createInfantryPieces(ONE_INFANTRY));
+
+        boolean placed = gameModel.placeArmiesDuringReinforcement(
+                "Not A Territory",
+                createInfantryPieces(ONE_INFANTRY));
 
         assertFalse(placed);
     }
@@ -3445,6 +3554,34 @@ public final class GameModelTest {
     }
 
     @Test
+    public void fortifyTerritoryRejectsUnknownSourceTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alberta", createInfantryPieces(ONE_INFANTRY));
+
+        assertFalse(gameModel.fortifyTerritory("Unknown", "Alberta", ONE_ARMY));
+    }
+
+    @Test
+    public void fortifyTerritoryRejectsUnknownDestinationTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+        gameModel.claimTerritoryDuringSetup("Alaska", createInfantryPieces(ONE_INFANTRY));
+
+        assertFalse(gameModel.fortifyTerritory("Alaska", "Unknown", ONE_ARMY));
+    }
+
+    @Test
     public void fortifyTerritoryReturnsFalseWhenSourceCannotRemoveArmies() {
         GameModel gameModel = new GameModel();
 
@@ -4004,6 +4141,18 @@ public final class GameModelTest {
     @Test
     public void advanceToNextActivePlayerWithNoPlayersReturnsFalse() {
         GameModel gameModel = new GameModel();
+
+        assertFalse(gameModel.advanceToNextActivePlayer());
+    }
+
+    @Test
+    public void advanceToNextActivePlayerReturnsFalseWhenPlayersBecomeEliminatedDuringScan() {
+        GameModel gameModel = createGameModel();
+        List<Player> players = getPlayers(gameModel);
+        players.clear();
+        players.add(new FlakyEliminationPlayer("Player 1"));
+        players.add(new FlakyEliminationPlayer("Player 2"));
+        players.add(new FlakyEliminationPlayer("Player 3"));
 
         assertFalse(gameModel.advanceToNextActivePlayer());
     }

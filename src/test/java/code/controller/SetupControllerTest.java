@@ -484,6 +484,11 @@ public final class SetupControllerTest {
     public void initializePlayersInvalidColorDisplaysErrorAndReprompts() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
+        int startingArmies = STARTING_ARMIES_THREE_PLAYERS;
+        final Player firstPlayer = new HumanPlayer("Player 1", PlayerColor.RED, startingArmies);
+        final Player secondPlayer = new HumanPlayer("Player 2", PlayerColor.BLUE, startingArmies);
+        final Player thirdPlayer = new HumanPlayer("Player 3", PlayerColor.GREEN, startingArmies);
+
         expect(view.promptNumberOfPlayers()).andReturn(THREE);
         expect(model.setPlayerCount(THREE)).andReturn(true);
 
@@ -510,9 +515,39 @@ public final class SetupControllerTest {
                 .andReturn(PlayerColor.RED);
 
         expect(model.addPlayer("Player 1", PlayerColor.RED))
-                .andReturn(createMock(Player.class));
+                .andReturn(firstPlayer);
+        expect(view.promptPlayerName(2)).andReturn("Player 2");
+        expect(view.promptPlayerColor("Player 2", List.of(
+                PlayerColor.BLUE,
+                PlayerColor.GREEN,
+                PlayerColor.YELLOW,
+                PlayerColor.BLACK,
+                PlayerColor.PURPLE)))
+                .andReturn(PlayerColor.BLUE);
+        expect(model.addPlayer("Player 2", PlayerColor.BLUE))
+                .andReturn(secondPlayer);
+        expect(view.promptPlayerName(3)).andReturn("Player 3");
+        expect(view.promptPlayerColor("Player 3", List.of(
+                PlayerColor.GREEN,
+                PlayerColor.YELLOW,
+                PlayerColor.BLACK,
+                PlayerColor.PURPLE)))
+                .andReturn(PlayerColor.GREEN);
+        expect(model.addPlayer("Player 3", PlayerColor.GREEN))
+                .andReturn(thirdPlayer);
+        model.setCurrentPlayerIndex(FIRST_PLAYER_INDEX);
+        expectLastCall().once();
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
 
-        // Additional players would be mocked here depending on the full existing test setup.
+        replay(model, view);
+
+        SetupController controller = new SetupController(
+                model, view, new FixedRandom(FIRST_PLAYER_INDEX));
+        controller.initializePlayers();
+
+        verify(model, view);
     }
 
     @Test

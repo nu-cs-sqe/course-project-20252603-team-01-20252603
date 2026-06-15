@@ -1180,6 +1180,17 @@ public final class ConsoleViewTest {
                 .contains("La configuracion esta completa. El juego comienza ahora."));
     }
 
+    @Test
+    public void displayPlayerEliminationPrintsEliminationMessage() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ConsoleView view = createViewWithOutput(output);
+
+        view.displayPlayerElimination("Player 2");
+
+        assertEquals("Player 2 has been eliminated." + System.lineSeparator(),
+                output.toString(StandardCharsets.UTF_8));
+    }
+
     private ConsoleView createViewWithInput(final String input) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
