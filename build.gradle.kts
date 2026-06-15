@@ -19,7 +19,7 @@ repositories {
 }
 
 application {
-    mainClass = "code.main"
+    mainClass = "code.Main"
 }
 
 dependencies {

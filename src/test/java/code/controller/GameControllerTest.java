@@ -1,17 +1,17 @@
 package code.controller;
 
 import static org.easymock.EasyMock.createMock;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import code.model.GameModel;
 import code.view.ConsoleView;
-
-import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests game startup behavior for the GameController class.
@@ -19,6 +19,8 @@ import java.util.Random;
 public final class GameControllerTest {
 
     private static final int DECK_CARD_COUNT = 44;
+
+    private static final int WINNER_FOUND_ON_SECOND_CHECK = 2;
 
     private static final int WINNER_FOUND_ON_THIRD_CHECK = 3;
 
@@ -35,6 +37,16 @@ public final class GameControllerTest {
         public void initializeBoard() {
             calls.add("setup");
         }
+
+        @Override
+        public void initializePlayers() {
+            calls.add("players");
+        }
+
+        @Override
+        public void handleTerritoryClaiming() {
+            calls.add("territories");
+        }
     }
 
     private static final class InitializingSetupController extends SetupController {
@@ -49,6 +61,14 @@ public final class GameControllerTest {
         @Override
         public void initializeBoard() {
             model.initializeContinentsAndTerritories();
+        }
+
+        @Override
+        public void initializePlayers() {
+        }
+
+        @Override
+        public void handleTerritoryClaiming() {
         }
     }
 
@@ -181,7 +201,7 @@ public final class GameControllerTest {
         public boolean currentPlayerHasWon() {
             calls.add("check winner");
             winnerChecks++;
-            return winnerChecks == 2;
+            return winnerChecks == WINNER_FOUND_ON_SECOND_CHECK;
         }
 
         @Override
@@ -255,7 +275,7 @@ public final class GameControllerTest {
         public boolean currentPlayerHasWon() {
             calls.add("check winner");
             winnerChecks++;
-            return winnerChecks == 2;
+            return winnerChecks == WINNER_FOUND_ON_SECOND_CHECK;
         }
 
         @Override
@@ -361,7 +381,9 @@ public final class GameControllerTest {
 
     @Test
     public void gameControllerConstructsWithDefaultDependencies() {
-        new GameController();
+        GameController controller = new GameController();
+
+        assertNotNull(controller);
     }
 
     @Test
@@ -374,41 +396,28 @@ public final class GameControllerTest {
         assertNotNull(controller);
     }
 
-//    @Test
-//
-//    public void startGameInitializesBoard() {
-//
-//        GameModel model = new GameModel();
-//
-//        ConsoleView view = createMock(ConsoleView.class);
-//
-//        GameController controller = new GameController(model, view);
-//
-//        controller.startGame();
-//
-//        int territoryCount = model.getContinents()
-//
-//                .stream()
-//
-//                .mapToInt(continent -> continent.getTerritories().size())
-//
-//                .sum();
-//
-//        assertEquals(CONTINENT_COUNT, model.getContinents().size());
-//
-//        assertEquals(TERRITORY_COUNT, territoryCount);
-//
-//    }
+    @Test
+    public void gameControllerConstructsWithInjectedSetupAndTurnControllers() {
+        List<String> calls = new ArrayList<>();
+        GameModel model = new WinningAfterOneTurnGameModel(calls);
+        ConsoleView view = new RecordingConsoleView(calls);
+        SetupController setupController = new RecordingSetupController(calls);
+        TurnController turnController = new RecordingTurnController(calls);
+
+        GameController controller = new GameController(
+                model,
+                view,
+                setupController,
+                turnController);
+
+        assertNotNull(controller);
+    }
 
     @Test
     public void startGameInitializesDeck() {
-
         List<String> calls = new ArrayList<>();
-
         GameModel model = new WinningAfterOneTurnGameModel(calls);
-
         ConsoleView view = new RecordingConsoleView(calls);
-
         GameController controller = new GameController(
                 model,
                 view,
@@ -418,9 +427,7 @@ public final class GameControllerTest {
         controller.startGame();
 
         assertEquals(DECK_CARD_COUNT, model.getDeckSize());
-
         assertFalse(model.isDeckEmpty());
-
     }
 
     @Test
@@ -434,6 +441,7 @@ public final class GameControllerTest {
                 view,
                 new RecordingSetupController(calls),
                 new RecordingTurnController(calls));
+
         controller.startGame();
 
         assertEquals("setup", calls.get(0));
@@ -453,6 +461,7 @@ public final class GameControllerTest {
         controller.startGame();
 
         String unclaimedTerritories = model.getUnclaimedTerritoriesByContinent();
+
         assertTrue(unclaimedTerritories.contains("North America"));
         assertTrue(unclaimedTerritories.contains("Alaska"));
     }
@@ -473,7 +482,14 @@ public final class GameControllerTest {
         controller.startGame();
 
         assertEquals(
-                List.of("setup", "check eliminated", "turn", "check winner", "display winner"),
+                List.of(
+                        "setup",
+                        "players",
+                        "territories",
+                        "check eliminated",
+                        "turn",
+                        "check winner",
+                        "display winner"),
                 calls);
     }
 
@@ -493,7 +509,14 @@ public final class GameControllerTest {
         controller.startGame();
 
         assertEquals(
-                List.of("setup", "check eliminated", "turn", "check winner", "display winner"),
+                List.of(
+                        "setup",
+                        "players",
+                        "territories",
+                        "check eliminated",
+                        "turn",
+                        "check winner",
+                        "display winner"),
                 calls);
     }
 
@@ -515,6 +538,8 @@ public final class GameControllerTest {
         assertEquals(
                 List.of(
                         "setup",
+                        "players",
+                        "territories",
                         "check eliminated",
                         "turn",
                         "check winner",
@@ -541,6 +566,8 @@ public final class GameControllerTest {
         assertEquals(
                 List.of(
                         "setup",
+                        "players",
+                        "territories",
                         "check eliminated",
                         "turn",
                         "check winner",
@@ -570,6 +597,8 @@ public final class GameControllerTest {
         assertEquals(
                 List.of(
                         "setup",
+                        "players",
+                        "territories",
                         "check eliminated",
                         "advance",
                         "check eliminated",
@@ -597,6 +626,8 @@ public final class GameControllerTest {
         assertEquals(
                 List.of(
                         "setup",
+                        "players",
+                        "territories",
                         "check eliminated",
                         "turn",
                         "check winner",
@@ -626,6 +657,8 @@ public final class GameControllerTest {
         assertEquals(
                 List.of(
                         "setup",
+                        "players",
+                        "territories",
                         "check eliminated",
                         "turn",
                         "check winner",
@@ -659,6 +692,8 @@ public final class GameControllerTest {
         assertEquals(
                 List.of(
                         "setup",
+                        "players",
+                        "territories",
                         "check eliminated",
                         "turn",
                         "check winner",
@@ -682,7 +717,14 @@ public final class GameControllerTest {
         controller.startGame();
 
         assertEquals(
-                List.of("setup", "check eliminated", "turn", "check winner", "display winner"),
+                List.of(
+                        "setup",
+                        "players",
+                        "territories",
+                        "check eliminated",
+                        "turn",
+                        "check winner",
+                        "display winner"),
                 calls);
     }
 }

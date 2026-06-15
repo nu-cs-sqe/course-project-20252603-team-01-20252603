@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.text.MessageFormat;
+import java.util.stream.Collectors;
 
 public class ConsoleView {
 
@@ -50,9 +51,16 @@ public class ConsoleView {
         messages = ResourceBundle.getBundle("messages", locale);
     }
 
+    private String displayColors(final List<PlayerColor> availableColors) {
+        return availableColors.stream()
+                .filter(color -> color != PlayerColor.UNASSIGNED)
+                .map(color -> message("color." + color.name()))
+                .collect(Collectors.joining(", "));
+    }
+
     public int promptNumberOfPlayers() {
         output.print(message("prompt.numberOfPlayers"));
-        return scanner.nextInt();
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public String promptPlayerName(final int playerNumber) {
@@ -63,8 +71,16 @@ public class ConsoleView {
     public PlayerColor promptPlayerColor(
             final String playerName,
             final List<PlayerColor> availableColors) {
+        output.println(message("prompt.availableColors", displayColors(availableColors)));
         output.print(message("prompt.playerColor", playerName));
-        return PlayerColor.valueOf(scanner.nextLine().trim().toUpperCase());
+
+        String colorInput = scanner.nextLine().trim().toUpperCase();
+
+        try {
+            return PlayerColor.valueOf(colorInput);
+        } catch (IllegalArgumentException exception) {
+            return PlayerColor.UNASSIGNED;
+        }
     }
 
     public void displayError(final String message) {
@@ -91,13 +107,13 @@ public class ConsoleView {
     public String getTerritoryChoiceDuringSetup() {
         output.print(message("prompt.claimTerritory"));
 
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     public String promptCurrentPlayerTerritoryChoice() {
         output.print(message("prompt.placeArmyTerritory"));
 
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     public void displaySetupPhaseComplete() {
@@ -113,13 +129,13 @@ public class ConsoleView {
     public String promptFortifySourceTerritory() {
         output.print(message("prompt.fortifySource"));
 
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     public String promptFortifyDestinationTerritory() {
         output.print(message("prompt.fortifyDestination"));
 
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 
     public String promptFortifyArmyCount() {

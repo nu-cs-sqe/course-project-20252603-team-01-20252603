@@ -2217,6 +2217,60 @@ public final class GameModelTest {
     }
 
     @Test
+    public void claimTerritoryDuringSetupLowercaseTerritoryNameClaimsMatchingTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup(
+                "alaska",
+                createInfantryPieces(ONE_INFANTRY));
+
+        assertTrue(claimed);
+        assertTrue(gameModel.getCurrentPlayerTerritoriesByContinent().contains("Alaska"));
+    }
+
+    @Test
+    public void claimTerritoryDuringSetupUppercaseTerritoryNameClaimsMatchingTerritory() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup(
+                "ALASKA",
+                createInfantryPieces(ONE_INFANTRY));
+
+        assertTrue(claimed);
+        assertTrue(gameModel.getCurrentPlayerTerritoriesByContinent().contains("Alaska"));
+    }
+
+
+    @Test
+    public void claimTerritoryDuringSetupInvalidTerritoryNameReturnsFalse() {
+        GameModel gameModel = new GameModel();
+
+        gameModel.setPlayerCount(MIN_PLAYER_COUNT);
+        gameModel.addPlayer("Player 1", PlayerColor.RED);
+        gameModel.addPlayer("Player 2", PlayerColor.BLUE);
+        gameModel.addPlayer("Player 3", PlayerColor.GREEN);
+        gameModel.initializeContinentsAndTerritories();
+
+        boolean claimed = gameModel.claimTerritoryDuringSetup(
+                "Fake Territory",
+                createInfantryPieces(ONE_INFANTRY));
+
+        assertFalse(claimed);
+    }
+
+    @Test
     public void executeBattleAndReturnWinnerThreeVersusTwoDefenderWinsBothRemovesTwoAttackingArmies() {
         GameModel gameModel = createGameModelWithDiceRolls(
                 DIE_ROLL_FIVE,

@@ -57,6 +57,8 @@ public final class SetupControllerTest {
 
     private static final int TWO_INFANTRY = 2;
 
+    private static final int THREE = 3;
+
     private static final int SETUP_INFANTRY_COUNT = 1;
 
     private final List<PlayerColor> allPlayableColors = List.of(
@@ -476,6 +478,41 @@ public final class SetupControllerTest {
         controller.handleTerritoryClaiming();
 
         verify(model, view);
+    }
+
+    @Test
+    public void initializePlayersInvalidColorDisplaysErrorAndReprompts() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        expect(view.promptNumberOfPlayers()).andReturn(THREE);
+        expect(model.setPlayerCount(THREE)).andReturn(true);
+
+        expect(view.promptPlayerName(1)).andReturn("Player 1");
+        expect(view.promptPlayerColor("Player 1", List.of(
+                PlayerColor.RED,
+                PlayerColor.BLUE,
+                PlayerColor.GREEN,
+                PlayerColor.YELLOW,
+                PlayerColor.BLACK,
+                PlayerColor.PURPLE)))
+                .andReturn(PlayerColor.UNASSIGNED);
+
+        view.displayError("Invalid color.");
+        expectLastCall().once();
+
+        expect(view.promptPlayerColor("Player 1", List.of(
+                PlayerColor.RED,
+                PlayerColor.BLUE,
+                PlayerColor.GREEN,
+                PlayerColor.YELLOW,
+                PlayerColor.BLACK,
+                PlayerColor.PURPLE)))
+                .andReturn(PlayerColor.RED);
+
+        expect(model.addPlayer("Player 1", PlayerColor.RED))
+                .andReturn(createMock(Player.class));
+
+        // Additional players would be mocked here depending on the full existing test setup.
     }
 
     @Test

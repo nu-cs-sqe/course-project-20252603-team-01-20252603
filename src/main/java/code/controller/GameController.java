@@ -44,6 +44,9 @@ public class GameController {
 
     public void startGame() {
         setupController.initializeBoard();
+
+        setupController.initializePlayers();
+        setupController.handleTerritoryClaiming();
         runGameLoopUntilWinner();
     }
 
