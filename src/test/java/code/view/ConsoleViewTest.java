@@ -973,7 +973,6 @@ public final class ConsoleViewTest {
         assertTrue(displayedText.contains("Player 1"));
         view.displayPlayerElimination("Player 2");
 
-        String displayedText = captured.toString(StandardCharsets.UTF_8);
         assertTrue(displayedText.contains("Player 2"));
     }
 
