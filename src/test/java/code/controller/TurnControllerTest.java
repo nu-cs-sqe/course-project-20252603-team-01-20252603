@@ -1020,6 +1020,33 @@ public final class TurnControllerTest {
     }
 
     @Test
+    public void handleAttackPhaseSkipsImmediatelyWhenPlayerChoosesSingleLetterNo() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(view.promptAttackChoice()).andReturn("n");
+        expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
     public void handleAttackPhaseDisplaysNoValidAttacksWhenNoneAvailable() {
         GameModel model = createMock(GameModel.class);
         ConsoleView view = createMock(ConsoleView.class);
@@ -1037,6 +1064,49 @@ public final class TurnControllerTest {
         expect(model.currentPlayerHasValidAttack()).andReturn(false);
         view.displayNoValidAttacks();
         expectLastCall().once();
+        expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
+
+        replay(model, view);
+
+        controller.handleAttackPhase(null);
+
+        verify(model, view);
+    }
+
+    @Test
+    public void handleAttackPhaseValidAttackWhenPlayerChoosesSingleLetterYes() {
+        GameModel model = createMock(GameModel.class);
+        ConsoleView view = createMock(ConsoleView.class);
+        TurnController controller = new TurnController(model, view);
+        List<String> territoryChoices = List.of("Alaska", "Alberta");
+        List<Integer> diceCounts = List.of(ONE_ARMY, ONE_ARMY);
+        List<String> battleResult = List.of("Battle resolved");
+
+        expect(model.getCurrentPlayerName()).andReturn("Player 1");
+        view.displayCurrentPlayer("Player 1");
+        expectLastCall().once();
+
+        expect(model.getCurrentPlayerTerritoriesByContinent())
+                .andReturn("North America: Alaska");
+        view.displayCurrentPlayerClaimingStatus("North America: Alaska");
+        expectLastCall().once();
+
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(model.currentPlayerHasValidAttack()).andReturn(true);
+        expect(view.promptAttackChoice()).andReturn("y");
+        expect(view.promptTerritoriesToAttack()).andReturn(territoryChoices);
+        expect(model.validateTerritoriesForAttackAndReturnDefenderName(
+                "Alaska",
+                "Alberta")).andReturn("Alberta");
+        expect(view.promptNumberOfDice("Alaska", "Alberta")).andReturn(diceCounts);
+        expect(model.validateNumberOfDice("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(true);
+        expect(model.executeBattleAndReturnWinner("Alaska", "Alberta", ONE_ARMY, ONE_ARMY))
+                .andReturn(battleResult);
+        view.displayBattleResult(battleResult);
+        expectLastCall().once();
+        expect(model.isTerritoryCaptured("Alberta")).andReturn(false);
+        expect(model.currentPlayerHasValidAttack()).andReturn(false);
         expect(model.awardRiskCardIfCaptured(false)).andReturn(false);
 
         replay(model, view);
