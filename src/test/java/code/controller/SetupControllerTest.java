@@ -526,7 +526,7 @@ public final class SetupControllerTest {
                 .andReturn(PlayerColor.BLUE);
         expect(model.addPlayer("Player 2", PlayerColor.BLUE))
                 .andReturn(secondPlayer);
-        expect(view.promptPlayerName(3)).andReturn("Player 3");
+        expect(view.promptPlayerName(THIRD_PLAYER_INDEX + 1)).andReturn("Player 3");
         expect(view.promptPlayerColor("Player 3", List.of(
                 PlayerColor.GREEN,
                 PlayerColor.YELLOW,
